@@ -19,7 +19,23 @@ type Question = {
 
 type Reponses = Record<string, "A" | "B" | "C" | "D">;
 
-export default function ExamenInteractif({ questions, tailleDemandee, dureeMinutes }: { questions: Question[]; tailleDemandee: number; dureeMinutes: number }) {
+type Props = {
+  questions: Question[];
+  tailleDemandee: number;
+  dureeMinutes: number;
+  modeSession?: string;
+  titreSession?: string;
+  sousTitreSession?: string;
+};
+
+export default function ExamenInteractif({
+  questions,
+  tailleDemandee,
+  dureeMinutes,
+  modeSession,
+  titreSession,
+  sousTitreSession,
+}: Props) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [reponses, setReponses] = useState<Reponses>({});
@@ -60,7 +76,7 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
     const bonnes = questions.reduce((total, q) => total + (reponses[q.id] === q.bonne_reponse ? 1 : 0), 0);
     const { data: session, error: sessionError } = await supabase.from("exam_sessions").insert({
       user_id: user.id,
-      mode: `examen_${tailleDemandee}`,
+      mode: modeSession || `examen_${tailleDemandee}`,
       score: bonnes,
       total_questions: questions.length,
       completed_at: new Date().toISOString(),
@@ -87,7 +103,10 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
       <header className="exam-session-header">
         <Link href="/examens" className="exam-session-brand">
           <span className="brand-mark">✚</span>
-          <span><strong>Haiti Nursing Exam Prep</strong><small>Simulation de {questions.length} questions</small></span>
+          <span>
+            <strong>{titreSession || "Haiti Nursing Exam Prep"}</strong>
+            <small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small>
+          </span>
         </Link>
         <div className="exam-timer"><span>◷</span><span>Temps restant</span><strong>{temps}</strong></div>
         <Link href="/examens" className="exam-session-exit">Quitter l’examen</Link>
