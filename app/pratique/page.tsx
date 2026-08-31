@@ -31,39 +31,79 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const cleGroupe = `${categorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}`;
 
   return (
-    <main className="container page">
-      <div className="nav"><div className="logo">Mode pratique avancé</div><Link href="/tableau-de-bord">Tableau de bord</Link></div>
-      <div className="card" style={{marginBottom:20}}>
-        <form method="get" action="/pratique" style={{display:"flex", gap:12, flexWrap:"wrap", alignItems:"end"}}>
-          <div className="field" style={{marginBottom:0}}>
-            <label>Catégorie</label>
-            <select name="categorie" defaultValue={categorieSelectionnee}>
-              <option value="">Toutes les catégories</option>
-              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </div>
-          <div className="field" style={{marginBottom:0}}>
-            <label>Année</label>
-            <select name="annee" defaultValue={anneeSelectionnee}>
-              <option value="">Toutes les années</option>
-              {annees.map((a) => <option key={a} value={a}>{a}</option>)}
-            </select>
-          </div>
-          <button className="btn btn-primary" type="submit">Afficher cette catégorie</button>
-          <Link className="btn btn-secondary" href="/pratique">Réinitialiser</Link>
-        </form>
-      </div>
-
-      {categorieSelectionnee && (
-        <div className="card" style={{marginBottom:20}}>
-          <strong>Catégorie sélectionnée : {categorieSelectionnee}</strong>
-          <p className="muted" style={{marginBottom:0}}>{questions?.length ?? 0} question(s) chargée(s) dans cette session pratique.</p>
+    <div className="practice-shell">
+      <aside className="practice-sidebar">
+        <Link href="/tableau-de-bord" className="brand-lockup">
+          <span className="brand-mark">✚</span>
+          <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
+        </Link>
+        <nav className="side-nav">
+          <Link href="/tableau-de-bord">⌂ <span>Accueil</span></Link>
+          <Link className="active" href="/pratique">✎ <span>Questions</span></Link>
+          <Link href="/examens">▣ <span>Examens</span></Link>
+          <Link href="/questions-incorrectes">⊗ <span>Questions incorrectes</span></Link>
+          <Link href="/favoris">♡ <span>Favoris</span></Link>
+          <Link href="/nightingale">✦ <span>Nightingale AI</span></Link>
+        </nav>
+        <div className="practice-sidebar-note">
+          <strong>Conseil d’étude</strong>
+          <p>Travaillez une catégorie à la fois et révisez les explications après chaque réponse.</p>
         </div>
-      )}
+      </aside>
 
-      {!questions || questions.length === 0
-        ? <div className="card"><h2>Aucune question trouvée</h2><p className="muted">Cette catégorie est prête à recevoir des questions. Choisissez une autre catégorie ou importez davantage de questions.</p></div>
-        : <QuestionInteractiveAvancee key={cleGroupe} questions={questions} />}
-    </main>
+      <main className="practice-main">
+        <header className="practice-topbar">
+          <div>
+            <span className="practice-breadcrumb">Accueil / Questions</span>
+            <h1>Pratique de questions</h1>
+          </div>
+          <Link href="/tableau-de-bord" className="practice-back-link">← Tableau de bord</Link>
+        </header>
+
+        <section className="practice-content">
+          <div className="practice-filter-card">
+            <div>
+              <span className="practice-eyebrow">Personnalisez votre session</span>
+              <h2>Choisissez ce que vous souhaitez réviser</h2>
+              <p>Filtrez la banque de questions par matière ou par année d’examen.</p>
+            </div>
+            <form method="get" action="/pratique" className="practice-filter-form">
+              <label>
+                <span>Catégorie</span>
+                <select name="categorie" defaultValue={categorieSelectionnee}>
+                  <option value="">Toutes les catégories</option>
+                  {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>Année</span>
+                <select name="annee" defaultValue={anneeSelectionnee}>
+                  <option value="">Toutes les années</option>
+                  {annees.map((a) => <option key={a} value={a}>{a}</option>)}
+                </select>
+              </label>
+              <button className="practice-primary-action" type="submit">Démarrer la session</button>
+              <Link className="practice-reset" href="/pratique">Réinitialiser</Link>
+            </form>
+          </div>
+
+          <div className="practice-session-summary">
+            <div><span>Session</span><strong>{categorieSelectionnee || "Toutes les catégories"}</strong></div>
+            <div><span>Année</span><strong>{anneeSelectionnee || "Toutes"}</strong></div>
+            <div><span>Questions chargées</span><strong>{questions?.length ?? 0}</strong></div>
+          </div>
+
+          {!questions || questions.length === 0 ? (
+            <div className="practice-empty-state">
+              <span>?</span>
+              <h2>Aucune question trouvée</h2>
+              <p>Choisissez une autre catégorie ou une autre année pour continuer votre révision.</p>
+            </div>
+          ) : (
+            <QuestionInteractiveAvancee key={cleGroupe} questions={questions} />
+          )}
+        </section>
+      </main>
+    </div>
   );
 }
