@@ -75,7 +75,7 @@ export default async function TableauDeBord() {
           <Link href="/pratique">▤ <span>Questions</span></Link>
           <Link href="/examens">▣ <span>Examens</span></Link>
           <Link href="/historique">▥ <span>Plan d’étude</span></Link>
-          <Link href="/historique">⌁ <span>Performance</span></Link>
+          <Link href="/performance">⌁ <span>Performance</span></Link>
           <Link href="/questions-incorrectes">◴ <span>Questions incorrectes</span>{incorrectes.length > 0 && <b>{incorrectes.length}</b>}</Link>
           <Link href="/favoris">♡ <span>Favoris</span>{(favoris ?? 0) > 0 && <b>{favoris}</b>}</Link>
           <Link href="/nightingale">✦ <span>Nightingale AI</span></Link>
@@ -125,7 +125,7 @@ export default async function TableauDeBord() {
           <div className="mock-grid">
             <div className="mock-main-column">
               <section className="panel progress-panel">
-                <div className="panel-heading"><h2>Votre progression par matière</h2><Link href="/pratique">Voir tout</Link></div>
+                <div className="panel-heading"><h2>Votre progression par matière</h2><Link href="/performance">Voir tout</Link></div>
                 {progression.length > 0 ? progression.map((item, index) => (
                   <div className="subject-row" key={item.categorie}>
                     <span className={`subject-dot c${index + 1}`}>{["♟","♙","♧","◇","◉","♢"][index]}</span>
