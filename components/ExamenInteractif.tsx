@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -31,7 +32,7 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
       setSecondesRestantes((s) => {
         if (s <= 1) {
           clearInterval(timer);
-          soumettreExamen();
+          void soumettreExamen();
           return 0;
         }
         return s - 1;
@@ -45,6 +46,9 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
     const sec = secondesRestantes % 60;
     return `${String(min).padStart(2, "0")}:${String(sec).padStart(2, "0")}`;
   }, [secondesRestantes]);
+
+  const progression = Math.round(((index + 1) / questions.length) * 100);
+  const repondues = Object.keys(reponses).length;
 
   async function soumettreExamen() {
     if (soumission) return;
@@ -79,17 +83,84 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
   const options = [["A", question.option_a], ["B", question.option_b], ["C", question.option_c], ["D", question.option_d]] as const;
 
   return (
-    <main className="container page">
-      <div className="nav"><div><div className="logo">Examen simulé</div><small className="muted">{questions.length} questions</small></div><div className="card" style={{padding:"10px 16px"}}><strong>Temps restant : {temps}</strong></div></div>
-      <div className="card" style={{maxWidth:860, margin:"20px auto"}}>
-        <p className="muted">Question {index + 1} sur {questions.length} — {question.categorie}</p>
-        <h2 className="question-title">{question.question}</h2>
-        {options.map(([lettre, texte]) => <button key={lettre} className={`option ${reponses[question.id] === lettre ? "selected" : ""}`} onClick={() => setReponses((r) => ({ ...r, [question.id]: lettre }))}>{lettre}. {texte}</button>)}
-        <div className="actions" style={{justifyContent:"space-between"}}>
-          <button className="btn btn-secondary" disabled={index === 0} onClick={() => setIndex((i) => Math.max(0, i - 1))}>Précédente</button>
-          {index < questions.length - 1 ? <button className="btn btn-primary" onClick={() => setIndex((i) => Math.min(questions.length - 1, i + 1))}>Suivante</button> : <button className="btn btn-primary" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Soumettre l’examen"}</button>}
-        </div>
-        <p className="muted">Réponses enregistrées localement pendant l’examen : {Object.keys(reponses).length}/{questions.length}</p>
+    <main className="exam-session-shell">
+      <header className="exam-session-header">
+        <Link href="/examens" className="exam-session-brand">
+          <span className="brand-mark">✚</span>
+          <span><strong>Haiti Nursing Exam Prep</strong><small>Simulation de {questions.length} questions</small></span>
+        </Link>
+        <div className="exam-timer"><span>◷</span><span>Temps restant</span><strong>{temps}</strong></div>
+        <Link href="/examens" className="exam-session-exit">Quitter l’examen</Link>
+      </header>
+
+      <div className="exam-session-progress"><i style={{ width: `${progression}%` }} /></div>
+
+      <div className="exam-session-body">
+        <section className="exam-question-card">
+          <div className="exam-question-meta">
+            <span>Question {index + 1} sur {questions.length}</span>
+            <span className="exam-category-chip">{question.categorie || "Sciences infirmières"}</span>
+          </div>
+
+          <h2>{question.question}</h2>
+
+          <div className="exam-answer-list">
+            {options.map(([lettre, texte]) => (
+              <button
+                type="button"
+                key={lettre}
+                className={`exam-answer ${reponses[question.id] === lettre ? "selected" : ""}`}
+                onClick={() => setReponses((r) => ({ ...r, [question.id]: lettre }))}
+              >
+                <span className="exam-answer-letter">{lettre}</span>
+                <span>{texte}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="exam-question-actions">
+            <button className="exam-nav-button" disabled={index === 0} onClick={() => setIndex((i) => Math.max(0, i - 1))}>← Précédente</button>
+            {index < questions.length - 1 ? (
+              <button className="exam-nav-button primary" onClick={() => setIndex((i) => Math.min(questions.length - 1, i + 1))}>Suivante →</button>
+            ) : (
+              <button className="exam-submit-button" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Terminer l’examen"}</button>
+            )}
+          </div>
+        </section>
+
+        <aside className="exam-question-sidebar">
+          <section className="exam-status-card">
+            <h3>Progression</h3>
+            <div className="exam-status-stats">
+              <div><strong>{repondues}</strong><span>Répondues</span></div>
+              <div><strong>{questions.length - repondues}</strong><span>Restantes</span></div>
+            </div>
+          </section>
+
+          <section className="exam-status-card">
+            <h3>Questions</h3>
+            <div className="exam-question-nav">
+              {questions.map((q, i) => (
+                <button
+                  type="button"
+                  key={q.id}
+                  aria-label={`Question ${i + 1}`}
+                  className={`${i === index ? "current" : ""} ${reponses[q.id] ? "answered" : ""}`}
+                  onClick={() => setIndex(i)}
+                >{i + 1}</button>
+              ))}
+            </div>
+            <div className="exam-status-legend"><span><i /> Non répondue</span><span><i /> Répondue</span></div>
+          </section>
+
+          <section className="exam-submit-card">
+            <strong>Prêt à terminer ?</strong>
+            <p>Vous avez répondu à {repondues} question{repondues > 1 ? "s" : ""} sur {questions.length}. Les questions non répondues seront comptées comme incorrectes.</p>
+            <button type="button" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Soumettre l’examen"}</button>
+          </section>
+
+          <p className="exam-loading-note">Vos réponses restent enregistrées dans cette session jusqu’à la soumission.</p>
+        </aside>
       </div>
     </main>
   );
