@@ -17,7 +17,7 @@ export default async function Examens() {
   if (!claimsData?.claims) redirect("/connexion");
 
   const userId = String(claimsData.claims.sub);
-  const [{ data: sessions }, { count: totalQuestions }] = await Promise.all([
+  const [{ data: sessions }, { count: totalQuestions }, { data: banques }] = await Promise.all([
     supabase
       .from("exam_sessions")
       .select("id,mode,score,total_questions,completed_at")
@@ -26,6 +26,10 @@ export default async function Examens() {
       .order("completed_at", { ascending: false })
       .limit(5),
     supabase.from("questions").select("*", { count: "exact", head: true }),
+    supabase
+      .from("exam_banks")
+      .select("id,annee,titre,authenticite,total_questions")
+      .order("annee", { ascending: false }),
   ]);
 
   const formats = [
@@ -75,7 +79,7 @@ export default async function Examens() {
             </div>
             <div className="exam-hero-stats">
               <div><span>Banque disponible</span><strong>{totalQuestions ?? 0}</strong><small>questions</small></div>
-              <div><span>Examens terminés</span><strong>{sessions?.length ?? 0}</strong><small>récents</small></div>
+              <div><span>Examens historiques</span><strong>{banques?.length ?? 0}</strong><small>banques</small></div>
               <div><span>Dernier score</span><strong>{dernierScore === null ? "—" : `${dernierScore}%`}</strong><small>performance</small></div>
             </div>
           </div>
@@ -98,11 +102,44 @@ export default async function Examens() {
             ))}
           </div>
 
+          <section className="exam-bank-section">
+            <div className="exam-panel-heading exam-bank-heading">
+              <div>
+                <span className="exam-eyebrow">Banque historique de préparation</span>
+                <h2>Examens reconstitués 2010–2023</h2>
+                <p>Ces banques sont des exercices de préparation reconstitués. Elles ne sont pas présentées comme des questionnaires officiels du MSPP/DFPSS.</p>
+              </div>
+              <span className="exam-bank-count">{banques?.length ?? 0} examens</span>
+            </div>
+
+            {!banques?.length ? (
+              <div className="exam-empty-history"><span>▣</span><p>Aucune banque historique n’est encore disponible.</p></div>
+            ) : (
+              <div className="exam-bank-grid">
+                {banques.map((banque) => (
+                  <article className="exam-bank-card" key={banque.id}>
+                    <div className="exam-bank-card-top">
+                      <span className="exam-bank-year">{banque.annee}</span>
+                      <span className="exam-bank-auth">Reconstitué</span>
+                    </div>
+                    <h3>Examen {banque.annee}</h3>
+                    <p>Préparation Examen d’État Haïtien</p>
+                    <div className="exam-bank-meta">
+                      <span>▣ {banque.total_questions} questions</span>
+                      <span>◷ 140 min</span>
+                    </div>
+                    <Link className="exam-bank-button" href={`/examens/banque/${banque.id}`}>Commencer →</Link>
+                  </article>
+                ))}
+              </div>
+            )}
+          </section>
+
           <div className="exam-lower-grid">
             <section className="exam-info-panel">
               <div className="exam-panel-heading"><div><span className="exam-eyebrow">Comment ça fonctionne</span><h2>Une simulation simple et efficace</h2></div></div>
               <div className="exam-steps">
-                <div><b>1</b><span><strong>Choisissez un format</strong><small>25, 50 ou 100 questions.</small></span></div>
+                <div><b>1</b><span><strong>Choisissez un format</strong><small>25, 50 ou 100 questions, ou une banque historique.</small></span></div>
                 <div><b>2</b><span><strong>Répondez sous chronomètre</strong><small>Vous pouvez naviguer entre les questions.</small></span></div>
                 <div><b>3</b><span><strong>Analysez votre résultat</strong><small>Score, réponses et historique sont enregistrés.</small></span></div>
               </div>
@@ -117,7 +154,7 @@ export default async function Examens() {
                 return (
                   <Link href={`/resultats/${session.id}`} className="exam-history-row" key={session.id}>
                     <span className="exam-history-icon">✓</span>
-                    <div><strong>{session.total_questions} questions</strong><small>{formatDate(session.completed_at)}</small></div>
+                    <div><strong>{session.mode?.startsWith("examen_reconstitue_") ? `Examen reconstitué ${session.mode.replace("examen_reconstitue_", "")}` : `${session.total_questions} questions`}</strong><small>{formatDate(session.completed_at)}</small></div>
                     <b className={score >= 70 ? "success" : "needs-work"}>{score}%</b>
                     <span>›</span>
                   </Link>
