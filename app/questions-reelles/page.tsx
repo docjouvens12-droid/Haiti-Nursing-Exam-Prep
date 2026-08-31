@@ -22,12 +22,12 @@ export default async function QuestionsReelles({
         .from("questions")
         .select("id", { count: "exact", head: true })
         .eq("categorie", nom);
-      return { nom, total: count ?? 0 };
+      return { nom: String(nom), total: count ?? 0 };
     })
   );
 
   const categories = [...comptes].sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
-  const compteur = new Map(categories.map((c) => [c.nom, c.total]));
+  const compteur = new Map<string, number>(categories.map((c) => [c.nom, c.total]));
 
   let query = supabase
     .from("questions")
