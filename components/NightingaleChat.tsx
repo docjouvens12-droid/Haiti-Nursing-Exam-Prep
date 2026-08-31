@@ -1,14 +1,14 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, KeyboardEvent, useEffect, useRef, useState } from "react";
 
 type Message = { role: "user" | "assistant"; content: string };
 
 const suggestions = [
-  "Explique-moi la pré-éclampsie simplement",
-  "Fais-moi réviser la pharmacologie",
-  "Donne-moi un mini cas clinique de pédiatrie",
-  "Explique pourquoi une réponse est correcte",
+  { icon: "✚", text: "Explique-moi la pré-éclampsie simplement" },
+  { icon: "Rx", text: "Fais-moi réviser la pharmacologie" },
+  { icon: "◉", text: "Donne-moi un mini cas clinique de pédiatrie" },
+  { icon: "?", text: "Explique pourquoi une réponse est correcte" },
 ];
 
 export default function NightingaleChat() {
@@ -22,6 +22,11 @@ export default function NightingaleChat() {
   const [texte, setTexte] = useState("");
   const [chargement, setChargement] = useState(false);
   const [erreur, setErreur] = useState("");
+  const finConversation = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    finConversation.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }, [messages, chargement]);
 
   async function envoyer(message?: string) {
     const contenu = (message ?? texte).trim();
@@ -56,64 +61,110 @@ export default function NightingaleChat() {
     void envoyer();
   }
 
+  function gererClavier(e: KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      if (texte.trim() && !chargement) void envoyer();
+    }
+  }
+
+  function nouvelleConversation() {
+    setMessages([
+      {
+        role: "assistant",
+        content:
+          "Nouvelle session ouverte. Que souhaitez-vous réviser aujourd’hui ? Je peux expliquer un concept, créer un QCM ou vous proposer un cas clinique.",
+      },
+    ]);
+    setTexte("");
+    setErreur("");
+  }
+
   return (
-    <div style={{ display: "grid", gap: 16 }}>
-      <section className="card" style={{ padding: 20 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 14 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, display: "grid", placeItems: "center", background: "#eef2ff", fontSize: 26 }}>🩺</div>
+    <div className="nightingale-workspace">
+      <aside className="nightingale-tools">
+        <div className="nightingale-tools-heading">
           <div>
-            <h1 style={{ margin: 0, fontSize: "1.35rem" }}>Nightingale AI</h1>
-            <p className="muted" style={{ margin: "3px 0 0" }}>Assistante pédagogique pour la préparation infirmière</p>
+            <span className="nightingale-eyebrow">Démarrage rapide</span>
+            <h3>Que voulez-vous travailler ?</h3>
           </div>
+          <button type="button" className="nightingale-new-chat" onClick={nouvelleConversation}>＋ Nouvelle discussion</button>
         </div>
 
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div className="nightingale-suggestion-grid">
           {suggestions.map((s) => (
-            <button key={s} type="button" className="button secondary" onClick={() => void envoyer(s)} disabled={chargement}>
-              {s}
+            <button key={s.text} type="button" className="nightingale-suggestion" onClick={() => void envoyer(s.text)} disabled={chargement}>
+              <span>{s.icon}</span>
+              <strong>{s.text}</strong>
             </button>
           ))}
         </div>
-      </section>
 
-      <section className="card" style={{ minHeight: 420, display: "flex", flexDirection: "column", padding: 18 }}>
-        <div style={{ flex: 1, display: "grid", gap: 12, alignContent: "start", marginBottom: 18 }}>
-          {messages.map((m, i) => (
-            <div
-              key={`${m.role}-${i}`}
-              style={{
-                maxWidth: "86%",
-                justifySelf: m.role === "user" ? "end" : "start",
-                background: m.role === "user" ? "#1d4ed8" : "#f3f4f6",
-                color: m.role === "user" ? "white" : "inherit",
-                borderRadius: 16,
-                padding: "12px 14px",
-                whiteSpace: "pre-wrap",
-                lineHeight: 1.55,
-              }}
-            >
-              {m.content}
+        <div className="nightingale-study-tip">
+          <span>💡</span>
+          <div>
+            <strong>Conseil</strong>
+            <p>Pour une meilleure réponse, indiquez la matière, ce que vous ne comprenez pas et le niveau de détail souhaité.</p>
+          </div>
+        </div>
+      </aside>
+
+      <section className="nightingale-chat-card">
+        <div className="nightingale-chat-header">
+          <div className="nightingale-chat-identity">
+            <div className="nightingale-chat-avatar">✦</div>
+            <div>
+              <strong>Nightingale</strong>
+              <span><i /> Assistante d’étude disponible</span>
             </div>
-          ))}
-          {chargement && <div className="muted">Nightingale réfléchit…</div>}
-          {erreur && <div style={{ color: "#b91c1c" }}>{erreur}</div>}
+          </div>
+          <div className="nightingale-chat-status">Sciences infirmières</div>
         </div>
 
-        <form onSubmit={soumettre} style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: 10 }}>
+        <div className="nightingale-messages" aria-live="polite">
+          {messages.map((m, i) => (
+            <div key={`${m.role}-${i}`} className={`nightingale-message-row ${m.role}`}>
+              {m.role === "assistant" && <div className="nightingale-message-avatar">✦</div>}
+              <div className={`nightingale-message ${m.role}`}>
+                <span className="nightingale-message-author">{m.role === "assistant" ? "Nightingale" : "Vous"}</span>
+                <div>{m.content}</div>
+              </div>
+            </div>
+          ))}
+
+          {chargement && (
+            <div className="nightingale-message-row assistant">
+              <div className="nightingale-message-avatar">✦</div>
+              <div className="nightingale-message assistant nightingale-thinking">
+                <span className="nightingale-message-author">Nightingale</span>
+                <div className="nightingale-dots"><i /><i /><i /></div>
+              </div>
+            </div>
+          )}
+
+          {erreur && <div className="nightingale-error">⚠ {erreur}</div>}
+          <div ref={finConversation} />
+        </div>
+
+        <form onSubmit={soumettre} className="nightingale-composer">
           <textarea
             value={texte}
             onChange={(e) => setTexte(e.target.value)}
+            onKeyDown={gererClavier}
             placeholder="Posez une question à Nightingale…"
             rows={3}
-            style={{ resize: "vertical" }}
+            aria-label="Message à Nightingale"
           />
-          <button className="button" type="submit" disabled={!texte.trim() || chargement}>
-            Envoyer
-          </button>
+          <div className="nightingale-composer-footer">
+            <span>Entrée pour envoyer · Maj + Entrée pour une nouvelle ligne</span>
+            <button type="submit" disabled={!texte.trim() || chargement}>{chargement ? "Patientez…" : "Envoyer ➜"}</button>
+          </div>
         </form>
-        <small className="muted" style={{ marginTop: 10 }}>
-          Nightingale est un outil éducatif. Elle ne remplace pas un professionnel de santé ni les protocoles cliniques officiels.
-        </small>
+
+        <div className="nightingale-disclaimer">
+          <span>ⓘ</span>
+          <p>Nightingale est un outil éducatif. Elle ne remplace pas un professionnel de santé ni les protocoles cliniques officiels.</p>
+        </div>
       </section>
     </div>
   );
