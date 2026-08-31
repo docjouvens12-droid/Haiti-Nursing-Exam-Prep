@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { exigerAdmin } from "@/lib/admin";
+import { CATEGORIES_QUESTIONS } from "@/lib/categories";
 
 export default async function ModifierQuestion({ params }: { params: Promise<{ id: string }> }) {
   const { supabase } = await exigerAdmin();
@@ -39,6 +40,8 @@ export default async function ModifierQuestion({ params }: { params: Promise<{ i
     redirect("/admin/questions");
   }
 
+  const categories = Array.from(new Set([question.categorie, ...CATEGORIES_QUESTIONS].filter(Boolean)));
+
   return (
     <main className="container page">
       <div className="nav"><div className="logo">Modifier la question</div><Link href="/admin/questions">Retour</Link></div>
@@ -47,7 +50,11 @@ export default async function ModifierQuestion({ params }: { params: Promise<{ i
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <label>ID externe<input name="external_id" defaultValue={question.external_id ?? ""} /></label>
           <label>Année<input name="annee" type="number" defaultValue={question.annee ?? ""} /></label>
-          <label>Catégorie<input name="categorie" required defaultValue={question.categorie ?? ""} /></label>
+          <label>Catégorie
+            <select name="categorie" required defaultValue={question.categorie ?? ""}>
+              {categories.map((categorie) => <option key={categorie} value={categorie}>{categorie}</option>)}
+            </select>
+          </label>
           <label>Sous-catégorie<input name="sous_categorie" defaultValue={question.sous_categorie ?? ""} /></label>
           <label>Difficulté<select name="difficulte" defaultValue={question.difficulte ?? "Moyenne"}><option>Facile</option><option>Moyenne</option><option>Difficile</option></select></label>
           <label>Langue<select name="langue" defaultValue={question.langue ?? "fr"}><option value="fr">Français</option><option value="ht">Kreyòl</option></select></label>
