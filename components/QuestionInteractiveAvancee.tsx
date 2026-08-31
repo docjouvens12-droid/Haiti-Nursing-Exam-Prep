@@ -36,14 +36,21 @@ export default function QuestionInteractiveAvancee({ questions }: { questions: Q
 
   const q = questionsMelangees[index] ?? questionsMelangees[0];
   if (!q) return null;
+
   const options = [["A", q.option_a], ["B", q.option_b], ["C", q.option_c], ["D", q.option_d]] as const;
+  const progression = Math.round(((index + 1) / questionsMelangees.length) * 100);
 
   async function valider() {
     if (!choix) return;
     const supabase = createClient();
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
-    await supabase.from("user_answers").insert({ user_id: user.id, question_id: q.id, reponse_choisie: choix, correcte: choix === q.bonne_reponse });
+    await supabase.from("user_answers").insert({
+      user_id: user.id,
+      question_id: q.id,
+      reponse_choisie: choix,
+      correcte: choix === q.bonne_reponse,
+    });
     setValide(true);
   }
 
@@ -68,11 +75,67 @@ export default function QuestionInteractiveAvancee({ questions }: { questions: Q
   }
 
   return (
-    <div className="card" style={{maxWidth:860, margin:"0 auto"}}>
-      <div style={{display:"flex", justifyContent:"space-between", gap:12, flexWrap:"wrap"}}><p className="muted">Question {index + 1} sur {questionsMelangees.length}{q.annee ? ` — ${q.annee}` : ""} — {q.categorie}</p><button className="btn btn-secondary" onClick={basculerFavori}>{favori ? "Retirer des favoris" : "Ajouter aux favoris"}</button></div>
-      <h2 className="question-title">{q.question}</h2>
-      {options.map(([lettre, texte]) => <button key={lettre} className={`option ${choix === lettre ? "selected" : ""}`} onClick={() => !valide && setChoix(lettre)}>{lettre}. {texte}</button>)}
-      {!valide ? <button className="btn btn-primary" disabled={!choix} onClick={valider}>Valider la réponse</button> : <><div className="feedback"><strong>{choix === q.bonne_reponse ? "Bonne réponse ✅" : `Réponse incorrecte ❌ — Bonne réponse : ${q.bonne_reponse}`}</strong>{q.explication && <p>{q.explication}</p>}</div><button className="btn btn-primary" onClick={suivante}>Question suivante</button></>}
-    </div>
+    <section className="practice-question-card">
+      <div className="practice-question-topline">
+        <div>
+          <span className="practice-eyebrow">Mode pratique</span>
+          <p>Question {index + 1} sur {questionsMelangees.length}</p>
+        </div>
+        <button className={`practice-favorite ${favori ? "active" : ""}`} onClick={basculerFavori}>
+          {favori ? "♥ Favori" : "♡ Ajouter aux favoris"}
+        </button>
+      </div>
+
+      <div className="practice-progress-line">
+        <span style={{ width: `${progression}%` }} />
+      </div>
+
+      <div className="practice-meta-row">
+        <span>{q.categorie}</span>
+        {q.annee && <span>Année {q.annee}</span>}
+        <strong>{progression}%</strong>
+      </div>
+
+      <h2 className="practice-question-title">{q.question}</h2>
+      <p className="practice-help">Sélectionnez la meilleure réponse.</p>
+
+      <div className="practice-options">
+        {options.map(([lettre, texte]) => {
+          const bonne = valide && lettre === q.bonne_reponse;
+          const mauvaise = valide && choix === lettre && lettre !== q.bonne_reponse;
+          return (
+            <button
+              key={lettre}
+              className={`practice-option ${choix === lettre ? "selected" : ""} ${bonne ? "correct" : ""} ${mauvaise ? "incorrect" : ""}`}
+              onClick={() => !valide && setChoix(lettre)}
+            >
+              <span className="practice-letter">{lettre}</span>
+              <span>{texte}</span>
+              {bonne && <b>✓</b>}
+              {mauvaise && <b>×</b>}
+            </button>
+          );
+        })}
+      </div>
+
+      {valide && (
+        <div className={`practice-feedback ${choix === q.bonne_reponse ? "correct" : "incorrect"}`}>
+          <div className="practice-feedback-title">
+            <span>{choix === q.bonne_reponse ? "✓" : "!"}</span>
+            <strong>{choix === q.bonne_reponse ? "Bonne réponse" : `Réponse incorrecte — bonne réponse : ${q.bonne_reponse}`}</strong>
+          </div>
+          {q.explication && <p>{q.explication}</p>}
+        </div>
+      )}
+
+      <div className="practice-actions-row">
+        <span className="practice-counter">{index + 1} / {questionsMelangees.length}</span>
+        {!valide ? (
+          <button className="practice-primary-action" disabled={!choix} onClick={valider}>Valider la réponse</button>
+        ) : (
+          <button className="practice-primary-action" onClick={suivante}>Question suivante →</button>
+        )}
+      </div>
+    </section>
   );
 }
