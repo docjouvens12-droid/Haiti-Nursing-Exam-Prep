@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 
 type Question = {
@@ -26,7 +26,16 @@ export default function QuestionInteractiveAvancee({ questions }: { questions: Q
   const [choix, setChoix] = useState<"A" | "B" | "C" | "D" | null>(null);
   const [valide, setValide] = useState(false);
   const [favori, setFavori] = useState(false);
-  const q = questionsMelangees[index];
+
+  useEffect(() => {
+    setIndex(0);
+    setChoix(null);
+    setValide(false);
+    setFavori(false);
+  }, [questions]);
+
+  const q = questionsMelangees[index] ?? questionsMelangees[0];
+  if (!q) return null;
   const options = [["A", q.option_a], ["B", q.option_b], ["C", q.option_c], ["D", q.option_d]] as const;
 
   async function valider() {
