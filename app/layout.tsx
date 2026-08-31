@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Haiti Nursing Exam Prep",
-  description: "Plateforme de préparation aux examens infirmiers en Haïti",
+  description: "Préparez-vous, pratiquez et progressez pour l’Examen d’État en sciences infirmières en Haïti.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
