@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 
 export default async function ProfilPage() {
   const supabase = await createClient();
@@ -17,6 +18,7 @@ export default async function ProfilPage() {
 
   const nom = profil?.nom_complet || "Étudiant";
   const initiale = nom.charAt(0).toUpperCase();
+  const estAdmin = profil?.role === "admin";
 
   return (
     <main className="profile-page">
@@ -35,8 +37,22 @@ export default async function ProfilPage() {
           <h2>Informations du compte</h2>
           <div className="profile-detail"><span>Nom complet</span><strong>{nom}</strong></div>
           <div className="profile-detail"><span>Adresse e-mail</span><strong>{email || "Non disponible"}</strong></div>
-          <div className="profile-detail"><span>Type de compte</span><strong>{profil?.role === "admin" ? "Administrateur" : "Étudiant"}</strong></div>
+          <div className="profile-detail"><span>Type de compte</span><strong>{estAdmin ? "Administrateur" : "Étudiant"}</strong></div>
         </article>
+
+        {estAdmin && (
+          <article className="profile-card">
+            <h2>Administration</h2>
+            <p className="muted" style={{ marginTop: -8, marginBottom: 12 }}>
+              Gérez le contenu de Haiti Nursing Exam Prep.
+            </p>
+            <div className="profile-links">
+              <Link href="/admin"><strong>Panneau administrateur</strong> <span>→</span></Link>
+              <Link href="/admin/questions">Gérer les questions <span>→</span></Link>
+              <Link href="/admin/import">Importer des questions <span>→</span></Link>
+            </div>
+          </article>
+        )}
 
         <article className="profile-card">
           <h2>Raccourcis</h2>
@@ -47,6 +63,14 @@ export default async function ProfilPage() {
             <Link href="/questions-incorrectes">Questions à revoir <span>→</span></Link>
             <Link href="/nightingale">Nightingale AI <span>→</span></Link>
           </div>
+        </article>
+
+        <article className="profile-card">
+          <h2>Session</h2>
+          <p className="muted" style={{ marginTop: -8, marginBottom: 16 }}>
+            Déconnectez-vous de votre compte sur cet appareil.
+          </p>
+          <BoutonDeconnexion />
         </article>
       </section>
     </main>
