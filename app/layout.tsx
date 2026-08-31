@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import MobileStudentNav from "@/components/MobileStudentNav";
 
 export const metadata: Metadata = {
   title: "Haiti Nursing Exam Prep",
@@ -9,7 +10,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        {children}
+        <MobileStudentNav />
+      </body>
     </html>
   );
 }
