@@ -69,6 +69,7 @@ export default async function TableauDeBord() {
           <Link href="/pratique">✎ <span>Pratique de questions</span></Link>
           <Link href="/examens">▣ <span>Simulations d’examen</span></Link>
           <Link href="/questions-reelles">▦ <span>Catégories</span></Link>
+          <Link href="/nightingale">✦ <span>Nightingale AI</span></Link>
           <Link href="/questions-incorrectes">⊗ <span>Questions incorrectes</span></Link>
           <Link href="/favoris">♡ <span>Favoris</span>{(favoris ?? 0) > 0 && <b>{favoris}</b>}</Link>
           <Link href="/historique">↗ <span>Historique</span></Link>
@@ -151,6 +152,7 @@ export default async function TableauDeBord() {
                 <div className="quick-grid">
                   <Link href="/pratique"><span>▤</span>Pratique</Link>
                   <Link href="/examens/25"><span>▣</span>Examen 25</Link>
+                  <Link href="/nightingale"><span>✦</span>Nightingale</Link>
                   <Link href="/questions-incorrectes"><span>⊗</span>Incorrectes</Link>
                   <Link href="/favoris"><span>☆</span>Favoris</Link>
                 </div>
