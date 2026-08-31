@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import QuestionInteractiveAvancee from "@/components/QuestionInteractiveAvancee";
 import { CATEGORIES_QUESTIONS } from "@/lib/categories";
+import "./pratique.css";
 
 export default async function Pratique({ searchParams }: { searchParams: Promise<{ categorie?: string; annee?: string }> }) {
   const params = await searchParams;
