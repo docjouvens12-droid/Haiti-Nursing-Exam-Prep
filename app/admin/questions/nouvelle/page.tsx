@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { exigerAdmin } from "@/lib/admin";
+import { CATEGORIES_QUESTIONS } from "@/lib/categories";
 
 export default async function NouvelleQuestion() {
   await exigerAdmin();
@@ -42,8 +43,13 @@ export default async function NouvelleQuestion() {
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
           <label>ID externe<input name="external_id" placeholder="HT-NUR-5001" /></label>
           <label>Année<input name="annee" type="number" placeholder="2026" /></label>
-          <label>Catégorie<input name="categorie" required /></label>
-          <label>Sous-catégorie<input name="sous_categorie" /></label>
+          <label>Catégorie
+            <select name="categorie" required defaultValue="">
+              <option value="" disabled>Sélectionner une catégorie</option>
+              {CATEGORIES_QUESTIONS.map((categorie) => <option key={categorie} value={categorie}>{categorie}</option>)}
+            </select>
+          </label>
+          <label>Sous-catégorie<input name="sous_categorie" placeholder="Ex. Cardiologie, Diabète, Vaccination..." /></label>
           <label>Difficulté<select name="difficulte" defaultValue="Moyenne"><option>Facile</option><option>Moyenne</option><option>Difficile</option></select></label>
           <label>Langue<select name="langue" defaultValue="fr"><option value="fr">Français</option><option value="ht">Kreyòl</option></select></label>
         </div>
