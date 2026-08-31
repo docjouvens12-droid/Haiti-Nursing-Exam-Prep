@@ -2,6 +2,7 @@ import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { exigerAdmin } from "@/lib/admin";
 import { CATEGORIES_QUESTIONS } from "@/lib/categories";
+import FiltreQuestionsAdmin from "@/components/FiltreQuestionsAdmin";
 
 const PAGE_SIZE = 25;
 
@@ -28,8 +29,8 @@ export default async function QuestionsAdmin({
 
   const { data: questions, count } = await query.range(from, to);
   const { data: categoriesRows } = await supabase.from("questions").select("categorie").order("categorie");
-  const categoriesExistantes = (categoriesRows ?? []).map((r) => r.categorie).filter(Boolean);
-  const categories = Array.from(new Set([...CATEGORIES_QUESTIONS, ...categoriesExistantes])).sort((a, b) => a.localeCompare(b, "fr"));
+  const categoriesExistantes = (categoriesRows ?? []).map((r) => r.categorie).filter(Boolean) as string[];
+  const categories = Array.from(new Set<string>([...CATEGORIES_QUESTIONS, ...categoriesExistantes])).sort((a, b) => a.localeCompare(b, "fr"));
   const total = count ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
@@ -54,40 +55,42 @@ export default async function QuestionsAdmin({
   return (
     <main className="container page">
       <div className="nav">
-        <div><div className="logo">Gestion des questions</div><small className="muted">{total.toLocaleString("fr-FR")} question(s)</small></div>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+        <div>
+          <div className="logo">Gestion des questions</div>
+          <small className="muted">
+            {total.toLocaleString("fr-FR")} question(s){categorie ? ` dans ${categorie}` : ""}
+          </small>
+        </div>
+        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
           <Link className="button" href="/admin/questions/nouvelle">Ajouter une question</Link>
           <Link href="/admin">Retour admin</Link>
         </div>
       </div>
 
-      <div className="card" style={{margin:"24px 0"}}>
-        <form method="get" style={{display:"grid",gridTemplateColumns:"2fr 1fr auto",gap:12,alignItems:"end"}}>
-          <label>Recherche
-            <input name="q" defaultValue={q} placeholder="Texte ou identifiant HT-NUR..." />
-          </label>
-          <label>Catégorie
-            <select name="categorie" defaultValue={categorie}>
-              <option value="">Toutes les catégories</option>
-              {categories.map((c) => <option key={c} value={c}>{c}</option>)}
-            </select>
-          </label>
-          <button className="button" type="submit">Filtrer</button>
-        </form>
-      </div>
+      <FiltreQuestionsAdmin
+        categories={categories}
+        categorieInitiale={categorie}
+        rechercheInitiale={q}
+      />
 
-      <div style={{display:"grid",gap:12}}>
+      {categorie && (
+        <div className="card" style={{ marginBottom: 16, padding: "14px 18px" }}>
+          <strong>Catégorie affichée : {categorie}</strong> — {total.toLocaleString("fr-FR")} question(s)
+        </div>
+      )}
+
+      <div style={{ display: "grid", gap: 12 }}>
         {(questions ?? []).map((item) => (
           <article className="card" key={item.id}>
-            <div style={{display:"flex",justifyContent:"space-between",gap:16,alignItems:"flex-start",flexWrap:"wrap"}}>
-              <div style={{flex:1,minWidth:240}}>
-                <div className="muted" style={{fontSize:14}}>
-                  {item.external_id ?? "Sans ID externe"} · {item.categorie}{item.sous_categorie ? ` / ${item.sous_categorie}` : ""}{item.annee ? ` · ${item.annee}` : ""}
+            <div style={{ display: "flex", justifyContent: "space-between", gap: 16, alignItems: "flex-start", flexWrap: "wrap" }}>
+              <div style={{ flex: 1, minWidth: 240 }}>
+                <div className="muted" style={{ fontSize: 14 }}>
+                  {item.external_id ?? "Sans ID externe"} · <strong>{item.categorie}</strong>{item.sous_categorie ? ` / ${item.sous_categorie}` : ""}{item.annee ? ` · ${item.annee}` : ""}
                 </div>
-                <h2 style={{fontSize:"1.05rem",lineHeight:1.45,margin:"8px 0"}}>{item.question}</h2>
+                <h2 style={{ fontSize: "1.05rem", lineHeight: 1.45, margin: "8px 0" }}>{item.question}</h2>
                 <small className="muted">Authenticité : {item.authenticite ?? "reconstitue"} · Langue : {item.langue ?? "fr"}</small>
               </div>
-              <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 <Link className="button secondary" href={`/admin/questions/${item.id}`}>Modifier</Link>
                 <form action={supprimerQuestion}>
                   <input type="hidden" name="id" value={item.id} />
@@ -97,12 +100,12 @@ export default async function QuestionsAdmin({
             </div>
           </article>
         ))}
-        {(questions ?? []).length === 0 && <div className="card"><p>Aucune question trouvée.</p></div>}
+        {(questions ?? []).length === 0 && <div className="card"><p>Aucune question trouvée dans cette catégorie.</p></div>}
       </div>
 
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:24}}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 24 }}>
         <span className="muted">Page {page} sur {totalPages}</span>
-        <div style={{display:"flex",gap:10}}>
+        <div style={{ display: "flex", gap: 10 }}>
           {page > 1 && <Link className="button secondary" href={pageHref(page - 1)}>Précédent</Link>}
           {page < totalPages && <Link className="button secondary" href={pageHref(page + 1)}>Suivant</Link>}
         </div>
