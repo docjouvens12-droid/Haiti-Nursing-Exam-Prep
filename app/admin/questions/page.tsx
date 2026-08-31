@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { exigerAdmin } from "@/lib/admin";
+import { CATEGORIES_QUESTIONS } from "@/lib/categories";
 
 const PAGE_SIZE = 25;
 
@@ -27,7 +28,8 @@ export default async function QuestionsAdmin({
 
   const { data: questions, count } = await query.range(from, to);
   const { data: categoriesRows } = await supabase.from("questions").select("categorie").order("categorie");
-  const categories = [...new Set((categoriesRows ?? []).map((r) => r.categorie).filter(Boolean))];
+  const categoriesExistantes = (categoriesRows ?? []).map((r) => r.categorie).filter(Boolean);
+  const categories = Array.from(new Set([...CATEGORIES_QUESTIONS, ...categoriesExistantes])).sort((a, b) => a.localeCompare(b, "fr"));
   const total = count ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
 
