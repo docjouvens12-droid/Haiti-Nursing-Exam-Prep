@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import QuestionInteractive from "@/components/QuestionInteractive";
 import SelectionCategorieEtudiant from "@/components/SelectionCategorieEtudiant";
+import { CATEGORIES_QUESTIONS } from "@/lib/categories";
 
 export default async function QuestionsReelles({
   searchParams,
@@ -15,20 +16,18 @@ export default async function QuestionsReelles({
   const { data: claimsData } = await supabase.auth.getClaims();
   if (!claimsData?.claims) redirect("/connexion");
 
-  const { data: categoriesRows } = await supabase
-    .from("questions")
-    .select("categorie")
-    .not("categorie", "is", null);
+  const comptes = await Promise.all(
+    CATEGORIES_QUESTIONS.map(async (nom) => {
+      const { count } = await supabase
+        .from("questions")
+        .select("id", { count: "exact", head: true })
+        .eq("categorie", nom);
+      return { nom, total: count ?? 0 };
+    })
+  );
 
-  const compteur = new Map<string, number>();
-  for (const row of categoriesRows ?? []) {
-    if (!row.categorie) continue;
-    compteur.set(row.categorie, (compteur.get(row.categorie) ?? 0) + 1);
-  }
-
-  const categories = [...compteur.entries()]
-    .map(([nom, total]) => ({ nom, total }))
-    .sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+  const categories = [...comptes].sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
+  const compteur = new Map(categories.map((c) => [c.nom, c.total]));
 
   let query = supabase
     .from("questions")
@@ -63,10 +62,12 @@ export default async function QuestionsReelles({
             key={cat.nom}
             href={`/questions-reelles?categorie=${encodeURIComponent(cat.nom)}`}
             className="card"
-            style={{ textDecoration: "none" }}
+            style={{ textDecoration: "none", opacity: cat.total > 0 ? 1 : 0.7 }}
           >
             <strong>{cat.nom}</strong>
-            <div className="muted" style={{ marginTop: 6 }}>{cat.total.toLocaleString("fr-FR")} question(s)</div>
+            <div className="muted" style={{ marginTop: 6 }}>
+              {cat.total > 0 ? `${cat.total.toLocaleString("fr-FR")} question(s)` : "Aucune question pour le moment"}
+            </div>
           </Link>
         ))}
       </div>
@@ -83,7 +84,7 @@ export default async function QuestionsReelles({
       {!questions || questions.length === 0 ? (
         <div className="card">
           <h2>Aucune question trouvée</h2>
-          <p className="muted">Cette catégorie ne contient pas encore de questions.</p>
+          <p className="muted">Cette catégorie existe bien sur la plateforme, mais elle ne contient pas encore de questions.</p>
         </div>
       ) : (
         <QuestionInteractive key={categorie || "toutes"} questions={questions} />
