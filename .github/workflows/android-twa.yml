@@ -1,0 +1,65 @@
+name: Build Android TWA
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "android/twa-manifest.json"
+      - ".github/workflows/android-twa.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install Bubblewrap
+        run: npm install -g @bubblewrap/cli
+
+      - name: Configure Bubblewrap
+        run: |
+          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_SDK_ROOT"
+
+      - name: Generate Android project
+        working-directory: android
+        run: bubblewrap update --skipVersionUpgrade --manifest ./twa-manifest.json
+
+      - name: Build unsigned Android bundle
+        working-directory: android
+        run: bubblewrap build --skipSigning --skipPwaValidation --manifest ./twa-manifest.json
+
+      - name: Package generated Android source
+        working-directory: android
+        run: |
+          zip -r haiti-nursing-android-source.zip . \
+            -x "app/build/*" \
+            -x ".gradle/*" \
+            -x "*.keystore"
+
+      - name: Upload Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: haiti-nursing-android-unsigned
+          if-no-files-found: error
+          path: |
+            android/app/build/outputs/bundle/release/app-release.aab
+            android/haiti-nursing-android-source.zip
+          retention-days: 14
