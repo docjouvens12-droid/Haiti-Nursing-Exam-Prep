@@ -3,3 +3,14 @@ node_modules
 .env
 .env.local
 .DS_Store
+
+# Android signing secrets
+*.keystore
+*.jks
+android/android.keystore
+
+# Android build outputs
+android/.gradle/
+android/app/build/
+android/build/
+android/local.properties
