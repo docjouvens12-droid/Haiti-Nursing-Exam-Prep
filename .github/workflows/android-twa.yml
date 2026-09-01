@@ -38,7 +38,7 @@ jobs:
         env:
           CI: "true"
         run: |
-          printf 'n\nn\n' | bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_SDK_ROOT"
+          printf 'n\n%s\nn\n%s\n' "$JAVA_HOME" "$ANDROID_SDK_ROOT" | bubblewrap updateConfig
 
       - name: Generate Android project
         working-directory: android
