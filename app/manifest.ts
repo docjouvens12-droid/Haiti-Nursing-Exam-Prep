@@ -7,7 +7,7 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "Préparation à l’Examen d’État en sciences infirmières en Haïti.",
     start_url: "/tableau-de-bord",
     display: "standalone",
-    background_color: "#f7f9fd",
+    background_color: "#061636",
     theme_color: "#0b1f59",
     lang: "fr",
     orientation: "portrait-primary",
