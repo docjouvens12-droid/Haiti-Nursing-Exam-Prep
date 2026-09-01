@@ -34,11 +34,17 @@ jobs:
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
 
-      - name: Configure Bubblewrap non-interactively
-        env:
-          CI: "true"
+      - name: Write Bubblewrap config
         run: |
-          printf 'n\n%s\nn\n%s\n' "$JAVA_HOME" "$ANDROID_SDK_ROOT" | bubblewrap updateConfig
+          mkdir -p "$HOME/.bubblewrap"
+          cat > "$HOME/.bubblewrap/config.json" <<EOF
+          {
+            "jdkPath": "$JAVA_HOME",
+            "androidSdkPath": "$ANDROID_SDK_ROOT"
+          }
+          EOF
+          cat "$HOME/.bubblewrap/config.json"
+          bubblewrap doctor
 
       - name: Generate Android project
         working-directory: android
