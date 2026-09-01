@@ -34,16 +34,22 @@ jobs:
       - name: Install Bubblewrap
         run: npm install -g @bubblewrap/cli
 
-      - name: Configure Bubblewrap
+      - name: Configure Bubblewrap non-interactively
+        env:
+          CI: "true"
         run: |
-          bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_SDK_ROOT"
+          printf 'n\nn\n' | bubblewrap updateConfig --jdkPath="$JAVA_HOME" --androidSdkPath="$ANDROID_SDK_ROOT"
 
       - name: Generate Android project
         working-directory: android
+        env:
+          CI: "true"
         run: bubblewrap update --skipVersionUpgrade --manifest ./twa-manifest.json
 
       - name: Build unsigned Android bundle
         working-directory: android
+        env:
+          CI: "true"
         run: bubblewrap build --skipSigning --skipPwaValidation --manifest ./twa-manifest.json
 
       - name: Package generated Android source
