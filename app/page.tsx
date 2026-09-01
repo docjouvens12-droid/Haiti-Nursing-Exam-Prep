@@ -6,6 +6,7 @@ export default function Accueil() {
       <nav className="nav">
         <div className="logo">Haiti Nursing Exam Prep</div>
         <div className="navlinks">
+          <Link href="/inscription">Créer un compte</Link>
           <Link href="/tableau-de-bord">Tableau de bord</Link>
           <Link className="btn btn-primary" href="/connexion">Se connecter</Link>
         </div>
@@ -20,15 +21,15 @@ export default function Accueil() {
             des explications détaillées et un suivi de votre progression.
           </p>
           <div className="actions">
-            <Link className="btn btn-primary" href="/questions">Commencer à pratiquer</Link>
-            <Link className="btn btn-secondary" href="/tableau-de-bord">Voir le tableau de bord</Link>
+            <Link className="btn btn-primary" href="/pratique">Commencer à pratiquer</Link>
+            <Link className="btn btn-secondary" href="/inscription">Créer un compte</Link>
           </div>
         </div>
 
         <div className="card">
           <h2>Votre préparation en un coup d'œil</h2>
           <div className="statgrid">
-            <div className="stat"><span>Questions</span><strong>1 400+</strong></div>
+            <div className="stat"><span>Questions</span><strong>6 000+</strong></div>
             <div className="stat"><span>Catégories</span><strong>10+</strong></div>
             <div className="stat"><span>Modes</span><strong>3</strong></div>
           </div>
