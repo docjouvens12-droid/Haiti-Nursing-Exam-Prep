@@ -1,0 +1,41 @@
+{
+  "packageId": "com.haitinursing.examprep",
+  "host": "haiti-nursing-exam-prep.vercel.app",
+  "name": "Haiti Nursing Exam Prep",
+  "launcherName": "Haiti Nursing",
+  "display": "standalone",
+  "themeColor": "#0b1f59",
+  "themeColorDark": "#061636",
+  "navigationColor": "#061636",
+  "navigationColorDark": "#061636",
+  "navigationDividerColor": "#061636",
+  "navigationDividerColorDark": "#061636",
+  "backgroundColor": "#061636",
+  "enableNotifications": false,
+  "startUrl": "/tableau-de-bord",
+  "iconUrl": "https://haiti-nursing-exam-prep.vercel.app/android-icon",
+  "maskableIconUrl": "https://haiti-nursing-exam-prep.vercel.app/android-icon",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "haiti-nursing"
+  },
+  "appVersionCode": 1,
+  "appVersion": "1.0.0",
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://haiti-nursing-exam-prep.vercel.app/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://haiti-nursing-exam-prep.vercel.app/",
+  "minSdkVersion": 23,
+  "orientation": "portrait-primary",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": []
+}
