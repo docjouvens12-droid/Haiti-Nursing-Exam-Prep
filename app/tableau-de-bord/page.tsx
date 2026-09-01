@@ -16,16 +16,42 @@ export default async function TableauDeBord() {
   const userId = String(claimsData.claims.sub);
   const email = String(claimsData.claims.email ?? "Étudiant");
 
-  const [{ data: profil }, { data: reponses }, { data: sessions }, { count: favoris }] = await Promise.all([
+  const [
+    { data: profil },
+    { data: reponses },
+    { data: sessions },
+    { count: favoris },
+    { count: totalQuestionsCount },
+    { count: historicalExamCount },
+  ] = await Promise.all([
     supabase.from("profiles").select("nom_complet,role").eq("id", userId).single(),
-    supabase.from("user_answers").select(`correcte,answered_at,question_id,questions(categorie,question)`).order("answered_at", { ascending: false }).limit(5000),
-    supabase.from("exam_sessions").select("id,mode,score,total_questions,completed_at").not("completed_at", "is", null).order("completed_at", { ascending: false }).limit(27),
-    supabase.from("favorites").select("*", { count: "exact", head: true }),
+    supabase
+      .from("user_answers")
+      .select(`correcte,answered_at,question_id,questions(categorie,question)`)
+      .eq("user_id", userId)
+      .order("answered_at", { ascending: false })
+      .limit(5000),
+    supabase
+      .from("exam_sessions")
+      .select("id,mode,score,total_questions,completed_at")
+      .eq("user_id", userId)
+      .not("completed_at", "is", null)
+      .order("completed_at", { ascending: false })
+      .limit(500),
+    supabase.from("favorites").select("*", { count: "exact", head: true }).eq("user_id", userId),
+    supabase.from("questions").select("id", { count: "exact", head: true }),
+    supabase.from("exam_banks").select("id", { count: "exact", head: true }),
   ]);
 
-  const total = reponses?.length ?? 0;
+  const totalTentatives = reponses?.length ?? 0;
+  const questionsRepondues = new Set((reponses ?? []).map((r: any) => String(r.question_id))).size;
+  const totalQuestions = totalQuestionsCount ?? 0;
+  const progressionQuestions = totalQuestions > 0
+    ? Math.min(100, Math.round((questionsRepondues / totalQuestions) * 100))
+    : 0;
+
   const bonnes = (reponses ?? []).filter((r: any) => r.correcte).length;
-  const taux = total ? Math.round((bonnes / total) * 100) : 0;
+  const taux = totalTentatives ? Math.round((bonnes / totalTentatives) * 100) : 0;
   const nom = profil?.nom_complet || email;
   const prenom = nom.split(" ")[0];
 
@@ -59,8 +85,9 @@ export default async function TableauDeBord() {
     return true;
   });
 
-  const examensCompletes = sessions?.length ?? 0;
-  const serieEtude = total > 0 ? Math.min(6, Math.max(1, Math.ceil(total / 25))) : 0;
+  const examensCompletes = new Set((sessions ?? []).map((session: any) => session.mode).filter(Boolean)).size;
+  const examensDisponibles = (historicalExamCount ?? 0) + 3;
+  const serieEtude = totalTentatives > 0 ? Math.min(6, Math.max(1, Math.ceil(totalTentatives / 25))) : 0;
 
   return (
     <div className="dashboard-shell modern-dashboard">
@@ -116,9 +143,9 @@ export default async function TableauDeBord() {
           </div>
 
           <div className="metric-grid modern-metrics">
-            <div className="metric-card"><span className="metric-icon blue">?</span><div><small>Questions répondues</small><strong>{total.toLocaleString("fr-FR")} <i>/ 5 000</i></strong><div className="mini-progress"><span style={{ width: `${Math.min(100, Math.round((total / 5000) * 100))}%` }} /></div><em>{Math.round((total / 5000) * 100)}% complété</em></div></div>
+            <div className="metric-card"><span className="metric-icon blue">?</span><div><small>Questions répondues</small><strong>{questionsRepondues.toLocaleString("fr-FR")} <i>/ {totalQuestions.toLocaleString("fr-FR")}</i></strong><div className="mini-progress"><span style={{ width: `${progressionQuestions}%` }} /></div><em>{progressionQuestions}% complété</em></div></div>
             <div className="metric-card"><span className="metric-icon green">✓</span><div><small>Taux de réussite</small><strong>{taux}%</strong><em>{bonnes} bonnes réponses</em></div></div>
-            <div className="metric-card"><span className="metric-icon purple">▣</span><div><small>Examens complétés</small><strong>{examensCompletes} <i>/ 27</i></strong><em>Poursuivez votre progression</em></div></div>
+            <div className="metric-card"><span className="metric-icon purple">▣</span><div><small>Examens complétés</small><strong>{examensCompletes} <i>/ {examensDisponibles}</i></strong><em>{examensDisponibles} formats disponibles</em></div></div>
             <div className="metric-card"><span className="metric-icon orange">🔥</span><div><small>Série d’étude</small><strong>{serieEtude} jours</strong><em>Continuez votre série !</em></div></div>
           </div>
 
@@ -153,7 +180,7 @@ export default async function TableauDeBord() {
                     <span className="exam-doc e4">★</span>
                     <strong>Examens d’État</strong>
                     <small>Banque historique</small>
-                    <p>Ajout progressif</p>
+                    <p>{historicalExamCount ?? 0} examens reconstitués</p>
                     <Link href="/examens">Découvrir →</Link>
                   </div>
                 </div>
