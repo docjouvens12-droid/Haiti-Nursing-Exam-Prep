@@ -1,3 +1,5 @@
+import CardiovascularTopics from "@/components/CardiovascularTopics";
+
 const categories = [
   { title: "Médecine–Chirurgie", icon: "🩺", topics: ["Cardiovasculaire", "Respiratoire", "Neurologie", "Gastro-intestinal", "Endocrinologie", "Rénal", "Hématologie", "Infectiologie"] },
   { title: "Pédiatrie", icon: "👶", topics: ["Nouveau-né", "Croissance et développement", "Maladies pédiatriques", "Vaccination", "Urgences pédiatriques"] },
@@ -26,7 +28,9 @@ export default function CategoriesPage() {
               <span className="category-arrow" aria-hidden="true">⌄</span>
             </summary>
             <div className="topic-list">
-              {category.topics.map((topic) => <div className="topic" key={topic}>{topic}</div>)}
+              {category.topics.map((topic) => category.title === "Médecine–Chirurgie" && topic === "Cardiovasculaire" ? (
+                <CardiovascularTopics key={topic} />
+              ) : <div className="topic" key={topic}>{topic}</div>)}
             </div>
           </details>
         ))}
@@ -36,10 +40,10 @@ export default function CategoriesPage() {
         .categories-header{margin-bottom:26px}.categories-kicker{display:inline-block;background:#eaf2ff;color:#2367e8;font-weight:800;font-size:13px;padding:8px 12px;border-radius:999px}
         .categories-header h1{font-size:32px;line-height:1.12;margin:15px 0 10px}.categories-header p{color:#66738e;line-height:1.6;margin:0;max-width:680px}
         .categories-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.category-card{background:#fff;border:1px solid #e1e7f0;border-radius:18px;box-shadow:0 5px 18px rgba(25,50,100,.06);overflow:hidden}
-        .category-card summary{list-style:none;display:flex;align-items:center;gap:14px;padding:20px;cursor:pointer}.category-card summary::-webkit-details-marker{display:none}
+        .category-card > summary{list-style:none;display:flex;align-items:center;gap:14px;padding:20px;cursor:pointer}.category-card > summary::-webkit-details-marker{display:none}
         .category-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:#eef4ff;font-size:24px}.category-name{display:flex;flex-direction:column;gap:5px;flex:1}.category-name strong{font-size:17px}.category-name small{color:#7a879f}
-        .category-arrow{font-size:24px;color:#4a67df;transition:transform .2s}.category-card[open] .category-arrow{transform:rotate(180deg)}.topic-list{display:grid;gap:8px;padding:0 20px 20px}.topic{background:#f5f8fd;border:1px solid #e8edf5;padding:11px 13px;border-radius:11px;color:#34425e;font-weight:600}
-        @media(max-width:700px){.categories-page{padding:24px 16px 110px}.categories-header h1{font-size:27px}.categories-grid{grid-template-columns:1fr}.category-card summary{padding:17px}.topic-list{padding:0 17px 17px}}
+        .category-arrow{font-size:24px;color:#4a67df;transition:transform .2s}.category-card[open] > summary .category-arrow{transform:rotate(180deg)}.topic-list{display:grid;gap:8px;padding:0 20px 20px}.topic{background:#f5f8fd;border:1px solid #e8edf5;padding:11px 13px;border-radius:11px;color:#34425e;font-weight:600}
+        @media(max-width:700px){.categories-page{padding:24px 16px 110px}.categories-header h1{font-size:27px}.categories-grid{grid-template-columns:1fr}.category-card > summary{padding:17px}.topic-list{padding:0 17px 17px}}
       `}</style>
     </main>
   );

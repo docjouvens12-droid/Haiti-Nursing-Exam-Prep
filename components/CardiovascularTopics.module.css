@@ -1,0 +1,13 @@
+.topic { width: 100%; min-width: 0; align-self: start; border: 1px solid #d9e5f5; border-radius: 12px; background: #f5f8fd; color: #34425e; overflow: hidden; }
+.summary { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 12px 13px; cursor: pointer; list-style: none; }
+.summary::-webkit-details-marker { display: none; }
+.summary:focus-visible { outline: 3px solid #2367e8; outline-offset: -3px; border-radius: 12px; }
+.title { display: grid; gap: 4px; min-width: 0; flex: 1; }
+.title strong { font-size: 15px; }
+.title small { font-size: 12px; color: #546580; }
+.arrow { color: #2367e8; font-size: 22px; }
+.topic[open] > .summary .arrow { transform: rotate(180deg); }
+.content { border-top: 1px solid #d9e5f5; padding: 12px; }
+.note { margin: 0 0 12px; font-size: 13px; line-height: 1.5; color: #546580; }
+.list { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.list li { padding: 10px 12px; border: 1px solid #e1e7f0; border-radius: 9px; background: white; font-size: 14px; line-height: 1.5; overflow-wrap: anywhere; }

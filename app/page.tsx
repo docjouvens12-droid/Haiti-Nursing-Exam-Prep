@@ -1,3 +1,4 @@
+import CardiovascularTopics from "@/components/CardiovascularTopics";
 import Link from "next/link";
 import "./home-categories.css";
 
@@ -105,7 +106,9 @@ export default function Accueil() {
               </summary>
               <div className="home-topic-list">
                 {category.topics.map((topic) => (
-                  <span className="home-topic-chip" key={topic}>{topic}</span>
+                  category.title === "Médecine–Chirurgie" && topic === "Cardiovasculaire" ? (
+                    <CardiovascularTopics key={topic} />
+                  ) : <span className="home-topic-chip" key={topic}>{topic}</span>
                 ))}
               </div>
             </details>
