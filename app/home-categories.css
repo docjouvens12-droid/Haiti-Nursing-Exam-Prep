@@ -17,6 +17,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+  align-items: start;
 }
 
 .home-category-card {
@@ -87,15 +88,6 @@
   flex-wrap: wrap;
   gap: 9px;
   padding: 16px 18px 18px;
-}
-
-.home-topic-chip {
-  padding: 8px 10px;
-  border-radius: 999px;
-  background: #f3f7fb;
-  border: 1px solid #e1e9f2;
-  color: #34445c;
-  font-size: .8rem;
 }
 
 @media (max-width: 800px) {
