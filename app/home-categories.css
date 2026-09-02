@@ -1,0 +1,117 @@
+.home-categories {
+  padding: 10px 0 80px;
+}
+
+.home-categories-heading {
+  max-width: 760px;
+  margin-bottom: 26px;
+}
+
+.home-categories-heading h2 {
+  margin: 14px 0 8px;
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  color: var(--texte);
+}
+
+.home-category-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.home-category-card {
+  background: var(--blanc);
+  border: 1px solid var(--bordure);
+  border-radius: 16px;
+  box-shadow: 0 7px 24px rgba(20, 40, 70, .05);
+  overflow: hidden;
+}
+
+.home-category-card summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+}
+
+.home-category-card summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-category-card[open] summary {
+  border-bottom: 1px solid var(--bordure);
+}
+
+.home-category-icon {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  background: var(--bleu-clair);
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+}
+
+.home-category-title-wrap {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.home-category-title-wrap strong {
+  color: var(--texte);
+  font-size: .98rem;
+}
+
+.home-category-title-wrap small {
+  color: var(--gris);
+  font-size: .78rem;
+}
+
+.home-category-chevron {
+  margin-left: auto;
+  color: var(--bleu);
+  font-size: 22px;
+  transition: transform .2s ease;
+}
+
+.home-category-card[open] .home-category-chevron {
+  transform: rotate(180deg);
+}
+
+.home-topic-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  padding: 16px 18px 18px;
+}
+
+.home-topic-chip {
+  padding: 8px 10px;
+  border-radius: 999px;
+  background: #f3f7fb;
+  border: 1px solid #e1e9f2;
+  color: #34445c;
+  font-size: .8rem;
+}
+
+@media (max-width: 800px) {
+  .home-categories {
+    padding-bottom: 56px;
+  }
+
+  .home-category-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-category-card summary {
+    padding: 15px;
+  }
+
+  .home-topic-list {
+    padding: 14px 15px 16px;
+  }
+}
