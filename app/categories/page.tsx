@@ -17,7 +17,7 @@ export default function CategoriesPage() {
       <header className="categories-header">
         <span className="categories-kicker">Programme de révision</span>
         <h1>Catégories et thématiques</h1>
-        <p>Explorez les domaines de préparation et les thématiques qui leur appartiennent. Les questions seront intégrées ultérieurement.</p>
+        <p>Explorez les domaines de préparation, leurs thématiques et sous-thématiques.</p>
       </header>
       <section className="categories-grid">
         {categories.map((category) => (

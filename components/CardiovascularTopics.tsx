@@ -41,7 +41,6 @@ export default function CardiovascularTopics() {
         <span className={styles.arrow} aria-hidden="true">⌄</span>
       </summary>
       <div className={styles.content}>
-        <p className={styles.note}>Les questions seront ajoutées ultérieurement.</p>
         <ul className={styles.list}>
           {subtopics.map((subtopic) => <li key={subtopic}>{subtopic}</li>)}
         </ul>

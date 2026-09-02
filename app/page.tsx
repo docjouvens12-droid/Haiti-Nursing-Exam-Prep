@@ -89,7 +89,7 @@ export default function Accueil() {
           <span className="badge">Programme de révision</span>
           <h2 id="categories-title">Catégories et thématiques</h2>
           <p className="muted">
-            Explorez les principaux domaines de préparation. Les questions seront ajoutées aux thématiques dans une prochaine étape.
+            Explorez les principaux domaines de préparation, leurs thématiques et sous-thématiques.
           </p>
         </div>
 
