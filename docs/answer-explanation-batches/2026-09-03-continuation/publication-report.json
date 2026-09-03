@@ -1,0 +1,20 @@
+{
+  "date": "2026-09-03",
+  "status": "applied-and-database-verified",
+  "requested": 6229,
+  "newlyEnriched": 6008,
+  "totalQuestions": 6425,
+  "totalEnriched": 6204,
+  "remaining": 221,
+  "verification": {
+    "mismatches": 0,
+    "checked": "Every applied row: question, options A-D, correct key and exact resulting explanation",
+    "parserTests": "passed"
+  },
+  "backupCommit": "0669754ebde822d715afe9417c1479796ce26b0c",
+  "limitations": [
+    "153 questions distinctes restent à enrichir individuellement.",
+    "68 énoncés ne précisent pas la grossesse alors que le corrigé suppose une pré-éclampsie ; clarification éditoriale nécessaire.",
+    "Pas de certification de relecture clinique indépendante ni de test navigateur authentifié dans ce lot."
+  ]
+}

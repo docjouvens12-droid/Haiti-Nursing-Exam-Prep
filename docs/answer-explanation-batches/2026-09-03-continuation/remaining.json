@@ -1,0 +1,2212 @@
+[
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "00655ff2-bd4a-4a1e-b58f-344d5772c021",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "À l’admission, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "02d9813d-6550-4312-b5f8-4080eb19ce3b",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’un appel de la famille, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "031940d2-7cf7-4a15-803a-e0694b7d647d",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Dans une unité hospitalière, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un thorax très silencieux dans une crise sévère peut refléter un débit d’air extrêmement réduit.",
+    "id": "03d568a7-0272-42b2-b547-2668b4029102",
+    "option_a": "Obstruction sévère et urgence",
+    "option_b": "Guérison complète",
+    "option_c": "Sommeil normal",
+    "option_d": "Faim",
+    "question": "Un enfant asthmatique devient silencieux à l’auscultation malgré une grande difficulté respiratoire. Que signifie ce signe ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’absence de respiration efficace nécessite une intervention néonatale immédiate selon le protocole.",
+    "id": "03da7c06-95d5-4c0e-aa67-2ad2a20ea9fa",
+    "option_a": "Commencer les étapes de réanimation néonatale appropriées et appeler de l’aide",
+    "option_b": "Lui donner de l’eau",
+    "option_c": "Attendre 10 minutes",
+    "option_d": "Le baigner",
+    "question": "Un nouveau-né ne respire pas normalement après séchage et stimulation initiale. Quelle est la priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Dyspnée, œdème et hypotension après exposition à un allergène sont compatibles avec une anaphylaxie.",
+    "id": "068e928d-dfb2-43a6-bcb2-f578293aee2f",
+    "option_a": "Anaphylaxie",
+    "option_b": "Constipation",
+    "option_c": "Migraine",
+    "option_d": "Hyperthyroïdie",
+    "question": "Après administration d’un médicament, un patient développe dyspnée, œdème du visage et hypotension. Quelle complication faut-il suspecter ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Cela peut correspondre à une réaction allergique sévère avec atteinte des voies aériennes.",
+    "id": "091a85c8-3600-4858-85ad-93188e2ee992",
+    "option_a": "Traiter comme une urgence et appeler immédiatement de l’aide",
+    "option_b": "Attendre le lendemain",
+    "option_c": "Lui donner un repas",
+    "option_d": "Le faire marcher",
+    "question": "Après un nouveau médicament, le patient développe gonflement du visage et difficulté respiratoire. Que faire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les prescriptions en mg/kg nécessitent un poids fiable en kilogrammes.",
+    "id": "0a9775e2-f108-4ad1-b1eb-9796d392b1f4",
+    "option_a": "Le poids de l’enfant en kilogrammes",
+    "option_b": "Sa pointure",
+    "option_c": "Le poids du père",
+    "option_d": "La taille de la chambre",
+    "question": "Pour calculer une dose pédiatrique prescrite en mg/kg, quelle donnée est indispensable ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "0b475357-bc01-452d-b984-debae0aedceb",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Pendant une évaluation centrée sur un problème, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La compression utérine bimanuelle est une mesure temporaire recommandée pour une HPP due à une atonie après accouchement vaginal, en attendant une prise en charge définitive.",
+    "id": "0b4dc55a-a6ec-4cd9-965e-4cca82ab348c",
+    "option_a": "Compression utérine bimanuelle",
+    "option_b": "Marche assistée",
+    "option_c": "Hydratation orale seule",
+    "option_d": "Attendre sans intervention",
+    "question": "Une patiente présente une hémorragie postpartum avec utérus atone malgré le début de la prise en charge. Quelle intervention mécanique temporaire peut aider à contrôler le saignement pendant l’escalade des soins ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hygiène des mains est une mesure essentielle de prévention des infections.",
+    "id": "0c131bf1-32e1-46bd-bcb1-cb903a87d1ec",
+    "option_a": "Prévenir la transmission des infections",
+    "option_b": "Augmenter la tension artérielle",
+    "option_c": "Traiter une fracture",
+    "option_d": "Corriger une anémie",
+    "question": "Le lavage des mains est particulièrement important pour :"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "0c90f831-a989-40b6-af4b-6b3de90a8534",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Lors de la préparation de la transmission, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent évoquer un syndrome coronarien aigu nécessitant une évaluation immédiate.",
+    "id": "0e04978a-e459-4b6f-8034-c73daf65528e",
+    "option_a": "Le laisser seul",
+    "option_b": "Évaluer rapidement, surveiller les signes vitaux et alerter l’équipe médicale",
+    "option_c": "Lui donner un repas",
+    "option_d": "Attendre 2 heures",
+    "question": "Un patient a une douleur thoracique constrictive avec sueurs et nausées. Quelle est la priorité infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un utérus mou avec saignement abondant évoque notamment une atonie utérine, cause fréquente d’hémorragie postpartum.",
+    "id": "0ee7fb0d-c480-4e86-a99d-536494c3d9d5",
+    "option_a": "Hémorragie du postpartum par atonie utérine",
+    "option_b": "Otite",
+    "option_c": "Asthme",
+    "option_d": "Appendicite",
+    "question": "Deux heures après l’accouchement, une femme saigne abondamment et l’utérus est mou. Quelle complication suspecter ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Avant toute administration, l’infirmière vérifie notamment l’identité du patient, les allergies, la prescription, la dose, la voie, le moment et les paramètres cliniques nécessaires. Ces contrôles contribuent à prévenir les erreurs médicamenteuses.",
+    "id": "105c45ca-713b-45bc-b865-73567211312b",
+    "option_a": "Administrer le médicament puis vérifier le dossier",
+    "option_b": "Demander au patient s’il reconnaît le comprimé",
+    "option_c": "Vérifier l’identité avec deux identifiants, les allergies, la prescription et les paramètres requis avant l’administration",
+    "option_d": "Se fier uniquement au nom inscrit sur le pilulier",
+    "question": "Un patient de 72 ans reçoit sa première dose d’un nouveau médicament. Avant l’administration, quelle vérification infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une anomalie prolongée du rythme fœtal peut traduire une souffrance fœtale et nécessite une évaluation rapide.",
+    "id": "1129cf02-a356-48fb-acc3-deb760ecd58d",
+    "option_a": "Une évaluation immédiate",
+    "option_b": "D’attendre systématiquement",
+    "option_c": "De faire marcher la patiente",
+    "option_d": "De donner un repas",
+    "question": "Pendant le travail, une décélération prolongée du rythme cardiaque fœtal nécessite :"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une diminution de la vigilance associée à une baisse de la saturation après un opioïde doit faire suspecter une dépression respiratoire, complication potentiellement mortelle nécessitant une intervention immédiate.",
+    "id": "112ad155-c74d-4c0b-a4c1-dfc27c3125e2",
+    "option_a": "Dépression respiratoire liée à l’opioïde",
+    "option_b": "Hyperglycémie isolée",
+    "option_c": "Rétention urinaire sans urgence",
+    "option_d": "Hypertension asymptomatique",
+    "question": "Après l’administration d’un opioïde, un patient est difficile à réveiller et sa saturation en oxygène diminue. Quelle complication doit être suspectée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "170917fb-a513-486b-8dee-d2c29949f323",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’un enseignement au patient, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La diminution de la capacité de transport de l’oxygène peut provoquer fatigue, faiblesse et pâleur.",
+    "id": "1740cf1f-4c73-4a57-863f-2f4b4f452d35",
+    "option_a": "Pâleur et fatigue",
+    "option_b": "Peau très rouge uniquement",
+    "option_c": "Bradycardie toujours",
+    "option_d": "Polyurie obligatoire",
+    "question": "Quel signe est fréquent chez un patient anémique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les propos de désespoir ou de mort nécessitent une évaluation du risque suicidaire.",
+    "id": "18052808-ca87-416b-bcaa-90afc6b2fad2",
+    "option_a": "Paroles de désespoir ou de mort",
+    "option_b": "Préférence musicale",
+    "option_c": "Nouvelle coiffure",
+    "option_d": "Goût alimentaire isolé",
+    "question": "Quel changement chez un patient dépressif doit être pris au sérieux ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "1ab696a9-1750-4351-aebb-a22b4ee42737",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au cours d’une surveillance rapprochée, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Le temps de début des symptômes influence l’évaluation et les options thérapeutiques.",
+    "id": "1ae57309-6e62-4046-add8-813a0eab636a",
+    "option_a": "Son repas préféré",
+    "option_b": "L’heure de début des symptômes ou la dernière fois vu normal",
+    "option_c": "Sa pointure",
+    "option_d": "Son groupe religieux",
+    "question": "Chez un patient suspect d’AVC, quel élément doit être noté en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La vaccination réduit le risque de certaines maladies infectieuses évitables.",
+    "id": "1b3391ab-0740-42ff-b8b2-3e627a9ada09",
+    "option_a": "Réduire le risque de maladies évitables",
+    "option_b": "Provoquer systématiquement une infection",
+    "option_c": "Remplacer toute hygiène",
+    "option_d": "Traiter toutes les maladies chroniques",
+    "question": "Quel est l’objectif principal de la vaccination ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un refroidissement approprié limite la chaleur tissulaire; la glace directe peut léser davantage les tissus.",
+    "id": "1e8101d4-c2b1-4175-a45c-561d3fec69e9",
+    "option_a": "Refroidir avec de l’eau courante fraîche, sans glace directe",
+    "option_b": "Appliquer de la glace directement longtemps",
+    "option_c": "Mettre du beurre",
+    "option_d": "Percer les cloques",
+    "question": "Pour une brûlure thermique récente et limitée, quelle première mesure est généralement appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "2096b71b-b5ed-4cf8-bb88-c6e345ad6f5e",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au début du quart de travail, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une altération de la perfusion ou un syndrome de compartiment doit être détecté rapidement.",
+    "id": "20c26c18-ee09-47b2-8192-79bb3bb2f11b",
+    "option_a": "Douleur croissante avec extrémité froide ou pâle",
+    "option_b": "Faim",
+    "option_c": "Sommeil normal",
+    "option_d": "Cheveux secs",
+    "question": "Après une fracture immobilisée, quel signe impose une évaluation neurovasculaire urgente ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La pression directe est une mesure initiale majeure pour contrôler une hémorragie externe.",
+    "id": "20caa31f-ef82-44a6-8b8c-18ee143d9465",
+    "option_a": "Appliquer une pression directe ferme avec protection adaptée",
+    "option_b": "Laver pendant 30 minutes avant toute chose",
+    "option_c": "Faire marcher le patient",
+    "option_d": "Attendre sans intervenir",
+    "question": "Pour une hémorragie externe importante d’un membre, quelle action initiale est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hypertension associée à des symptômes neurologiques peut évoquer une pré-éclampsie sévère.",
+    "id": "213440a2-bb90-444d-bc71-fcfc5835384b",
+    "option_a": "Pré-éclampsie",
+    "option_b": "Appendicite",
+    "option_c": "Otite",
+    "option_d": "Asthme",
+    "question": "Chez une femme enceinte, hypertension sévère et céphalées intenses font suspecter :"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le soulèvement manuel de la présentation fœtale peut réduire temporairement la compression du cordon pendant la préparation de l’accouchement.",
+    "id": "214f2d9b-48e4-435e-bcca-cfe7283dd0cc",
+    "option_a": "Élever la présentation fœtale pour diminuer la pression sur le cordon",
+    "option_b": "Faire marcher la patiente jusqu’à la salle d’opération",
+    "option_c": "Appliquer une pression directe sur le cordon visible",
+    "option_d": "Retirer le cordon visible pour éviter qu’il ne se dessèche",
+    "question": "Une procidence du cordon est diagnostiquée et la présentation fœtale comprime le cordon. Quelle mesure temporaire vise directement à réduire cette compression ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "217fcc69-53ba-46c4-bb7b-8f24b6733f96",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au changement d’équipe, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Dans les diarrhées aqueuses sévères, la réhydratation rapide est déterminante pour prévenir le choc et le décès.",
+    "id": "2274c5f3-4ead-49da-bb92-e76db302588a",
+    "option_a": "Évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "option_b": "Donner seulement un antitussif",
+    "option_c": "Faire jeûner sans liquide",
+    "option_d": "Attendre une semaine",
+    "question": "Chez un patient avec diarrhée aqueuse profuse et signes de déshydratation, quelle priorité est essentielle ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’association hypotension, tachycardie et signes d’hypoperfusion évoque un état de choc.",
+    "id": "23bd2d5c-2bf3-4b31-8797-d0201d19da38",
+    "option_a": "État de choc",
+    "option_b": "Rhume simple",
+    "option_c": "Myopie",
+    "option_d": "Dermatite légère",
+    "question": "Un patient est froid, pâle, confus, tachycarde et hypotendu. Quelle situation faut-il suspecter ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un tirage important peut indiquer une détresse respiratoire.",
+    "id": "23c6ef31-7691-4d2b-8ef3-f2459dec2359",
+    "option_a": "Tirage sous-costal marqué",
+    "option_b": "Hoquet occasionnel",
+    "option_c": "Éternuement isolé",
+    "option_d": "Bâillement",
+    "question": "Quel signe respiratoire chez un nourrisson nécessite une attention rapide ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "240bc782-8dd8-4429-a905-44e204d59a5e",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après une modification des signes vitaux, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "254afcfc-f0e3-4f92-8dc7-7a52e79c8266",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant une prise en charge communautaire, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "26eb277f-6e67-4ea9-a105-88a27dd58af9",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Après une aggravation rapportée par le patient, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "275be9d9-7bb0-4ed9-9d46-9927407cef64",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Après réception d’une nouvelle prescription, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "27d9e0f1-51d6-482d-aabe-696c21112ba2",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Avant une intervention prescrite, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "2989686a-ab7b-4641-90d2-402f682e5b02",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Dans un centre de santé, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’OMS recommande une réponse standardisée et simultanée plutôt qu’une succession lente d’interventions. Le bundle de première réponse comprend massage utérin, utérotonique, TXA, liquides IV, examen du tractus génital et escalade des soins.",
+    "id": "2a14709d-e075-4e5d-a142-996b702b50c9",
+    "option_a": "Massage utérin, utérotonique, acide tranexamique, cristalloïdes IV, examen du tractus génital et escalade des soins",
+    "option_b": "Repos au lit et surveillance des pertes pendant 60 minutes avant tout traitement",
+    "option_c": "Acide tranexamique seul sans recherche de la cause du saignement",
+    "option_d": "Massage utérin seul jusqu’à l’arrêt complet du saignement",
+    "question": "Une hémorragie postpartum vient d’être diagnostiquée après un accouchement vaginal. L’utérus est atone. Quel ensemble correspond le mieux au traitement de première réponse recommandé par l’OMS ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement vaginal pendant la grossesse peut signaler une complication et doit être évalué.",
+    "id": "2a572dc3-0b67-401c-a8ae-72c58f24ff29",
+    "option_a": "Saignement vaginal",
+    "option_b": "Faim avant le repas",
+    "option_c": "Envie de dormir le soir",
+    "option_d": "Mouvement normal du fœtus",
+    "question": "Quel symptôme pendant la grossesse nécessite une consultation rapide ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une discordance d’identité interdit une administration sûre. L’infirmière doit arrêter le processus et confirmer l’identité du patient avec les identifiants requis avant de donner le médicament.",
+    "id": "2c51d2b7-d627-4bf9-b6ba-c537090c983d",
+    "option_a": "Suspendre l’administration jusqu’à vérification certaine de l’identité",
+    "option_b": "Demander au voisin de chambre de confirmer son identité",
+    "option_c": "Administrer si le patient reconnaît la couleur du comprimé",
+    "option_d": "Modifier le nom dans le dossier sans vérification",
+    "question": "Au moment d’administrer un médicament, le nom figurant sur le bracelet du patient ne correspond pas exactement à celui de la prescription. Que doit faire l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les réactions transfusionnelles peuvent apparaître précocement et nécessitent une intervention rapide.",
+    "id": "2cee0234-3837-4772-a68f-7fb513120c10",
+    "option_a": "Observer étroitement le patient et ses signes vitaux pour détecter une réaction",
+    "option_b": "Quitter immédiatement la salle",
+    "option_c": "Mélanger un médicament dans la poche de sang",
+    "option_d": "Accélérer systématiquement au maximum",
+    "question": "Au début d’une transfusion sanguine, quelle surveillance est essentielle ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "2d111c5b-c5ce-4e99-bd7f-da17378c79e0",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’un contrôle des paramètres cliniques, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une allergie documentée doit être vérifiée avant l’administration. La sécurité médicamenteuse exige de confirmer le bon patient, le bon médicament, la dose, la voie, le moment, les allergies et les paramètres cliniques pertinents.",
+    "id": "2d221d11-ca17-47c0-acdc-bdd98c4048f1",
+    "option_a": "Administrer le médicament puis surveiller",
+    "option_b": "Vérifier l’allergie et clarifier la prescription avant toute administration",
+    "option_c": "Demander au patient de choisir s’il souhaite le prendre",
+    "option_d": "Ignorer l’allergie si la dose est faible",
+    "question": "Avant d’administrer un nouveau médicament à un patient hospitalisé, l’infirmière constate que la prescription est lisible mais que le dossier mentionne une allergie médicamenteuse. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "2d8cfd49-814a-4a4c-a7ff-682b184625df",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Au moment de réviser le plan de soins, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "En présence d’une rétention placentaire accompagnée de saignement, la prise en charge doit être accélérée et l’extraction manuelle du placenta peut être nécessaire selon le protocole et les compétences disponibles.",
+    "id": "2e0be9c0-61e8-4fab-90ac-30fc199f54d5",
+    "option_a": "Accélérer la prise en charge de la rétention placentaire et préparer l’extraction manuelle selon le protocole",
+    "option_b": "Attendre encore deux heures sans intervention",
+    "option_c": "Faire marcher la patiente",
+    "option_d": "Administrer de l’ergométrine spécifiquement pour expulser le placenta retenu",
+    "question": "Trente-cinq minutes après la naissance, le placenta n’est pas expulsé et la patiente commence à saigner abondamment. Quelle conduite est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "2e1f6d57-9deb-4ff1-8388-d0942dafe62d",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’une évaluation avant transfert, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un utérus mou associé à un saignement abondant après l’accouchement évoque en priorité une hémorragie du post-partum par atonie utérine.",
+    "id": "2e2ba609-9942-4c11-a863-2700f3a78b09",
+    "option_a": "Pré-éclampsie",
+    "option_b": "Atonie utérine avec hémorragie du post-partum",
+    "option_c": "Infection urinaire",
+    "option_d": "Grossesse extra-utérine",
+    "question": "Deux heures après l’accouchement, une patiente présente un saignement vaginal abondant et un utérus mou. Quelle complication faut-il suspecter en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le triage de catastrophe vise à utiliser les ressources disponibles pour maximiser les bénéfices et sauver le plus de vies possible.",
+    "id": "2ee29ee3-3761-47dd-8383-88a398a7cd79",
+    "option_a": "Prioriser selon gravité, urgence et ressources disponibles",
+    "option_b": "Traiter uniquement par ordre d’arrivée",
+    "option_c": "Choisir selon la profession",
+    "option_d": "Choisir selon les vêtements",
+    "question": "En situation de catastrophe avec de nombreuses victimes, quel principe guide le triage ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La confidentialité est fondamentale, mais la sécurité peut imposer des obligations de protection selon les règles applicables.",
+    "id": "31b4af62-c33c-4d00-b84d-4dbbb9fcf87c",
+    "option_a": "Lorsqu’il existe un risque sérieux et imminent pour la sécurité selon la loi et le protocole",
+    "option_b": "Pour satisfaire la curiosité d’un voisin",
+    "option_c": "Pour publier sur les réseaux sociaux",
+    "option_d": "Pour raconter au marché",
+    "question": "Quand la confidentialité peut-elle nécessiter une exception ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’éclampsie est une urgence; la sécurité, les voies aériennes et le traitement protocolisé sont prioritaires.",
+    "id": "32325313-a334-4028-a7eb-8050ada327d4",
+    "option_a": "Protéger les voies aériennes et la patiente, appeler de l’aide et suivre le protocole d’urgence",
+    "option_b": "Mettre un objet dans sa bouche",
+    "option_c": "La laisser seule",
+    "option_d": "Lui donner à boire pendant la crise",
+    "question": "Une femme enceinte pré-éclamptique fait une convulsion. Quelle est la priorité infirmière immédiate ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le prolapsus du cordon menace l’oxygénation fœtale et constitue une urgence obstétricale.",
+    "id": "33de9093-0378-41e8-8f00-64614d2f1acc",
+    "option_a": "Alerter immédiatement et réduire la compression du cordon selon protocole en préparant une naissance urgente",
+    "option_b": "Repousser le cordon sans précaution puis partir",
+    "option_c": "Faire marcher la patiente",
+    "option_d": "Attendre plusieurs heures",
+    "question": "Un cordon ombilical est visible après rupture des membranes. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un environnement sécurisé et les objets accessibles réduisent le risque de chute.",
+    "id": "34123ec3-0a68-48a6-b188-7597628465bb",
+    "option_a": "Laisser le sol encombré",
+    "option_b": "Mettre les objets utiles à portée et sécuriser l’environnement",
+    "option_c": "Éteindre toutes les lumières",
+    "option_d": "Encourager à marcher seul malgré une faiblesse",
+    "question": "Chez un patient à haut risque de chute, quelle mesure est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Des positions telles que genu-pectorale ou latérale exagérée peuvent diminuer la pression de la présentation fœtale sur le cordon pendant le transfert et la préparation de la naissance.",
+    "id": "34f004c6-7ddd-4258-b7e4-641aac06058f",
+    "option_a": "Position genu-pectorale ou latérale exagérée selon le protocole local",
+    "option_b": "Décubitus dorsal strict avec les jambes à plat",
+    "option_c": "Position assise droite sans autre mesure",
+    "option_d": "Position debout pour favoriser la descente fœtale",
+    "question": "Pendant le transfert d’une patiente ayant une procidence du cordon, quelle position peut aider à diminuer la compression du cordon en attendant la prise en charge définitive ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’identification correcte du patient fait partie des principes fondamentaux de sécurité médicamenteuse.",
+    "id": "35f6378f-2871-4eb9-8e7d-233512eb7c9e",
+    "option_a": "L’identité du patient",
+    "option_b": "La couleur des murs",
+    "option_c": "Le nombre de visiteurs",
+    "option_d": "L’heure du repas du voisin",
+    "question": "Avant d’administrer un médicament, quelle vérification est essentielle ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les brûlures, surtout faciales ou par inhalation, peuvent compromettre rapidement les voies aériennes.",
+    "id": "36169720-a638-4710-94dc-098075c630c1",
+    "option_a": "Vérifier les voies aériennes",
+    "option_b": "Choisir ses vêtements",
+    "option_c": "Couper ses cheveux",
+    "option_d": "Mesurer sa taille",
+    "question": "Chez un patient gravement brûlé, quelle priorité initiale suit l’approche ABC ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Des repères simples et cohérents peuvent diminuer la désorientation.",
+    "id": "37d6cb49-8bc7-44ab-8d32-deeb14804157",
+    "option_a": "Réorientation douce avec repères de temps, lieu et personnes",
+    "option_b": "Changer constamment de chambre",
+    "option_c": "Éteindre toute lumière jour et nuit",
+    "option_d": "Donner des informations contradictoires",
+    "question": "Chez un patient confus, quelle intervention non pharmacologique peut aider ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "38db3ba3-a8e6-4809-aa4e-0347e70bcde9",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Au cours d’un examen infirmier, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "3a96794f-3412-4cbc-b02c-66842ed47ebd",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Après un changement observé dans l’état général, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "3ce447b1-93ee-4abf-aec9-801d60dbd03d",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’une évaluation avant administration d’un traitement, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une hématurie et des ecchymoses importantes sous anticoagulant peuvent traduire un saignement cliniquement significatif. Une évaluation rapide et une escalade des soins sont nécessaires.",
+    "id": "3f47b86e-e845-4364-ab13-644b7a0441aa",
+    "option_a": "Évaluer le saignement et alerter rapidement le prescripteur ou l’équipe responsable",
+    "option_b": "Conseiller un massage énergique des zones ecchymotiques",
+    "option_c": "Administrer la prochaine dose sans autre évaluation",
+    "option_d": "Attendre plusieurs jours avant de signaler les symptômes",
+    "question": "Un patient sous anticoagulant présente des ecchymoses étendues et rapporte des urines rouges depuis ce matin. Quelle conduite infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "40870ef2-5e83-4a96-a79b-27dbe75e8c45",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Lors d’une consultation non programmée, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les médicaments IV exigent des vérifications précises pour prévenir des complications graves.",
+    "id": "40999bb0-48ef-400d-ba54-d9dd0e051207",
+    "option_a": "Prescription, compatibilité, dilution/débit et perméabilité de la voie",
+    "option_b": "Seulement la couleur du flacon",
+    "option_c": "Le nombre de fenêtres",
+    "option_d": "La taille du lit",
+    "question": "Avant d’administrer un médicament IV, que doit vérifier l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une documentation exacte assure la continuité et la sécurité des soins.",
+    "id": "40a8ce48-ea59-4ff6-87a5-3a783cb4c607",
+    "option_a": "Documenter correctement l’administration et la réponse pertinente",
+    "option_b": "Effacer la prescription",
+    "option_c": "Ne rien noter",
+    "option_d": "Demander au patient d’écrire à la place",
+    "question": "Après administration d’un médicament, quelle action est nécessaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes peuvent évoquer une méningite, qui nécessite une évaluation urgente.",
+    "id": "40ee197f-9c3e-409b-9d44-e5c0d8c90ae5",
+    "option_a": "Alerter rapidement et appliquer les précautions indiquées",
+    "option_b": "Le renvoyer sans évaluation",
+    "option_c": "Lui donner seulement un repas",
+    "option_d": "Attendre le lendemain",
+    "question": "Chez un patient avec fièvre, raideur de nuque et altération de la conscience, quelle conduite est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "40fbadca-cde3-4666-b26a-0d8ccc3941e4",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Après l’arrivée d’un nouveau patient, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La sécheresse des muqueuses et l’oligurie peuvent accompagner une déshydratation.",
+    "id": "42b0aee3-1b14-4c39-a69a-75d37faac36f",
+    "option_a": "Muqueuses sèches et diminution des urines",
+    "option_b": "Œdème généralisé uniquement",
+    "option_c": "Larmoiement excessif",
+    "option_d": "Prise de poids rapide",
+    "question": "Quelle observation suggère une déshydratation chez l’adulte ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La confusion, les sueurs et les tremblements sont des signes classiques d’hypoglycémie.",
+    "id": "4440f4a8-3dfb-4b5c-bad8-4a3abe353792",
+    "option_a": "Hyperglycémie",
+    "option_b": "Hypoglycémie",
+    "option_c": "Hypertension",
+    "option_d": "Déshydratation",
+    "question": "Un patient diabétique est confus, transpire et tremble. Quelle complication faut-il suspecter en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une incapacité à parler normalement peut refléter une détresse respiratoire importante.",
+    "id": "453b7682-b9be-4a84-8efb-28d552bc3326",
+    "option_a": "Difficulté à parler en phrases complètes",
+    "option_b": "Appétit normal",
+    "option_c": "Sommeil de 8 heures",
+    "option_d": "Peau sans lésion",
+    "question": "Chez un patient asthmatique, quel signe indique une aggravation sévère ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une bradypnée et une somnolence marquée après un opioïde évoquent une dépression respiratoire. La priorité est l’évaluation et le soutien immédiats des fonctions respiratoires, avec escalade et antidote selon le protocole clinique.",
+    "id": "4aa5be44-c406-4731-8b5c-4b737767260e",
+    "option_a": "Évaluer immédiatement la ventilation, stimuler le patient et déclencher le protocole de prise en charge",
+    "option_b": "Laisser le patient dormir et réévaluer dans une heure",
+    "option_c": "Administrer une nouvelle dose d’opioïde pour améliorer le confort",
+    "option_d": "Faire marcher le patient seul pour augmenter sa vigilance",
+    "question": "Un patient ayant reçu un opioïde IV devient très somnolent, avec une fréquence respiratoire de 8/min. Quelle intervention infirmière doit être réalisée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "4ba02bd7-d978-4c4f-9606-4304a55e981b",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Pendant une activité de dépistage, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes peuvent indiquer une pré-éclampsie sévère et nécessitent une prise en charge urgente.",
+    "id": "4e0cbc3e-f5e5-4086-9399-d6cf8da3e082",
+    "option_a": "Évaluation urgente et alerte de l’équipe obstétricale",
+    "option_b": "La renvoyer chez elle sans surveillance",
+    "option_c": "Lui faire faire de l’exercice intense",
+    "option_d": "Lui donner seulement de l’eau",
+    "question": "Une femme enceinte a une TA très élevée, céphalées intenses et troubles visuels. Quelle conduite est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les vérifications préalables réduisent les erreurs et sécurisent la vaccination.",
+    "id": "4e9d15b9-0ff9-47e1-8145-5fe3b2ee80f9",
+    "option_a": "Le vaccin, la dose, la voie, l’enfant et les contre-indications pertinentes",
+    "option_b": "La couleur préférée de l’enfant",
+    "option_c": "Le métier du voisin",
+    "option_d": "La pointure de la mère",
+    "question": "Avant d’administrer un vaccin, que doit vérifier l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Toute anomalie doit être confirmée et interprétée dans le contexte clinique.",
+    "id": "4eeba6dd-7cc3-403c-8a17-741eceeb4dbf",
+    "option_a": "Vérifier la mesure, évaluer le patient et agir selon la gravité",
+    "option_b": "L’effacer",
+    "option_c": "L’ignorer",
+    "option_d": "Inventer une valeur normale",
+    "question": "Une valeur de signe vital est très différente des précédentes. Que doit faire l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "4f621fbe-c5e1-4342-a59a-b73132f03db0",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Pendant une surveillance post-intervention, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’émaciation sévère et les œdèmes bilatéraux sont des signes majeurs à évaluer.",
+    "id": "52b79ca2-04d2-4b66-a5d7-3185d78867ac",
+    "option_a": "Amaigrissement sévère ou œdèmes nutritionnels bilatéraux",
+    "option_b": "Cheveux coiffés",
+    "option_c": "Dents de lait",
+    "option_d": "Ongles courts",
+    "question": "Quel signe doit faire rechercher une malnutrition aiguë sévère chez un enfant ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Chez un patient conscient en hypoglycémie, un glucide à action rapide est indiqué, puis la glycémie est réévaluée.",
+    "id": "53057730-3792-4128-b740-1bf13864d1be",
+    "option_a": "Donner une source de glucose rapide par voie orale",
+    "option_b": "Administrer de l’insuline",
+    "option_c": "Le faire jeûner",
+    "option_d": "Lui donner seulement de l’eau",
+    "question": "Un patient diabétique conscient présente tremblements, sueurs et glycémie à 55 mg/dL. Que faire d’abord ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un environnement moins stimulant et des limites cohérentes peuvent réduire l’agitation.",
+    "id": "537ead35-b1e5-4926-bc4e-7d0e35943b15",
+    "option_a": "Réduire les stimuli et établir des limites claires et cohérentes",
+    "option_b": "Multiplier les activités bruyantes",
+    "option_c": "Encourager la caféine",
+    "option_d": "Discuter agressivement",
+    "question": "Pour un patient en épisode maniaque très stimulé, quelle intervention est utile ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le tamponnement intra-utérin par ballon peut être utilisé pour une HPP par atonie ne répondant pas au traitement de première ligne, à condition que chirurgie et produits sanguins soient rapidement accessibles, que les autres causes soient exclues et qu’une surveillance adéquate soit possible.",
+    "id": "5416332f-e651-45ee-a12f-f4f36da553b5",
+    "option_a": "Tamponnement intra-utérin par ballon dans les conditions appropriées",
+    "option_b": "Packing utérin systématique",
+    "option_c": "Retarder l’escalade jusqu’au lendemain",
+    "option_d": "Faire sortir la patiente pour surveillance à domicile",
+    "question": "Une hémorragie postpartum due à une atonie persiste malgré utérotoniques, massage et traitement initial. Dans un établissement disposant de chirurgie et de produits sanguins, quelle option peut être envisagée avant une chirurgie si les autres causes ont été raisonnablement exclues ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "544b723d-b116-44d2-85eb-8524e82a5adb",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "À la suite d’une nouvelle plainte clinique, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’éloignement des sources de chaleur est une mesure essentielle de prévention.",
+    "id": "551949c2-64bc-4906-a759-80fc0b01936c",
+    "option_a": "Garder liquides chauds et flammes hors de portée",
+    "option_b": "Laisser les casseroles au bord",
+    "option_c": "Permettre de jouer près du feu",
+    "option_d": "Stocker l’eau bouillante au sol",
+    "question": "Quel conseil réduit le risque de brûlure chez le jeune enfant ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Plusieurs diurétiques peuvent modifier la kaliémie; le type de diurétique détermine le risque.",
+    "id": "558e545c-0743-40ca-9dae-79bf85c09784",
+    "option_a": "Potassium",
+    "option_b": "Or",
+    "option_c": "Argent",
+    "option_d": "Fluor uniquement",
+    "question": "Chez un patient recevant certains diurétiques, quel électrolyte peut nécessiter une surveillance particulière ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "56697b34-a70f-4b1d-bd98-ecd2d48dde24",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au moment de la transmission, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Il faut protéger sans immobiliser de force et ne rien introduire dans la bouche.",
+    "id": "566d1d1a-38d8-4c2c-83af-1631f0cc2423",
+    "option_a": "Protéger le patient des blessures et dégager l’environnement",
+    "option_b": "Mettre un objet dans sa bouche",
+    "option_c": "Le retenir fortement",
+    "option_d": "Lui donner de l’eau",
+    "question": "Pendant une crise convulsive généralisée, que doit faire l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le choix contraceptif doit être éclairé, volontaire et adapté à la situation clinique.",
+    "id": "572e6cf6-1faf-4d35-a78f-d38ff7ad342a",
+    "option_a": "Informer sans coercition et tenir compte des besoins et contre-indications",
+    "option_b": "Imposer une méthode",
+    "option_c": "Décider sans parler à la patiente",
+    "option_d": "Refuser toute question",
+    "question": "Avant de conseiller une méthode contraceptive, quelle approche est correcte ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La prévention des blessures et le maintien des voies aériennes sont prioritaires.",
+    "id": "597cd295-5cdb-4cf9-93ff-cc7667d88a4f",
+    "option_a": "Le protéger et le placer en sécurité, sans rien mettre dans sa bouche",
+    "option_b": "Forcer une cuillère entre ses dents",
+    "option_c": "Lui donner à boire pendant la crise",
+    "option_d": "Le secouer",
+    "question": "Pendant une convulsion chez un enfant, quelle action est correcte ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une intention suicidaire avec plan représente un risque élevé nécessitant une intervention immédiate.",
+    "id": "5b990a85-f5c3-466c-be3c-0fcf6daa4ce0",
+    "option_a": "Assurer sa sécurité, ne pas le laisser seul selon le niveau de risque et alerter immédiatement",
+    "option_b": "Changer de sujet",
+    "option_c": "Lui promettre le secret",
+    "option_d": "Le renvoyer seul",
+    "question": "Un patient dit : « Je veux mourir et j’ai un plan. » Quelle est la priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un brassard de taille adaptée améliore la fiabilité de la mesure.",
+    "id": "5f255943-0b57-4f4c-a658-9bfdbf882fd1",
+    "option_a": "Choisir un brassard adapté au bras",
+    "option_b": "Utiliser toujours le plus petit brassard",
+    "option_c": "Mesurer sur des vêtements épais",
+    "option_d": "Faire courir le patient",
+    "question": "Avant de mesurer la pression artérielle, que doit faire l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "5f7270ee-254c-4b23-a24a-f804b010a50a",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant la préparation des soins, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Pour le traitement d’une hémorragie postpartum, l’OMS recommande l’utilisation précoce du TXA IV dans les 3 heures suivant la naissance, en complément des autres mesures. Il ne remplace ni les utérotoniques ni les autres éléments du bundle.",
+    "id": "6067b953-905c-450b-aba7-5dc327377eae",
+    "option_a": "Il doit être réservé à la prévention systématique avant tout saignement",
+    "option_b": "Il remplace l’utérotonique lorsque l’utérus est atone",
+    "option_c": "Il ne doit être utilisé qu’après 3 heures suivant la naissance",
+    "option_d": "Son administration IV précoce, dans les 3 heures suivant la naissance, est recommandée en complément des soins standards",
+    "question": "Une patiente présente une hémorragie postpartum 45 minutes après l’accouchement. Le protocole de première réponse est activé. Quelle affirmation concernant l’acide tranexamique (TXA) est correcte ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Cette surveillance permet de détecter précocement une hémorragie et une instabilité maternelle.",
+    "id": "60a4e2d0-949f-4d59-bec1-b1b7a2c26a16",
+    "option_a": "Saignement, tonus utérin et signes vitaux",
+    "option_b": "Couleur des chaussures",
+    "option_c": "Longueur des cheveux",
+    "option_d": "Acuité visuelle uniquement",
+    "question": "Dans les premières heures postpartum, quelle surveillance est essentielle ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La technique vise à éviter de ramener des microorganismes vers les zones les plus propres.",
+    "id": "613376cf-40cd-4a05-970e-80343ff678da",
+    "option_a": "Aller du plus propre vers le plus contaminé",
+    "option_b": "Utiliser la même compresse partout",
+    "option_c": "Toucher la plaie à mains nues",
+    "option_d": "Réutiliser une compresse tombée",
+    "question": "Lors d’un pansement propre, quel principe est correct ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une TVP peut se manifester par douleur et œdème unilatéral; elle nécessite une évaluation clinique.",
+    "id": "62c8bcb8-b707-4a1d-a8d5-26cf058d07f6",
+    "option_a": "Gonflement unilatéral avec douleur",
+    "option_b": "Douleur d’oreille",
+    "option_c": "Vision améliorée",
+    "option_d": "Toux uniquement après repas",
+    "question": "Quel signe peut évoquer une thrombose veineuse profonde d’un membre inférieur ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La dilatation et l’effacement cervicaux permettent d’évaluer la progression du travail.",
+    "id": "63ef9616-7ec3-43ed-b5a1-4a528572b9ed",
+    "option_a": "Modification progressive du col utérin",
+    "option_b": "Couleur des cheveux",
+    "option_c": "Poids du conjoint",
+    "option_d": "Nombre de visites prénatales seulement",
+    "question": "Quelle donnée confirme le mieux la progression du travail ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "649ad0d2-bbeb-4906-a320-fbecc13ae3a9",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Pendant la préparation à la sortie, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La notification et la surveillance permettent une réponse rapide de santé publique.",
+    "id": "6aa6cd4f-6f03-46e9-b1af-8650aa7c2c27",
+    "option_a": "Signaler selon le système de surveillance et recueillir des données fiables",
+    "option_b": "Cacher les cas",
+    "option_c": "Publier les noms des patients",
+    "option_d": "Attendre plusieurs mois",
+    "question": "Lors d’une augmentation inhabituelle de cas de maladie dans une communauté, quelle action est importante ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "6cb45840-0470-473d-b348-b613487779c7",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant la surveillance d’un patient à risque, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "6db70633-d523-447b-a980-dd4cd9b7f485",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Au moment d’établir les priorités du quart, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Sous sulfate de magnésium, une baisse de la fréquence respiratoire, une diminution des réflexes et une oligurie peuvent annoncer une toxicité. Une surveillance clinique étroite est donc nécessaire.",
+    "id": "6fecebe6-cd50-427b-88c2-960f1bc49fe8",
+    "option_a": "Fréquence respiratoire, réflexes ostéotendineux et diurèse",
+    "option_b": "Couleur des cheveux et température des extrémités",
+    "option_c": "Tour de taille et glycémie capillaire uniquement",
+    "option_d": "Acuité visuelle uniquement",
+    "question": "Une patiente atteinte de pré-éclampsie sévère reçoit du sulfate de magnésium. Quel paramètre doit être surveillé étroitement pour détecter une toxicité potentielle ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "701ea9f0-79a6-4333-8010-260ee18379ad",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Pendant la coordination avec l’équipe soignante, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La pâleur, la tachycardie et l’hypotension postopératoires peuvent évoquer une hémorragie.",
+    "id": "72442917-0bc8-438a-9f53-f76c3ccb7b95",
+    "option_a": "Hémorragie",
+    "option_b": "Constipation",
+    "option_c": "Insomnie",
+    "option_d": "Rhinite",
+    "question": "Après chirurgie, un patient devient pâle, tachycarde et hypotendu. Quelle complication suspecter ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le repositionnement régulier réduit la pression prolongée sur les tissus.",
+    "id": "72a626ed-124c-4595-88d5-22e2e218b691",
+    "option_a": "Repositionnement régulier",
+    "option_b": "Immobilité prolongée",
+    "option_c": "Réduction des apports hydriques",
+    "option_d": "Friction intense de la peau",
+    "question": "Quelle intervention aide à prévenir les lésions de pression chez un patient alité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "7494b1c3-4dbc-435e-b287-03a3554b9576",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après un changement de niveau de conscience, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une allergie documentée doit être vérifiée avant l’administration. La sécurité médicamenteuse exige de confirmer le bon patient, le bon médicament, la dose, la voie, le moment, les allergies et les paramètres cliniques pertinents.",
+    "id": "75f91d0d-d37a-4ce1-8d1d-cae4126933c5",
+    "option_a": "Administrer le médicament puis surveiller",
+    "option_b": "Vérifier l’allergie et clarifier la prescription avant toute administration",
+    "option_c": "Demander au patient de choisir s’il souhaite le prendre",
+    "option_d": "Ignorer l’allergie si la dose est faible",
+    "question": "Avant d’administrer un nouveau médicament à un patient hospitalisé, l’infirmière constate que la prescription est lisible mais que le dossier mentionne une allergie médicamenteuse. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Des selles noires associées à une hypotension et des étourdissements peuvent indiquer une hémorragie significative. Chez un patient anticoagulé, une évaluation rapide et une escalade immédiate sont nécessaires.",
+    "id": "779e7d40-2c1b-420e-99dd-1d9f8c935cf4",
+    "option_a": "Évaluer rapidement l’état hémodynamique et le saignement, puis alerter l’équipe selon le protocole",
+    "option_b": "Administrer la prochaine dose d’anticoagulant immédiatement",
+    "option_c": "Conseiller au patient d’attendre son prochain rendez-vous",
+    "option_d": "Masser vigoureusement les membres pour améliorer la circulation",
+    "question": "Un patient traité par anticoagulant signale des selles noires et se sent étourdi. Sa tension artérielle est de 92/58 mmHg. Quelle intervention infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’insuline peut provoquer une hypoglycémie et nécessite une surveillance appropriée.",
+    "id": "7a17f39a-c9f3-4b4d-8549-5c2588a3bfe7",
+    "option_a": "Hypoglycémie",
+    "option_b": "Otite",
+    "option_c": "Myopie",
+    "option_d": "Constipation uniquement",
+    "question": "Après administration d’insuline, l’infirmière doit particulièrement surveiller :"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La vérification des allergies peut prévenir une réaction potentiellement grave.",
+    "id": "7b522ef8-beec-4b20-9035-9116d8033554",
+    "option_a": "Vérifier les allergies connues",
+    "option_b": "Ignorer les antécédents",
+    "option_c": "Donner une double dose",
+    "option_d": "Mélanger avec tous les autres médicaments",
+    "question": "Que faire avant d’administrer un antibiotique pour la première fois ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’écoute active aide à établir une relation thérapeutique et à comprendre le patient.",
+    "id": "7c9a9369-385e-4911-83c3-9bbcea3dfed9",
+    "option_a": "Écoute active",
+    "option_b": "Jugement",
+    "option_c": "Menaces",
+    "option_d": "Interruption constante",
+    "question": "Quelle attitude favorise une communication thérapeutique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’autoévaluation du patient est la référence principale lorsque celui-ci peut communiquer.",
+    "id": "7d0012aa-cd52-449d-a47a-5e21327cd62c",
+    "option_a": "Le rapport du patient",
+    "option_b": "L’opinion d’un visiteur uniquement",
+    "option_c": "La taille du patient",
+    "option_d": "Son âge seulement",
+    "question": "Quelle est la meilleure source pour évaluer l’intensité d’une douleur chez un patient conscient capable de communiquer ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "7de38b53-d7df-4f59-90b6-d9fc7fc7e22d",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Au service des urgences, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement persistant avec un utérus ferme doit faire rechercher rapidement une lésion du tractus génital; l’examen vaginal et génital fait partie du bundle de première réponse.",
+    "id": "7e1ceb94-62ac-42f2-aba7-23c82ecd612d",
+    "option_a": "Traumatisme du tractus génital",
+    "option_b": "Atonie utérine certaine",
+    "option_c": "Hypoglycémie",
+    "option_d": "Otite moyenne",
+    "question": "Après un accouchement, le saignement persiste alors que l’utérus est ferme et bien contracté. Quelle cause doit être recherchée rapidement ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "81a41e2b-295d-466a-bf77-77867357de5d",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Pendant la garde du matin, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "81ab3bf9-b01a-43c0-9616-e53c11733441",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Au cours d’une ronde, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "827cbde6-318d-40bc-ae8c-445bc5d610db",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au cours d’une garde particulièrement chargée, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Fièvre et lochies malodorantes peuvent être des signes d’infection nécessitant une évaluation.",
+    "id": "82b4564b-1e42-45ed-a462-cc367a4461f7",
+    "option_a": "Fièvre avec lochies malodorantes",
+    "option_b": "Appétit normal",
+    "option_c": "Sommeil réparateur",
+    "option_d": "Lactation normale",
+    "question": "Quel signe postpartum peut évoquer une infection puerpérale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une diminution de la vigilance associée à une baisse de la saturation après un opioïde doit faire suspecter une dépression respiratoire, complication potentiellement mortelle nécessitant une intervention immédiate.",
+    "id": "834460d6-dfdc-4440-a79e-445526fb905f",
+    "option_a": "Dépression respiratoire liée à l’opioïde",
+    "option_b": "Hyperglycémie isolée",
+    "option_c": "Rétention urinaire sans urgence",
+    "option_d": "Hypertension asymptomatique",
+    "question": "Après l’administration d’un opioïde, un patient est difficile à réveiller et sa saturation en oxygène diminue. Quelle complication doit être suspectée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau peut évoquer une grossesse extra-utérine, potentiellement hémorragique et urgente.",
+    "id": "83f6daed-cddf-46bb-a830-81d1531e61d1",
+    "option_a": "Grossesse extra-utérine",
+    "option_b": "Rhume",
+    "option_c": "Otite",
+    "option_d": "Dermatite",
+    "question": "Une femme en début de grossesse présente douleur abdominale unilatérale, malaise et saignement. Quelle complication faut-il envisager ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une perte sanguine d’au moins 500 mL après la naissance répond au critère diagnostique OMS d’hémorragie postpartum. La prise en charge doit être rapide et coordonnée : massage utérin, utérotonique, acide tranexamique, cristalloïdes IV, examen du tractus génital et escalade des soins selon le protocole.",
+    "id": "85b862e0-173a-4ac8-b710-cf3f8405589e",
+    "option_a": "Attendre une nouvelle estimation des pertes dans une heure",
+    "option_b": "Déclencher le protocole d’hémorragie postpartum avec massage utérin et traitement groupé selon protocole",
+    "option_c": "Faire marcher la patiente pour favoriser la contraction utérine",
+    "option_d": "Administrer uniquement des liquides par voie orale",
+    "question": "Vingt minutes après un accouchement vaginal, une patiente présente environ 600 mL de pertes sanguines mesurées. L’utérus est mou et la fréquence cardiaque augmente. Quelle prise en charge doit être déclenchée sans délai ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "870e9db6-e33a-48eb-8e69-671167ce92ed",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant une évaluation ciblée, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un utérus mou et mal contracté associé à un saignement postpartum évoque en premier lieu une atonie utérine. Le traitement de l’HPP doit toutefois être déclenché immédiatement et la cause évaluée en parallèle.",
+    "id": "8c484ad9-a1f2-48b4-9d64-66c25fa77d92",
+    "option_a": "Atonie utérine",
+    "option_b": "Embolie pulmonaire",
+    "option_c": "Infection urinaire",
+    "option_d": "Rétention urinaire isolée",
+    "question": "Après un accouchement vaginal, une patiente présente un saignement abondant et un utérus mou à la palpation. Quelle cause d’hémorragie postpartum est la plus probable ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’oxygène favorise la combustion; les sources d’ignition doivent être évitées.",
+    "id": "8f16aac6-eb15-4fb5-9549-a9e4caecb779",
+    "option_a": "Éloigner flammes et sources d’ignition",
+    "option_b": "Fumer près du patient",
+    "option_c": "Mettre de l’huile inflammable sur le matériel",
+    "option_d": "Placer la bouteille sans la sécuriser",
+    "question": "Quelle règle de sécurité est importante avec l’oxygénothérapie ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La reformulation par le patient permet de vérifier réellement la compréhension.",
+    "id": "8f2c06aa-1df8-4e5d-8c7a-3d1be541f69d",
+    "option_a": "Lui demander d’expliquer avec ses propres mots",
+    "option_b": "Demander seulement « compris ? »",
+    "option_c": "Ne rien vérifier",
+    "option_d": "Parler uniquement au voisin",
+    "question": "Quelle méthode permet de vérifier que le patient a compris comment prendre son médicament ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "8f4eeb71-eb07-43ed-be19-f3d74ed76f24",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après une observation préoccupante de la famille, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "9056a3ea-2c44-46f5-b650-da463d749835",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant une séance d’éducation, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "912ad758-6a6a-498e-a12a-2c839a9f1913",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Lors d’une évaluation de sécurité au chevet, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "91a60f67-7af0-4416-ae8c-a160ddaa77fe",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après réception d’un nouveau résultat clinique, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La fréquence cardiaque fœtale aide à détecter rapidement une souffrance ou une complication telle qu’un prolapsus du cordon.",
+    "id": "9660c784-ac81-40fc-b5e9-2d6edde5f256",
+    "option_a": "Fréquence cardiaque fœtale",
+    "option_b": "Pointure maternelle",
+    "option_c": "Couleur des yeux",
+    "option_d": "Longueur des cheveux",
+    "question": "Après rupture des membranes, quelle évaluation est particulièrement importante ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’infirmière valide l’émotion sans renforcer l’hallucination et recherche notamment des ordres dangereux.",
+    "id": "9695ba69-23c5-4c04-9d12-8b3168c1836a",
+    "option_a": "Reconnaître son expérience sans confirmer que les voix sont réelles et évaluer la sécurité",
+    "option_b": "Dire que les voix sont certainement vraies",
+    "option_c": "Se moquer",
+    "option_d": "Ignorer tout risque",
+    "question": "Un patient dit entendre des voix. Quelle réponse est appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "9798879f-133c-487b-a1d6-d5859a36279f",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Après un signalement de l’aide-soignant, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Des selles noires peuvent correspondre à un méléna. Associées à des étourdissements chez un patient anticoagulé, elles doivent faire rechercher rapidement une hémorragie digestive et une instabilité hémodynamique.",
+    "id": "99ba9252-7ae2-48f9-ad78-0a40f360a882",
+    "option_a": "Hémorragie digestive potentiellement significative",
+    "option_b": "Constipation simple",
+    "option_c": "Effet thérapeutique attendu de l’anticoagulant",
+    "option_d": "Déshydratation légère sans saignement",
+    "question": "Un patient traité par anticoagulant signale des selles noires, des étourdissements et une faiblesse inhabituelle. Quelle complication doit être envisagée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hygiène des mains est une mesure fondamentale de prévention des infections.",
+    "id": "9b2c0f79-212e-4340-bf33-838f2abbe01b",
+    "option_a": "Hygiène des mains",
+    "option_b": "Porter deux montres",
+    "option_c": "Fermer les fenêtres",
+    "option_d": "Changer de chaussures toutes les heures",
+    "question": "Quelle mesure est la plus importante pour réduire la transmission des infections associées aux soins ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les soins prénatals visent la prévention, le dépistage et la prise en charge précoce des risques.",
+    "id": "9bbdaf09-c6d9-4f0d-861c-87b5cd582ae2",
+    "option_a": "Détecter précocement les risques et promouvoir la santé materno-fœtale",
+    "option_b": "Choisir le prénom uniquement",
+    "option_c": "Déterminer la couleur des vêtements",
+    "option_d": "Éviter toute éducation sanitaire",
+    "question": "Quel est un objectif majeur des consultations prénatales ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Fièvre, tachycardie et hypotension peuvent indiquer un sepsis avec risque de choc septique.",
+    "id": "9e4926d3-be30-481b-ba6f-d25fde463711",
+    "option_a": "Sepsis",
+    "option_b": "Constipation",
+    "option_c": "Migraine",
+    "option_d": "Otite",
+    "question": "Chez un patient fébrile avec frissons, tachycardie et hypotension, quelle complication grave faut-il envisager ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "a043e921-200a-451a-b2f3-5481e100bd58",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Après une intervention précédente, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une discordance d’identité interdit une administration sûre. L’infirmière doit arrêter le processus et confirmer l’identité du patient avec les identifiants requis avant de donner le médicament.",
+    "id": "a0d88d39-8ecc-4c6a-8d37-30a193cac97f",
+    "option_a": "Suspendre l’administration jusqu’à vérification certaine de l’identité",
+    "option_b": "Demander au voisin de chambre de confirmer son identité",
+    "option_c": "Administrer si le patient reconnaît la couleur du comprimé",
+    "option_d": "Modifier le nom dans le dossier sans vérification",
+    "question": "Au moment d’administrer un médicament, le nom figurant sur le bracelet du patient ne correspond pas exactement à celui de la prescription. Que doit faire l’infirmière ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La procidence du cordon peut interrompre rapidement l’oxygénation fœtale. La priorité est d’appeler de l’aide, de réduire immédiatement la compression du cordon et de préparer une naissance urgente.",
+    "id": "a17046d1-2b6c-4a20-bbe1-3dc25b96fd80",
+    "option_a": "Appeler immédiatement de l’aide et soulager manuellement la pression sur le cordon",
+    "option_b": "Repousser le cordon dans l’utérus avec force",
+    "option_c": "Attendre plusieurs contractions pour vérifier si le cordon remonte",
+    "option_d": "Demander à la patiente de pousser immédiatement quel que soit le stade du travail",
+    "question": "Après rupture des membranes, le rythme cardiaque fœtal chute brutalement et un cordon ombilical est visible dans le vagin. Quelle action infirmière est prioritaire pendant la préparation d’une naissance urgente ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le poids et le périmètre abdominal permettent de suivre l’accumulation liquidienne.",
+    "id": "a19467bc-fcda-49e6-9e76-283b2e415bbf",
+    "option_a": "Périmètre abdominal et poids",
+    "option_b": "Longueur des cheveux",
+    "option_c": "Pointure",
+    "option_d": "Acuité auditive seulement",
+    "question": "Quel paramètre est utile pour surveiller l’ascite chez un patient cirrhotique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "a23524bf-91ab-434b-a066-26f7e8bb2260",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’un contrôle après traitement, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une hypertension sévère associée à une céphalée et des troubles visuels évoque une pré-éclampsie sévère. Elle nécessite une évaluation obstétricale urgente, une surveillance materno-fœtale et le traitement de l’hypertension sévère selon le protocole.",
+    "id": "a31f5746-7462-4f2e-82a5-9a06a68e2458",
+    "option_a": "Organiser une évaluation obstétricale urgente, surveiller mère et fœtus et préparer le traitement prescrit de l’hypertension sévère",
+    "option_b": "Faire marcher la patiente pour faire baisser la tension",
+    "option_c": "Donner uniquement de l’eau et réévaluer dans deux heures",
+    "option_d": "Renvoyer la patiente à domicile si les mouvements fœtaux sont présents",
+    "question": "Une femme enceinte de 34 semaines présente une TA de 168/112 mmHg, une céphalée intense et des troubles visuels. Quelle intervention infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "a3a5383e-fa15-4a8c-b197-8f84bf262a00",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Lors d’une priorisation de plusieurs soins, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une faiblesse brutale unilatérale est un signe majeur d’AVC et impose une évaluation urgente.",
+    "id": "a634b4fa-d5ca-4762-b781-ee0d2c25fe18",
+    "option_a": "Faiblesse soudaine d’un côté du corps",
+    "option_b": "Douleur lombaire chronique",
+    "option_c": "Toux sèche",
+    "option_d": "Nausée isolée",
+    "question": "Quel signe est le plus évocateur d’un AVC aigu ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "a6ba482b-31fd-4b29-bda5-ad66523f19a5",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Pendant la collecte des données, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une évaluation est nécessaire avant traitement, notamment pour rechercher des signes de complication.",
+    "id": "a6f70246-a238-4186-a798-9cc60068d5c8",
+    "option_a": "Faire une évaluation clinique et orienter selon les signes de gravité",
+    "option_b": "Introduire un objet dans l’oreille",
+    "option_c": "Donner n’importe quel antibiotique restant",
+    "option_d": "Ignorer la fièvre",
+    "question": "Chez un enfant avec douleur d’oreille et fièvre, quelle conduite est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les variations quotidiennes de poids reflètent rapidement les changements de volume hydrique.",
+    "id": "a73101c4-3ce6-4b82-8658-da93c8d567d3",
+    "option_a": "Le poids à la même heure",
+    "option_b": "La taille",
+    "option_c": "Le tour de tête",
+    "option_d": "La couleur des yeux",
+    "question": "Quel paramètre est le plus utile pour suivre quotidiennement la rétention hydrique chez un patient insuffisant rénal ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont caractéristiques d’une déshydratation et nécessitent une évaluation rapide de sa gravité.",
+    "id": "a75ea73f-5799-4ba3-b5cf-50d66b6948d5",
+    "option_a": "Déshydratation",
+    "option_b": "Hypertension",
+    "option_c": "Hyperglycémie",
+    "option_d": "Otite moyenne",
+    "question": "Un enfant présente diarrhée, sécheresse des muqueuses, yeux enfoncés et diminution des urines. Quelle complication est la plus probable ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’OMS recommande les cristalloïdes isotoniques plutôt que les colloïdes pour la réanimation IV initiale d’une hémorragie postpartum. La restauration de la perfusion doit se faire parallèlement au contrôle rapide de la cause du saignement.",
+    "id": "a80093fd-2228-4cb0-92bc-c153135edc08",
+    "option_a": "Cristalloïdes isotoniques",
+    "option_b": "Colloïdes systématiquement en première intention",
+    "option_c": "Solution glucosée hypertonique uniquement",
+    "option_d": "Aucun liquide avant l’arrêt complet du saignement",
+    "question": "Une patiente ayant accouché présente une hémorragie postpartum avec hypotension. Quel type de liquide IV est recommandé en première intention pour la réanimation volémique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La saturation périphérique en oxygène aide à surveiller l’oxygénation, avec l’évaluation clinique.",
+    "id": "a8550bd2-be29-45e8-8e61-a90d877dcec2",
+    "option_a": "SpO₂",
+    "option_b": "Taille",
+    "option_c": "Pointure",
+    "option_d": "Tour de poignet",
+    "question": "Chez un patient atteint de pneumonie, quelle donnée permet de surveiller directement l’oxygénation ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "a912e67f-441b-43af-837f-d296f63c9652",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant l’évaluation initiale, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les mesures anthropométriques répétées permettent de surveiller la croissance.",
+    "id": "aa63298d-43d3-4abc-af3f-892d4bc5be5d",
+    "option_a": "Poids et taille reportés sur une courbe de croissance",
+    "option_b": "Couleur des vêtements",
+    "option_c": "Nombre de jouets",
+    "option_d": "Longueur des cheveux",
+    "question": "Quelle mesure aide à suivre la croissance d’un enfant au fil du temps ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hypotension, la tachycardie et la peau froide peuvent indiquer une mauvaise perfusion tissulaire.",
+    "id": "ac3313fa-abf1-4a79-808a-ae8452a701d3",
+    "option_a": "Hypotension, tachycardie, peau froide",
+    "option_b": "Hypertension isolée et appétit normal",
+    "option_c": "Bradycardie avec peau chaude uniquement",
+    "option_d": "Vision améliorée",
+    "question": "Quel ensemble de signes évoque un état de choc ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Des selles noires peuvent correspondre à un méléna. Associées à des étourdissements chez un patient anticoagulé, elles doivent faire rechercher rapidement une hémorragie digestive et une instabilité hémodynamique.",
+    "id": "acb1953d-810e-41e9-a572-bfd5ff19a10d",
+    "option_a": "Hémorragie digestive potentiellement significative",
+    "option_b": "Constipation simple",
+    "option_c": "Effet thérapeutique attendu de l’anticoagulant",
+    "option_d": "Déshydratation légère sans saignement",
+    "question": "Un patient traité par anticoagulant signale des selles noires, des étourdissements et une faiblesse inhabituelle. Quelle complication doit être envisagée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une douleur thoracique aiguë peut évoquer un syndrome coronarien aigu et nécessite une évaluation et une prise en charge immédiates.",
+    "id": "ad4b5dca-8dda-4f28-9352-ed0b562a26cd",
+    "option_a": "Le faire marcher",
+    "option_b": "Évaluer rapidement, alerter et appliquer le protocole d’urgence",
+    "option_c": "Lui donner un repas",
+    "option_d": "Attendre 30 minutes",
+    "question": "Un patient présente une douleur thoracique brutale avec sueurs et nausées. Quelle action infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Lorsque la naissance vaginale n’est pas imminente, la prise en charge vise à réduire la compression du cordon et à obtenir rapidement une naissance dans une structure capable de fournir des soins obstétricaux d’urgence.",
+    "id": "ae156916-0dd4-4c61-8632-e0b2e603fcb5",
+    "option_a": "Réduire la compression du cordon et accélérer l’accouchement dans un milieu capable de réaliser une naissance urgente",
+    "option_b": "Attendre la reprise spontanée d’un rythme fœtal normal sans intervention",
+    "option_c": "Administrer un repas puis réévaluer dans une heure",
+    "option_d": "Reporter toute décision jusqu’à dilatation complète",
+    "question": "Chez une patiente présentant une procidence du cordon avec fœtus vivant et naissance vaginale non imminente, quel objectif guide la prise en charge ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "afa4a145-d38e-4786-99bf-331d6de7dc7c",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’un changement soudain des symptômes, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La glycémie et le moment du repas influencent la sécurité de l’insuline rapide.",
+    "id": "b0c55572-708f-4975-a3b7-a49bc6be58f5",
+    "option_a": "Glycémie et disponibilité du repas selon le plan",
+    "option_b": "Couleur des chaussures",
+    "option_c": "Taille de la chambre",
+    "option_d": "Nombre de visiteurs",
+    "question": "Avant d’administrer une insuline rapide prescrite avant le repas, quelle donnée est particulièrement importante ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une bradypnée et une somnolence marquée après un opioïde évoquent une dépression respiratoire. La priorité est l’évaluation et le soutien immédiats des fonctions respiratoires, avec escalade et antidote selon le protocole clinique.",
+    "id": "b20a45e5-511a-43a3-811f-bb95ac70cc96",
+    "option_a": "Évaluer immédiatement la ventilation, stimuler le patient et déclencher le protocole de prise en charge",
+    "option_b": "Laisser le patient dormir et réévaluer dans une heure",
+    "option_c": "Administrer une nouvelle dose d’opioïde pour améliorer le confort",
+    "option_d": "Faire marcher le patient seul pour augmenter sa vigilance",
+    "question": "Un patient ayant reçu un opioïde IV devient très somnolent, avec une fréquence respiratoire de 8/min. Quelle intervention infirmière doit être réalisée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une hématémèse peut entraîner une hémorragie importante et un état de choc.",
+    "id": "b2d37861-8ba8-46a7-b165-a8d9fe081962",
+    "option_a": "Évaluer ABC, signes vitaux et alerter rapidement",
+    "option_b": "Lui donner un laxatif",
+    "option_c": "Le faire marcher",
+    "option_d": "Lui servir un repas",
+    "question": "Un patient vomit du sang rouge. Quelle action infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "b30b0020-fa3e-4ea6-a723-d8ab6e54850b",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Lors d’une réévaluation, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La fréquence cardiaque peut influencer la décision d’administrer certains médicaments cardiaques.",
+    "id": "b4c35bbf-5565-42b9-a16e-7b4e5768f2a1",
+    "option_a": "Mesurer la fréquence cardiaque et suivre les paramètres prescrits",
+    "option_b": "Mesurer la pointure",
+    "option_c": "Compter les cheveux",
+    "option_d": "Mesurer le lit",
+    "question": "Avant d’administrer un médicament pouvant ralentir fortement la fréquence cardiaque, quelle évaluation est pertinente ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement vaginal indolore tardif est un signe classique nécessitant une évaluation obstétricale.",
+    "id": "b636deda-9990-4d7d-a80e-056f8ce2d11d",
+    "option_a": "Saignement vaginal indolore au cours de la seconde moitié de la grossesse",
+    "option_b": "Douleur d’oreille",
+    "option_c": "Toux sèche uniquement",
+    "option_d": "Éruption du bras",
+    "question": "Quel tableau est classiquement associé au placenta prævia ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une déshydratation et nécessitent une évaluation de sa gravité.",
+    "id": "b85cb82f-7058-42a5-ba58-846e7913f37d",
+    "option_a": "Déshydratation",
+    "option_b": "Hypertension",
+    "option_c": "Otite",
+    "option_d": "Myopie",
+    "question": "Un enfant avec diarrhée a les yeux enfoncés, la bouche sèche et urine peu. Quelle complication suspecter ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’autonomie implique une participation éclairée aux décisions concernant ses soins.",
+    "id": "b892c353-8532-4337-a987-b71680967a16",
+    "option_a": "Lui fournir l’information nécessaire et respecter ses choix éclairés",
+    "option_b": "Décider toujours à sa place",
+    "option_c": "Cacher toute information",
+    "option_d": "Forcer un traitement non urgent",
+    "question": "Que signifie respecter l’autonomie du patient capable de décider ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Hypotension, tachycardie et pâleur après chirurgie peuvent indiquer une hémorragie et un choc.",
+    "id": "b94dad13-8d00-486b-bc74-a90a3a9e1357",
+    "option_a": "Hémorragie avec choc",
+    "option_b": "Constipation",
+    "option_c": "Otite",
+    "option_d": "Myopie",
+    "question": "Après une chirurgie, un patient devient pâle, TA 80/50 mmHg, pouls 120/min. Quelle complication suspecter ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "b9729f3e-56ce-40cf-bee4-cd77300cc35a",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant la planification des soins, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "ba35aa78-ae1a-469b-bb55-fca33ff94bc7",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Pendant l’organisation des soins prioritaires, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une documentation exacte et opportune soutient la continuité et la responsabilité des soins.",
+    "id": "bc23f152-1ac8-4a15-aea9-6d243d68bbbb",
+    "option_a": "Factuelle, datée et précise",
+    "option_b": "Basée sur des rumeurs",
+    "option_c": "Effacée si elle est importante",
+    "option_d": "Écrite plusieurs jours plus tard sans indication",
+    "question": "Une note infirmière doit être :"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les pertes digestives importantes peuvent entraîner une perte de potassium.",
+    "id": "bcb2a3f5-e26c-426e-a457-5e025176a42a",
+    "option_a": "Un patient avec diarrhées abondantes",
+    "option_b": "Un patient avec petite coupure",
+    "option_c": "Un patient myope",
+    "option_d": "Un patient avec carie isolée",
+    "question": "Quel patient présente un risque accru d’hypokaliémie ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La réduction de la pression, la surveillance cutanée et le contrôle de l’humidité sont essentiels.",
+    "id": "c175374f-de86-48e6-856e-ad112d2561b4",
+    "option_a": "Repositionnement adapté, inspection cutanée et gestion de l’humidité",
+    "option_b": "Le laisser dans la même position",
+    "option_c": "Masser fortement toute rougeur persistante",
+    "option_d": "Garder les draps humides",
+    "question": "Chez un patient alité, quelle intervention aide à prévenir les lésions de pression ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un environnement sûr et une assistance adaptée diminuent le risque de chute.",
+    "id": "c555c205-22ae-4926-b13d-7bddf3cebaef",
+    "option_a": "Mettre les objets utiles à portée et aider aux déplacements",
+    "option_b": "Laisser le sol mouillé",
+    "option_c": "Éloigner la sonnette",
+    "option_d": "Encourager à se lever seul rapidement",
+    "question": "Quelle mesure réduit le risque de chute chez un patient faible ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un sevrage sévère peut mettre la vie en danger et nécessite une prise en charge urgente.",
+    "id": "c696fe5c-eac2-46df-a499-1ca30bd08248",
+    "option_a": "Évaluation urgente et surveillance rapprochée",
+    "option_b": "Le laisser seul",
+    "option_c": "Lui donner de l’alcool sans prescription",
+    "option_d": "Ignorer les hallucinations",
+    "question": "Un patient en sevrage d’alcool devient confus, tremble fortement et hallucine. Quelle conduite ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’OMS recommande de traiter l’hypertension sévère pendant la grossesse avec un antihypertenseur approprié, tout en assurant une surveillance maternelle et fœtale rapprochée.",
+    "id": "c870931b-4f40-48c6-9b61-35bf44d65afd",
+    "option_a": "Administrer un antihypertenseur selon prescription/protocole et poursuivre la surveillance materno-fœtale",
+    "option_b": "Reporter tout traitement jusqu’au lendemain si la patiente est consciente",
+    "option_c": "Encourager un exercice modéré pour réduire la pression artérielle",
+    "option_d": "Arrêter toute surveillance si la céphalée diminue",
+    "question": "Une femme avec pré-éclampsie sévère développe une TA persistante à 170/115 mmHg malgré le repos. Quelle prise en charge est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une approche calme et non menaçante favorise la désescalade et la sécurité.",
+    "id": "c907cdd8-a809-4312-8aaa-3683edbc36b9",
+    "option_a": "Parler calmement, maintenir une distance sûre et réduire les stimuli",
+    "option_b": "Crier plus fort",
+    "option_c": "Le provoquer",
+    "option_d": "S’approcher brusquement",
+    "question": "Face à un patient très agité, quelle approche initiale est préférable ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "c9b0ba8e-e339-483a-a143-2ab3d6845077",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant une garde de nuit, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les vérifications systématiques réduisent le risque d’erreur médicamenteuse.",
+    "id": "cb5c9da2-9e01-4521-b3da-17b811592175",
+    "option_a": "Bon patient, médicament, dose, voie, moment et vérifications associées",
+    "option_b": "Seulement la couleur du comprimé",
+    "option_c": "Le nom du visiteur",
+    "option_d": "La météo",
+    "question": "Avant d’administrer un médicament, quelle vérification est essentielle ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La sécurité immédiate du patient est prioritaire en présence d’un risque suicidaire.",
+    "id": "cc92cc73-d7b5-40e8-876f-eec559d177e6",
+    "option_a": "Le laisser seul",
+    "option_b": "Assurer sa sécurité et alerter l’équipe",
+    "option_c": "Changer de sujet",
+    "option_d": "Lui demander de rentrer chez lui",
+    "question": "Un patient exprime clairement une intention suicidaire. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un placenta incomplet après la naissance suggère une rétention de tissu placentaire, cause importante d’HPP qui nécessite une évaluation et une prise en charge rapides.",
+    "id": "cdbbd255-eed6-43af-8132-4f18d3d4c217",
+    "option_a": "Rétention de tissu placentaire",
+    "option_b": "Crise d’asthme",
+    "option_c": "Hypertension chronique",
+    "option_d": "Migraine",
+    "question": "Une patiente présente une hémorragie postpartum. À l’examen, le placenta paraît incomplet. Quelle cause du saignement doit être suspectée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’OMS recommande le sulfate de magnésium pour le traitement de l’éclampsie, en complément des mesures de sécurité, du soutien des fonctions vitales et de la prise en charge obstétricale urgente.",
+    "id": "d034a5d4-9ace-4405-a823-b5479445a73c",
+    "option_a": "Sulfate de magnésium",
+    "option_b": "Diazépam systématiquement avant toute autre mesure",
+    "option_c": "Phénytoïne comme traitement de routine préféré",
+    "option_d": "Aucun anticonvulsivant n’est indiqué dans l’éclampsie",
+    "question": "Une femme enceinte hypertendue présente une crise convulsive généralisée. Après avoir assuré la sécurité et les voies aériennes, quel traitement anticonvulsivant est recommandé en première intention pour l’éclampsie ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "d26999ae-178c-49d5-8f1b-5aa157b4f9d9",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’un transfert entre unités, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "d347b883-c61c-4cba-b13d-11578b68993a",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Avant de communiquer avec le médecin, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une communication claire, adaptée et participative améliore la compréhension et l’adhésion.",
+    "id": "d3bdbed3-1bc8-4aba-a656-45f57d2e3a49",
+    "option_a": "Utiliser un langage clair, vérifier la compréhension et respecter le contexte culturel",
+    "option_b": "Employer uniquement un jargon technique",
+    "option_c": "Ne pas permettre de questions",
+    "option_d": "Donner la même information sans tenir compte du public",
+    "question": "Quelle méthode favorise une bonne éducation sanitaire dans la communauté ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une anxiété intense réduit la capacité à traiter des informations complexes.",
+    "id": "d41a1e4a-c842-48a2-a708-ba98ee5642c3",
+    "option_a": "Phrases courtes, simples et calmes",
+    "option_b": "Longues explications complexes",
+    "option_c": "Plusieurs ordres simultanés",
+    "option_d": "Critiques",
+    "question": "Chez un patient en crise d’anxiété aiguë, quelle communication est préférable ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Limiter les manipulations et la durée de sondage réduit le risque d’infection.",
+    "id": "d549cc1b-196f-4ad3-b177-416fe13b641a",
+    "option_a": "Maintenir un système fermé et retirer la sonde dès qu’elle n’est plus nécessaire",
+    "option_b": "Déconnecter souvent le système",
+    "option_c": "Poser une sonde sans indication",
+    "option_d": "Laisser le sac au-dessus de la vessie",
+    "question": "Quelle mesure réduit le risque d’infection liée à une sonde urinaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement abondant peut signaler une hémorragie du post-partum.",
+    "id": "d60891c2-e657-4a8c-9d9a-f66cc2673004",
+    "option_a": "Saignement abondant",
+    "option_b": "Fatigue modérée",
+    "option_c": "Soif légère",
+    "option_d": "Sommeil",
+    "question": "Quel signe après l’accouchement nécessite une attention urgente ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une hématurie et des ecchymoses importantes sous anticoagulant peuvent traduire un saignement cliniquement significatif. Une évaluation rapide et une escalade des soins sont nécessaires.",
+    "id": "d6a4755f-a9d6-4192-baf3-f677f5abbd80",
+    "option_a": "Évaluer le saignement et alerter rapidement le prescripteur ou l’équipe responsable",
+    "option_b": "Conseiller un massage énergique des zones ecchymotiques",
+    "option_c": "Administrer la prochaine dose sans autre évaluation",
+    "option_d": "Attendre plusieurs jours avant de signaler les symptômes",
+    "question": "Un patient sous anticoagulant présente des ecchymoses étendues et rapporte des urines rouges depuis ce matin. Quelle conduite infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "d85ecc68-74b0-4742-9a46-fa31a55e5d7a",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Pendant la surveillance, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "d92b9903-fe59-46bc-b35c-592847df6bbe",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Avant la sortie du patient, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "d979b558-6630-4452-9cfb-95a16d982f52",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Lors d’une consultation infirmière de suivi, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La fièvre doit être interprétée avec l’état général, l’hydratation et les signes de gravité.",
+    "id": "da71522e-d23e-4a45-821c-4e258e948c6a",
+    "option_a": "Évaluer température, hydratation et état général",
+    "option_b": "Le couvrir de nombreuses couvertures",
+    "option_c": "Donner un médicament adulte au hasard",
+    "option_d": "Ignorer l’état de conscience",
+    "question": "Chez un enfant fébrile, quelle mesure infirmière est importante ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une position redressée peut faciliter l’expansion pulmonaire et diminuer la dyspnée.",
+    "id": "dc346f4d-657c-4a40-a7da-2fe83b5409cf",
+    "option_a": "Semi-Fowler ou Fowler",
+    "option_b": "Trendelenburg systématique",
+    "option_c": "Décubitus ventral forcé",
+    "option_d": "À plat sans oreiller",
+    "question": "Un patient insuffisant cardiaque devient plus dyspné en position couchée. Quelle position peut améliorer son confort ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une communication adaptée au développement réduit l’anxiété et favorise la coopération.",
+    "id": "dcf0cf3f-06ee-48f1-b445-035989dc1f67",
+    "option_a": "Expliquer avec des mots adaptés à son âge et impliquer le parent/tuteur",
+    "option_b": "Menacer l’enfant",
+    "option_c": "Ne rien expliquer",
+    "option_d": "Parler uniquement de lui comme s’il était absent",
+    "question": "Lors d’un soin pédiatrique, quelle approche favorise la coopération ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "de595900-61bf-4a5d-b9ab-21135b52a6cb",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’une visite à domicile, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Chez le jeune nourrisson, la fièvre peut révéler une infection sévère et nécessite une évaluation rapide.",
+    "id": "de6196b7-2461-42e0-bc0a-78edb9397cfd",
+    "option_a": "Toujours bénigne",
+    "option_b": "Potentiellement urgente",
+    "option_c": "Sans importance",
+    "option_d": "Liée uniquement aux dents",
+    "question": "Chez un nourrisson très jeune, une fièvre doit être considérée comme :"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La priorité est de soutenir l’oxygénation et la ventilation. La position semi-assise facilite l’expansion thoracique et l’oxygène traite l’hypoxémie.",
+    "id": "df892a43-2976-4aea-8c1a-7151a861e4a8",
+    "option_a": "Donner de l’eau",
+    "option_b": "Installer le patient en position semi-assise et administrer l’oxygène selon le protocole ou la prescription",
+    "option_c": "Demander au patient de marcher",
+    "option_d": "Placer le patient en Trendelenburg",
+    "question": "Un patient présente une dyspnée importante, une SpO₂ à 84 % et utilise les muscles accessoires. Quelle intervention infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "e1dada57-2fe8-461a-bca5-4f18a96e3157",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après un changement clinique, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les troubles de déglutition augmentent le risque d’aspiration.",
+    "id": "e58772f3-b02e-46b4-bb2c-5719c81ea491",
+    "option_a": "Évaluer le risque d’aspiration et suivre les recommandations de texture/position",
+    "option_b": "Le coucher complètement à plat",
+    "option_c": "Le faire manger très vite",
+    "option_d": "Ignorer la toux pendant le repas",
+    "question": "Avant de nourrir un patient ayant des troubles de déglutition, quelle précaution est importante ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "e60d95fd-fdf1-4e97-be4f-0b654ee3e370",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Lors d’une prise en charge en dispensaire, l’infirmière évalue une situation caractérisée par hypertension sévère, céphalées et troubles visuels. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La priorité est de soutenir l’oxygénation et de réduire le travail respiratoire.",
+    "id": "e8ff85cd-0ce5-4f75-a0c9-db6e0a660f4d",
+    "option_a": "Lui donner à boire",
+    "option_b": "L’installer en position semi-assise et administrer l’oxygène selon protocole/prescription",
+    "option_c": "Le faire marcher",
+    "option_d": "Le placer à plat",
+    "question": "Un patient présente une dyspnée aiguë, une FR à 32/min et une SpO₂ à 84 %. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les gants ne remplacent pas l’hygiène des mains; celle-ci doit suivre les indications de prévention des infections.",
+    "id": "e9280326-9ab3-49a3-ad3b-a0610b804e10",
+    "option_a": "Avant et après les contacts de soins selon les indications",
+    "option_b": "Seulement en fin de semaine",
+    "option_c": "Uniquement si les mains semblent sales",
+    "option_d": "Jamais avec des gants",
+    "question": "Quand l’hygiène des mains est-elle nécessaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le tirage intercostal traduit un effort respiratoire accru.",
+    "id": "eceda790-eb50-46b1-bcf0-79b75a590663",
+    "option_a": "Tirage intercostal",
+    "option_b": "Appétit normal",
+    "option_c": "Sommeil calme",
+    "option_d": "Pouls régulier",
+    "question": "Quel signe indique une détresse respiratoire chez un enfant ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "eda0010f-4b56-45c5-9dcc-e347dc092105",
+    "option_a": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_b": "encourager l’exercice intense",
+    "option_c": "renvoyer sans surveillance",
+    "option_d": "attendre plusieurs jours",
+    "question": "Lors d’une visite communautaire, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement inhabituel peut indiquer une complication liée à l’anticoagulation.",
+    "id": "ee456074-74e7-4dbc-9ecd-29d04bc46fca",
+    "option_a": "Saignement inhabituel",
+    "option_b": "Faim normale",
+    "option_c": "Peau sèche légère",
+    "option_d": "Somnolence après repas",
+    "question": "Chez un patient sous anticoagulant, quel signe doit être signalé rapidement ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le séchage et le contact peau à peau réduisent les pertes de chaleur.",
+    "id": "ef1a06db-b915-4625-8e0b-0bed2a35c69a",
+    "option_a": "Le sécher et favoriser le contact peau à peau si l’état le permet",
+    "option_b": "Le laisser mouillé",
+    "option_c": "Le placer près d’une fenêtre ouverte",
+    "option_d": "Le baigner immédiatement dans l’eau froide",
+    "question": "Quelle mesure aide à prévenir l’hypothermie du nouveau-né immédiatement après la naissance ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "efaa3e6a-b7c6-4075-8902-0fe3b0669215",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’une vérification de sécurité, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f0d74a88-2739-453a-826e-845e8c5375bd",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’une visite de suivi, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f221af22-cf23-4863-a046-dca2f9a434d2",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Après une plainte nouvelle du patient, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Les anticoagulants augmentent le risque de saignement; tout saignement inhabituel doit être évalué.",
+    "id": "f307b3ca-3642-4df1-92df-6790484b3352",
+    "option_a": "Saignement inhabituel",
+    "option_b": "Faim normale",
+    "option_c": "Cheveux longs",
+    "option_d": "Sommeil normal",
+    "question": "Quel signe chez un patient sous anticoagulant doit être signalé rapidement ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une menace des voies aériennes ou de la respiration est prioritaire selon l’approche ABC.",
+    "id": "f4c6581e-146f-4f6a-ad82-14e1c1fe44b3",
+    "option_a": "Celui qui présente une difficulté respiratoire soudaine",
+    "option_b": "Celui qui demande une couverture",
+    "option_c": "Celui qui veut connaître l’heure",
+    "option_d": "Celui qui attend un document non urgent",
+    "question": "Parmi quatre patients, lequel voir en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les recommandations OMS actualisées soutiennent une détection précoce : une perte sanguine d’au moins 300 mL associée à des signes hémodynamiques anormaux, ou une perte d’au moins 500 mL, doit déclencher la reconnaissance et la prise en charge de l’hémorragie postpartum.",
+    "id": "f5ce68ba-eb45-4c07-9aa2-a28c938cad6c",
+    "option_a": "La quantité est inférieure à 500 mL, donc une hémorragie postpartum est exclue",
+    "option_b": "Il faut seulement poursuivre l’observation pendant deux heures",
+    "option_c": "Une hémorragie postpartum doit être reconnue car une perte ≥300 mL associée à des signes hémodynamiques anormaux justifie une action rapide",
+    "option_d": "La patiente doit être mobilisée pour vérifier sa tolérance",
+    "question": "Après un accouchement vaginal, une patiente a perdu 350 mL de sang de façon objectivement mesurée. Elle devient tachycarde et sa pression artérielle chute. Selon les critères OMS actualisés, quelle interprétation est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Lorsque le saignement persiste malgré les utérotoniques et les autres mesures conservatrices disponibles, l’escalade vers une intervention chirurgicale ne doit pas être retardée.",
+    "id": "f682e175-3a30-4462-81fa-5dc6a815bc1e",
+    "option_a": "Escalader rapidement vers une intervention chirurgicale appropriée",
+    "option_b": "Poursuivre indéfiniment le massage seul",
+    "option_c": "Attendre une heure supplémentaire avant d’appeler de l’aide",
+    "option_d": "Donner uniquement des liquides par voie orale",
+    "question": "Après un accouchement, une patiente continue de saigner malgré le traitement médical et les mesures conservatrices disponibles. Quelle est la conduite recommandée si l’hémorragie ne s’arrête pas ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f76dba8c-e1c5-44ea-b9e0-3c992e8d3ba1",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après les premiers soins, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une fréquence respiratoire très basse avec somnolence après un opioïde évoque une dépression respiratoire potentiellement grave. La priorité est l’évaluation et le soutien immédiats de la respiration, avec escalade et traitement selon le protocole local.",
+    "id": "f7ebc305-f087-487f-8e10-3e13aea894b7",
+    "option_a": "Laisser le patient dormir et revenir dans une heure",
+    "option_b": "Évaluer immédiatement les voies respiratoires et la ventilation, stimuler le patient, appeler de l’aide et appliquer le protocole de prise en charge de la dépression respiratoire",
+    "option_c": "Administrer la dose suivante plus tôt",
+    "option_d": "Faire marcher le patient dans le corridor",
+    "question": "Trente minutes après l’administration d’un opioïde IV, un patient devient difficile à réveiller. Sa fréquence respiratoire est de 7/min et sa SpO₂ diminue. Quelle action infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La tuberculose pulmonaire infectieuse se transmet principalement par voie aérienne.",
+    "id": "f809502d-2f58-4db6-b33c-18e1b55c466d",
+    "option_a": "Précautions aériennes selon les ressources et protocoles",
+    "option_b": "Aucune précaution",
+    "option_c": "Seulement des gants pour parler au patient",
+    "option_d": "Isolement digestif",
+    "question": "Pour un patient atteint de tuberculose pulmonaire contagieuse, quelle précaution est appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le respect de la prescription et la surveillance des effets indésirables favorisent sécurité et efficacité.",
+    "id": "f8393c0b-dd22-40fd-a781-626eaee02263",
+    "option_a": "Le prendre selon la prescription et signaler les réactions importantes",
+    "option_b": "Partager avec la famille",
+    "option_c": "Arrêter dès la première dose",
+    "option_d": "Doubler toutes les doses oubliées",
+    "question": "Quel enseignement général est approprié concernant un antibiotique prescrit ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission féco-orale.",
+    "id": "f86e58bf-b18c-408d-8312-43ece925c3e7",
+    "option_a": "Eau potable, assainissement et lavage des mains",
+    "option_b": "Partager l’eau contaminée",
+    "option_c": "Ne pas utiliser de latrines",
+    "option_d": "Conserver les aliments sans protection",
+    "question": "Quelle mesure communautaire aide à prévenir les maladies diarrhéiques ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f916fb05-ff78-4f4a-ab13-99e8dc83c779",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Pendant une consultation de suivi, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une HPP avec instabilité hémodynamique nécessite une réanimation simultanée au contrôle du saignement. Les cristalloïdes isotoniques sont préférés aux colloïdes pour la réanimation IV initiale.",
+    "id": "f9b0f3c5-b8d2-4ec3-9507-4bb3dc966d55",
+    "option_a": "Établir/maintenir des accès IV, administrer des cristalloïdes isotoniques et activer l’escalade de réanimation",
+    "option_b": "Limiter la surveillance des signes vitaux",
+    "option_c": "Donner uniquement des liquides par voie orale",
+    "option_d": "Reporter l’évaluation hémodynamique",
+    "question": "Une patiente avec hémorragie postpartum reste hypotendue et tachycarde malgré les premières mesures. Quelle action doit accompagner sans délai le contrôle de la cause du saignement ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Le lait maternel fournit notamment des facteurs immunitaires protecteurs.",
+    "id": "fa1817d7-fb53-4c1e-9560-f4d1c84f1e4e",
+    "option_a": "Augmentation du risque infectieux",
+    "option_b": "Protection immunitaire",
+    "option_c": "Déshydratation systématique",
+    "option_d": "Carence immédiate en fer",
+    "question": "Quel est l’un des avantages majeurs de l’allaitement maternel exclusif chez le nourrisson ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Se lever lentement peut réduire les étourdissements et le risque de chute.",
+    "id": "fac97f6b-dc6b-46c7-a65f-b80c96136fd7",
+    "option_a": "Se lever progressivement",
+    "option_b": "Se lever brusquement",
+    "option_c": "Arrêter seul le médicament",
+    "option_d": "Doubler la dose si étourdi",
+    "question": "Quel conseil est utile pour un patient prenant un antihypertenseur pouvant causer une hypotension orthostatique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "fc146052-d167-4181-868b-79ac0a631002",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’une consultation, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La SRO remplace l’eau et les électrolytes perdus; le plan dépend du degré de déshydratation.",
+    "id": "fcac56f0-77ab-470b-ab1e-65484c824d64",
+    "option_a": "Solution de réhydratation orale selon le plan adapté",
+    "option_b": "Boisson énergisante",
+    "option_c": "Antibiotique systématique",
+    "option_d": "Jeûne complet",
+    "question": "Quel traitement est essentiel pour prévenir ou corriger la déshydratation lors d’une diarrhée aiguë sans choc ?"
+  }
+]
