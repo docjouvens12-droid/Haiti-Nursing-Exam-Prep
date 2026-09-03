@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import AnswerExplanation from "./AnswerExplanation";
 
 type Question = {
   id: string;
@@ -46,7 +47,7 @@ export default function QuestionInteractive({ questions }: { questions: Question
         <p className="muted">{q.categorie} — Question {index + 1} sur {questions.length}</p>
         <h2 className="question-title">{q.question}</h2>
         {options.map(([lettre, texte]) => <button key={lettre} className={`option ${choix === lettre ? "selected" : ""}`} onClick={() => !valide && setChoix(lettre)}>{lettre}. {texte}</button>)}
-        {!valide ? <button className="btn btn-primary" disabled={!choix} onClick={valider}>Valider la réponse</button> : <><div className="feedback"><strong>{choix === q.bonne_reponse ? "Bonne réponse ✅" : `Réponse incorrecte ❌ — Bonne réponse : ${q.bonne_reponse}`}</strong><p>{q.explication}</p></div><button className="btn btn-primary" onClick={suivante}>Question suivante</button></>}
+        {!valide ? <button className="btn btn-primary" disabled={!choix} onClick={valider}>Valider la réponse</button> : <><div className="feedback"><strong>{choix === q.bonne_reponse ? "Bonne réponse ✅" : "Réponse incorrecte"}</strong><AnswerExplanation question={q} selected={choix} /></div><button className="btn btn-primary" onClick={suivante}>Question suivante</button></>}
       </div>
     </main>
   );

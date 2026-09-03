@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
+import AnswerExplanation from "./AnswerExplanation";
 
 type Question = {
   id: string;
@@ -124,7 +125,7 @@ export default function QuestionInteractiveAvancee({ questions }: { questions: Q
             <span>{choix === q.bonne_reponse ? "✓" : "!"}</span>
             <strong>{choix === q.bonne_reponse ? "Bonne réponse" : `Réponse incorrecte — bonne réponse : ${q.bonne_reponse}`}</strong>
           </div>
-          {q.explication && <p>{q.explication}</p>}
+          <AnswerExplanation question={q} selected={choix} />
         </div>
       )}
 

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { exigerAdmin } from "@/lib/admin";
 import { CATEGORIES_QUESTIONS } from "@/lib/categories";
+import ExplanationFields from "@/components/ExplanationFields";
+import { explanationFromForm } from "@/lib/answer-explanation";
 
 export default async function NouvelleQuestion() {
   await exigerAdmin();
@@ -25,7 +27,7 @@ export default async function NouvelleQuestion() {
       option_c: String(formData.get("option_c") ?? "").trim(),
       option_d: String(formData.get("option_d") ?? "").trim(),
       bonne_reponse: String(formData.get("bonne_reponse") ?? "A"),
-      explication: String(formData.get("explication") ?? "").trim() || null,
+      explication: explanationFromForm(formData),
       source: source || null,
       authenticite,
       langue: String(formData.get("langue") ?? "fr"),
@@ -59,7 +61,7 @@ export default async function NouvelleQuestion() {
         <label>Option C<textarea name="option_c" rows={2} required /></label>
         <label>Option D<textarea name="option_d" rows={2} required /></label>
         <label>Bonne réponse<select name="bonne_reponse" defaultValue="A"><option>A</option><option>B</option><option>C</option><option>D</option></select></label>
-        <label>Explication<textarea name="explication" rows={4} /></label>
+        <ExplanationFields />
         <label>Source<input name="source" placeholder="OMS, MSPP, manuel, etc." /></label>
         <label>Authenticité<select name="authenticite" defaultValue="reconstitue"><option value="reconstitue">Reconstitué</option><option value="demonstration">Démonstration</option><option value="officiel_verifie">Officiel vérifié</option></select></label>
         <button className="button" type="submit">Enregistrer la question</button>

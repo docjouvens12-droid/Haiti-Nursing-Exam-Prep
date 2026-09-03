@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { exigerAdmin } from "@/lib/admin";
 import { CATEGORIES_QUESTIONS } from "@/lib/categories";
+import ExplanationFields from "@/components/ExplanationFields";
+import { explanationFromForm } from "@/lib/answer-explanation";
 
 export default async function ModifierQuestion({ params }: { params: Promise<{ id: string }> }) {
   const { supabase } = await exigerAdmin();
@@ -29,7 +31,7 @@ export default async function ModifierQuestion({ params }: { params: Promise<{ i
       option_c: String(formData.get("option_c") ?? "").trim(),
       option_d: String(formData.get("option_d") ?? "").trim(),
       bonne_reponse: String(formData.get("bonne_reponse") ?? "A"),
-      explication: String(formData.get("explication") ?? "").trim() || null,
+      explication: explanationFromForm(formData),
       source: source || null,
       authenticite,
       langue: String(formData.get("langue") ?? "fr"),
@@ -65,7 +67,7 @@ export default async function ModifierQuestion({ params }: { params: Promise<{ i
         <label>Option C<textarea name="option_c" rows={2} required defaultValue={question.option_c ?? ""} /></label>
         <label>Option D<textarea name="option_d" rows={2} required defaultValue={question.option_d ?? ""} /></label>
         <label>Bonne réponse<select name="bonne_reponse" defaultValue={question.bonne_reponse ?? "A"}><option>A</option><option>B</option><option>C</option><option>D</option></select></label>
-        <label>Explication<textarea name="explication" rows={4} defaultValue={question.explication ?? ""} /></label>
+        <ExplanationFields value={question.explication} />
         <label>Source<input name="source" defaultValue={question.source ?? ""} /></label>
         <label>Authenticité<select name="authenticite" defaultValue={question.authenticite ?? "reconstitue"}><option value="reconstitue">Reconstitué</option><option value="demonstration">Démonstration</option><option value="officiel_verifie">Officiel vérifié</option></select></label>
         <button className="button" type="submit">Enregistrer les modifications</button>

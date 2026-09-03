@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../revision.module.css";
+import AnswerExplanation from "@/components/AnswerExplanation";
 
 function formatDate(value: string | null) {
   if (!value) return "";
@@ -94,7 +95,7 @@ export default async function Favoris() {
                       <div><span>Bonne réponse</span><strong className={styles.correct}>{q?.bonne_reponse ?? "—"}</strong></div>
                       <div><span>Objectif</span><strong>À maîtriser</strong></div>
                     </div>
-                    {q?.explication && <div className={styles.explanation}><strong>Explication clinique</strong><p>{q.explication}</p></div>}
+                    {q && <div className={styles.explanation}><AnswerExplanation question={q} /></div>}
                     <div className={styles.actions}>
                       <Link className={styles.primary} href={`/pratique${q?.categorie ? `?categorie=${encodeURIComponent(q.categorie)}` : ""}`}>Réviser cette matière</Link>
                       <Link className={styles.secondary} href="/nightingale">Approfondir avec Nightingale AI</Link>

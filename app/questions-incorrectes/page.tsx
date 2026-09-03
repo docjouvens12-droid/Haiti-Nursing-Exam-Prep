@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import styles from "../revision.module.css";
+import AnswerExplanation from "@/components/AnswerExplanation";
 
 function formatDate(value: string | null) {
   if (!value) return "";
@@ -16,7 +17,7 @@ export default async function QuestionsIncorrectes() {
   const userId = String(claimsData.claims.sub);
   const { data: lignes } = await supabase
     .from("user_answers")
-    .select(`id,answered_at,reponse_choisie,question_id,questions(annee,categorie,question,bonne_reponse,explication)`)
+    .select(`id,answered_at,reponse_choisie,question_id,questions(annee,categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication)`)
     .eq("user_id", userId)
     .eq("correcte", false)
     .order("answered_at", { ascending: false })
@@ -103,7 +104,7 @@ export default async function QuestionsIncorrectes() {
                       <div><span>Votre réponse</span><strong className={styles.wrong}>{r.reponse_choisie ?? "Aucune réponse"}</strong></div>
                       <div><span>Bonne réponse</span><strong className={styles.correct}>{q?.bonne_reponse ?? "—"}</strong></div>
                     </div>
-                    {q?.explication && <div className={styles.explanation}><strong>Explication clinique</strong><p>{q.explication}</p></div>}
+                    {q && <div className={styles.explanation}><AnswerExplanation question={q} selected={r.reponse_choisie} /></div>}
                     <div className={styles.actions}>
                       <Link className={styles.primary} href={`/pratique${q?.categorie ? `?categorie=${encodeURIComponent(q.categorie)}` : ""}`}>Réviser cette matière</Link>
                       <Link className={styles.secondary} href="/nightingale">Demander à Nightingale AI</Link>

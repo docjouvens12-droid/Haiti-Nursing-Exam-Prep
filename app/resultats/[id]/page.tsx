@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import type { CSSProperties } from "react";
 import { createClient } from "@/lib/supabase/server";
 import "./resultats.css";
+import AnswerExplanation from "@/components/AnswerExplanation";
 
 type Reponse = {
   id: string;
@@ -31,6 +32,7 @@ export default async function ResultatPage({ params }: { params: Promise<{ id: s
     .single();
 
   if (!session) notFound();
+  if (!session.completed_at) redirect("/examens");
 
   const { data: reponses } = await supabase
     .from("user_answers")
@@ -144,7 +146,7 @@ export default async function ResultatPage({ params }: { params: Promise<{ id: s
                       <div className="results-review-meta"><span>Question {i + 1}</span><span>{q?.categorie || "Autres"}</span></div>
                       <h3>{q?.question}</h3>
                       <div className="results-answer-summary"><span>Votre réponse : <strong>{r.reponse_choisie ?? "Aucune"}</strong></span>{!r.correcte && <span>Bonne réponse : <strong>{q?.bonne_reponse}</strong></span>}</div>
-                      {q?.explication && <details><summary>Voir l’explication</summary><p>{q.explication}</p></details>}
+                      {q && <details open={!r.correcte}><summary>Voir le corrigé détaillé</summary><AnswerExplanation question={q} selected={r.reponse_choisie} /></details>}
                     </div>
                   </article>
                 );
