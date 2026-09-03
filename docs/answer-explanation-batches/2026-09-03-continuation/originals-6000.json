@@ -1,0 +1,2292 @@
+[
+  {
+    "bonne_reponse": "A",
+    "explication": "Lorsque le saignement persiste malgré les utérotoniques et les autres mesures conservatrices disponibles, l’escalade vers une intervention chirurgicale ne doit pas être retardée.",
+    "id": "f682e175-3a30-4462-81fa-5dc6a815bc1e",
+    "option_a": "Escalader rapidement vers une intervention chirurgicale appropriée",
+    "option_b": "Poursuivre indéfiniment le massage seul",
+    "option_c": "Attendre une heure supplémentaire avant d’appeler de l’aide",
+    "option_d": "Donner uniquement des liquides par voie orale",
+    "question": "Après un accouchement, une patiente continue de saigner malgré le traitement médical et les mesures conservatrices disponibles. Quelle est la conduite recommandée si l’hémorragie ne s’arrête pas ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La malnutrition aiguë sévère avec complications nécessite une évaluation et une prise en charge structurées.",
+    "id": "f68a5ad2-5d1c-41d1-bc28-04cbb4165581",
+    "option_a": "donner n’importe quel repas en grande quantité immédiatement",
+    "option_b": "faire faire un exercice intense",
+    "option_c": "ignorer les œdèmes",
+    "option_d": "évaluer selon le protocole de malnutrition et rechercher les signes nécessitant une prise en charge urgente",
+    "question": "Lors d’une réévaluation, l’infirmière prend en charge un patient présentant amaigrissement sévère, œdèmes bilatéraux ou signes de complication. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La coordination entre glycémie, repas et insuline rapide est essentielle.",
+    "id": "f69688b0-0b95-48a6-a4e2-c9e642079b65",
+    "option_a": "doubler la dose si le patient a faim",
+    "option_b": "vérifier glycémie et disponibilité du repas selon le plan thérapeutique",
+    "option_c": "administrer sans connaître la glycémie",
+    "option_d": "retarder le repas plusieurs heures",
+    "question": "Après une plainte nouvelle du patient, un patient présente insuline rapide prévue avant un repas. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Après rupture des membranes, l’évaluation fœtale aide à détecter rapidement certaines complications.",
+    "id": "f699710d-91d2-4dee-bffc-cab748faa907",
+    "option_a": "ignorer la couleur du liquide",
+    "option_b": "retarder toute surveillance",
+    "option_c": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "option_d": "faire marcher immédiatement sans évaluation",
+    "question": "Pendant la ronde infirmière, l’infirmière prend en charge un patient présentant rupture spontanée des membranes pendant le travail. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’OMS recommande l’allaitement maternel exclusif pendant les six premiers mois.",
+    "id": "f69cd7b1-5a1a-4e02-b449-bd06a22b059b",
+    "option_a": "commencer des aliments solides dès la naissance",
+    "option_b": "encourager l’allaitement maternel exclusif lorsque possible",
+    "option_c": "ajouter systématiquement du jus",
+    "option_d": "donner de l’eau sucrée chaque jour",
+    "question": "Après les premiers soins, l’infirmière prend en charge un patient présentant question d’une mère sur l’alimentation d’un nourrisson sain de moins de six mois. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes peuvent traduire une compromission neurovasculaire.",
+    "id": "f6a1ba2d-7141-42ac-9eed-40c65b6a040e",
+    "option_a": "réévaluer immédiatement l’état neurovasculaire et signaler",
+    "option_b": "serrer davantage l’immobilisation",
+    "option_c": "ignorer jusqu’au lendemain",
+    "option_d": "faire marcher sur le membre",
+    "question": "Lors de la préparation des soins, l’infirmière prend en charge un patient présentant membre immobilisé devenu froid, pâle et engourdi. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes peuvent indiquer une pré-éclampsie sévère.",
+    "id": "f6ab2570-4340-4e4d-83cc-0f4482790ae6",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente",
+    "question": "Pendant la surveillance, une situation clinique se caractérise par hypertension sévère, céphalées et troubles visuels pendant la grossesse. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’éclampsie est une urgence maternelle nécessitant sécurité, soutien vital et traitement rapide.",
+    "id": "f6ab2f70-3cd9-40a3-b150-d3c75b433dc7",
+    "option_a": "mettre un objet dans la bouche",
+    "option_b": "la laisser seule",
+    "option_c": "donner à boire pendant la crise",
+    "option_d": "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente",
+    "question": "Après un changement clinique, l’infirmière prend en charge un patient présentant convulsion chez une femme enceinte hypertendue. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une atteinte par inhalation peut rapidement compromettre les voies aériennes.",
+    "id": "f6bb15ad-1a4e-47ff-b13b-a2c43e3ce11e",
+    "option_a": "appliquer directement de la glace sur une grande surface",
+    "option_b": "donner à manger avant l’évaluation",
+    "option_c": "évaluer immédiatement les voies aériennes et la respiration",
+    "option_d": "percer toutes les cloques",
+    "question": "Lors d’une visite à domicile, l’infirmière évalue une situation caractérisée par brûlure importante avec suspicion d’inhalation. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation.",
+    "id": "f6bb897a-5b11-4c32-9be9-636b3a335cf4",
+    "option_a": "interdire tout liquide",
+    "option_b": "donner seulement un antitussif",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "question": "Au service des urgences, un patient présente diarrhée aqueuse profuse avec déshydratation. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en recherchant un risque pour la sécurité.",
+    "id": "f6d49d38-0baf-4aeb-93b7-79cd59c231e6",
+    "option_a": "ignorer le contenu des voix",
+    "option_b": "reconnaître le vécu sans confirmer les voix et évaluer la sécurité",
+    "option_c": "confirmer que les voix sont réelles",
+    "option_d": "se moquer",
+    "question": "Pendant une activité de dépistage, l’infirmière évalue une situation caractérisée par voix menaçantes rapportées par un patient. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent indiquer une compromission neurovasculaire.",
+    "id": "f6d73f31-182a-4fb3-b102-7ebcd483a6b4",
+    "option_a": "attendre le lendemain",
+    "option_b": "réévaluer immédiatement l’état neurovasculaire",
+    "option_c": "serrer davantage l’immobilisation",
+    "option_d": "faire marcher le patient",
+    "question": "Pendant une garde de nuit, face à membre immobilisé devenu froid, pâle et engourdi, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un saignement digestif peut provoquer une hypovolémie et un état de choc.",
+    "id": "f6dd485c-a81d-49e8-9989-9ddba7fa273d",
+    "option_a": "évaluer l’état hémodynamique et rechercher rapidement les signes de choc",
+    "option_b": "faire marcher le patient",
+    "option_c": "donner un repas copieux",
+    "option_d": "attendre le lendemain",
+    "question": "Lors d’un contrôle des paramètres cliniques, l’infirmière évalue une situation caractérisée par méléna ou hématémèse avec faiblesse. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Un saignement digestif peut provoquer une hypovolémie et un état de choc.",
+    "id": "f6ddc6b1-d327-452f-8e7e-1677871b1796",
+    "option_a": "faire marcher le patient",
+    "option_b": "donner un repas copieux",
+    "option_c": "attendre le lendemain",
+    "option_d": "évaluer l’état hémodynamique et rechercher rapidement les signes de choc",
+    "question": "Pendant une garde de nuit, un patient présente méléna ou hématémèse avec faiblesse. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une thrombose veineuse profonde est possible et comporte un risque embolique.",
+    "id": "f6e1b1bc-6901-4d00-9507-71533092f0f5",
+    "option_a": "appliquer une forte compression improvisée",
+    "option_b": "évaluer et signaler rapidement sans massage vigoureux du membre",
+    "option_c": "masser profondément le mollet",
+    "option_d": "faire courir le patient",
+    "question": "Lors d’une visite communautaire, un patient présente mollet unilatéralement gonflé et douloureux. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une documentation exacte soutient la continuité et la sécurité des soins.",
+    "id": "f706a2d1-5b0b-46ea-8e24-9d215704c7a1",
+    "option_a": "Basée sur des rumeurs",
+    "option_b": "Effacée si importante",
+    "option_c": "Écrite par un visiteur",
+    "option_d": "Factuelle, précise, datée et réalisée au moment approprié",
+    "question": "À l’admission, une note infirmière de qualité doit être :"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces données peuvent signaler une rétention hydrique ou une détérioration de la fonction rénale.",
+    "id": "f72a21a0-4931-4023-885c-da051a8e5cbe",
+    "option_a": "ignorer la diurèse",
+    "option_b": "encourager une consommation massive de liquide sans prescription",
+    "option_c": "mesurer seulement la taille",
+    "option_d": "surveiller précisément bilan hydrique, poids, signes vitaux et signaler l’aggravation",
+    "question": "Pendant une surveillance post-intervention, l’infirmière évalue une situation caractérisée par oligurie, œdèmes et prise de poids rapide. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques.",
+    "id": "f73177ea-fb27-4f27-af93-4203b68ca9e7",
+    "option_a": "supprimer le lavage des mains",
+    "option_b": "stocker les aliments sans protection",
+    "option_c": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_d": "encourager l’eau non traitée",
+    "question": "Avant une intervention prescrite, un patient présente communauté exposée aux maladies diarrhéiques. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces données peuvent signaler une rétention hydrique ou une détérioration de la fonction rénale.",
+    "id": "f7325b86-6fdb-4df1-9f94-191c07aa6076",
+    "option_a": "surveiller précisément bilan hydrique, poids, signes vitaux et signaler l’aggravation",
+    "option_b": "ignorer la diurèse",
+    "option_c": "encourager une consommation massive de liquide sans prescription",
+    "option_d": "mesurer seulement la taille",
+    "question": "Pendant la surveillance, un patient présente oligurie, œdèmes et prise de poids rapide. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion.",
+    "id": "f755eaf0-f98a-4f1c-a1e5-88f0aea6bb26",
+    "option_a": "introduire un objet dans la bouche",
+    "option_b": "immobiliser fortement tous les membres",
+    "option_c": "donner à boire pendant la crise",
+    "option_d": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "question": "Avant de communiquer avec le médecin, un patient présente crise convulsive généralisée. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une assistance adaptée réduit le risque de chute.",
+    "id": "f75bfab5-98dc-4b55-a54b-9b35d8e82ad1",
+    "option_a": "laisser le sol mouillé",
+    "option_b": "éloigner la sonnette",
+    "option_c": "aider aux déplacements et sécuriser l’environnement",
+    "option_d": "faire lever brusquement seul",
+    "question": "Pendant la garde du matin, le patient présente faiblesse et étourdissement au lever. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le méléna peut traduire un saignement digestif et doit être évalué rapidement.",
+    "id": "f75df263-5085-4e56-9075-2ecc2391f3c1",
+    "option_a": "Une hémorragie digestive",
+    "option_b": "Une otite",
+    "option_c": "Une conjonctivite",
+    "option_d": "Une fracture",
+    "question": "Lors d’une consultation, un patient présente des selles noires goudronneuses avec faiblesse. Quelle complication doit être envisagée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f76dba8c-e1c5-44ea-b9e0-3c992e8d3ba1",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Après les premiers soins, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent traduire une complication hémodynamique postopératoire.",
+    "id": "f77d70ae-9f10-45f6-a8ab-f005f68a375b",
+    "option_a": "attendre le repas",
+    "option_b": "rechercher une hémorragie ou un état de choc et alerter rapidement",
+    "option_c": "donner un laxatif",
+    "option_d": "faire lever seul",
+    "question": "Lors d’une consultation, face à pâleur, tachycardie et hypotension après chirurgie, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en recherchant un risque pour la sécurité.",
+    "id": "f7a1fb55-c3c2-46bf-8eff-96c4761c2813",
+    "option_a": "ignorer le contenu des voix",
+    "option_b": "reconnaître le vécu sans confirmer les voix et évaluer la sécurité",
+    "option_c": "confirmer que les voix sont réelles",
+    "option_d": "se moquer",
+    "question": "Après réception d’une nouvelle prescription, l’infirmière évalue une situation caractérisée par voix menaçantes rapportées par un patient. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une prescription en mg/kg nécessite un poids fiable et une vérification rigoureuse du calcul.",
+    "id": "f7ad011d-bd9c-4bcb-9d21-c053f08f2d57",
+    "option_a": "utiliser le poids du parent",
+    "option_b": "estimer uniquement selon l’âge",
+    "option_c": "ignorer les unités",
+    "option_d": "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul",
+    "question": "Avant de communiquer avec le médecin, un patient présente dose prescrite en mg/kg. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’enfant peut se déshydrater rapidement lors d’une diarrhée importante.",
+    "id": "f7b7122d-2b33-4381-b522-3eb6f0316965",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "option_c": "supprimer tous les liquides",
+    "option_d": "donner uniquement une boisson gazeuse",
+    "question": "Après l’arrivée d’un nouveau patient, l’infirmière évalue une situation caractérisée par diarrhée avec yeux enfoncés, bouche sèche et oligurie. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le délai de début des symptômes est essentiel dans l’évaluation d’un AVC.",
+    "id": "f7c4d5c2-5f89-488f-a728-5006ebc48f12",
+    "option_a": "donner à boire",
+    "option_b": "laisser dormir",
+    "option_c": "faire marcher seul",
+    "option_d": "noter l’heure de début ou la dernière fois normale et déclencher l’évaluation urgente",
+    "question": "Après un changement clinique, une situation clinique se caractérise par faiblesse brutale d’un côté avec trouble de la parole. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’OMS recommande l’allaitement maternel exclusif pendant les six premiers mois.",
+    "id": "f7d548a3-7a54-4066-9659-5367edcdf491",
+    "option_a": "commencer les solides dès la naissance",
+    "option_b": "recommander l’allaitement maternel exclusif lorsque possible",
+    "option_c": "ajouter systématiquement du jus",
+    "option_d": "donner de l’eau sucrée chaque jour",
+    "question": "Pendant une évaluation ciblée, un patient présente conseil sur l’alimentation d’un nourrisson de moins de six mois. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’évaluation et la réévaluation de la douleur permettent de juger l’efficacité des interventions.",
+    "id": "f7da7b6b-2cd6-4b92-bb67-93211e495bbe",
+    "option_a": "attendre plusieurs heures",
+    "option_b": "évaluer systématiquement la douleur, intervenir selon prescription puis réévaluer",
+    "option_c": "documenter sans intervenir",
+    "option_d": "dire que la douleur est normale",
+    "question": "Dans une unité hospitalière, l’infirmière prend en charge un patient présentant douleur évaluée à 8/10 après une intervention. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La vérification des allergies contribue à prévenir les réactions graves.",
+    "id": "f7dd23da-537c-422f-8db5-e0aa5f01dd7f",
+    "option_a": "vérifier les allergies et surveiller les réactions indésirables",
+    "option_b": "ignorer une éruption",
+    "option_c": "partager la dose avec un autre patient",
+    "option_d": "arrêter automatiquement après une seule dose",
+    "question": "Lors d’un transfert entre unités, un patient présente première dose d’un antibiotique. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’hygiène des mains et l’asepsie sont essentielles à la prévention des infections associées aux soins.",
+    "id": "f7e5a358-6a33-442c-8275-e9916ba18823",
+    "option_a": "réutiliser du matériel contaminé",
+    "option_b": "omettre l’hygiène des mains si des gants sont portés",
+    "option_c": "toucher les zones stériles à mains nues",
+    "option_d": "respecter rigoureusement l’hygiène des mains et la technique aseptique indiquée",
+    "question": "Lors d’une évaluation avant transfert, l’infirmière évalue une situation caractérisée par soins d’une plaie ou d’un dispositif invasif. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le tirage marqué est un signe de travail respiratoire accru.",
+    "id": "f7e9c25e-7d42-4432-abdd-521aa226207f",
+    "option_a": "forcer un grand repas",
+    "option_b": "laisser l’enfant sans surveillance",
+    "option_c": "attendre une amélioration spontanée",
+    "option_d": "évaluer immédiatement la respiration et l’oxygénation",
+    "question": "Lors d’une évaluation avant administration d’un traitement, l’infirmière évalue une situation caractérisée par tirage marqué et difficulté à s’alimenter chez un nourrisson. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La désescalade et la sécurité sont prioritaires.",
+    "id": "f7eac154-5b69-4b6e-959e-717b16051f8d",
+    "option_a": "réduire les stimuli, garder une distance sûre, parler calmement et demander du renfort si nécessaire",
+    "option_b": "crier plus fort",
+    "option_c": "provoquer le patient",
+    "option_d": "rester seul dans une situation dangereuse",
+    "question": "À l’admission, un patient présente agitation croissante avec menaces. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une fréquence respiratoire très basse avec somnolence après un opioïde évoque une dépression respiratoire potentiellement grave. La priorité est l’évaluation et le soutien immédiats de la respiration, avec escalade et traitement selon le protocole local.",
+    "id": "f7ebc305-f087-487f-8e10-3e13aea894b7",
+    "option_a": "Laisser le patient dormir et revenir dans une heure",
+    "option_b": "Évaluer immédiatement les voies respiratoires et la ventilation, stimuler le patient, appeler de l’aide et appliquer le protocole de prise en charge de la dépression respiratoire",
+    "option_c": "Administrer la dose suivante plus tôt",
+    "option_d": "Faire marcher le patient dans le corridor",
+    "question": "Trente minutes après l’administration d’un opioïde IV, un patient devient difficile à réveiller. Sa fréquence respiratoire est de 7/min et sa SpO₂ diminue. Quelle action infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent traduire une compromission neurovasculaire.",
+    "id": "f7ff723c-5fbc-49e7-ab19-cb0aa4156a1c",
+    "option_a": "faire marcher sur le membre",
+    "option_b": "attendre jusqu’au lendemain",
+    "option_c": "effectuer immédiatement une évaluation neurovasculaire et signaler l’anomalie",
+    "option_d": "serrer davantage l’immobilisation",
+    "question": "Lors d’une évaluation de sécurité au chevet, l’infirmière évalue une situation caractérisée par douleur croissante, pâleur et engourdissement distal après immobilisation. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Un utérus mou avec saignement abondant évoque notamment une atonie utérine.",
+    "id": "f801ace9-40f2-475a-9847-7572fb7f130f",
+    "option_a": "attendre une heure",
+    "option_b": "faire marcher la patiente",
+    "option_c": "donner uniquement de l’eau",
+    "option_d": "reconnaître une hémorragie postpartum possible et déclencher la prise en charge urgente",
+    "question": "Dans une unité hospitalière, un patient présente saignement abondant avec utérus mou après accouchement. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La tuberculose pulmonaire infectieuse se transmet principalement par voie aérienne.",
+    "id": "f809502d-2f58-4db6-b33c-18e1b55c466d",
+    "option_a": "Précautions aériennes selon les ressources et protocoles",
+    "option_b": "Aucune précaution",
+    "option_c": "Seulement des gants pour parler au patient",
+    "option_d": "Isolement digestif",
+    "question": "Pour un patient atteint de tuberculose pulmonaire contagieuse, quelle précaution est appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une assistance adaptée et un environnement sûr réduisent le risque de chute.",
+    "id": "f8113bb3-102a-4cf9-88ef-54a9332a9030",
+    "option_a": "le faire se lever brusquement seul",
+    "option_b": "laisser le sol mouillé",
+    "option_c": "éloigner la sonnette",
+    "option_d": "aider aux déplacements, sécuriser l’environnement et garder l’appel à portée",
+    "question": "Après un changement clinique, l’infirmière prend en charge un patient présentant patient faible et étourdi lorsqu’il se lève. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "f8118fe1-138a-413f-863c-65a21a99f961",
+    "option_a": "donner à boire",
+    "option_b": "protéger la patiente, soutenir ABC et déclencher la prise en charge urgente",
+    "option_c": "mettre un objet dans la bouche",
+    "option_d": "laisser seule",
+    "question": "Après un changement clinique, face à convulsion chez une femme enceinte hypertendue, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’enfant peut rapidement se déshydrater lors d’une diarrhée.",
+    "id": "f81b790e-98d3-4712-9afb-6d5a4314a232",
+    "option_a": "arrêter tous les liquides",
+    "option_b": "donner seulement une boisson gazeuse",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "évaluer la déshydratation et commencer la réhydratation appropriée",
+    "question": "Lors d’une consultation, une situation clinique se caractérise par diarrhée chez un enfant avec yeux enfoncés et oligurie. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Chez un patient conscient, l’hypoglycémie nécessite un glucide rapide et une réévaluation.",
+    "id": "f81f858f-7ce3-4d24-9910-69e49fb28ce3",
+    "option_a": "donner un glucide à action rapide puis réévaluer",
+    "option_b": "administrer davantage d’insuline",
+    "option_c": "faire jeûner",
+    "option_d": "donner seulement de l’eau",
+    "question": "Avant la sortie, l’infirmière prend en charge un patient présentant hypoglycémie symptomatique chez un patient conscient. Quelle intervention est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’oxygène soutient la combustion et doit être utilisé selon des règles de sécurité strictes.",
+    "id": "f8305df1-4222-481c-bac8-d789d2a810ae",
+    "option_a": "autoriser une flamme à proximité",
+    "option_b": "modifier librement le débit sans indication",
+    "option_c": "couvrir la source d’oxygène avec des matériaux inflammables",
+    "option_d": "respecter la prescription/protocole et les règles de sécurité contre le feu",
+    "question": "Pendant une surveillance post-intervention, l’infirmière évalue une situation caractérisée par patient recevant de l’oxygène. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le respect de la prescription et la surveillance des effets indésirables favorisent sécurité et efficacité.",
+    "id": "f8393c0b-dd22-40fd-a781-626eaee02263",
+    "option_a": "Le prendre selon la prescription et signaler les réactions importantes",
+    "option_b": "Partager avec la famille",
+    "option_c": "Arrêter dès la première dose",
+    "option_d": "Doubler toutes les doses oubliées",
+    "question": "Quel enseignement général est approprié concernant un antibiotique prescrit ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’oxygène soutient la combustion et doit être utilisé selon des règles de sécurité strictes.",
+    "id": "f83b68b1-e4f8-47fe-b2ef-443911f2ee8a",
+    "option_a": "couvrir la source d’oxygène avec des matériaux inflammables",
+    "option_b": "respecter la prescription/protocole et les règles de sécurité contre le feu",
+    "option_c": "autoriser une flamme à proximité",
+    "option_d": "modifier librement le débit sans indication",
+    "question": "Au service des urgences, un patient présente patient recevant de l’oxygène. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La malnutrition aiguë sévère nécessite une évaluation structurée, notamment pour rechercher des complications.",
+    "id": "f844e6b2-4716-438b-a930-a239d21610c7",
+    "option_a": "faire pratiquer un exercice intense",
+    "option_b": "ignorer les œdèmes",
+    "option_c": "donner sans évaluation une quantité excessive d’aliments",
+    "option_d": "évaluer selon le protocole de malnutrition et rechercher les complications",
+    "question": "Au service des urgences, un patient présente amaigrissement sévère ou œdèmes bilatéraux. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’asepsie et l’hygiène des mains réduisent le risque d’infection associée aux soins.",
+    "id": "f8554ed2-dd03-4a5f-9898-caad9e78b0d8",
+    "option_a": "toucher la plaie à mains nues",
+    "option_b": "réutiliser du matériel tombé au sol",
+    "option_c": "respecter l’hygiène des mains et la technique aseptique indiquée",
+    "option_d": "réutiliser une compresse souillée",
+    "question": "Lors d’une consultation, l’infirmière prend en charge un patient présentant soins d’une plaie chirurgicale. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Un plan suicidaire précis représente un risque élevé.",
+    "id": "f857a076-7dff-4380-9132-fc7ee108c641",
+    "option_a": "laisser seul",
+    "option_b": "changer de sujet",
+    "option_c": "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole",
+    "option_d": "promettre le secret absolu",
+    "question": "Dans un centre de santé, le patient présente intention suicidaire avec plan précis. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "f858f49d-5603-497c-8aa4-4f117d388ef3",
+    "option_a": "attendre la prochaine ronde",
+    "option_b": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_c": "donner un laxatif",
+    "option_d": "faire lever seul",
+    "question": "Au moment de réviser le plan de soins, l’infirmière évalue une situation caractérisée par tachycardie, hypotension et pâleur après chirurgie. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion.",
+    "id": "f85c31d9-628f-40ad-92e0-035ff92e9d90",
+    "option_a": "introduire un objet dans la bouche",
+    "option_b": "immobiliser fortement tous les membres",
+    "option_c": "donner à boire pendant la crise",
+    "option_d": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "question": "Pendant une activité de dépistage, l’infirmière évalue une situation caractérisée par crise convulsive généralisée. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La diarrhée peut entraîner rapidement une déshydratation chez l’enfant.",
+    "id": "f8622507-8ef9-4156-a511-88a889f80015",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "option_c": "arrêter tous les liquides",
+    "option_d": "donner uniquement une boisson gazeuse",
+    "question": "Lors d’une consultation, l’infirmière prend en charge un patient présentant diarrhée, yeux enfoncés, bouche sèche et diminution des urines. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une prescription en mg/kg nécessite un poids fiable et une vérification rigoureuse du calcul.",
+    "id": "f863ceba-dcee-4ecc-8b98-eb8f96f40ab0",
+    "option_a": "estimer uniquement selon l’âge",
+    "option_b": "ignorer les unités",
+    "option_c": "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul",
+    "option_d": "utiliser le poids du parent",
+    "question": "Avant une intervention prescrite, un patient présente dose prescrite en mg/kg. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une hémorragie digestive peut provoquer une instabilité hémodynamique.",
+    "id": "f86b02e5-018a-46e3-beaa-ca0d39eb8781",
+    "option_a": "évaluer ABC, signes de choc et alerter immédiatement",
+    "option_b": "donner un repas solide",
+    "option_c": "faire marcher le patient",
+    "option_d": "attendre le prochain service",
+    "question": "Au cours d’un enseignement au patient, l’infirmière prend en charge un patient présentant vomissements sanglants avec pâleur et tachycardie. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission féco-orale.",
+    "id": "f86e58bf-b18c-408d-8312-43ece925c3e7",
+    "option_a": "Eau potable, assainissement et lavage des mains",
+    "option_b": "Partager l’eau contaminée",
+    "option_c": "Ne pas utiliser de latrines",
+    "option_d": "Conserver les aliments sans protection",
+    "question": "Quelle mesure communautaire aide à prévenir les maladies diarrhéiques ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hygiène des mains et l’asepsie sont essentielles à la prévention des infections associées aux soins.",
+    "id": "f8965db4-d9e2-46bf-be10-d970db9cc549",
+    "option_a": "respecter rigoureusement l’hygiène des mains et la technique aseptique indiquée",
+    "option_b": "réutiliser du matériel contaminé",
+    "option_c": "omettre l’hygiène des mains si des gants sont portés",
+    "option_d": "toucher les zones stériles à mains nues",
+    "question": "Pendant la surveillance d’un patient à risque, l’infirmière évalue une situation caractérisée par soins d’une plaie ou d’un dispositif invasif. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le tirage marqué est un signe de travail respiratoire accru.",
+    "id": "f8a1839f-2ad8-4936-93fe-80fd5675f38b",
+    "option_a": "forcer un grand repas",
+    "option_b": "laisser l’enfant sans surveillance",
+    "option_c": "attendre une amélioration spontanée",
+    "option_d": "évaluer immédiatement la respiration et l’oxygénation",
+    "question": "Après un changement clinique, un patient présente tirage marqué et difficulté à s’alimenter chez un nourrisson. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Chez un patient conscient, un glucide rapide est indiqué pour corriger une hypoglycémie, avec contrôle ultérieur.",
+    "id": "f8aef04d-a101-4fe3-9d73-41f1c44d7add",
+    "option_a": "administrer davantage d’insuline",
+    "option_b": "interdire toute prise orale",
+    "option_c": "attendre la disparition spontanée",
+    "option_d": "administrer un glucide à action rapide puis réévaluer la glycémie",
+    "question": "Lors d’une évaluation de sécurité au chevet, l’infirmière évalue une situation caractérisée par hypoglycémie symptomatique chez un patient conscient. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’évaluation du travail combine les données maternelles, fœtales et la progression cervicale.",
+    "id": "f8b811a5-3b8d-4879-b052-17e7d2488fde",
+    "option_a": "surveiller progression cervicale, contractions, descente et bien-être materno-fœtal",
+    "option_b": "évaluer seulement le poids maternel",
+    "option_c": "ignorer le rythme fœtal",
+    "option_d": "mesurer uniquement la température",
+    "question": "Lors d’une priorisation de plusieurs soins, un patient présente travail obstétrical actif. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réduction de la pression et la surveillance cutanée préviennent les lésions.",
+    "id": "f8bffe2c-b914-426b-a0b5-ef555ccba07c",
+    "option_a": "garder les draps humides",
+    "option_b": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_c": "laisser dans la même position",
+    "option_d": "masser fortement une rougeur persistante",
+    "question": "À l’admission, face à patient alité à haut risque de lésion de pression, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La réduction de la pression et la surveillance cutanée sont essentielles.",
+    "id": "f8c8e282-4835-4c62-b260-f98de213e082",
+    "option_a": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_b": "laisser toujours dans la même position",
+    "option_c": "masser fortement une rougeur persistante",
+    "option_d": "garder les draps humides",
+    "question": "Pendant une évaluation ciblée, un patient présente patient alité à haut risque de lésion de pression. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’état général et la perfusion sont essentiels pour reconnaître un enfant gravement malade.",
+    "id": "f8cec96b-44f1-4949-9bad-e37674fef57f",
+    "option_a": "ignorer la perfusion",
+    "option_b": "évaluer rapidement l’état général, les signes vitaux et rechercher des signes de gravité",
+    "option_c": "se fier uniquement au chiffre de température",
+    "option_d": "faire un bain glacé prolongé",
+    "question": "Dans une unité hospitalière, l’infirmière prend en charge un patient présentant fièvre avec léthargie et mauvaise perfusion. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Éloigner les sources de chaleur réduit le risque de brûlure.",
+    "id": "f8e1c2dc-f262-480a-b32f-af355cef9a8d",
+    "option_a": "Mettre l’eau bouillante au sol",
+    "option_b": "Laisser l’enfant jouer près du feu",
+    "option_c": "Garder liquides chauds, flammes et casseroles hors de portée",
+    "option_d": "Laisser les casseroles au bord",
+    "question": "Pendant la garde du matin, quelle mesure aide à prévenir les brûlures chez le jeune enfant à domicile ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Le séchage et le peau-à-peau réduisent les pertes de chaleur.",
+    "id": "f8e8b792-0846-411c-86b7-3770fd62f393",
+    "option_a": "le baigner à l’eau froide",
+    "option_b": "sécher rapidement et favoriser le peau-à-peau si l’état le permet",
+    "option_c": "laisser le nouveau-né humide",
+    "option_d": "le placer dans un courant d’air",
+    "question": "Lors d’une consultation, face à nouveau-né humide juste après la naissance, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en évaluant la sécurité.",
+    "id": "f8f02d66-1b85-4a12-9bb5-b52bd45565ce",
+    "option_a": "ignorer le contenu des voix",
+    "option_b": "reconnaître son expérience sans confirmer les voix et évaluer le risque de passage à l’acte",
+    "option_c": "confirmer que les voix sont réelles",
+    "option_d": "se moquer",
+    "question": "Lors d’une visite de suivi, l’infirmière prend en charge un patient présentant patient disant entendre des voix menaçantes. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une urgence coronarienne doit être envisagée devant ce tableau.",
+    "id": "f8f693c9-27a9-4238-9a1b-6429a9ccf4c1",
+    "option_a": "attendre la fin du service",
+    "option_b": "donner un laxatif",
+    "option_c": "évaluer rapidement, surveiller les signes vitaux et alerter l’équipe",
+    "option_d": "faire dormir le patient",
+    "question": "Dans un centre de santé, le patient présente douleur thoracique oppressive avec sueurs. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "f8f9a658-8249-4327-9cbe-d6691c0ccc86",
+    "option_a": "introduire un objet dans la bouche",
+    "option_b": "laisser la patiente seule",
+    "option_c": "donner à boire pendant la crise",
+    "option_d": "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente",
+    "question": "Pendant la préparation des soins, un patient présente convulsion chez une femme enceinte hypertendue. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Au triage, les menaces vitales immédiates ont priorité.",
+    "id": "f900be73-72d5-4677-bcc4-edaf72ca98ca",
+    "option_a": "traiter d’abord la demande administrative",
+    "option_b": "attendre l’ordre d’arrivée sans triage",
+    "option_c": "prendre en charge en priorité la menace immédiate des voies aériennes",
+    "option_d": "voir d’abord la petite coupure",
+    "question": "Pendant une garde de nuit, l’infirmière prend en charge un patient présentant plusieurs patients arrivent simultanément, dont un avec obstruction des voies aériennes. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent indiquer une pré-éclampsie sévère.",
+    "id": "f90917a4-3b5f-4d71-af95-0b8ec2dbee17",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "organiser une évaluation obstétricale urgente",
+    "option_c": "encourager l’exercice intense",
+    "option_d": "renvoyer sans surveillance",
+    "question": "Lors d’une réévaluation, face à hypertension sévère, céphalées et troubles visuels pendant la grossesse, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "f916fb05-ff78-4f4a-ab13-99e8dc83c779",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Pendant une consultation de suivi, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La vérification des allergies contribue à prévenir les réactions graves.",
+    "id": "f91a3bc1-7d88-4d8c-9856-c70374145ac5",
+    "option_a": "ignorer une éruption",
+    "option_b": "partager la dose avec un autre patient",
+    "option_c": "arrêter automatiquement après une seule dose",
+    "option_d": "vérifier les allergies et surveiller les réactions indésirables",
+    "question": "Pendant une prise en charge communautaire, l’infirmière évalue une situation caractérisée par première dose d’un antibiotique. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les anticoagulants augmentent le risque hémorragique.",
+    "id": "f92907d0-78f1-41ab-95e9-938e2c698bd8",
+    "option_a": "effectuer un massage profond",
+    "option_b": "évaluer et signaler rapidement le saignement",
+    "option_c": "administrer une dose supplémentaire",
+    "option_d": "ignorer le saignement",
+    "question": "Après l’arrivée d’un nouveau patient, l’infirmière évalue une situation caractérisée par saignement inhabituel sous anticoagulant. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les contrôles systématiques réduisent les erreurs médicamenteuses.",
+    "id": "f933923b-f8e1-4e71-8ce0-7ef5b48b66a8",
+    "option_a": "ignorer les allergies",
+    "option_b": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "option_c": "se fier à la couleur",
+    "option_d": "demander à un autre patient",
+    "question": "Lors d’une visite communautaire, face à première dose d’un médicament, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Les contrôles systématiques diminuent les erreurs médicamenteuses.",
+    "id": "f93df679-b74d-4fba-bf5e-e7d068e9c00d",
+    "option_a": "se fier uniquement à la couleur du médicament",
+    "option_b": "demander à un autre patient",
+    "option_c": "ignorer les allergies",
+    "option_d": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "question": "Après un signalement de l’aide-soignant, un patient présente administration prochaine d’un médicament. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation.",
+    "id": "f940ed1f-b641-4ee4-922f-3e56b1ae1ce2",
+    "option_a": "interdire tout liquide",
+    "option_b": "donner seulement un antitussif",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "question": "Lors d’un changement soudain des symptômes, un patient présente diarrhée aqueuse profuse avec déshydratation. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Chez un patient conscient, un glucide rapide est indiqué pour corriger une hypoglycémie, avec contrôle ultérieur.",
+    "id": "f95618d4-eb57-45fa-b566-e95bbf295178",
+    "option_a": "administrer un glucide à action rapide puis réévaluer la glycémie",
+    "option_b": "administrer davantage d’insuline",
+    "option_c": "interdire toute prise orale",
+    "option_d": "attendre la disparition spontanée",
+    "question": "Lors d’un contrôle après traitement, l’infirmière évalue une situation caractérisée par hypoglycémie symptomatique chez un patient conscient. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation.",
+    "id": "f9574c8a-05c6-4d54-8272-fb87f085a5b8",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "option_c": "interdire tout liquide",
+    "option_d": "donner seulement un antitussif",
+    "question": "Après une plainte nouvelle du patient, un patient présente diarrhée aqueuse profuse avec déshydratation. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "f9645028-46cd-449f-baa6-c1e399195ac3",
+    "option_a": "donner à boire",
+    "option_b": "protéger la patiente, soutenir ABC et déclencher la prise en charge urgente",
+    "option_c": "mettre un objet dans la bouche",
+    "option_d": "laisser seule",
+    "question": "Lors d’une visite communautaire, face à convulsion chez une femme enceinte hypertendue, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une documentation précise favorise la continuité et la sécurité des soins.",
+    "id": "f96ee17c-4819-44f8-8c27-6bddb07e7443",
+    "option_a": "documenter des rumeurs",
+    "option_b": "effacer une erreur sans suivre la procédure",
+    "option_c": "demander à un visiteur d’écrire la note",
+    "option_d": "consigner des données factuelles, précises, datées et pertinentes",
+    "question": "Au changement d’équipe, un patient présente événement clinique important à documenter. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une assistance adaptée et un environnement sûr réduisent le risque de chute.",
+    "id": "f9727ed9-3e8f-45f5-bdf3-bedc4cf3defc",
+    "option_a": "aider aux déplacements et sécuriser l’environnement",
+    "option_b": "faire lever brusquement seul",
+    "option_c": "laisser le sol mouillé",
+    "option_d": "éloigner le dispositif d’appel",
+    "question": "Après les premiers soins, un patient présente faiblesse et étourdissement au lever. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une documentation précise favorise la continuité et la sécurité des soins.",
+    "id": "f97ad5dc-c8aa-4561-b817-2165384ea376",
+    "option_a": "consigner des données factuelles, précises, datées et pertinentes",
+    "option_b": "documenter des rumeurs",
+    "option_c": "effacer une erreur sans suivre la procédure",
+    "option_d": "demander à un visiteur d’écrire la note",
+    "question": "Pendant l’organisation des soins prioritaires, l’infirmière évalue une situation caractérisée par événement clinique important à documenter. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une réaction transfusionnelle potentielle exige l’arrêt de la transfusion et une évaluation immédiate.",
+    "id": "f988c326-75fd-40fb-b48b-deb4f0ffe9b1",
+    "option_a": "interrompre la transfusion et suivre immédiatement le protocole de réaction transfusionnelle",
+    "option_b": "augmenter le débit",
+    "option_c": "continuer jusqu’à la fin",
+    "option_d": "ignorer les symptômes",
+    "question": "Pendant l’organisation des soins prioritaires, l’infirmière évalue une situation caractérisée par fièvre, frissons ou dyspnée pendant une transfusion. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La vérification des allergies et la surveillance des réactions sont des éléments de sécurité médicamenteuse.",
+    "id": "f98e8f7b-9ba8-4392-be84-cc255d219aee",
+    "option_a": "arrêter chaque antibiotique dès amélioration sans prescription",
+    "option_b": "partager les doses entre patients",
+    "option_c": "vérifier les allergies et surveiller les signes de réaction indésirable",
+    "option_d": "ignorer toute éruption",
+    "question": "Au moment de la transmission, l’infirmière prend en charge un patient présentant patient recevant un antibiotique. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La dépression respiratoire est une complication potentiellement grave des opioïdes.",
+    "id": "f98fd39f-6349-47e9-a221-e1fdf71d5fed",
+    "option_a": "évaluer immédiatement la respiration et appliquer le protocole prévu",
+    "option_b": "administrer une dose supplémentaire",
+    "option_c": "laisser dormir sans surveillance",
+    "option_d": "faire marcher seul",
+    "question": "Pendant la préparation des soins, un patient présente respiration lente et somnolence après un opioïde. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en recherchant un risque pour la sécurité.",
+    "id": "f9aa5d33-9d05-45b3-b502-f732c9d32998",
+    "option_a": "reconnaître le vécu sans confirmer les voix et évaluer la sécurité",
+    "option_b": "confirmer que les voix sont réelles",
+    "option_c": "se moquer",
+    "option_d": "ignorer le contenu des voix",
+    "question": "Au moment de la transmission, un patient présente voix menaçantes rapportées par un patient. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une HPP avec instabilité hémodynamique nécessite une réanimation simultanée au contrôle du saignement. Les cristalloïdes isotoniques sont préférés aux colloïdes pour la réanimation IV initiale.",
+    "id": "f9b0f3c5-b8d2-4ec3-9507-4bb3dc966d55",
+    "option_a": "Établir/maintenir des accès IV, administrer des cristalloïdes isotoniques et activer l’escalade de réanimation",
+    "option_b": "Limiter la surveillance des signes vitaux",
+    "option_c": "Donner uniquement des liquides par voie orale",
+    "option_d": "Reporter l’évaluation hémodynamique",
+    "question": "Une patiente avec hémorragie postpartum reste hypotendue et tachycarde malgré les premières mesures. Quelle action doit accompagner sans délai le contrôle de la cause du saignement ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une détresse respiratoire impose d’abord l’évaluation et le soutien des voies aériennes et de la respiration.",
+    "id": "f9b6542a-975b-4815-952d-cc467ba2f9f1",
+    "option_a": "Faire marcher le patient",
+    "option_b": "Attendre sans réévaluer",
+    "option_c": "Évaluer ABC, installer pour faciliter la respiration et appliquer l’oxygène selon protocole/prescription",
+    "option_d": "Donner un repas",
+    "question": "À l’admission, un patient présente une dyspnée soudaine et une SpO₂ basse. Quelle action est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent traduire une congestion pulmonaire nécessitant une évaluation rapide.",
+    "id": "f9c29fcd-b349-447b-8332-14c0f4fb4de0",
+    "option_a": "encourager un effort soutenu",
+    "option_b": "installer le patient pour faciliter la respiration, évaluer l’oxygénation et appliquer les prescriptions",
+    "option_c": "placer complètement à plat",
+    "option_d": "augmenter librement les apports hydriques",
+    "question": "Après les premiers soins, un patient présente orthopnée, crépitants et dyspnée croissante. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes peuvent indiquer une infection du postpartum.",
+    "id": "f9c85f90-3a64-4981-a97b-3260ba28be63",
+    "option_a": "considérer ces signes toujours normaux",
+    "option_b": "retarder l’évaluation",
+    "option_c": "encourager un effort intense",
+    "option_d": "suspecter une infection puerpérale et organiser une évaluation rapide",
+    "question": "À la suite d’une nouvelle plainte clinique, l’infirmière évalue une situation caractérisée par fièvre, douleur utérine et lochies malodorantes après accouchement. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La procidence du cordon menace l’oxygénation fœtale.",
+    "id": "f9d1abd4-ed2d-4eee-930f-d12dc92ca198",
+    "option_a": "attendre plusieurs contractions",
+    "option_b": "repousser brutalement le cordon",
+    "option_c": "appeler de l’aide et appliquer immédiatement les mesures visant à réduire la compression du cordon",
+    "option_d": "faire marcher la patiente",
+    "question": "Pendant la préparation à la sortie, l’infirmière évalue une situation caractérisée par cordon ombilical visible ou palpable après rupture des membranes. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’hygiène des mains et l’asepsie sont essentielles à la prévention des infections associées aux soins.",
+    "id": "f9dac3c0-8933-4cbe-b397-769fdd306abd",
+    "option_a": "respecter rigoureusement l’hygiène des mains et la technique aseptique indiquée",
+    "option_b": "réutiliser du matériel contaminé",
+    "option_c": "omettre l’hygiène des mains si des gants sont portés",
+    "option_d": "toucher les zones stériles à mains nues",
+    "question": "Après l’arrivée d’un nouveau patient, l’infirmière évalue une situation caractérisée par soins d’une plaie ou d’un dispositif invasif. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’évaluation après rupture des membranes aide à détecter rapidement certaines complications.",
+    "id": "f9db8583-3d11-4b14-b799-3c5be03afc8f",
+    "option_a": "retarder toute surveillance",
+    "option_b": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "option_c": "faire marcher immédiatement sans évaluation",
+    "option_d": "ignorer le liquide",
+    "question": "Pendant la planification des soins, un patient présente rupture des membranes pendant le travail. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les signes d’inhalation font craindre un œdème des voies aériennes.",
+    "id": "f9dd1823-a91b-42f9-910b-4fc2a63be7b6",
+    "option_a": "percer les cloques",
+    "option_b": "donner un repas avant l’évaluation",
+    "option_c": "prioriser l’évaluation des voies aériennes et de la respiration",
+    "option_d": "appliquer de la glace directement sur toute la brûlure",
+    "question": "Lors d’une visite de suivi, l’infirmière prend en charge un patient présentant brûlure étendue avec suie autour de la bouche et voix rauque. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "f9dfa6a7-509d-4728-a2c6-96e74dd9a163",
+    "option_a": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre la prochaine ronde",
+    "question": "À la suite d’une nouvelle plainte clinique, l’infirmière évalue une situation caractérisée par tachycardie, hypotension et pâleur après chirurgie. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une assistance adaptée réduit le risque de chute.",
+    "id": "f9e839e2-73f5-41d4-9028-807805ef4d81",
+    "option_a": "faire lever brusquement seul",
+    "option_b": "laisser le sol mouillé",
+    "option_c": "éloigner la sonnette",
+    "option_d": "aider aux déplacements et sécuriser l’environnement",
+    "question": "Lors d’une consultation, une situation clinique se caractérise par faiblesse et étourdissement au lever. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Le délai de début des symptômes est essentiel dans l’évaluation d’un AVC.",
+    "id": "f9efba2e-5b91-4cf8-a027-944b9f43c8de",
+    "option_a": "faire marcher seul",
+    "option_b": "noter l’heure de début ou la dernière fois normale et déclencher l’évaluation urgente",
+    "option_c": "donner à boire",
+    "option_d": "laisser dormir",
+    "question": "Avant la sortie, face à faiblesse brutale d’un côté avec trouble de la parole, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation.",
+    "id": "f9f18eb2-3c77-4297-9a14-b7320c69fce8",
+    "option_a": "donner seulement un antitussif",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "option_d": "interdire tout liquide",
+    "question": "Lors d’une prise en charge en dispensaire, l’infirmière évalue une situation caractérisée par diarrhée aqueuse profuse avec déshydratation. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent annoncer une pré-éclampsie sévère et des complications neurologiques.",
+    "id": "fa03b136-9a9b-442c-b3ca-774837a58f86",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures de sécurité prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Pendant une garde de nuit, l’infirmière prend en charge un patient présentant hypertension sévère, céphalées et troubles visuels pendant la grossesse. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’enfant peut se déshydrater rapidement lors d’une diarrhée importante.",
+    "id": "fa086d51-4888-4e87-b3b7-43f4551030d1",
+    "option_a": "donner uniquement une boisson gazeuse",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "option_d": "supprimer tous les liquides",
+    "question": "Avant de communiquer avec le médecin, un patient présente diarrhée avec yeux enfoncés, bouche sèche et oligurie. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques.",
+    "id": "fa17d93f-8b21-47b0-8fa5-5b512fd9b4c2",
+    "option_a": "supprimer le lavage des mains",
+    "option_b": "stocker les aliments sans protection",
+    "option_c": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_d": "encourager l’eau non traitée",
+    "question": "Au moment de la transmission, un patient présente communauté exposée aux maladies diarrhéiques. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Le lait maternel fournit notamment des facteurs immunitaires protecteurs.",
+    "id": "fa1817d7-fb53-4c1e-9560-f4d1c84f1e4e",
+    "option_a": "Augmentation du risque infectieux",
+    "option_b": "Protection immunitaire",
+    "option_c": "Déshydratation systématique",
+    "option_d": "Carence immédiate en fer",
+    "question": "Quel est l’un des avantages majeurs de l’allaitement maternel exclusif chez le nourrisson ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une détresse respiratoire impose une prise en charge prioritaire des fonctions vitales.",
+    "id": "fa219d13-ca19-4bb7-a2e6-f4792b841e1a",
+    "option_a": "donner un repas avant toute intervention",
+    "option_b": "attendre sans réévaluation",
+    "option_c": "faire marcher le patient",
+    "option_d": "prioriser voies aériennes, respiration, positionnement et oxygène selon indication/protocole",
+    "question": "Lors d’un appel de la famille, un patient présente détresse respiratoire avec saturation basse. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La coordination entre glycémie, repas et insuline rapide est essentielle.",
+    "id": "fa2ac54a-c6c4-400f-9e27-d0323769496a",
+    "option_a": "retarder le repas plusieurs heures",
+    "option_b": "doubler la dose si le patient a faim",
+    "option_c": "vérifier glycémie et disponibilité du repas selon le plan thérapeutique",
+    "option_d": "administrer sans connaître la glycémie",
+    "question": "Pendant la surveillance, un patient présente insuline rapide prévue avant un repas. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une exacerbation sévère peut rapidement compromettre la ventilation.",
+    "id": "fa30b695-8e00-4bd6-b3cf-03d9ff4c8d16",
+    "option_a": "attendre la disparition spontanée",
+    "option_b": "évaluer la gravité respiratoire et administrer le traitement prescrit sans délai",
+    "option_c": "faire boire beaucoup avant toute évaluation",
+    "option_d": "demander au patient de courir",
+    "question": "Après les premiers soins, l’infirmière prend en charge un patient présentant dyspnée, sibilances et difficulté à parler. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La vérification de la compréhension améliore la qualité de l’éducation sanitaire.",
+    "id": "fa31a909-3638-42f0-adc5-162716ba2cab",
+    "option_a": "éviter les questions",
+    "option_b": "supposer que tout a été compris",
+    "option_c": "utiliser un langage clair puis vérifier la compréhension par reformulation",
+    "option_d": "donner uniquement un document complexe",
+    "question": "Lors d’une visite de suivi, un patient présente enseignement à une famille sur une maladie chronique. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Le triage de catastrophe vise à utiliser les ressources disponibles selon l’urgence et les chances de bénéfice.",
+    "id": "fa3209eb-0218-4246-809d-58a6f264967f",
+    "option_a": "consacrer toutes les ressources aux blessures mineures",
+    "option_b": "ignorer l’état respiratoire",
+    "option_c": "utiliser les critères de triage pour prioriser les personnes nécessitant une intervention immédiate",
+    "option_d": "traiter uniquement par ordre d’arrivée",
+    "question": "Pendant la planification des soins, un patient présente triage lors d’un afflux massif de victimes. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une prise profonde améliore le transfert du lait et réduit les traumatismes du mamelon.",
+    "id": "fa4967dc-ba6a-4993-84e2-7214e47c2616",
+    "option_a": "interrompre définitivement sans évaluation",
+    "option_b": "espacer fortement toutes les tétées",
+    "option_c": "corriger le positionnement et favoriser une prise profonde",
+    "option_d": "faire pincer seulement le mamelon",
+    "question": "Pendant la surveillance, un patient présente prise superficielle du sein avec douleur maternelle. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La pression directe est une mesure initiale importante de contrôle d’une hémorragie.",
+    "id": "fa4e9299-ac55-4117-97ce-53ec0e5409f8",
+    "option_a": "attendre sans intervenir",
+    "option_b": "retirer constamment les compresses",
+    "option_c": "appliquer une pression directe ferme et évaluer l’état général",
+    "option_d": "faire marcher le patient",
+    "question": "Dans un centre de santé, le patient présente hémorragie externe abondante. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes peuvent traduire une complication hémodynamique postopératoire.",
+    "id": "fa5274da-3808-4d92-ac92-1b5e14ae01fe",
+    "option_a": "donner un laxatif",
+    "option_b": "faire lever seul",
+    "option_c": "attendre le repas",
+    "option_d": "rechercher une hémorragie ou un état de choc et alerter rapidement",
+    "question": "Lors d’une réévaluation, une situation clinique se caractérise par pâleur, tachycardie et hypotension après chirurgie. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’OMS recommande l’allaitement maternel exclusif pendant les six premiers mois.",
+    "id": "fa583fd1-c792-4c4b-97d1-12ec21b7b8fb",
+    "option_a": "commencer les solides dès la naissance",
+    "option_b": "recommander l’allaitement maternel exclusif lorsque possible",
+    "option_c": "ajouter systématiquement du jus",
+    "option_d": "donner de l’eau sucrée chaque jour",
+    "question": "Après une aggravation rapportée par le patient, l’infirmière évalue une situation caractérisée par conseil sur l’alimentation d’un nourrisson de moins de six mois. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques.",
+    "id": "fa59c1b7-5717-4347-893c-f659a7b04408",
+    "option_a": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_b": "encourager l’eau non traitée",
+    "option_c": "supprimer le lavage des mains",
+    "option_d": "stocker les aliments sans protection",
+    "question": "Lors de la préparation de la transmission, un patient présente communauté exposée aux maladies diarrhéiques. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’enfant peut rapidement se déshydrater lors d’une diarrhée.",
+    "id": "fa74148d-f1b3-4d0d-beaa-d0fcf2d79dda",
+    "option_a": "donner seulement une boisson gazeuse",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "évaluer la déshydratation et commencer la réhydratation appropriée",
+    "option_d": "arrêter tous les liquides",
+    "question": "Pendant la surveillance, le patient présente diarrhée chez un enfant avec yeux enfoncés et oligurie. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une hypoglycémie consciente nécessite un glucide rapide suivi d’une réévaluation.",
+    "id": "fa97174d-c0ef-4858-acb1-ca9315ec8481",
+    "option_a": "attendre sans intervenir",
+    "option_b": "donner un glucide à action rapide puis contrôler de nouveau la glycémie",
+    "option_c": "administrer une dose supplémentaire d’insuline",
+    "option_d": "interdire toute prise orale malgré la conscience",
+    "question": "Au cours de la surveillance, l’infirmière prend en charge un patient présentant sueurs, tremblements, confusion légère et glycémie basse chez un patient conscient. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "faab9a23-db50-41a6-b534-2c07596acd69",
+    "option_a": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre la prochaine ronde",
+    "question": "Au cours d’une garde particulièrement chargée, l’infirmière évalue une situation caractérisée par tachycardie, hypotension et pâleur après chirurgie. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent annoncer une pré-éclampsie sévère et des complications neurologiques.",
+    "id": "faaf237d-d509-44b7-9b3b-300d7cee9664",
+    "option_a": "renvoyer sans surveillance",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "organiser une évaluation obstétricale urgente et appliquer les mesures de sécurité prescrites",
+    "option_d": "encourager l’exercice intense",
+    "question": "Au service des urgences, l’infirmière prend en charge un patient présentant hypertension sévère, céphalées et troubles visuels pendant la grossesse. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Se lever lentement peut réduire les étourdissements et le risque de chute.",
+    "id": "fac97f6b-dc6b-46c7-a65f-b80c96136fd7",
+    "option_a": "Se lever progressivement",
+    "option_b": "Se lever brusquement",
+    "option_c": "Arrêter seul le médicament",
+    "option_d": "Doubler la dose si étourdi",
+    "question": "Quel conseil est utile pour un patient prenant un antihypertenseur pouvant causer une hypotension orthostatique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion.",
+    "id": "fac9d70f-7507-479b-968a-c9a0ae9ac034",
+    "option_a": "immobiliser fortement tous les membres",
+    "option_b": "donner à boire pendant la crise",
+    "option_c": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "option_d": "introduire un objet dans la bouche",
+    "question": "Après une intervention précédente, un patient présente crise convulsive généralisée. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les contrôles systématiques diminuent les erreurs médicamenteuses.",
+    "id": "facb17c0-5934-41fd-a1a6-bde0dfe38f44",
+    "option_a": "demander à un autre patient",
+    "option_b": "ignorer les allergies",
+    "option_c": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "option_d": "se fier uniquement à la couleur du médicament",
+    "question": "Pendant une surveillance post-intervention, l’infirmière évalue une situation caractérisée par administration prochaine d’un médicament. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La malnutrition aiguë sévère nécessite une évaluation structurée, notamment pour rechercher des complications.",
+    "id": "fad5bb20-baed-47c4-b56e-886024ab0c25",
+    "option_a": "donner sans évaluation une quantité excessive d’aliments",
+    "option_b": "évaluer selon le protocole de malnutrition et rechercher les complications",
+    "option_c": "faire pratiquer un exercice intense",
+    "option_d": "ignorer les œdèmes",
+    "question": "Dans un centre de santé, un patient présente amaigrissement sévère ou œdèmes bilatéraux. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent indiquer une infection du postpartum.",
+    "id": "fae1e44a-634d-41c1-afb3-2396f2d27ec4",
+    "option_a": "retarder l’évaluation",
+    "option_b": "encourager un effort intense",
+    "option_c": "suspecter une infection puerpérale et organiser une évaluation rapide",
+    "option_d": "considérer ces signes toujours normaux",
+    "question": "Avant de communiquer avec le médecin, un patient présente fièvre, douleur utérine et lochies malodorantes après accouchement. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une atteinte par inhalation peut rapidement compromettre les voies aériennes.",
+    "id": "fb06accd-fb2c-4e7b-9e7c-8b409245cfe6",
+    "option_a": "donner à manger avant l’évaluation",
+    "option_b": "évaluer immédiatement les voies aériennes et la respiration",
+    "option_c": "percer toutes les cloques",
+    "option_d": "appliquer directement de la glace sur une grande surface",
+    "question": "Au début du quart de travail, un patient présente brûlure importante avec suspicion d’inhalation. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une prise profonde améliore le transfert du lait et réduit les traumatismes du mamelon.",
+    "id": "fb1da4c5-6765-400b-abc6-8342a6e68246",
+    "option_a": "faire pincer seulement le mamelon",
+    "option_b": "interrompre définitivement sans évaluation",
+    "option_c": "espacer fortement toutes les tétées",
+    "option_d": "corriger le positionnement et favoriser une prise profonde",
+    "question": "Pendant la collecte des données, un patient présente prise superficielle du sein avec douleur maternelle. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes peuvent traduire une complication hémodynamique postopératoire.",
+    "id": "fb2ffa3e-4237-49a7-b9d6-2240a821e612",
+    "option_a": "rechercher une hémorragie ou un état de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre le repas",
+    "question": "Pendant la surveillance, l’infirmière prend en charge un patient présentant pâleur, tachycardie et hypotension après chirurgie. Quelle intervention est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une douleur thoracique aiguë associée à des signes végétatifs peut correspondre à une urgence coronarienne.",
+    "id": "fb3c345e-da94-4903-bad6-bcb8a0613e6c",
+    "option_a": "évaluer ABC, signes vitaux et déclencher rapidement l’évaluation d’une urgence coronarienne",
+    "option_b": "retarder l’évaluation jusqu’au prochain repas",
+    "option_c": "faire marcher le patient pour confirmer le diagnostic",
+    "option_d": "donner uniquement de l’eau",
+    "question": "Lors d’un enseignement au patient, un patient présente douleur thoracique aiguë avec signes végétatifs. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une urgence coronarienne doit être envisagée devant ce tableau.",
+    "id": "fb56fd0e-5032-450e-b810-64a75b82a5b1",
+    "option_a": "attendre la fin du service",
+    "option_b": "donner un laxatif",
+    "option_c": "évaluer rapidement, surveiller les signes vitaux et alerter l’équipe",
+    "option_d": "faire dormir le patient",
+    "question": "Au service des urgences, le patient présente douleur thoracique oppressive avec sueurs. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’oxygène soutient la combustion et doit être utilisé selon des règles de sécurité strictes.",
+    "id": "fb6be000-d6b8-485b-b648-a9070de90fb9",
+    "option_a": "autoriser une flamme à proximité",
+    "option_b": "modifier librement le débit sans indication",
+    "option_c": "couvrir la source d’oxygène avec des matériaux inflammables",
+    "option_d": "respecter la prescription/protocole et les règles de sécurité contre le feu",
+    "question": "Au cours d’un examen infirmier, un patient présente patient recevant de l’oxygène. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le délai depuis le début des symptômes est déterminant dans la prise en charge d’un AVC aigu.",
+    "id": "fb6d166f-58f8-4631-a5c8-83d54829693d",
+    "option_a": "déterminer l’heure de début ou la dernière fois normale et activer l’évaluation urgente",
+    "option_b": "donner immédiatement à manger",
+    "option_c": "laisser dormir plusieurs heures",
+    "option_d": "faire marcher sans assistance",
+    "question": "Pendant une activité de dépistage, l’infirmière évalue une situation caractérisée par déficit neurologique focal apparu brutalement. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en évaluant le danger.",
+    "id": "fb6eba2b-1202-4348-b891-e7f9df8c9fb1",
+    "option_a": "confirmer que les voix sont réelles",
+    "option_b": "se moquer",
+    "option_c": "ignorer le contenu",
+    "option_d": "reconnaître son vécu sans confirmer les voix et évaluer la sécurité",
+    "question": "Lors d’une réévaluation, une situation clinique se caractérise par patient disant entendre des voix menaçantes. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes sont compatibles avec une déshydratation dont la gravité doit être évaluée.",
+    "id": "fb8da96b-9156-4b07-a8df-e8caeb3462c8",
+    "option_a": "Myopie",
+    "option_b": "Déshydratation",
+    "option_c": "Hypertension",
+    "option_d": "Otite",
+    "question": "Après l’évaluation initiale, un enfant avec diarrhée a les yeux enfoncés, la bouche sèche et urine peu. Quelle complication est la plus probable ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réduction de la pression et la surveillance cutanée sont essentielles.",
+    "id": "fb92bcea-a1a8-4926-b4ae-0184308a0c11",
+    "option_a": "garder les draps humides",
+    "option_b": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_c": "laisser toujours dans la même position",
+    "option_d": "masser fortement une rougeur persistante",
+    "question": "Au service des urgences, un patient présente patient alité à haut risque de lésion de pression. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "fba59fec-3d33-49f0-833c-7f77b2fd1469",
+    "option_a": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre la prochaine ronde",
+    "question": "Pendant une évaluation centrée sur un problème, l’infirmière évalue une situation caractérisée par tachycardie, hypotension et pâleur après chirurgie. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en évaluant le danger.",
+    "id": "fbaae36a-a4f5-4c76-9f05-3b539ca4d25f",
+    "option_a": "ignorer le contenu",
+    "option_b": "reconnaître son vécu sans confirmer les voix et évaluer la sécurité",
+    "option_c": "confirmer que les voix sont réelles",
+    "option_d": "se moquer",
+    "question": "Pendant la surveillance, face à patient disant entendre des voix menaçantes, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les vérifications systématiques réduisent les erreurs médicamenteuses.",
+    "id": "fbb2f5bb-dc9c-43c1-8b42-9d013970e473",
+    "option_a": "Ignorer les allergies",
+    "option_b": "Vérifier patient, médicament, dose, voie, moment et autres droits de sécurité",
+    "option_c": "Se fier seulement à la couleur du comprimé",
+    "option_d": "Demander au voisin",
+    "question": "Lors d’une consultation, avant d’administrer un médicament, quelle action est essentielle ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La dépression respiratoire est une complication grave des opioïdes.",
+    "id": "fbb7b695-3952-4d59-877d-0fbc2a833ae3",
+    "option_a": "administrer une nouvelle dose",
+    "option_b": "laisser dormir sans surveillance",
+    "option_c": "faire marcher seul",
+    "option_d": "évaluer immédiatement la respiration et appliquer le protocole prévu",
+    "question": "Lors d’une réévaluation, une situation clinique se caractérise par respiration lente et somnolence après un opioïde. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La pression directe est une mesure initiale majeure de contrôle d’une hémorragie externe.",
+    "id": "fbc2efec-376f-4942-b1f8-597e9eb4cbea",
+    "option_a": "Appliquer une pression directe ferme avec une protection adaptée",
+    "option_b": "Faire marcher le patient",
+    "option_c": "Attendre sans intervenir",
+    "option_d": "Donner un repas",
+    "question": "Au centre de santé, quelle action initiale aide à contrôler une hémorragie externe importante ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une dose en mg/kg exige un poids fiable exprimé en kilogrammes.",
+    "id": "fbd4f58a-f311-4623-af55-5bd0cfac4545",
+    "option_a": "La pointure",
+    "option_b": "Le poids du parent",
+    "option_c": "La taille de la chambre",
+    "option_d": "Le poids actuel en kilogrammes",
+    "question": "Pendant les soins, une prescription pédiatrique est exprimée en mg/kg. Quelle donnée est indispensable au calcul ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La vérification de la compréhension améliore la qualité de l’éducation sanitaire.",
+    "id": "fc031dd3-3e6e-43b4-8739-8c7356953c2a",
+    "option_a": "éviter les questions",
+    "option_b": "supposer que tout a été compris",
+    "option_c": "utiliser un langage clair puis vérifier la compréhension par reformulation",
+    "option_d": "donner uniquement un document complexe",
+    "question": "Après une observation préoccupante de la famille, l’infirmière évalue une situation caractérisée par enseignement à une famille sur une maladie chronique. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le délai de début des symptômes est essentiel dans l’évaluation d’un AVC.",
+    "id": "fc07390b-affa-4c4d-b9f8-6eb9c4082402",
+    "option_a": "donner à boire",
+    "option_b": "laisser dormir",
+    "option_c": "faire marcher seul",
+    "option_d": "noter l’heure de début ou la dernière fois normale et déclencher l’évaluation urgente",
+    "question": "À l’admission, une situation clinique se caractérise par faiblesse brutale d’un côté avec trouble de la parole. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une prise profonde améliore le transfert du lait et réduit les traumatismes du mamelon.",
+    "id": "fc0f411d-9436-4fd3-ba52-1765f34ec8f1",
+    "option_a": "faire pincer seulement le mamelon",
+    "option_b": "interrompre définitivement sans évaluation",
+    "option_c": "espacer fortement toutes les tétées",
+    "option_d": "corriger le positionnement et favoriser une prise profonde",
+    "question": "Pendant l’organisation des soins prioritaires, l’infirmière évalue une situation caractérisée par prise superficielle du sein avec douleur maternelle. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes sont compatibles avec une pré-éclampsie sévère.",
+    "id": "fc146052-d167-4181-868b-79ac0a631002",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente et appliquer les mesures prescrites",
+    "question": "Lors d’une consultation, un patient présente hypertension sévère, céphalées et troubles visuels. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les contrôles systématiques réduisent les erreurs médicamenteuses.",
+    "id": "fc1db372-6595-45ad-94eb-b7842a80004b",
+    "option_a": "ignorer les allergies",
+    "option_b": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "option_c": "se fier à la couleur",
+    "option_d": "demander à un autre patient",
+    "question": "Avant la sortie, face à première dose d’un médicament, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Les contrôles systématiques diminuent les erreurs médicamenteuses.",
+    "id": "fc5e9456-0638-4c56-91c8-48d549fd576b",
+    "option_a": "se fier uniquement à la couleur du médicament",
+    "option_b": "demander à un autre patient",
+    "option_c": "ignorer les allergies",
+    "option_d": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "question": "Dans une unité hospitalière, un patient présente administration prochaine d’un médicament. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La vérification de la compréhension améliore la qualité de l’éducation sanitaire.",
+    "id": "fc64a1fd-9366-4f4f-b7a3-6bcac6b2d2ad",
+    "option_a": "utiliser un langage clair puis vérifier la compréhension par reformulation",
+    "option_b": "donner uniquement un document complexe",
+    "option_c": "éviter les questions",
+    "option_d": "supposer que tout a été compris",
+    "question": "Après réception d’un nouveau résultat clinique, un patient présente enseignement à une famille sur une maladie chronique. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission.",
+    "id": "fc664628-8e2c-49c5-a33b-0016e2fe5796",
+    "option_a": "laisser les aliments sans protection",
+    "option_b": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_c": "encourager l’eau non traitée",
+    "option_d": "supprimer le lavage des mains",
+    "question": "Dans un centre de santé, face à communauté exposée aux maladies diarrhéiques, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une suspicion de méningite nécessite une prise en charge rapide et des précautions adaptées.",
+    "id": "fc69af8a-bd15-4706-9315-106d02ee94d1",
+    "option_a": "partager le matériel sans désinfection",
+    "option_b": "appliquer rapidement les précautions et l’évaluation prescrites selon la suspicion clinique",
+    "option_c": "laisser circuler sans précaution",
+    "option_d": "retarder l’évaluation",
+    "question": "Au cours de la surveillance, l’infirmière prend en charge un patient présentant fièvre, raideur de nuque, céphalée intense et altération de l’état général. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réduction de la pression et la surveillance cutanée sont essentielles.",
+    "id": "fc8905e1-5971-48c0-9262-5f1a1f06e2c0",
+    "option_a": "garder les draps humides",
+    "option_b": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_c": "laisser toujours dans la même position",
+    "option_d": "masser fortement une rougeur persistante",
+    "question": "Après un changement de niveau de conscience, l’infirmière évalue une situation caractérisée par patient alité à haut risque de lésion de pression. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les anticoagulants augmentent le risque hémorragique.",
+    "id": "fc8dfb08-4349-4108-8a44-f6b1427fd2aa",
+    "option_a": "ignorer le saignement",
+    "option_b": "effectuer un massage profond",
+    "option_c": "évaluer et signaler rapidement le saignement",
+    "option_d": "administrer une dose supplémentaire",
+    "question": "Avant de communiquer avec le médecin, un patient présente saignement inhabituel sous anticoagulant. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau peut évoquer une urgence coronarienne et nécessite une prise en charge rapide.",
+    "id": "fc8ecdee-6130-4d1d-88cd-45cfc5eccd2d",
+    "option_a": "Évaluer immédiatement, surveiller les signes vitaux et alerter l’équipe",
+    "option_b": "Lui proposer de dormir",
+    "option_c": "Attendre la fin du service",
+    "option_d": "Lui donner un laxatif",
+    "question": "Pendant la garde du matin, un patient décrit une douleur thoracique oppressive avec sueurs. Quelle conduite infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les anticoagulants augmentent le risque hémorragique.",
+    "id": "fc8edb47-1d89-46d8-8288-ba76ac745b88",
+    "option_a": "ignorer le saignement",
+    "option_b": "effectuer un massage profond",
+    "option_c": "évaluer et signaler rapidement le saignement",
+    "option_d": "administrer une dose supplémentaire",
+    "question": "Pendant une consultation de suivi, un patient présente saignement inhabituel sous anticoagulant. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les contrôles systématiques diminuent les erreurs médicamenteuses.",
+    "id": "fc94e53e-6a36-47f0-beb5-efde9c0b7caa",
+    "option_a": "demander à un autre patient",
+    "option_b": "ignorer les allergies",
+    "option_c": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "option_d": "se fier uniquement à la couleur du médicament",
+    "question": "Pendant la coordination avec l’équipe soignante, l’infirmière évalue une situation caractérisée par administration prochaine d’un médicament. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’écoute active facilite l’évaluation et l’expression des préoccupations.",
+    "id": "fca9b45f-4109-4ca7-8079-30258295b40a",
+    "option_a": "minimiser les émotions",
+    "option_b": "quitter sans explication",
+    "option_c": "utiliser une attitude calme, l’écoute active et des questions ouvertes",
+    "option_d": "dire simplement de se calmer",
+    "question": "Pendant l’organisation des soins prioritaires, l’infirmière évalue une situation caractérisée par anxiété intense. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La SRO remplace l’eau et les électrolytes perdus; le plan dépend du degré de déshydratation.",
+    "id": "fcac56f0-77ab-470b-ab1e-65484c824d64",
+    "option_a": "Solution de réhydratation orale selon le plan adapté",
+    "option_b": "Boisson énergisante",
+    "option_c": "Antibiotique systématique",
+    "option_d": "Jeûne complet",
+    "question": "Quel traitement est essentiel pour prévenir ou corriger la déshydratation lors d’une diarrhée aiguë sans choc ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les signes d’inhalation font craindre un œdème des voies aériennes.",
+    "id": "fcb7f12c-357c-4d2b-aa0f-c9c9c1b4be09",
+    "option_a": "donner un repas avant l’évaluation",
+    "option_b": "prioriser l’évaluation des voies aériennes et de la respiration",
+    "option_c": "appliquer de la glace directement sur toute la brûlure",
+    "option_d": "percer les cloques",
+    "question": "Lors de la préparation des soins, l’infirmière prend en charge un patient présentant brûlure étendue avec suie autour de la bouche et voix rauque. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un plan suicidaire précis représente un risque élevé.",
+    "id": "fcbc74f2-110d-4f73-b00d-8762aef0194e",
+    "option_a": "changer de sujet",
+    "option_b": "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole",
+    "option_c": "promettre le secret absolu",
+    "option_d": "laisser seul",
+    "question": "Après un changement clinique, face à intention suicidaire avec plan précis, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Un syndrome coronarien aigu doit être envisagé; l’évaluation et l’alerte rapides sont prioritaires.",
+    "id": "fcd13af0-99c4-456f-adb6-056951bc2b99",
+    "option_a": "évaluer ABC, signes vitaux, douleur et alerter rapidement l’équipe",
+    "option_b": "faire marcher le patient pour tester sa tolérance",
+    "option_c": "attendre une heure avant de réévaluer",
+    "option_d": "donner un repas copieux",
+    "question": "Dans un centre de santé, l’infirmière prend en charge un patient présentant douleur thoracique oppressive, sueurs et nausées. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent indiquer une compromission neurovasculaire.",
+    "id": "fcd39d76-0765-4bb6-8d19-ee39b7b8b0dd",
+    "option_a": "faire marcher le patient",
+    "option_b": "attendre le lendemain",
+    "option_c": "réévaluer immédiatement l’état neurovasculaire",
+    "option_d": "serrer davantage l’immobilisation",
+    "question": "Pendant une garde de nuit, le patient présente membre immobilisé devenu froid, pâle et engourdi. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "fce36862-43d4-4cbc-a54b-350768dd304d",
+    "option_a": "laisser la patiente seule",
+    "option_b": "donner à boire pendant la crise",
+    "option_c": "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente",
+    "option_d": "introduire un objet dans la bouche",
+    "question": "Pendant une consultation de suivi, un patient présente convulsion chez une femme enceinte hypertendue. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une détresse respiratoire impose une prise en charge prioritaire des fonctions vitales.",
+    "id": "fd04440b-ddb7-425d-b272-a3d7ba166266",
+    "option_a": "donner un repas avant toute intervention",
+    "option_b": "attendre sans réévaluation",
+    "option_c": "faire marcher le patient",
+    "option_d": "prioriser voies aériennes, respiration, positionnement et oxygène selon indication/protocole",
+    "question": "Avant la sortie du patient, un patient présente détresse respiratoire avec saturation basse. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Il faut éviter de renforcer l’hallucination tout en recherchant un risque pour la sécurité.",
+    "id": "fd054994-722e-4934-b3c3-48259f63100b",
+    "option_a": "confirmer que les voix sont réelles",
+    "option_b": "se moquer",
+    "option_c": "ignorer le contenu des voix",
+    "option_d": "reconnaître le vécu sans confirmer les voix et évaluer la sécurité",
+    "question": "Après réception d’un nouveau résultat clinique, un patient présente voix menaçantes rapportées par un patient. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une réaction transfusionnelle potentielle exige l’arrêt de la transfusion et une évaluation immédiate.",
+    "id": "fd0734da-b463-419c-a26d-50b136337be4",
+    "option_a": "augmenter le débit",
+    "option_b": "continuer jusqu’à la fin",
+    "option_c": "ignorer les symptômes",
+    "option_d": "interrompre la transfusion et suivre immédiatement le protocole de réaction transfusionnelle",
+    "question": "Après l’arrivée d’un nouveau patient, l’infirmière évalue une situation caractérisée par fièvre, frissons ou dyspnée pendant une transfusion. Quelle action infirmière doit être priorisée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Un utérus mou avec saignement abondant évoque notamment une atonie utérine.",
+    "id": "fd0cd307-a9df-4938-85d7-59a18bb4ece7",
+    "option_a": "attendre une heure",
+    "option_b": "donner seulement de l’eau",
+    "option_c": "reconnaître une hémorragie postpartum possible et déclencher la prise en charge urgente",
+    "option_d": "faire marcher la patiente",
+    "question": "Lors d’une consultation, le patient présente saignement abondant après accouchement avec utérus mou. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le tirage marqué est un signe de travail respiratoire accru.",
+    "id": "fd1357d0-b5cb-41be-bc3f-2ddfed5387ec",
+    "option_a": "forcer un grand repas",
+    "option_b": "laisser l’enfant sans surveillance",
+    "option_c": "attendre une amélioration spontanée",
+    "option_d": "évaluer immédiatement la respiration et l’oxygénation",
+    "question": "Après un changement de niveau de conscience, l’infirmière évalue une situation caractérisée par tirage marqué et difficulté à s’alimenter chez un nourrisson. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission.",
+    "id": "fd25cd33-f7ba-4bc1-8b0a-31dc7660a890",
+    "option_a": "supprimer le lavage des mains",
+    "option_b": "laisser les aliments sans protection",
+    "option_c": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_d": "encourager l’eau non traitée",
+    "question": "Dans un centre de santé, le patient présente communauté exposée aux maladies diarrhéiques. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Chez un patient conscient, l’hypoglycémie nécessite un glucide rapide et une réévaluation.",
+    "id": "fd2ef04a-3ea3-46a5-a79d-1ebe0a377df6",
+    "option_a": "faire jeûner",
+    "option_b": "donner seulement de l’eau",
+    "option_c": "donner un glucide à action rapide puis réévaluer",
+    "option_d": "administrer davantage d’insuline",
+    "question": "Pendant la surveillance, le patient présente hypoglycémie symptomatique chez un patient conscient. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’asepsie et l’hygiène des mains réduisent le risque d’infection associée aux soins.",
+    "id": "fd30152c-8cb2-463b-9664-c1e1aade50b1",
+    "option_a": "réutiliser du matériel tombé au sol",
+    "option_b": "respecter l’hygiène des mains et la technique aseptique indiquée",
+    "option_c": "réutiliser une compresse souillée",
+    "option_d": "toucher la plaie à mains nues",
+    "question": "Dans un centre de santé, l’infirmière prend en charge un patient présentant soins d’une plaie chirurgicale. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces mesures réduisent le risque d’infection et favorisent un drainage correct.",
+    "id": "fd454e40-d9bf-41b0-b657-e13990e35084",
+    "option_a": "irriguer sans indication",
+    "option_b": "maintenir un système fermé, hygiène appropriée et poche sous le niveau de la vessie",
+    "option_c": "déconnecter souvent le système",
+    "option_d": "poser la poche sur le lit au-dessus de la vessie",
+    "question": "Avant de transmettre le dossier, l’infirmière prend en charge un patient présentant patient porteur d’une sonde urinaire à demeure. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "fd471eef-abfc-4691-8886-d2349bac7fa4",
+    "option_a": "mettre un objet dans la bouche",
+    "option_b": "laisser seule",
+    "option_c": "donner à boire",
+    "option_d": "protéger la patiente, soutenir ABC et déclencher la prise en charge urgente",
+    "question": "Lors d’une réévaluation, une situation clinique se caractérise par convulsion chez une femme enceinte hypertendue. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le tirage marqué est un signe de travail respiratoire accru.",
+    "id": "fd5162a0-e874-42a8-8d79-2de9094ed0a6",
+    "option_a": "évaluer immédiatement la respiration et l’oxygénation",
+    "option_b": "forcer un grand repas",
+    "option_c": "laisser l’enfant sans surveillance",
+    "option_d": "attendre une amélioration spontanée",
+    "question": "Pendant la préparation à la sortie, l’infirmière évalue une situation caractérisée par tirage marqué et difficulté à s’alimenter chez un nourrisson. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les anticoagulants augmentent le risque de saignement.",
+    "id": "fd6adce6-4438-428a-8c24-f2e1b7f4589a",
+    "option_a": "Des cheveux longs",
+    "option_b": "Un sommeil normal",
+    "option_c": "Un saignement inhabituel",
+    "option_d": "Une faim normale",
+    "question": "Lors d’une réévaluation, quel signe chez un patient sous anticoagulant doit être signalé rapidement ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une exacerbation sévère peut rapidement compromettre la ventilation.",
+    "id": "fd6b460c-aa89-45c9-96b7-42e9fc26e42c",
+    "option_a": "attendre la disparition spontanée",
+    "option_b": "évaluer la gravité respiratoire et administrer le traitement prescrit sans délai",
+    "option_c": "faire boire beaucoup avant toute évaluation",
+    "option_d": "demander au patient de courir",
+    "question": "À l’admission, l’infirmière prend en charge un patient présentant dyspnée, sibilances et difficulté à parler. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Le séchage et le peau-à-peau limitent les pertes de chaleur.",
+    "id": "fd6d1a39-c1d6-4e5b-85d1-e048d6fb431b",
+    "option_a": "le placer dans un courant d’air",
+    "option_b": "le baigner immédiatement à l’eau froide",
+    "option_c": "sécher rapidement et favoriser le peau-à-peau si l’état le permet",
+    "option_d": "laisser le nouveau-né humide",
+    "question": "Lors d’une visite de suivi, un patient présente risque d’hypothermie immédiatement après la naissance. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ce tableau peut évoquer une urgence coronarienne et nécessite une prise en charge rapide.",
+    "id": "fd76f11e-8ce7-4b90-a6c6-62c3a2ffff4f",
+    "option_a": "Attendre la fin du service",
+    "option_b": "Lui donner un laxatif",
+    "option_c": "Évaluer immédiatement, surveiller les signes vitaux et alerter l’équipe",
+    "option_d": "Lui proposer de dormir",
+    "question": "Au centre de santé, un patient décrit une douleur thoracique oppressive avec sueurs. Quelle conduite infirmière est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’enfant peut se déshydrater rapidement lors d’une diarrhée importante.",
+    "id": "fd81073f-38f4-4074-928d-23cfd6dd640d",
+    "option_a": "supprimer tous les liquides",
+    "option_b": "donner uniquement une boisson gazeuse",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "question": "Lors d’une consultation non programmée, l’infirmière évalue une situation caractérisée par diarrhée avec yeux enfoncés, bouche sèche et oligurie. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une hypoglycémie consciente nécessite un glucide rapide suivi d’une réévaluation.",
+    "id": "fd82788c-fc34-4e05-819e-68970e1ebdc0",
+    "option_a": "attendre sans intervenir",
+    "option_b": "donner un glucide à action rapide puis contrôler de nouveau la glycémie",
+    "option_c": "administrer une dose supplémentaire d’insuline",
+    "option_d": "interdire toute prise orale malgré la conscience",
+    "question": "Pendant la ronde infirmière, l’infirmière prend en charge un patient présentant sueurs, tremblements, confusion légère et glycémie basse chez un patient conscient. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La vérification des allergies contribue à prévenir les réactions graves.",
+    "id": "fd8325a2-73fc-44b0-aab4-80a7e9ed0be5",
+    "option_a": "vérifier les allergies et surveiller les réactions indésirables",
+    "option_b": "ignorer une éruption",
+    "option_c": "partager la dose avec un autre patient",
+    "option_d": "arrêter automatiquement après une seule dose",
+    "question": "Dans un centre de santé, un patient présente première dose d’un antibiotique. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’ascite et la rétention hydrique nécessitent une surveillance clinique structurée.",
+    "id": "fd855281-5b9b-432b-8311-bd6d003f48ca",
+    "option_a": "encourager l’alcool",
+    "option_b": "surveiller poids, abdomen, bilan hydrique et état respiratoire",
+    "option_c": "administrer du sel supplémentaire",
+    "option_d": "ignorer la confusion",
+    "question": "Pendant la ronde infirmière, l’infirmière prend en charge un patient présentant augmentation du périmètre abdominal, œdèmes et prise de poids. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent traduire une compromission neurovasculaire.",
+    "id": "fd85b749-6aa8-453f-b061-ea158f998413",
+    "option_a": "ignorer jusqu’au lendemain",
+    "option_b": "faire marcher sur le membre",
+    "option_c": "réévaluer immédiatement l’état neurovasculaire et signaler",
+    "option_d": "serrer davantage l’immobilisation",
+    "question": "Lors d’une consultation, l’infirmière prend en charge un patient présentant membre immobilisé devenu froid, pâle et engourdi. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques.",
+    "id": "fdaa0a8c-7466-4cee-9a87-a55327d0f955",
+    "option_a": "stocker les aliments sans protection",
+    "option_b": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_c": "encourager l’eau non traitée",
+    "option_d": "supprimer le lavage des mains",
+    "question": "Après les premiers soins, un patient présente communauté exposée aux maladies diarrhéiques. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’évaluation après rupture des membranes aide à détecter rapidement certaines complications.",
+    "id": "fdaf047e-5316-4c87-8bb3-de4f50ebb18b",
+    "option_a": "ignorer le liquide",
+    "option_b": "retarder toute surveillance",
+    "option_c": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "option_d": "faire marcher immédiatement sans évaluation",
+    "question": "Lors d’un contrôle des paramètres cliniques, l’infirmière évalue une situation caractérisée par rupture des membranes pendant le travail. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Les anticoagulants augmentent le risque hémorragique.",
+    "id": "fdc541e5-85e1-47f1-b8ad-4ff6c16e5ada",
+    "option_a": "ignorer le saignement",
+    "option_b": "effectuer un massage profond",
+    "option_c": "évaluer et signaler rapidement le saignement",
+    "option_d": "administrer une dose supplémentaire",
+    "question": "Après une plainte nouvelle du patient, un patient présente saignement inhabituel sous anticoagulant. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Chez un patient conscient, un glucide rapide est indiqué pour corriger une hypoglycémie, avec contrôle ultérieur.",
+    "id": "fdc65093-0d52-4252-a5c4-5d7d1720cb4e",
+    "option_a": "administrer davantage d’insuline",
+    "option_b": "interdire toute prise orale",
+    "option_c": "attendre la disparition spontanée",
+    "option_d": "administrer un glucide à action rapide puis réévaluer la glycémie",
+    "question": "Au cours d’une surveillance rapprochée, un patient présente hypoglycémie symptomatique chez un patient conscient. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Les anticoagulants augmentent le risque hémorragique.",
+    "id": "fdc69136-4a1a-4900-9732-0cd84df88a7a",
+    "option_a": "faire un massage profond",
+    "option_b": "évaluer et signaler rapidement le saignement",
+    "option_c": "administrer une dose supplémentaire",
+    "option_d": "ignorer le saignement",
+    "question": "Dans un centre de santé, face à saignement inhabituel sous anticoagulant, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une thrombose veineuse profonde doit être envisagée en raison du risque embolique.",
+    "id": "fdc8fe66-7015-47c4-baf7-fd7fbfd7a9a8",
+    "option_a": "limiter les manipulations inutiles, évaluer et signaler rapidement",
+    "option_b": "masser vigoureusement le mollet",
+    "option_c": "faire courir le patient",
+    "option_d": "appliquer une pression forte sans évaluation",
+    "question": "Au service des urgences, l’infirmière prend en charge un patient présentant douleur et gonflement unilatéral du mollet. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces mesures contribuent à prévenir l’infection et le reflux urinaire.",
+    "id": "fdd6c49f-ac6a-42a1-a426-8774606a04cb",
+    "option_a": "placer la poche au-dessus de la vessie",
+    "option_b": "irriguer sans indication",
+    "option_c": "maintenir le système fermé et la poche sous le niveau de la vessie",
+    "option_d": "déconnecter fréquemment le système",
+    "question": "Lors d’un changement soudain des symptômes, un patient présente sonde urinaire à demeure. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation.",
+    "id": "fdf43ce0-0c6f-4fe3-bdd9-cded02906af1",
+    "option_a": "attendre plusieurs jours",
+    "option_b": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "option_c": "interdire tout liquide",
+    "option_d": "donner seulement un antitussif",
+    "question": "Lors d’un transfert entre unités, un patient présente diarrhée aqueuse profuse avec déshydratation. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Un utérus mou avec saignement abondant évoque notamment une atonie utérine et nécessite une prise en charge urgente.",
+    "id": "fdf8db03-5dd9-4620-a676-a7a0dd650673",
+    "option_a": "Une otite",
+    "option_b": "Une migraine simple",
+    "option_c": "Une myopie",
+    "option_d": "Une hémorragie du postpartum avec atonie utérine possible",
+    "question": "Lors d’une réévaluation, après l’accouchement, une femme présente un saignement abondant et un utérus mou. Que faut-il suspecter ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Ces signes peuvent traduire une congestion pulmonaire nécessitant une évaluation rapide.",
+    "id": "fe21be91-3a69-4ffa-9856-dd3756548cac",
+    "option_a": "augmenter librement les apports hydriques",
+    "option_b": "encourager un effort soutenu",
+    "option_c": "installer le patient pour faciliter la respiration, évaluer l’oxygénation et appliquer les prescriptions",
+    "option_d": "placer complètement à plat",
+    "question": "Après une intervention précédente, un patient présente orthopnée, crépitants et dyspnée croissante. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une thrombose veineuse profonde est possible et comporte un risque embolique.",
+    "id": "fe2929e6-01da-4613-95a8-9779d1c2f2ce",
+    "option_a": "masser profondément le mollet",
+    "option_b": "faire courir le patient",
+    "option_c": "appliquer une forte compression improvisée",
+    "option_d": "évaluer et signaler rapidement sans massage vigoureux du membre",
+    "question": "Au moment d’établir les priorités du quart, l’infirmière évalue une situation caractérisée par mollet unilatéralement gonflé et douloureux. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’enfant peut se déshydrater rapidement lors d’une diarrhée importante.",
+    "id": "fe32e78a-886b-4877-9e1b-1273b65326d7",
+    "option_a": "donner uniquement une boisson gazeuse",
+    "option_b": "attendre plusieurs jours",
+    "option_c": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "option_d": "supprimer tous les liquides",
+    "question": "Lors d’une visite à domicile, l’infirmière évalue une situation caractérisée par diarrhée avec yeux enfoncés, bouche sèche et oligurie. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un utérus mou avec saignement abondant évoque notamment une atonie utérine.",
+    "id": "fe3e77db-e72e-44f0-9991-83c84da41482",
+    "option_a": "donner uniquement de l’eau",
+    "option_b": "reconnaître une hémorragie postpartum possible et déclencher la prise en charge urgente",
+    "option_c": "attendre une heure",
+    "option_d": "faire marcher la patiente",
+    "question": "Lors d’une consultation non programmée, l’infirmière évalue une situation caractérisée par saignement abondant avec utérus mou après accouchement. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Un saignement digestif peut provoquer une hypovolémie et un état de choc.",
+    "id": "fe4e49d9-a55e-40e0-a3ca-4fbce8c060ad",
+    "option_a": "donner un repas copieux",
+    "option_b": "attendre le lendemain",
+    "option_c": "évaluer l’état hémodynamique et rechercher rapidement les signes de choc",
+    "option_d": "faire marcher le patient",
+    "question": "Lors d’une évaluation avant administration d’un traitement, l’infirmière évalue une situation caractérisée par méléna ou hématémèse avec faiblesse. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La coordination entre glycémie, repas et insuline rapide est essentielle.",
+    "id": "fe649f12-1fa9-47d2-a63c-d8bd9d255b5b",
+    "option_a": "retarder le repas plusieurs heures",
+    "option_b": "doubler la dose si le patient a faim",
+    "option_c": "vérifier glycémie et disponibilité du repas selon le plan thérapeutique",
+    "option_d": "administrer sans connaître la glycémie",
+    "question": "Pendant la préparation des soins, un patient présente insuline rapide prévue avant un repas. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’association pâleur, tachycardie et hypotension peut indiquer une perte sanguine importante.",
+    "id": "fe6dc1a0-8cfa-4309-aeed-d8984791390f",
+    "option_a": "Hémorragie et état de choc",
+    "option_b": "Constipation simple",
+    "option_c": "Myopie",
+    "option_d": "Otite",
+    "question": "Pendant la garde du matin, après une chirurgie, le patient devient pâle, tachycarde et hypotendu. Quelle complication est prioritaire à rechercher ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Le tirage et les difficultés alimentaires peuvent signaler une détresse respiratoire importante.",
+    "id": "fe6fdfc4-d98b-4eb2-80db-2ece2bc4b2ac",
+    "option_a": "donner un repas forcé",
+    "option_b": "laisser pleurer longtemps",
+    "option_c": "attendre sans surveillance",
+    "option_d": "évaluer immédiatement la respiration et l’oxygénation",
+    "question": "Après les premiers soins, l’infirmière prend en charge un patient présentant tirage marqué, geignement et difficulté à s’alimenter chez un nourrisson. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "fe70e8e7-8796-43f3-9a25-a8790e953afb",
+    "option_a": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre la prochaine ronde",
+    "question": "Pendant la garde du matin, un patient présente tachycardie, hypotension et pâleur après chirurgie. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Le délai depuis le début des symptômes influence l’évaluation et les options de prise en charge d’un AVC.",
+    "id": "fe7bcf20-bb98-477e-a530-dd51cdcc92b5",
+    "option_a": "L’heure exacte du début ou la dernière fois où le patient était normal",
+    "option_b": "Son dernier repas préféré",
+    "option_c": "Sa pointure",
+    "option_d": "Son groupe sanguin uniquement",
+    "question": "À l’admission, une faiblesse soudaine d’un côté du corps et un trouble de la parole apparaissent. Quelle information est cruciale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Chez un patient conscient, un glucide rapide est indiqué pour corriger une hypoglycémie, avec contrôle ultérieur.",
+    "id": "fe7ea178-fe01-45fe-9e9d-25e6a15f837e",
+    "option_a": "attendre la disparition spontanée",
+    "option_b": "administrer un glucide à action rapide puis réévaluer la glycémie",
+    "option_c": "administrer davantage d’insuline",
+    "option_d": "interdire toute prise orale",
+    "question": "Pendant une séance d’éducation, un patient présente hypoglycémie symptomatique chez un patient conscient. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces mesures contribuent à prévenir l’infection et le reflux urinaire.",
+    "id": "fe8a73ed-c0fe-41cb-b762-fb9db8fce815",
+    "option_a": "maintenir le système fermé et la poche sous le niveau de la vessie",
+    "option_b": "déconnecter fréquemment le système",
+    "option_c": "placer la poche au-dessus de la vessie",
+    "option_d": "irriguer sans indication",
+    "question": "À l’admission, un patient présente sonde urinaire à demeure. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "fe911882-e085-4401-8d54-fd25dd08d1a7",
+    "option_a": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_b": "donner un laxatif",
+    "option_c": "faire lever seul",
+    "option_d": "attendre la prochaine ronde",
+    "question": "Au moment de la transmission, un patient présente tachycardie, hypotension et pâleur après chirurgie. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une dose en mg/kg exige un poids fiable exprimé en kilogrammes.",
+    "id": "fe99ffed-5485-45aa-8174-0fc89585ea8e",
+    "option_a": "Le poids du parent",
+    "option_b": "La taille de la chambre",
+    "option_c": "Le poids actuel en kilogrammes",
+    "option_d": "La pointure",
+    "question": "Dans une unité hospitalière, une prescription pédiatrique est exprimée en mg/kg. Quelle donnée est indispensable au calcul ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion.",
+    "id": "fea1c716-9f05-41a7-b181-3c77965d1090",
+    "option_a": "donner à boire pendant la crise",
+    "option_b": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "option_c": "introduire un objet dans la bouche",
+    "option_d": "immobiliser fortement tous les membres",
+    "question": "Après une observation préoccupante de la famille, l’infirmière évalue une situation caractérisée par crise convulsive généralisée. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une réaction transfusionnelle potentielle exige l’arrêt de la transfusion et une évaluation immédiate.",
+    "id": "fea4cd9b-4ad1-42db-8943-71a0f8c0ea62",
+    "option_a": "interrompre la transfusion et suivre immédiatement le protocole de réaction transfusionnelle",
+    "option_b": "augmenter le débit",
+    "option_c": "continuer jusqu’à la fin",
+    "option_d": "ignorer les symptômes",
+    "question": "Lors d’un enseignement au patient, un patient présente fièvre, frissons ou dyspnée pendant une transfusion. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "La dépression respiratoire est une complication potentiellement grave des opioïdes.",
+    "id": "fec75293-cb90-461e-ac0d-eedd4e59064f",
+    "option_a": "administrer une dose supplémentaire",
+    "option_b": "laisser dormir sans surveillance",
+    "option_c": "faire marcher seul",
+    "option_d": "évaluer immédiatement la respiration et appliquer le protocole prévu",
+    "question": "Pendant une consultation de suivi, un patient présente respiration lente et somnolence après un opioïde. Quelle action doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La fièvre et les lochies malodorantes postpartum peuvent indiquer une infection.",
+    "id": "fec88f4d-1614-4904-9dfa-a2f450343167",
+    "option_a": "retarder l’évaluation plusieurs jours",
+    "option_b": "faire un effort physique intense",
+    "option_c": "suspecter une infection et organiser une évaluation rapide",
+    "option_d": "considérer cela toujours normal",
+    "question": "Au cours d’un enseignement au patient, l’infirmière prend en charge un patient présentant fièvre postpartum, douleur utérine et lochies malodorantes. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La dilatation, l’effacement et la descente fœtale renseignent sur la progression du travail.",
+    "id": "fec92be9-ca54-4588-88ef-0cd31d54da65",
+    "option_a": "Les modifications du col utérin et la descente fœtale",
+    "option_b": "La couleur des yeux",
+    "option_c": "La pointure",
+    "option_d": "Le poids du conjoint",
+    "question": "Pendant la garde du matin, quelle donnée permet le mieux d’évaluer la progression du travail obstétrical ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion.",
+    "id": "fece14cd-6ff2-4338-825b-ed0f99ded336",
+    "option_a": "immobiliser fortement tous les membres",
+    "option_b": "donner à boire pendant la crise",
+    "option_c": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "option_d": "introduire un objet dans la bouche",
+    "question": "Au cours d’une garde particulièrement chargée, l’infirmière évalue une situation caractérisée par crise convulsive généralisée. Quelle intervention répond le mieux à cette situation clinique ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’éclampsie est une urgence maternelle.",
+    "id": "fed2a4d9-388e-40b7-a188-b829b371a56e",
+    "option_a": "laisser seule",
+    "option_b": "donner à boire",
+    "option_c": "protéger la patiente, soutenir ABC et déclencher la prise en charge urgente",
+    "option_d": "mettre un objet dans la bouche",
+    "question": "Dans un centre de santé, le patient présente convulsion chez une femme enceinte hypertendue. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "La réduction de la pression et la surveillance cutanée préviennent les lésions.",
+    "id": "feed321e-a928-4f6e-acb6-064ecdf1293c",
+    "option_a": "masser fortement une rougeur persistante",
+    "option_b": "garder les draps humides",
+    "option_c": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_d": "laisser dans la même position",
+    "question": "Pendant la surveillance, le patient présente patient alité à haut risque de lésion de pression. Quelle conduite est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ce tableau postopératoire peut indiquer une complication hémodynamique grave.",
+    "id": "ff01acaf-b1fb-479d-8e7b-51b0fdc1100b",
+    "option_a": "attendre la prochaine ronde",
+    "option_b": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "option_c": "donner un laxatif",
+    "option_d": "faire lever seul",
+    "question": "Lors d’un enseignement au patient, un patient présente tachycardie, hypotension et pâleur après chirurgie. Quelle réponse correspond le mieux à la priorité clinique ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Une urgence coronarienne doit être envisagée devant ce tableau.",
+    "id": "ff159798-9f9b-4beb-87de-c1220194385d",
+    "option_a": "évaluer rapidement, surveiller les signes vitaux et alerter l’équipe",
+    "option_b": "faire dormir le patient",
+    "option_c": "attendre la fin du service",
+    "option_d": "donner un laxatif",
+    "question": "Avant la sortie, l’infirmière prend en charge un patient présentant douleur thoracique oppressive avec sueurs. Quelle intervention est prioritaire ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "L’écoute active et les questions ouvertes favorisent l’expression et l’évaluation.",
+    "id": "ff16890f-f6e4-47f2-aa5c-31f4e161efd7",
+    "option_a": "utiliser une question ouverte et une attitude calme pour explorer ses préoccupations",
+    "option_b": "dire « calmez-vous »",
+    "option_c": "minimiser ses émotions",
+    "option_d": "quitter la pièce sans explication",
+    "question": "Pendant l’évaluation initiale, l’infirmière prend en charge un patient présentant patient très anxieux qui dit ne plus pouvoir faire face. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces signes sont compatibles avec une déshydratation dont la gravité doit être évaluée.",
+    "id": "ff1f6b28-75aa-4ba9-ae5d-0c3cafe9c42f",
+    "option_a": "Déshydratation",
+    "option_b": "Hypertension",
+    "option_c": "Otite",
+    "option_d": "Myopie",
+    "question": "À l’admission, un enfant avec diarrhée a les yeux enfoncés, la bouche sèche et urine peu. Quelle complication est la plus probable ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Les contrôles systématiques diminuent les erreurs médicamenteuses.",
+    "id": "ff5b9bfc-3fea-4fdd-86aa-04cbb5095bd9",
+    "option_a": "se fier uniquement à la couleur du médicament",
+    "option_b": "demander à un autre patient",
+    "option_c": "ignorer les allergies",
+    "option_d": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "question": "Pendant une prise en charge communautaire, l’infirmière évalue une situation caractérisée par administration prochaine d’un médicament. Quelle mesure doit être prise en premier pour assurer la sécurité du patient ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La vérification des allergies et la surveillance des réactions sont des éléments de sécurité médicamenteuse.",
+    "id": "ff5f23fd-ea65-4183-b46f-aad336da4ee7",
+    "option_a": "partager les doses entre patients",
+    "option_b": "vérifier les allergies et surveiller les signes de réaction indésirable",
+    "option_c": "ignorer toute éruption",
+    "option_d": "arrêter chaque antibiotique dès amélioration sans prescription",
+    "question": "Lors d’une réévaluation, l’infirmière prend en charge un patient présentant patient recevant un antibiotique. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une documentation précise favorise la continuité et la sécurité des soins.",
+    "id": "ff6e24c9-3e24-4bf0-a449-49c8fa1a1bb8",
+    "option_a": "documenter des rumeurs",
+    "option_b": "effacer une erreur sans suivre la procédure",
+    "option_c": "demander à un visiteur d’écrire la note",
+    "option_d": "consigner des données factuelles, précises, datées et pertinentes",
+    "question": "Au moment d’établir les priorités du quart, l’infirmière évalue une situation caractérisée par événement clinique important à documenter. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "La désescalade et la sécurité sont prioritaires.",
+    "id": "ff76bde2-d8d0-4915-aa4a-0e05b9ca7600",
+    "option_a": "réduire les stimuli, garder une distance sûre, parler calmement et demander du renfort si nécessaire",
+    "option_b": "crier plus fort",
+    "option_c": "provoquer le patient",
+    "option_d": "rester seul dans une situation dangereuse",
+    "question": "Après une modification des signes vitaux, l’infirmière évalue une situation caractérisée par agitation croissante avec menaces. Quelle intervention représente la meilleure conduite initiale ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un saignement digestif peut provoquer une hypovolémie et un état de choc.",
+    "id": "ff7ab3fd-2387-4a37-acfb-5c97092c95a3",
+    "option_a": "attendre le lendemain",
+    "option_b": "évaluer l’état hémodynamique et rechercher rapidement les signes de choc",
+    "option_c": "faire marcher le patient",
+    "option_d": "donner un repas copieux",
+    "question": "Au moment d’établir les priorités du quart, l’infirmière évalue une situation caractérisée par méléna ou hématémèse avec faiblesse. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Une assistance adaptée réduit le risque de chute.",
+    "id": "ff800c39-5869-4b89-ba67-1ff67629cc92",
+    "option_a": "faire lever brusquement seul",
+    "option_b": "laisser le sol mouillé",
+    "option_c": "éloigner la sonnette",
+    "option_d": "aider aux déplacements et sécuriser l’environnement",
+    "question": "Pendant la garde du matin, une situation clinique se caractérise par faiblesse et étourdissement au lever. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Ces signes peuvent traduire une complication hémodynamique postopératoire.",
+    "id": "ff8877f4-132e-41ff-81d4-7c6a5336c675",
+    "option_a": "attendre le repas",
+    "option_b": "rechercher une hémorragie ou un état de choc et alerter rapidement",
+    "option_c": "donner un laxatif",
+    "option_d": "faire lever seul",
+    "question": "Pendant une garde de nuit, face à pâleur, tachycardie et hypotension après chirurgie, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’oxygène soutient la combustion et doit être utilisé selon des règles de sécurité strictes.",
+    "id": "ff8c201d-a064-4c3e-adb8-89ea0df8d49f",
+    "option_a": "modifier librement le débit sans indication",
+    "option_b": "couvrir la source d’oxygène avec des matériaux inflammables",
+    "option_c": "respecter la prescription/protocole et les règles de sécurité contre le feu",
+    "option_d": "autoriser une flamme à proximité",
+    "question": "Avant une intervention prescrite, un patient présente patient recevant de l’oxygène. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques.",
+    "id": "ff9b2321-5d69-4bc4-affd-d7cf0d6f5e12",
+    "option_a": "encourager l’eau non traitée",
+    "option_b": "supprimer le lavage des mains",
+    "option_c": "stocker les aliments sans protection",
+    "option_d": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "question": "Après réception d’une nouvelle prescription, l’infirmière évalue une situation caractérisée par communauté exposée aux maladies diarrhéiques. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Une prise profonde améliore le transfert du lait et réduit les traumatismes du mamelon.",
+    "id": "ff9be11c-9399-4658-8ffc-ccfc5b543bc4",
+    "option_a": "interrompre définitivement sans évaluation",
+    "option_b": "espacer fortement toutes les tétées",
+    "option_c": "corriger le positionnement et favoriser une prise profonde",
+    "option_d": "faire pincer seulement le mamelon",
+    "question": "Pendant la préparation des soins, un patient présente prise superficielle du sein avec douleur maternelle. Quelle conduite infirmière est la plus sûre ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Un plan suicidaire précis représente un risque élevé.",
+    "id": "ff9d022b-b555-4517-acb1-017a57000d75",
+    "option_a": "changer de sujet",
+    "option_b": "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole",
+    "option_c": "promettre le secret absolu",
+    "option_d": "laisser seul",
+    "question": "À l’admission, face à intention suicidaire avec plan précis, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "A",
+    "explication": "Ces mesures contribuent à prévenir l’infection et le reflux urinaire.",
+    "id": "ffb0c574-c8f7-4271-b1f1-c01560f1e86e",
+    "option_a": "maintenir le système fermé et la poche sous le niveau de la vessie",
+    "option_b": "déconnecter fréquemment le système",
+    "option_c": "placer la poche au-dessus de la vessie",
+    "option_d": "irriguer sans indication",
+    "question": "Lors d’un transfert entre unités, un patient présente sonde urinaire à demeure. Quelle intervention infirmière est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "D",
+    "explication": "Ces signes peuvent indiquer une pré-éclampsie sévère.",
+    "id": "ffb3f6d1-8b5d-4b83-af0e-6deb569777a6",
+    "option_a": "encourager l’exercice intense",
+    "option_b": "renvoyer sans surveillance",
+    "option_c": "attendre plusieurs jours",
+    "option_d": "organiser une évaluation obstétricale urgente",
+    "question": "À l’admission, une situation clinique se caractérise par hypertension sévère, céphalées et troubles visuels pendant la grossesse. Quelle action infirmière doit être réalisée en premier ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "Au triage, les menaces vitales immédiates ont priorité.",
+    "id": "ffb70f02-1bca-4b42-8214-fe5cd08018b4",
+    "option_a": "traiter d’abord la demande administrative",
+    "option_b": "attendre l’ordre d’arrivée sans triage",
+    "option_c": "prendre en charge en priorité la menace immédiate des voies aériennes",
+    "option_d": "voir d’abord la petite coupure",
+    "question": "Au service des urgences, l’infirmière prend en charge un patient présentant plusieurs patients arrivent simultanément, dont un avec obstruction des voies aériennes. Quelle intervention est la plus appropriée en priorité ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission.",
+    "id": "ffb970e4-10a8-453b-b838-ac0a72a74d05",
+    "option_a": "laisser les aliments sans protection",
+    "option_b": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "option_c": "encourager l’eau non traitée",
+    "option_d": "supprimer le lavage des mains",
+    "question": "Au changement d’équipe, face à communauté exposée aux maladies diarrhéiques, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "Une documentation précise favorise la continuité et la sécurité des soins.",
+    "id": "ffd401c3-b29d-45ab-b1d3-122ce80a7183",
+    "option_a": "demander à un visiteur d’écrire la note",
+    "option_b": "consigner des données factuelles, précises, datées et pertinentes",
+    "option_c": "documenter des rumeurs",
+    "option_d": "effacer une erreur sans suivre la procédure",
+    "question": "Au cours d’une garde particulièrement chargée, l’infirmière évalue une situation caractérisée par événement clinique important à documenter. Quelle décision infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "B",
+    "explication": "La réduction de la pression et la surveillance cutanée préviennent les lésions.",
+    "id": "ffe20d24-69bd-4d60-96f8-fcb1f41446ee",
+    "option_a": "garder les draps humides",
+    "option_b": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "option_c": "laisser dans la même position",
+    "option_d": "masser fortement une rougeur persistante",
+    "question": "Pendant la surveillance, face à patient alité à haut risque de lésion de pression, quelle réponse infirmière est la plus appropriée ?"
+  },
+  {
+    "bonne_reponse": "C",
+    "explication": "L’évaluation après rupture des membranes aide à détecter rapidement certaines complications.",
+    "id": "fffa0633-3969-4a8f-b527-486f62abb588",
+    "option_a": "ignorer le liquide",
+    "option_b": "retarder toute surveillance",
+    "option_c": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "option_d": "faire marcher immédiatement sans évaluation",
+    "question": "Après les premiers soins, un patient présente rupture des membranes pendant le travail. Quelle conduite infirmière est la plus sûre ?"
+  }
+]

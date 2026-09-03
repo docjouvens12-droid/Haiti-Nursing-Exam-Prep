@@ -1,0 +1,2786 @@
+[
+  {
+    "correct": "évaluer et signaler rapidement le saignement",
+    "i": 0,
+    "indices": [
+      0
+    ],
+    "map": {
+      "administrer une dose supplémentaire": "Une dose supplémentaire peut majorer le saignement ; elle ne doit pas être improvisée.",
+      "effectuer un massage profond": "Un massage profond peut provoquer des ecchymoses et ne traite pas le saignement.",
+      "faire un massage profond": "Un massage profond peut provoquer des ecchymoses et ne traite pas le saignement.",
+      "ignorer le saignement": "L’ignorer retarde la détection d’une hémorragie.",
+      "évaluer et signaler rapidement le saignement": "Un saignement inhabituel sous anticoagulant peut annoncer une complication hémorragique : il faut l’évaluer et le signaler."
+    },
+    "references": [
+      "https://www.nhs.uk/medicines/anticoagulants/side-effects/"
+    ],
+    "takeaway": "Un saignement inhabituel sous anticoagulant peut annoncer une complication hémorragique : il faut l’évaluer et le signaler.",
+    "explanations": [
+      "Les anticoagulants augmentent le risque hémorragique."
+    ]
+  },
+  {
+    "correct": "réduire les stimuli, parler calmement, garder une distance sûre et demander du renfort si nécessaire",
+    "i": 1,
+    "indices": [
+      1
+    ],
+    "map": {
+      "crier plus fort": "Crier peut accroître l’agitation et la perception de menace.",
+      "provoquer le patient": "La provocation peut aggraver l’agressivité.",
+      "rester seul dans une situation dangereuse": "Rester seul face à une menace expose le soignant et empêche une intervention coordonnée.",
+      "réduire les stimuli, garder une distance sûre, parler calmement et demander du renfort si nécessaire": "Une approche calme et une distance sûre limitent l’escalade tout en permettant de mobiliser de l’aide.",
+      "réduire les stimuli, parler calmement, garder une distance sûre et demander du renfort si nécessaire": "Une approche calme et une distance sûre limitent l’escalade tout en permettant de mobiliser de l’aide."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng10/chapter/recommendations"
+    ],
+    "takeaway": "Une approche calme et une distance sûre limitent l’escalade tout en permettant de mobiliser de l’aide.",
+    "explanations": [
+      "La désescalade et la sécurité sont prioritaires."
+    ]
+  },
+  {
+    "correct": "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente",
+    "i": 2,
+    "indices": [
+      2
+    ],
+    "map": {
+      "donner à boire": "Boire pendant une convulsion expose à une fausse route.",
+      "donner à boire pendant la crise": "Boire pendant une convulsion expose à une fausse route.",
+      "introduire un objet dans la bouche": "Un objet dans la bouche peut blesser ou obstruer les voies aériennes.",
+      "laisser la patiente seule": "La patiente nécessite une surveillance continue et une aide urgente.",
+      "laisser seule": "La patiente nécessite une surveillance continue et une aide urgente.",
+      "mettre un objet dans la bouche": "Un objet dans la bouche peut blesser ou obstruer les voies aériennes.",
+      "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente": "Une convulsion chez une femme enceinte hypertendue fait suspecter une éclampsie : protéger la patiente et soutenir voies aériennes, respiration et circulation sont prioritaires.",
+      "protéger la patiente, soutenir ABC et déclencher la prise en charge urgente": "Une convulsion chez une femme enceinte hypertendue fait suspecter une éclampsie : protéger la patiente et soutenir voies aériennes, respiration et circulation sont prioritaires."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+    ],
+    "takeaway": "Déclencher l’aide obstétricale urgente et préparer les traitements prescrits sans retarder le soutien vital.",
+    "explanations": [
+      "L’éclampsie est une urgence maternelle."
+    ]
+  },
+  {
+    "correct": "appeler de l’aide et appliquer immédiatement les mesures visant à réduire la compression du cordon",
+    "i": 3,
+    "indices": [
+      3
+    ],
+    "map": {
+      "appeler de l’aide et appliquer immédiatement les mesures visant à réduire la compression du cordon": "La compression du cordon peut interrompre les échanges fœtaux ; alerter et appliquer immédiatement le protocole est prioritaire.",
+      "appeler de l’aide et appliquer les mesures visant à réduire la compression du cordon": "La compression du cordon peut interrompre les échanges fœtaux ; alerter et appliquer immédiatement le protocole est prioritaire.",
+      "attendre plusieurs contractions": "L’attente prolonge le risque de manque d’oxygène fœtal.",
+      "faire marcher la patiente": "La marche ne lève pas de façon sûre la compression et retarde les mesures urgentes.",
+      "repousser brutalement le cordon": "Une manipulation brutale peut léser le cordon ou provoquer un spasme vasculaire."
+    },
+    "references": [
+      "https://www.rcog.org.uk/guidance/browse-all-guidance/green-top-guidelines/umbilical-cord-prolapse-green-top-guideline-no-50/"
+    ],
+    "takeaway": "La compression du cordon peut interrompre les échanges fœtaux ; alerter et appliquer immédiatement le protocole est prioritaire.",
+    "explanations": [
+      "La procidence du cordon menace l’oxygénation fœtale."
+    ]
+  },
+  {
+    "correct": "reconnaître une hémorragie postpartum possible et déclencher la prise en charge urgente",
+    "i": 4,
+    "indices": [
+      4
+    ],
+    "map": {
+      "attendre une heure": "Attendre une heure laisse progresser une hémorragie potentiellement grave.",
+      "donner seulement de l’eau": "De l’eau seule ne contrôle ni le saignement ni une éventuelle instabilité circulatoire.",
+      "donner uniquement de l’eau": "De l’eau seule ne contrôle ni le saignement ni une éventuelle instabilité circulatoire.",
+      "faire marcher la patiente": "Faire marcher une patiente qui saigne expose au malaise et retarde les soins.",
+      "reconnaître une hémorragie postpartum possible et déclencher la prise en charge urgente": "Après l’accouchement, un saignement abondant avec utérus mou évoque une atonie et impose une prise en charge urgente de l’hémorragie."
+    },
+    "references": [
+      "https://www.who.int/publications/i/item/9789240115637"
+    ],
+    "takeaway": "Après l’accouchement, un saignement abondant avec utérus mou évoque une atonie et impose une prise en charge urgente de l’hémorragie.",
+    "explanations": [
+      "Un utérus mou avec saignement abondant évoque notamment une atonie utérine."
+    ]
+  },
+  {
+    "correct": "recommander l’allaitement maternel exclusif lorsque possible",
+    "i": 5,
+    "indices": [
+      5
+    ],
+    "map": {
+      "Bouillie dès la naissance": "Les solides ne sont pas adaptés dès la naissance ; leur introduction débute vers six mois.",
+      "Eau sucrée": "L’eau sucrée n’apporte pas les nutriments du lait et n’est pas nécessaire en complément systématique.",
+      "Jus": "Le jus n’est pas un complément systématique adapté avant six mois.",
+      "La bouillie dès la naissance": "Les solides ne sont pas adaptés dès la naissance ; leur introduction débute vers six mois.",
+      "Lait maternel": "L’allaitement exclusif est recommandé pendant les six premiers mois lorsque possible, avec accompagnement adapté de la famille.",
+      "Le jus": "Le jus n’est pas un complément systématique adapté avant six mois.",
+      "Le lait maternel": "L’allaitement exclusif est recommandé pendant les six premiers mois lorsque possible, avec accompagnement adapté de la famille.",
+      "L’eau sucrée": "L’eau sucrée n’apporte pas les nutriments du lait et n’est pas nécessaire en complément systématique.",
+      "ajouter systématiquement du jus": "Le jus n’est pas un complément systématique adapté avant six mois.",
+      "commencer des aliments solides dès la naissance": "Les solides ne sont pas adaptés dès la naissance ; leur introduction débute vers six mois.",
+      "commencer les solides dès la naissance": "Les solides ne sont pas adaptés dès la naissance ; leur introduction débute vers six mois.",
+      "donner de l’eau sucrée chaque jour": "L’eau sucrée n’apporte pas les nutriments du lait et n’est pas nécessaire en complément systématique.",
+      "encourager l’allaitement maternel exclusif lorsque possible": "L’allaitement exclusif est recommandé pendant les six premiers mois lorsque possible, avec accompagnement adapté de la famille.",
+      "recommander l’allaitement maternel exclusif lorsque possible": "L’allaitement exclusif est recommandé pendant les six premiers mois lorsque possible, avec accompagnement adapté de la famille."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/infant-and-young-child-feeding"
+    ],
+    "takeaway": "Adapter le soutien nutritionnel aux besoins de l’enfant ; une difficulté d’allaitement nécessite une évaluation, sans culpabiliser la famille.",
+    "explanations": [
+      "L’OMS recommande l’allaitement maternel exclusif pendant les six premiers mois."
+    ]
+  },
+  {
+    "correct": "effectuer immédiatement une évaluation neurovasculaire et signaler l’anomalie",
+    "i": 6,
+    "indices": [
+      6
+    ],
+    "map": {
+      "attendre jusqu’au lendemain": "Attendre au lendemain risque de retarder le traitement d’une complication menaçant le membre.",
+      "effectuer immédiatement une évaluation neurovasculaire et signaler l’anomalie": "Douleur croissante, pâleur et engourdissement après immobilisation font craindre une atteinte neurovasculaire nécessitant une évaluation urgente.",
+      "faire marcher sur le membre": "Faire marcher sur le membre ne permet pas d’écarter une complication et peut aggraver la douleur.",
+      "ignorer jusqu’au lendemain": "Attendre au lendemain risque de retarder le traitement d’une complication menaçant le membre.",
+      "réévaluer immédiatement l’état neurovasculaire et signaler": "Douleur croissante, pâleur et engourdissement après immobilisation font craindre une atteinte neurovasculaire nécessitant une évaluation urgente.",
+      "serrer davantage l’immobilisation": "Serrer davantage peut accentuer la compression et compromettre la perfusion."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Neurovascular_observations/"
+    ],
+    "takeaway": "Douleur croissante, pâleur et engourdissement après immobilisation font craindre une atteinte neurovasculaire nécessitant une évaluation urgente.",
+    "explanations": [
+      "Ces signes peuvent traduire une compromission neurovasculaire."
+    ]
+  },
+  {
+    "correct": "aider aux déplacements, sécuriser l’environnement et garder l’appel à portée",
+    "i": 7,
+    "indices": [
+      7
+    ],
+    "map": {
+      "aider aux déplacements et sécuriser l’environnement": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+      "aider aux déplacements, sécuriser l’environnement et garder l’appel à portée": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+      "faire lever brusquement seul": "Un lever brusque et sans aide augmente le risque de malaise et de chute.",
+      "laisser le sol mouillé": "Un sol mouillé augmente le risque de glissade.",
+      "le faire se lever brusquement seul": "Un lever brusque et sans aide augmente le risque de malaise et de chute.",
+      "éloigner la sonnette": "Une sonnette éloignée peut pousser le patient à se déplacer seul pour demander de l’aide.",
+      "éloigner le dispositif d’appel": "Une sonnette éloignée peut pousser le patient à se déplacer seul pour demander de l’aide."
+    },
+    "references": [
+      "https://www.ahrq.gov/patient-safety/settings/hospital/fall-tips/index.html"
+    ],
+    "takeaway": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+    "explanations": [
+      "Une assistance adaptée et un environnement sûr réduisent le risque de chute."
+    ]
+  },
+  {
+    "correct": "repositionner selon les besoins, inspecter la peau et gérer l’humidité",
+    "i": 8,
+    "indices": [
+      8,
+      11
+    ],
+    "map": {
+      "Garder les draps humides": "L’humidité favorise la macération et la fragilité cutanée.",
+      "Le laisser toujours dans la même position": "La même position maintient la pression sur les mêmes zones.",
+      "Masser fortement une rougeur persistante": "Un massage appuyé d’une rougeur persistante peut endommager les tissus.",
+      "Repositionnement adapté, inspection de la peau et contrôle de l’humidité": "Le repositionnement adapté, l’inspection cutanée et la maîtrise de l’humidité limitent la pression prolongée et les lésions.",
+      "garder les draps humides": "L’humidité favorise la macération et la fragilité cutanée.",
+      "laisser dans la même position": "La même position maintient la pression sur les mêmes zones.",
+      "laisser toujours dans la même position": "La même position maintient la pression sur les mêmes zones.",
+      "masser fortement une rougeur persistante": "Un massage appuyé d’une rougeur persistante peut endommager les tissus.",
+      "repositionner selon les besoins, inspecter la peau et gérer l’humidité": "Le repositionnement adapté, l’inspection cutanée et la maîtrise de l’humidité limitent la pression prolongée et les lésions."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg179/chapter/recommendations"
+    ],
+    "takeaway": "Le repositionnement adapté, l’inspection cutanée et la maîtrise de l’humidité limitent la pression prolongée et les lésions.",
+    "explanations": [
+      "La réduction de la pression et la surveillance cutanée sont essentielles.",
+      "La réduction de la pression et la surveillance cutanée préviennent les lésions."
+    ]
+  },
+  {
+    "correct": "sécher rapidement et favoriser le peau-à-peau si l’état le permet",
+    "i": 9,
+    "indices": [
+      9
+    ],
+    "map": {
+      "Le baigner à l’eau froide": "Un bain froid accentue le refroidissement.",
+      "Le laisser mouillé": "L’humidité favorise les pertes de chaleur par évaporation.",
+      "Le placer près d’une fenêtre ouverte": "Un courant d’air augmente les pertes de chaleur.",
+      "Sécher le nouveau-né et favoriser le peau-à-peau si son état le permet": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur.",
+      "laisser le nouveau-né humide": "L’humidité favorise les pertes de chaleur par évaporation.",
+      "le baigner immédiatement à l’eau froide": "Un bain froid accentue le refroidissement.",
+      "le placer dans un courant d’air": "Un courant d’air augmente les pertes de chaleur.",
+      "sécher rapidement et favoriser le peau-à-peau si l’état le permet": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur."
+    },
+    "references": [
+      "https://www.who.int/westernpacific/newsroom/feature-stories/item/skin-to-skin-contact-helps-newborns-breastfeed"
+    ],
+    "takeaway": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur.",
+    "explanations": [
+      "Le séchage et le peau-à-peau limitent les pertes de chaleur."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement la respiration et l’oxygénation",
+    "i": 10,
+    "indices": [
+      10
+    ],
+    "map": {
+      "Bâillement isolé": "Un bâillement isolé n’est pas un signe comparable de détresse respiratoire.",
+      "Hoquet occasionnel": "Un hoquet occasionnel isolé n’indique pas le travail respiratoire accru décrit par un tirage marqué.",
+      "Tirage marqué et difficulté à s’alimenter": "Un tirage marqué avec difficulté à s’alimenter indique un effort respiratoire important : la respiration et l’oxygénation doivent être évaluées sans délai.",
+      "attendre une amélioration spontanée": "Attendre expose à retarder le traitement d’une détresse respiratoire.",
+      "forcer un grand repas": "Un repas forcé peut aggraver la fatigue et exposer à une fausse route.",
+      "laisser l’enfant sans surveillance": "Sans surveillance, une aggravation respiratoire peut passer inaperçue.",
+      "Éternuement unique": "Un éternuement isolé n’évoque pas à lui seul une détresse respiratoire.",
+      "évaluer immédiatement la respiration et l’oxygénation": "Un tirage marqué avec difficulté à s’alimenter indique un effort respiratoire important : la respiration et l’oxygénation doivent être évaluées sans délai."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Observation_and_continuous_monitoring/"
+    ],
+    "takeaway": "Un tirage marqué avec difficulté à s’alimenter indique un effort respiratoire important : la respiration et l’oxygénation doivent être évaluées sans délai.",
+    "explanations": [
+      "Le tirage marqué est un signe de travail respiratoire accru."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement la respiration et appliquer le protocole prévu",
+    "i": 11,
+    "indices": [
+      12
+    ],
+    "map": {
+      "administrer une nouvelle dose": "Une nouvelle dose risque d’aggraver la dépression respiratoire.",
+      "donner une nouvelle dose": "Une nouvelle dose risque d’aggraver la dépression respiratoire.",
+      "faire marcher seul": "La marche sans aide expose à une chute et ne corrige pas l’insuffisance ventilatoire.",
+      "laisser dormir sans surveillance": "Une somnolence associée à une respiration lente ne doit pas être assimilée à un sommeil rassurant.",
+      "évaluer immédiatement la respiration et appliquer le protocole de prise en charge": "Une respiration lente et une somnolence après un opioïde font craindre une dépression respiratoire ; évaluer, alerter et appliquer le protocole sans délai.",
+      "évaluer immédiatement la respiration et appliquer le protocole prévu": "Une respiration lente et une somnolence après un opioïde font craindre une dépression respiratoire ; évaluer, alerter et appliquer le protocole sans délai."
+    },
+    "references": [
+      "https://www.cdc.gov/overdose-prevention/reversing-overdose/about-naloxone.html"
+    ],
+    "takeaway": "Une respiration lente et une somnolence après un opioïde font craindre une dépression respiratoire ; évaluer, alerter et appliquer le protocole sans délai.",
+    "explanations": [
+      "La dépression respiratoire est une complication grave des opioïdes."
+    ]
+  },
+  {
+    "correct": "prioriser le patient présentant la menace immédiate des voies aériennes",
+    "i": 12,
+    "indices": [
+      13
+    ],
+    "map": {
+      "prioriser le patient présentant la menace immédiate des voies aériennes": "Une obstruction des voies aériennes menace immédiatement la vie et prime au triage.",
+      "répondre d’abord à une demande administrative": "Une demande administrative peut attendre la stabilisation d’une urgence vitale.",
+      "suivre uniquement l’ordre d’arrivée": "L’ordre d’arrivée ne reflète pas la gravité clinique.",
+      "traiter d’abord une petite égratignure": "Une petite égratignure sans gravité ne prime pas sur une obstruction respiratoire."
+    },
+    "references": [
+      "https://www.who.int/tools/triage"
+    ],
+    "takeaway": "Une obstruction des voies aériennes menace immédiatement la vie et prime au triage.",
+    "explanations": [
+      "Au triage, les menaces vitales immédiates sont prioritaires."
+    ]
+  },
+  {
+    "correct": "rechercher une hémorragie ou autre cause de choc et alerter rapidement",
+    "i": 13,
+    "indices": [
+      14
+    ],
+    "map": {
+      "attendre la prochaine ronde": "L’attente peut laisser s’aggraver une défaillance circulatoire.",
+      "donner un laxatif": "Un laxatif ne traite pas l’instabilité hémodynamique.",
+      "faire lever seul": "Un lever sans assistance expose au malaise et à la chute.",
+      "rechercher une hémorragie ou autre cause de choc et alerter rapidement": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-internal"
+    ],
+    "takeaway": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc.",
+    "explanations": [
+      "Ce tableau postopératoire peut indiquer une complication hémodynamique grave."
+    ]
+  },
+  {
+    "correct": "surveiller précisément bilan hydrique, poids, signes vitaux et signaler l’aggravation",
+    "i": 14,
+    "indices": [
+      15
+    ],
+    "map": {
+      "encourager une consommation massive de liquide sans prescription": "Un apport massif non prescrit peut aggraver une surcharge hydrique.",
+      "ignorer la diurèse": "La diurèse est une donnée essentielle pour repérer une aggravation.",
+      "mesurer seulement la taille": "La taille seule ne mesure pas les variations rapides de rétention hydrique.",
+      "surveiller précisément bilan hydrique, poids, signes vitaux et signaler l’aggravation": "Oligurie, œdèmes et prise de poids rapide imposent de quantifier les entrées-sorties et de rechercher une aggravation rénale ou circulatoire."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng148/chapter/Recommendations"
+    ],
+    "takeaway": "Oligurie, œdèmes et prise de poids rapide imposent de quantifier les entrées-sorties et de rechercher une aggravation rénale ou circulatoire.",
+    "explanations": [
+      "Ces données peuvent signaler une rétention hydrique ou une détérioration de la fonction rénale."
+    ]
+  },
+  {
+    "correct": "maintenir le système fermé et la poche sous le niveau de la vessie",
+    "i": 15,
+    "indices": [
+      16
+    ],
+    "map": {
+      "déconnecter fréquemment le système": "Les déconnexions répétées ouvrent une voie de contamination.",
+      "irriguer sans indication": "Une irrigation sans indication ajoute des manipulations et n’est pas une mesure préventive systématique.",
+      "maintenir le système fermé et la poche sous le niveau de la vessie": "Le système fermé limite les contaminations ; la poche située sous la vessie favorise l’écoulement sans reflux.",
+      "placer la poche au-dessus de la vessie": "Une poche trop haute favorise le reflux vers la vessie."
+    },
+    "references": [
+      "https://www.cdc.gov/infection-control/hcp/cauti/summary-of-recommendations.html"
+    ],
+    "takeaway": "Le système fermé limite les contaminations ; la poche située sous la vessie favorise l’écoulement sans reflux.",
+    "explanations": [
+      "Ces mesures contribuent à prévenir l’infection et le reflux urinaire."
+    ]
+  },
+  {
+    "correct": "suspecter une infection puerpérale et organiser une évaluation rapide",
+    "i": 16,
+    "indices": [
+      17
+    ],
+    "map": {
+      "considérer ces signes toujours normaux": "Cette association n’est pas un changement postpartum à banaliser.",
+      "encourager un effort intense": "Un effort intense ne traite pas l’infection et peut aggraver la fatigue.",
+      "retarder l’évaluation": "Un délai peut laisser progresser l’infection.",
+      "suspecter une infection puerpérale et organiser une évaluation rapide": "Fièvre, douleur utérine et lochies malodorantes après l’accouchement font suspecter une infection et nécessitent une évaluation rapide."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng194/chapter/Recommendations"
+    ],
+    "takeaway": "Fièvre, douleur utérine et lochies malodorantes après l’accouchement font suspecter une infection et nécessitent une évaluation rapide.",
+    "explanations": [
+      "Ces signes peuvent indiquer une infection du postpartum."
+    ]
+  },
+  {
+    "correct": "installer le patient pour faciliter la respiration, évaluer l’oxygénation et appliquer les prescriptions",
+    "i": 17,
+    "indices": [
+      18
+    ],
+    "map": {
+      "augmenter librement les apports hydriques": "Des apports hydriques augmentés sans indication peuvent aggraver la congestion.",
+      "encourager un effort soutenu": "L’effort accroît les besoins en oxygène pendant la détresse.",
+      "installer le patient pour faciliter la respiration, évaluer l’oxygénation et appliquer les prescriptions": "L’orthopnée et les crépitants avec dyspnée croissante évoquent une congestion : faciliter la respiration et évaluer l’oxygénation sont prioritaires.",
+      "placer complètement à plat": "La position à plat peut majorer l’orthopnée."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg187/chapter/Recommendations"
+    ],
+    "takeaway": "L’orthopnée et les crépitants avec dyspnée croissante évoquent une congestion : faciliter la respiration et évaluer l’oxygénation sont prioritaires.",
+    "explanations": [
+      "Ces signes peuvent traduire une congestion pulmonaire nécessitant une évaluation rapide."
+    ]
+  },
+  {
+    "correct": "administrer un glucide à action rapide puis réévaluer la glycémie",
+    "i": 19,
+    "indices": [
+      20
+    ],
+    "map": {
+      "administrer davantage d’insuline": "L’insuline supplémentaire abaisserait encore la glycémie.",
+      "administrer un glucide à action rapide puis réévaluer la glycémie": "Un glucide rapide permet de corriger une hypoglycémie chez un patient éveillé et capable d’avaler sans danger, puis la glycémie doit être contrôlée.",
+      "attendre la disparition spontanée": "Attendre peut laisser progresser l’hypoglycémie et l’altération neurologique.",
+      "interdire toute prise orale": "Une interdiction systématique n’est pas justifiée si la déglutition est sûre ; sinon une autre voie est nécessaire selon protocole."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
+    ],
+    "takeaway": "Vérifier la capacité à avaler : ne rien donner par la bouche en cas de déglutition dangereuse ou de conscience altérée.",
+    "explanations": [
+      "Chez un patient conscient, un glucide rapide est indiqué pour corriger une hypoglycémie, avec contrôle ultérieur."
+    ]
+  },
+  {
+    "correct": "reconnaître le vécu sans confirmer les voix et évaluer la sécurité",
+    "i": 20,
+    "indices": [
+      21
+    ],
+    "map": {
+      "confirmer que les voix sont réelles": "Confirmer les voix renforce l’expérience hallucinatoire plutôt que de soutenir un repérage de la réalité.",
+      "ignorer le contenu des voix": "Le contenu peut révéler des ordres dangereux pour le patient ou pour autrui.",
+      "reconnaître le vécu sans confirmer les voix et évaluer la sécurité": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+      "se moquer": "La moquerie rompt la confiance et peut augmenter la détresse."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK616969/"
+    ],
+    "takeaway": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+    "explanations": [
+      "Il faut éviter de renforcer l’hallucination tout en recherchant un risque pour la sécurité."
+    ]
+  },
+  {
+    "correct": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "i": 21,
+    "indices": [
+      22
+    ],
+    "map": {
+      "encourager l’eau non traitée": "Une eau non traitée peut transporter des agents infectieux.",
+      "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire": "L’eau potable, l’assainissement et l’hygiène coupent plusieurs voies de transmission des maladies diarrhéiques.",
+      "stocker les aliments sans protection": "Des aliments non protégés peuvent être contaminés.",
+      "supprimer le lavage des mains": "Supprimer le lavage des mains facilite la transmission féco-orale."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "L’eau potable, l’assainissement et l’hygiène coupent plusieurs voies de transmission des maladies diarrhéiques.",
+    "explanations": [
+      "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission de nombreuses maladies diarrhéiques."
+    ]
+  },
+  {
+    "correct": "utiliser une attitude calme, l’écoute active et des questions ouvertes",
+    "i": 22,
+    "indices": [
+      23
+    ],
+    "map": {
+      "dire simplement de se calmer": "Une injonction seule n’aide pas à exprimer ni à comprendre l’inquiétude.",
+      "minimiser les émotions": "Minimiser les émotions peut faire sentir au patient qu’il n’est pas entendu.",
+      "quitter sans explication": "Partir sans explication peut accentuer l’insécurité et rompre la relation.",
+      "utiliser une attitude calme, l’écoute active et des questions ouvertes": "Une écoute calme avec questions ouvertes aide à comprendre les préoccupations et à diminuer la tension."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK590036/"
+    ],
+    "takeaway": "Une écoute calme avec questions ouvertes aide à comprendre les préoccupations et à diminuer la tension.",
+    "explanations": [
+      "L’écoute active facilite l’évaluation et l’expression des préoccupations."
+    ]
+  },
+  {
+    "correct": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "i": 23,
+    "indices": [
+      24
+    ],
+    "map": {
+      "attendre plusieurs jours": "Attendre plusieurs jours peut laisser s’aggraver la déshydratation.",
+      "donner uniquement une boisson gazeuse": "Une boisson gazeuse n’a pas la composition adaptée d’une solution de réhydratation orale.",
+      "supprimer tous les liquides": "Supprimer les liquides aggrave les pertes non compensées.",
+      "évaluer le degré de déshydratation et commencer la réhydratation appropriée": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée.",
+    "explanations": [
+      "L’enfant peut se déshydrater rapidement lors d’une diarrhée importante."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "i": 24,
+    "indices": [
+      25
+    ],
+    "map": {
+      "faire marcher immédiatement sans évaluation": "La mobilisation ne doit pas précéder l’évaluation initiale d’une éventuelle complication.",
+      "ignorer le liquide": "L’aspect du liquide apporte des données cliniques utiles qu’il ne faut pas ignorer.",
+      "retarder toute surveillance": "Une surveillance retardée peut manquer une anomalie fœtale.",
+      "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole": "Après rupture des membranes, le rythme fœtal et l’aspect du liquide aident à détecter une complication et orienter les soins."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng235/chapter/Recommendations"
+    ],
+    "takeaway": "Après rupture des membranes, le rythme fœtal et l’aspect du liquide aident à détecter une complication et orienter les soins.",
+    "explanations": [
+      "L’évaluation après rupture des membranes aide à détecter rapidement certaines complications."
+    ]
+  },
+  {
+    "correct": "surveiller progression cervicale, contractions, descente et bien-être materno-fœtal",
+    "i": 25,
+    "indices": [
+      26
+    ],
+    "map": {
+      "ignorer le rythme fœtal": "Ignorer le rythme fœtal peut faire manquer une anomalie nécessitant une action.",
+      "mesurer uniquement la température": "La température seule ne mesure pas la progression du travail.",
+      "surveiller progression cervicale, contractions, descente et bien-être materno-fœtal": "La progression du travail s’évalue avec plusieurs données : col, contractions, descente et état materno-fœtal.",
+      "évaluer seulement le poids maternel": "Le poids maternel seul ne renseigne pas sur la progression cervicale."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng235/chapter/Recommendations"
+    ],
+    "takeaway": "La progression du travail s’évalue avec plusieurs données : col, contractions, descente et état materno-fœtal.",
+    "explanations": [
+      "L’évaluation du travail combine les données maternelles, fœtales et la progression cervicale."
+    ]
+  },
+  {
+    "correct": "respecter rigoureusement l’hygiène des mains et la technique aseptique indiquée",
+    "i": 26,
+    "indices": [
+      27
+    ],
+    "map": {
+      "omettre l’hygiène des mains si des gants sont portés": "Les gants ne remplacent pas l’hygiène des mains.",
+      "respecter rigoureusement l’hygiène des mains et la technique aseptique indiquée": "L’hygiène des mains et une technique aseptique adaptée limitent l’introduction de microbes pendant les soins.",
+      "réutiliser du matériel contaminé": "Un matériel contaminé peut introduire des microbes dans la plaie ou le dispositif.",
+      "toucher les zones stériles à mains nues": "Le contact des mains nues contamine une zone stérile."
+    },
+    "references": [
+      "https://www.cdc.gov/clean-hands/hcp/clinical-safety/index.html"
+    ],
+    "takeaway": "L’hygiène des mains et une technique aseptique adaptée limitent l’introduction de microbes pendant les soins.",
+    "explanations": [
+      "L’hygiène des mains et l’asepsie sont essentielles à la prévention des infections associées aux soins."
+    ]
+  },
+  {
+    "correct": "respecter la prescription/protocole et les règles de sécurité contre le feu",
+    "i": 27,
+    "indices": [
+      28
+    ],
+    "map": {
+      "autoriser une flamme à proximité": "Une flamme près de l’oxygène augmente fortement le risque d’incendie.",
+      "couvrir la source d’oxygène avec des matériaux inflammables": "Des matériaux inflammables près de la source augmentent le danger de combustion.",
+      "modifier librement le débit sans indication": "Le débit doit être adapté selon prescription ou protocole, pas changé arbitrairement.",
+      "respecter la prescription/protocole et les règles de sécurité contre le feu": "L’oxygène doit être délivré selon une indication et des objectifs définis, avec prévention stricte du risque d’incendie."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK591819/"
+    ],
+    "takeaway": "L’oxygène doit être délivré selon une indication et des objectifs définis, avec prévention stricte du risque d’incendie.",
+    "explanations": [
+      "L’oxygène soutient la combustion et doit être utilisé selon des règles de sécurité strictes."
+    ]
+  },
+  {
+    "correct": "vérifier glycémie et disponibilité du repas selon le plan thérapeutique",
+    "i": 28,
+    "indices": [
+      29
+    ],
+    "map": {
+      "administrer sans connaître la glycémie": "L’absence de contrôle requis peut faire administrer une dose inadaptée à la situation.",
+      "doubler la dose si le patient a faim": "La faim seule ne justifie jamais de doubler une dose.",
+      "retarder le repas plusieurs heures": "Un repas très retardé après l’insuline rapide expose à l’hypoglycémie.",
+      "vérifier glycémie et disponibilité du repas selon le plan thérapeutique": "La glycémie et la disponibilité du repas permettent de sécuriser l’insuline rapide selon le plan thérapeutique."
+    },
+    "references": [
+      "https://www.nhs.uk/medicines/insulin/rapid-acting-insulin/how-and-when-to-take-rapid-acting-insulin/"
+    ],
+    "takeaway": "La glycémie et la disponibilité du repas permettent de sécuriser l’insuline rapide selon le plan thérapeutique.",
+    "explanations": [
+      "La coordination entre glycémie, repas et insuline rapide est essentielle."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement la respiration et appliquer le protocole prévu",
+    "i": 29,
+    "indices": [
+      30
+    ],
+    "map": {
+      "administrer une dose supplémentaire": "Une dose supplémentaire peut aggraver la dépression respiratoire.",
+      "faire marcher seul": "Faire marcher seul expose à une chute et ne traite pas la cause.",
+      "laisser dormir sans surveillance": "L’absence de surveillance peut faire manquer une aggravation de la ventilation.",
+      "évaluer immédiatement la respiration et appliquer le protocole prévu": "Respiration lente et somnolence après un opioïde font suspecter une dépression respiratoire imposant évaluation et prise en charge immédiates."
+    },
+    "references": [
+      "https://www.cdc.gov/overdose-prevention/reversing-overdose/about-naloxone.html"
+    ],
+    "takeaway": "Respiration lente et somnolence après un opioïde font suspecter une dépression respiratoire imposant évaluation et prise en charge immédiates.",
+    "explanations": [
+      "La dépression respiratoire est une complication potentiellement grave des opioïdes."
+    ]
+  },
+  {
+    "correct": "évaluer selon le protocole de malnutrition et rechercher les complications",
+    "i": 30,
+    "indices": [
+      31
+    ],
+    "map": {
+      "donner sans évaluation une quantité excessive d’aliments": "Une réalimentation excessive non évaluée peut entraîner des complications ; elle doit être adaptée et surveillée.",
+      "faire pratiquer un exercice intense": "Un exercice intense augmente les besoins d’un organisme déjà fragilisé.",
+      "ignorer les œdèmes": "Les œdèmes sont une donnée importante, pas un signe à négliger.",
+      "évaluer selon le protocole de malnutrition et rechercher les complications": "Un amaigrissement sévère ou des œdèmes bilatéraux nécessitent une évaluation structurée de la malnutrition et de ses complications."
+    },
+    "references": [
+      "https://www.who.int/publications/i/item/9789240082830"
+    ],
+    "takeaway": "Un amaigrissement sévère ou des œdèmes bilatéraux nécessitent une évaluation structurée de la malnutrition et de ses complications.",
+    "explanations": [
+      "La malnutrition aiguë sévère nécessite une évaluation structurée, notamment pour rechercher des complications."
+    ]
+  },
+  {
+    "correct": "appliquer une pression directe ferme avec protection appropriée et évaluer l’état général",
+    "i": 31,
+    "indices": [
+      32
+    ],
+    "map": {
+      "appliquer une pression directe ferme avec protection appropriée et évaluer l’état général": "Une pression directe ferme contribue à contrôler un saignement externe pendant l’alerte et l’évaluation générale.",
+      "attendre sans intervenir": "Ne pas intervenir prolonge la perte sanguine.",
+      "faire marcher le patient": "La marche ne contrôle pas le saignement et expose au malaise.",
+      "retirer constamment les compresses": "Retirer sans cesse les compresses interrompt la compression et peut perturber l’hémostase."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-external"
+    ],
+    "takeaway": "Une pression directe ferme contribue à contrôler un saignement externe pendant l’alerte et l’évaluation générale.",
+    "explanations": [
+      "La pression directe est une mesure initiale importante de contrôle d’une hémorragie externe."
+    ]
+  },
+  {
+    "correct": "mettre en œuvre une mesure de prévention primaire adaptée, comme la vaccination lorsqu’indiquée",
+    "i": 32,
+    "indices": [
+      33
+    ],
+    "map": {
+      "attendre une complication": "Attendre une complication n’empêche pas la maladie d’apparaître.",
+      "faire uniquement de la réadaptation": "La réadaptation intervient après une atteinte ; ce n’est pas la prévention primaire recherchée.",
+      "mettre en œuvre une mesure de prévention primaire adaptée, comme la vaccination lorsqu’indiquée": "La prévention primaire agit avant l’apparition de la maladie, notamment par la vaccination lorsqu’elle est indiquée.",
+      "traiter seulement les séquelles": "Le traitement des séquelles intervient après la maladie."
+    },
+    "references": [
+      "https://www.cdc.gov/vaccines/basics/index.html"
+    ],
+    "takeaway": "La prévention primaire agit avant l’apparition de la maladie, notamment par la vaccination lorsqu’elle est indiquée.",
+    "explanations": [
+      "La prévention primaire intervient avant l’apparition de la maladie."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "i": 33,
+    "indices": [
+      34
+    ],
+    "map": {
+      "attendre plusieurs jours": "L’attente peut laisser évoluer la déshydratation vers le choc.",
+      "donner seulement un antitussif": "Un antitussif ne remplace ni l’eau ni les électrolytes perdus.",
+      "interdire tout liquide": "Interdire tous les liquides aggrave le déficit hydrique.",
+      "évaluer rapidement la déshydratation et commencer la réhydratation appropriée": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes.",
+    "explanations": [
+      "La réhydratation est centrale dans la prise en charge de la diarrhée aqueuse avec déshydratation."
+    ]
+  },
+  {
+    "correct": "protéger le patient des blessures et maintenir la sécurité des voies aériennes",
+    "i": 34,
+    "indices": [
+      35
+    ],
+    "map": {
+      "donner à boire pendant la crise": "Donner à boire pendant la crise expose à une fausse route.",
+      "immobiliser fortement tous les membres": "Une contention forcée peut provoquer des blessures sans arrêter la crise.",
+      "introduire un objet dans la bouche": "Un objet dans la bouche peut blesser ou obstruer les voies aériennes.",
+      "protéger le patient des blessures et maintenir la sécurité des voies aériennes": "Pendant une convulsion, prévenir les blessures et maintenir la sécurité respiratoire sont les priorités immédiates."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/seizures"
+    ],
+    "takeaway": "Pendant une convulsion, prévenir les blessures et maintenir la sécurité respiratoire sont les priorités immédiates.",
+    "explanations": [
+      "La sécurité et la protection des voies aériennes sont prioritaires pendant une convulsion."
+    ]
+  },
+  {
+    "correct": "utiliser un langage clair puis vérifier la compréhension par reformulation",
+    "i": 35,
+    "indices": [
+      36
+    ],
+    "map": {
+      "donner uniquement un document complexe": "Un document complexe seul peut rester incompris.",
+      "supposer que tout a été compris": "Présumer la compréhension laisse persister des erreurs non repérées.",
+      "utiliser un langage clair puis vérifier la compréhension par reformulation": "Un langage clair suivi d’une reformulation permet de vérifier ce que la famille a réellement compris.",
+      "éviter les questions": "Éviter les questions empêche de clarifier les difficultés."
+    },
+    "references": [
+      "https://www.ahrq.gov/health-literacy/improve/precautions/tool5.html"
+    ],
+    "takeaway": "Un langage clair suivi d’une reformulation permet de vérifier ce que la famille a réellement compris.",
+    "explanations": [
+      "La vérification de la compréhension améliore la qualité de l’éducation sanitaire."
+    ]
+  },
+  {
+    "correct": "vérifier les allergies et surveiller les réactions indésirables",
+    "i": 36,
+    "indices": [
+      37
+    ],
+    "map": {
+      "arrêter automatiquement après une seule dose": "L’arrêt ne doit pas être automatique après une dose ; il dépend de l’évaluation et de la prescription.",
+      "ignorer une éruption": "Une éruption peut signaler une réaction médicamenteuse et doit être évaluée.",
+      "partager la dose avec un autre patient": "Une dose est prescrite pour un patient donné, pas partagée.",
+      "vérifier les allergies et surveiller les réactions indésirables": "Avant et après un antibiotique, rechercher les allergies et surveiller les réactions contribue à sécuriser le traitement."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg183/chapter/Recommendations"
+    ],
+    "takeaway": "Avant et après un antibiotique, rechercher les allergies et surveiller les réactions contribue à sécuriser le traitement.",
+    "explanations": [
+      "La vérification des allergies contribue à prévenir les réactions graves."
+    ]
+  },
+  {
+    "correct": "déterminer l’heure de début ou la dernière fois normale et activer l’évaluation urgente",
+    "i": 37,
+    "indices": [
+      38
+    ],
+    "map": {
+      "donner immédiatement à manger": "Manger avant l’évaluation de la déglutition peut entraîner une fausse route.",
+      "déterminer l’heure de début ou la dernière fois normale et activer l’évaluation urgente": "Un déficit focal soudain impose une évaluation urgente d’AVC ; l’heure de début ou la dernière fois normale guide les décisions.",
+      "faire marcher sans assistance": "La marche sans aide expose à une chute liée au déficit.",
+      "laisser dormir plusieurs heures": "Laisser dormir retarde une prise en charge sensible au temps."
+    },
+    "references": [
+      "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+    ],
+    "takeaway": "Un déficit focal soudain impose une évaluation urgente d’AVC ; l’heure de début ou la dernière fois normale guide les décisions.",
+    "explanations": [
+      "Le délai depuis le début des symptômes est déterminant dans la prise en charge d’un AVC aigu."
+    ]
+  },
+  {
+    "correct": "utiliser les critères de triage pour prioriser les personnes nécessitant une intervention immédiate",
+    "i": 38,
+    "indices": [
+      39
+    ],
+    "map": {
+      "consacrer toutes les ressources aux blessures mineures": "Mobiliser toutes les ressources pour des blessures mineures laisse les urgences sans réponse.",
+      "ignorer l’état respiratoire": "L’état respiratoire est un critère essentiel de gravité.",
+      "traiter uniquement par ordre d’arrivée": "L’ordre d’arrivée seul ne repère pas les urgences les plus graves.",
+      "utiliser les critères de triage pour prioriser les personnes nécessitant une intervention immédiate": "Le triage classe les besoins selon la gravité et les ressources disponibles, avec priorité aux interventions immédiates indiquées."
+    },
+    "references": [
+      "https://www.who.int/tools/triage"
+    ],
+    "takeaway": "Le triage classe les besoins selon la gravité et les ressources disponibles, avec priorité aux interventions immédiates indiquées.",
+    "explanations": [
+      "Le triage de catastrophe vise à utiliser les ressources disponibles selon l’urgence et les chances de bénéfice."
+    ]
+  },
+  {
+    "correct": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "i": 39,
+    "indices": [
+      40
+    ],
+    "map": {
+      "demander à un autre patient": "Un autre patient n’est pas une source fiable pour vérifier l’identité et la prescription.",
+      "ignorer les allergies": "Ignorer une allergie expose à une réaction évitable.",
+      "se fier uniquement à la couleur du médicament": "La couleur ne permet pas d’identifier sûrement le médicament ou la dose.",
+      "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK560654/"
+    ],
+    "takeaway": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration.",
+    "explanations": [
+      "Les contrôles systématiques diminuent les erreurs médicamenteuses."
+    ]
+  },
+  {
+    "correct": "évaluer l’état hémodynamique et rechercher rapidement les signes de choc",
+    "i": 40,
+    "indices": [
+      41
+    ],
+    "map": {
+      "attendre le lendemain": "Attendre au lendemain peut laisser progresser une hémorragie.",
+      "donner un repas copieux": "Un repas copieux ne traite pas le saignement et peut retarder les soins.",
+      "faire marcher le patient": "Faire marcher un patient potentiellement instable expose au malaise.",
+      "évaluer l’état hémodynamique et rechercher rapidement les signes de choc": "Méléna ou hématémèse avec faiblesse font rechercher une hémorragie digestive et son retentissement circulatoire."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/digestive-diseases/gastrointestinal-bleeding/symptoms-causes"
+    ],
+    "takeaway": "Méléna ou hématémèse avec faiblesse font rechercher une hémorragie digestive et son retentissement circulatoire.",
+    "explanations": [
+      "Un saignement digestif peut provoquer une hypovolémie et un état de choc."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement les voies aériennes et la respiration",
+    "i": 41,
+    "indices": [
+      42
+    ],
+    "map": {
+      "appliquer directement de la glace sur une grande surface": "La glace sur une grande surface peut léser les tissus et favoriser l’hypothermie.",
+      "donner à manger avant l’évaluation": "L’alimentation retarde l’évaluation d’une menace respiratoire et peut être inadaptée.",
+      "percer toutes les cloques": "Percer les cloques ne traite pas l’inhalation et expose la plaie à la contamination.",
+      "évaluer immédiatement les voies aériennes et la respiration": "Une brûlure avec suspicion d’inhalation peut menacer rapidement les voies aériennes : l’évaluation respiratoire prime."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/burns"
+    ],
+    "takeaway": "Une brûlure avec suspicion d’inhalation peut menacer rapidement les voies aériennes : l’évaluation respiratoire prime.",
+    "explanations": [
+      "Une atteinte par inhalation peut rapidement compromettre les voies aériennes."
+    ]
+  },
+  {
+    "correct": "prioriser voies aériennes, respiration, positionnement et oxygène selon indication/protocole",
+    "i": 42,
+    "indices": [
+      43
+    ],
+    "map": {
+      "attendre sans réévaluation": "Attendre sans réévaluation peut manquer une aggravation de l’hypoxémie.",
+      "donner un repas avant toute intervention": "Un repas n’est pas prioritaire et peut exposer à une fausse route en pleine détresse.",
+      "faire marcher le patient": "Marcher augmente les besoins en oxygène et expose au malaise.",
+      "prioriser voies aériennes, respiration, positionnement et oxygène selon indication/protocole": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK591819/"
+    ],
+    "takeaway": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration.",
+    "explanations": [
+      "Une détresse respiratoire impose une prise en charge prioritaire des fonctions vitales."
+    ]
+  },
+  {
+    "correct": "consigner des données factuelles, précises, datées et pertinentes",
+    "i": 43,
+    "indices": [
+      44
+    ],
+    "map": {
+      "consigner des données factuelles, précises, datées et pertinentes": "Des notes factuelles, datées et précises permettent une transmission fiable et une continuité des soins.",
+      "demander à un visiteur d’écrire la note": "Le professionnel responsable doit documenter ses soins ; un visiteur ne peut s’y substituer.",
+      "documenter des rumeurs": "Une rumeur n’est pas une observation clinique vérifiée.",
+      "effacer une erreur sans suivre la procédure": "Une correction doit rester traçable conformément à la procédure, pas effacée arbitrairement."
+    },
+    "references": [
+      "https://www.nmc.org.uk/standards/code/read-the-code-online/"
+    ],
+    "takeaway": "Des notes factuelles, datées et précises permettent une transmission fiable et une continuité des soins.",
+    "explanations": [
+      "Une documentation précise favorise la continuité et la sécurité des soins."
+    ]
+  },
+  {
+    "correct": "évaluer ABC, signes vitaux et déclencher rapidement l’évaluation d’une urgence coronarienne",
+    "i": 44,
+    "indices": [
+      45
+    ],
+    "map": {
+      "donner uniquement de l’eau": "De l’eau seule n’évalue ni ne traite une éventuelle urgence coronarienne.",
+      "faire marcher le patient pour confirmer le diagnostic": "Un effort peut aggraver une ischémie ; il ne faut pas provoquer les symptômes pour confirmer le diagnostic.",
+      "retarder l’évaluation jusqu’au prochain repas": "Attendre le repas retarde une prise en charge sensible au temps.",
+      "évaluer ABC, signes vitaux et déclencher rapidement l’évaluation d’une urgence coronarienne": "Une douleur thoracique aiguë avec sueurs ou autres signes associés peut être une urgence coronarienne ; l’évaluation vitale et l’alerte sont prioritaires."
+    },
+    "references": [
+      "https://www.heart.org/en/health-topics/heart-attack/warning-signs-of-a-heart-attack"
+    ],
+    "takeaway": "Une douleur thoracique aiguë avec sueurs ou autres signes associés peut être une urgence coronarienne ; l’évaluation vitale et l’alerte sont prioritaires.",
+    "explanations": [
+      "Une douleur thoracique aiguë associée à des signes végétatifs peut correspondre à une urgence coronarienne."
+    ]
+  },
+  {
+    "correct": "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole",
+    "i": 45,
+    "indices": [
+      46
+    ],
+    "map": {
+      "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+      "changer de sujet": "Changer de sujet ne répond pas au danger exprimé.",
+      "laisser le patient seul": "Laisser seul peut permettre un passage à l’acte avant l’évaluation.",
+      "promettre le secret absolu": "Le secret absolu ne doit pas être promis lorsqu’une protection urgente peut nécessiter de partager les informations utiles."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng225/chapter/Recommendations"
+    ],
+    "takeaway": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+    "explanations": [
+      "Une intention suicidaire avec plan précis correspond à un risque élevé."
+    ]
+  },
+  {
+    "correct": "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul",
+    "i": 46,
+    "indices": [
+      47
+    ],
+    "map": {
+      "estimer uniquement selon l’âge": "L’âge seul ne remplace pas le poids dans une prescription en mg/kg.",
+      "ignorer les unités": "Une erreur d’unité peut entraîner une erreur majeure de dose.",
+      "utiliser le poids du parent": "Le poids du parent n’est pas celui du patient traité.",
+      "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul": "Pour une prescription en mg/kg, le poids actuel fiable en kilogrammes est la base du calcul à vérifier."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK593207/"
+    ],
+    "takeaway": "Pour une prescription en mg/kg, le poids actuel fiable en kilogrammes est la base du calcul à vérifier.",
+    "explanations": [
+      "Une prescription en mg/kg nécessite un poids fiable et une vérification rigoureuse du calcul."
+    ]
+  },
+  {
+    "correct": "corriger le positionnement et favoriser une prise profonde",
+    "i": 47,
+    "indices": [
+      48
+    ],
+    "map": {
+      "corriger le positionnement et favoriser une prise profonde": "Corriger la position et obtenir une prise profonde réduit la compression du mamelon et améliore le transfert de lait.",
+      "espacer fortement toutes les tétées": "Espacer fortement les tétées ne corrige pas la prise et peut nuire au transfert de lait.",
+      "faire pincer seulement le mamelon": "Pincer seulement le mamelon entretient la douleur et une prise inefficace.",
+      "interrompre définitivement sans évaluation": "Un arrêt définitif sans évaluation prive la mère d’une correction potentiellement simple."
+    },
+    "references": [
+      "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/positioning-and-attachment/"
+    ],
+    "takeaway": "Corriger la position et obtenir une prise profonde réduit la compression du mamelon et améliore le transfert de lait.",
+    "explanations": [
+      "Une prise profonde améliore le transfert du lait et réduit les traumatismes du mamelon."
+    ]
+  },
+  {
+    "correct": "interrompre la transfusion et suivre immédiatement le protocole de réaction transfusionnelle",
+    "i": 48,
+    "indices": [
+      49
+    ],
+    "map": {
+      "augmenter le débit": "Augmenter le débit augmente l’exposition au produit potentiellement responsable.",
+      "continuer jusqu’à la fin": "Continuer jusqu’à la fin retarde les mesures de sécurité.",
+      "ignorer les symptômes": "Ignorer ces signes peut laisser s’aggraver une réaction grave.",
+      "interrompre la transfusion et suivre immédiatement le protocole de réaction transfusionnelle": "Fièvre, frissons ou dyspnée pendant une transfusion font suspecter une réaction : interrompre la transfusion et appliquer immédiatement le protocole."
+    },
+    "references": [
+      "https://www.lifeblood.com.au/health-professionals/clinical-practice/adverse-events/management-of-suspected-reactions"
+    ],
+    "takeaway": "Fièvre, frissons ou dyspnée pendant une transfusion font suspecter une réaction : interrompre la transfusion et appliquer immédiatement le protocole.",
+    "explanations": [
+      "Une réaction transfusionnelle potentielle exige l’arrêt de la transfusion et une évaluation immédiate."
+    ]
+  },
+  {
+    "correct": "évaluer et signaler rapidement sans massage vigoureux du membre",
+    "i": 49,
+    "indices": [
+      50
+    ],
+    "map": {
+      "appliquer une forte compression improvisée": "Une compression forte improvisée sans évaluation n’est pas une prise en charge sûre.",
+      "faire courir le patient": "Faire courir le patient n’aide pas à confirmer la cause et retarde les soins.",
+      "masser profondément le mollet": "Un massage profond du membre suspect de thrombose est à éviter ; il ne remplace pas l’évaluation.",
+      "évaluer et signaler rapidement sans massage vigoureux du membre": "Un mollet gonflé et douloureux d’un seul côté fait suspecter une thrombose : évaluer et signaler rapidement, sans massage vigoureux."
+    },
+    "references": [
+      "https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/"
+    ],
+    "takeaway": "Un mollet gonflé et douloureux d’un seul côté fait suspecter une thrombose : évaluer et signaler rapidement, sans massage vigoureux.",
+    "explanations": [
+      "Une thrombose veineuse profonde est possible et comporte un risque embolique."
+    ]
+  },
+  {
+    "correct": "organiser une évaluation obstétricale urgente",
+    "i": 50,
+    "indices": [
+      51
+    ],
+    "map": {
+      "Attendre plusieurs jours": "Attendre plusieurs jours expose à une complication materno-fœtale grave.",
+      "Exercice intense": "L’exercice intense ne traite pas cette urgence.",
+      "Retour à domicile sans surveillance": "Un retour sans surveillance ne répond pas aux signes de gravité.",
+      "attendre plusieurs jours": "Attendre plusieurs jours expose à une complication materno-fœtale grave.",
+      "encourager l’exercice intense": "L’exercice intense ne traite pas cette urgence.",
+      "organiser une évaluation obstétricale urgente": "Pendant la grossesse, hypertension sévère, céphalées et troubles visuels font suspecter une pré-éclampsie sévère nécessitant une évaluation urgente.",
+      "renvoyer sans surveillance": "Un retour sans surveillance ne répond pas aux signes de gravité.",
+      "Évaluation urgente et alerte de l’équipe obstétricale": "Pendant la grossesse, hypertension sévère, céphalées et troubles visuels font suspecter une pré-éclampsie sévère nécessitant une évaluation urgente."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+    ],
+    "takeaway": "Pendant la grossesse, hypertension sévère, céphalées et troubles visuels font suspecter une pré-éclampsie sévère nécessitant une évaluation urgente.",
+    "explanations": [
+      "Ces signes peuvent indiquer une pré-éclampsie sévère."
+    ]
+  },
+  {
+    "correct": "réévaluer immédiatement l’état neurovasculaire",
+    "i": 51,
+    "indices": [
+      52
+    ],
+    "map": {
+      "attendre le lendemain": "Attendre au lendemain risque de retarder le traitement d’une complication menaçant le membre.",
+      "faire marcher le patient": "Faire marcher sur le membre ne permet pas d’écarter une complication et peut aggraver la douleur.",
+      "réévaluer immédiatement l’état neurovasculaire": "Douleur croissante, pâleur et engourdissement après immobilisation font craindre une atteinte neurovasculaire nécessitant une évaluation urgente.",
+      "serrer davantage l’immobilisation": "Serrer davantage peut accentuer la compression et compromettre la perfusion."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Neurovascular_observations/"
+    ],
+    "takeaway": "Douleur croissante, pâleur et engourdissement après immobilisation font craindre une atteinte neurovasculaire nécessitant une évaluation urgente.",
+    "explanations": [
+      "Ces signes peuvent indiquer une compromission neurovasculaire."
+    ]
+  },
+  {
+    "correct": "rechercher une hémorragie ou un état de choc et alerter rapidement",
+    "i": 52,
+    "indices": [
+      53
+    ],
+    "map": {
+      "attendre le repas": "L’attente peut laisser s’aggraver une défaillance circulatoire.",
+      "donner un laxatif": "Un laxatif ne traite pas l’instabilité hémodynamique.",
+      "faire lever seul": "Un lever sans assistance expose au malaise et à la chute.",
+      "rechercher une hémorragie ou un état de choc et alerter rapidement": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-internal"
+    ],
+    "takeaway": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc.",
+    "explanations": [
+      "Ces signes peuvent traduire une complication hémodynamique postopératoire."
+    ]
+  },
+  {
+    "correct": "donner un glucide à action rapide puis réévaluer",
+    "i": 53,
+    "indices": [
+      54
+    ],
+    "map": {
+      "administrer davantage d’insuline": "L’insuline supplémentaire abaisse encore la glycémie.",
+      "donner seulement de l’eau": "L’eau seule ne contient pas le glucose nécessaire.",
+      "donner un glucide à action rapide puis réévaluer": "Un glucide rapide corrige une hypoglycémie si le patient est suffisamment éveillé et avale sans danger, puis la glycémie est recontrôlée.",
+      "faire jeûner": "Le jeûne ne corrige pas le manque de glucose."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
+    ],
+    "takeaway": "Vérifier la sécurité de la déglutition ; sinon utiliser la conduite alternative prévue au protocole.",
+    "explanations": [
+      "Chez un patient conscient, l’hypoglycémie nécessite un glucide rapide et une réévaluation."
+    ]
+  },
+  {
+    "correct": "reconnaître son vécu sans confirmer les voix et évaluer la sécurité",
+    "i": 54,
+    "indices": [
+      55
+    ],
+    "map": {
+      "confirmer que les voix sont réelles": "Confirmer les voix renforce l’expérience hallucinatoire plutôt que de soutenir un repérage de la réalité.",
+      "ignorer le contenu": "Le contenu peut révéler des ordres dangereux pour le patient ou pour autrui.",
+      "reconnaître son vécu sans confirmer les voix et évaluer la sécurité": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+      "se moquer": "La moquerie rompt la confiance et peut augmenter la détresse."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK616969/"
+    ],
+    "takeaway": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+    "explanations": [
+      "Il faut éviter de renforcer l’hallucination tout en évaluant le danger."
+    ]
+  },
+  {
+    "correct": "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire",
+    "i": 55,
+    "indices": [
+      56
+    ],
+    "map": {
+      "encourager l’eau non traitée": "Une eau non traitée peut transporter des agents infectieux.",
+      "laisser les aliments sans protection": "Des aliments non protégés peuvent être contaminés.",
+      "promouvoir eau potable, assainissement, lavage des mains et sécurité alimentaire": "L’eau potable, l’assainissement et l’hygiène coupent plusieurs voies de transmission des maladies diarrhéiques.",
+      "supprimer le lavage des mains": "Supprimer le lavage des mains facilite la transmission féco-orale."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "L’eau potable, l’assainissement et l’hygiène coupent plusieurs voies de transmission des maladies diarrhéiques.",
+    "explanations": [
+      "L’eau sûre, l’assainissement et l’hygiène réduisent la transmission."
+    ]
+  },
+  {
+    "correct": "évaluer la déshydratation et commencer la réhydratation appropriée",
+    "i": 56,
+    "indices": [
+      57
+    ],
+    "map": {
+      "arrêter tous les liquides": "Supprimer les liquides aggrave les pertes non compensées.",
+      "attendre plusieurs jours": "Attendre plusieurs jours peut laisser s’aggraver la déshydratation.",
+      "donner seulement une boisson gazeuse": "Une boisson gazeuse n’a pas la composition adaptée d’une solution de réhydratation orale.",
+      "évaluer la déshydratation et commencer la réhydratation appropriée": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée.",
+    "explanations": [
+      "L’enfant peut rapidement se déshydrater lors d’une diarrhée."
+    ]
+  },
+  {
+    "correct": "appliquer une pression directe ferme et évaluer l’état général",
+    "i": 57,
+    "indices": [
+      58
+    ],
+    "map": {
+      "appliquer une pression directe ferme et évaluer l’état général": "Une pression directe ferme contribue à contrôler un saignement externe pendant l’alerte et l’évaluation générale.",
+      "attendre sans intervenir": "Ne pas intervenir prolonge la perte sanguine.",
+      "faire marcher le patient": "La marche ne contrôle pas le saignement et expose au malaise.",
+      "retirer constamment les compresses": "Retirer sans cesse les compresses interrompt la compression et peut perturber l’hémostase."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-external"
+    ],
+    "takeaway": "Une pression directe ferme contribue à contrôler un saignement externe pendant l’alerte et l’évaluation générale.",
+    "explanations": [
+      "La pression directe est une mesure initiale importante de contrôle d’une hémorragie."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "i": 58,
+    "indices": [
+      59
+    ],
+    "map": {
+      "attendre plusieurs jours": "L’attente peut laisser évoluer la déshydratation vers le choc.",
+      "donner un antitussif": "Interdire tous les liquides aggrave le déficit hydrique.",
+      "interdire tout liquide": "Un antitussif ne remplace ni l’eau ni les électrolytes perdus.",
+      "évaluer rapidement la déshydratation et commencer la réhydratation appropriée": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes.",
+    "explanations": [
+      "La réhydratation est centrale dans la prise en charge."
+    ]
+  },
+  {
+    "correct": "noter l’heure de début ou la dernière fois normale et déclencher l’évaluation urgente",
+    "i": 59,
+    "indices": [
+      60
+    ],
+    "map": {
+      "donner à boire": "Boire avant la vérification de la déglutition peut entraîner une fausse route.",
+      "faire marcher seul": "La marche sans aide expose à une chute.",
+      "laisser dormir": "Laisser dormir retarde une prise en charge sensible au temps.",
+      "noter l’heure de début ou la dernière fois normale et déclencher l’évaluation urgente": "Un déficit neurologique soudain impose de noter le début ou la dernière fois normale et de déclencher l’évaluation urgente."
+    },
+    "references": [
+      "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+    ],
+    "takeaway": "Un déficit neurologique soudain impose de noter le début ou la dernière fois normale et de déclencher l’évaluation urgente.",
+    "explanations": [
+      "Le délai de début des symptômes est essentiel dans l’évaluation d’un AVC."
+    ]
+  },
+  {
+    "correct": "sécher rapidement et favoriser le peau-à-peau si l’état le permet",
+    "i": 60,
+    "indices": [
+      61
+    ],
+    "map": {
+      "laisser le nouveau-né humide": "L’humidité favorise les pertes de chaleur par évaporation.",
+      "le baigner à l’eau froide": "Un bain froid accentue le refroidissement.",
+      "le placer dans un courant d’air": "Un courant d’air augmente les pertes de chaleur.",
+      "sécher rapidement et favoriser le peau-à-peau si l’état le permet": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur."
+    },
+    "references": [
+      "https://www.who.int/westernpacific/newsroom/feature-stories/item/skin-to-skin-contact-helps-newborns-breastfeed"
+    ],
+    "takeaway": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur.",
+    "explanations": [
+      "Le séchage et le peau-à-peau réduisent les pertes de chaleur."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement la respiration et l’oxygénation",
+    "i": 61,
+    "indices": [
+      62
+    ],
+    "map": {
+      "attendre": "Attendre peut retarder le soutien respiratoire nécessaire.",
+      "forcer un repas": "Un repas forcé augmente la fatigue et le risque de fausse route.",
+      "laisser pleurer sans surveillance": "Laisser pleurer sans surveillance peut faire manquer une aggravation.",
+      "évaluer immédiatement la respiration et l’oxygénation": "Le tirage et la difficulté à s’alimenter nécessitent une évaluation immédiate de la respiration et de l’oxygénation."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Observation_and_continuous_monitoring/"
+    ],
+    "takeaway": "Le tirage et la difficulté à s’alimenter nécessitent une évaluation immédiate de la respiration et de l’oxygénation.",
+    "explanations": [
+      "Le tirage marqué est un signe de détresse respiratoire."
+    ]
+  },
+  {
+    "correct": "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole",
+    "i": 62,
+    "indices": [
+      63,
+      101
+    ],
+    "map": {
+      "assurer la sécurité, évaluer le risque et alerter immédiatement selon protocole": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+      "changer de sujet": "Changer de sujet ne répond pas au danger exprimé.",
+      "laisser seul": "Laisser seul peut permettre un passage à l’acte avant l’évaluation.",
+      "promettre le secret absolu": "Le secret absolu ne doit pas être promis lorsqu’une protection urgente peut nécessiter de partager les informations utiles."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng225/chapter/Recommendations"
+    ],
+    "takeaway": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+    "explanations": [
+      "Un plan suicidaire précis représente un risque élevé.",
+      "Un plan suicidaire précis représente un risque élevé nécessitant une intervention immédiate."
+    ]
+  },
+  {
+    "correct": "aider aux déplacements et sécuriser l’environnement",
+    "i": 63,
+    "indices": [
+      64
+    ],
+    "map": {
+      "aider aux déplacements et sécuriser l’environnement": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+      "faire lever brusquement seul": "Un lever brusque et sans aide augmente le risque de malaise et de chute.",
+      "laisser le sol mouillé": "Un sol mouillé augmente le risque de glissade.",
+      "éloigner la sonnette": "Une sonnette éloignée peut pousser le patient à se déplacer seul pour demander de l’aide."
+    },
+    "references": [
+      "https://www.ahrq.gov/patient-safety/settings/hospital/fall-tips/index.html"
+    ],
+    "takeaway": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+    "explanations": [
+      "Une assistance adaptée réduit le risque de chute."
+    ]
+  },
+  {
+    "correct": "évaluer ABC, faciliter la respiration et appliquer l’oxygène selon indication/protocole",
+    "i": 64,
+    "indices": [
+      65
+    ],
+    "map": {
+      "attendre sans réévaluer": "Attendre sans réévaluation peut manquer une aggravation de l’hypoxémie.",
+      "donner un repas": "Un repas n’est pas prioritaire et peut exposer à une fausse route en pleine détresse.",
+      "faire marcher le patient": "Marcher augmente les besoins en oxygène et expose au malaise.",
+      "évaluer ABC, faciliter la respiration et appliquer l’oxygène selon indication/protocole": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK591819/"
+    ],
+    "takeaway": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration.",
+    "explanations": [
+      "Une détresse respiratoire exige une évaluation et un soutien immédiats des fonctions vitales."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement, surveiller les signes vitaux et alerter l’équipe",
+    "i": 65,
+    "indices": [
+      66
+    ],
+    "map": {
+      "attendre la fin du service": "Attendre la fin du service est incompatible avec une possible urgence.",
+      "donner un laxatif": "Un laxatif ne traite pas une urgence coronarienne.",
+      "faire dormir le patient": "Faire dormir retarde l’identification de la cause et la prise en charge.",
+      "évaluer rapidement, surveiller les signes vitaux et alerter l’équipe": "Une douleur thoracique oppressive avec sueurs peut être une urgence coronarienne et nécessite une évaluation rapide avec alerte."
+    },
+    "references": [
+      "https://www.heart.org/en/health-topics/heart-attack/warning-signs-of-a-heart-attack"
+    ],
+    "takeaway": "Une douleur thoracique oppressive avec sueurs peut être une urgence coronarienne et nécessite une évaluation rapide avec alerte.",
+    "explanations": [
+      "Une urgence coronarienne doit être envisagée devant ce tableau."
+    ]
+  },
+  {
+    "correct": "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis",
+    "i": 66,
+    "indices": [
+      67
+    ],
+    "map": {
+      "demander à un autre patient": "Un autre patient n’est pas une source fiable pour vérifier l’identité et la prescription.",
+      "ignorer les allergies": "Ignorer une allergie expose à une réaction évitable.",
+      "se fier à la couleur": "La couleur ne permet pas d’identifier sûrement le médicament ou la dose.",
+      "vérifier identité, médicament, dose, voie, moment, allergies et contrôles requis": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK560654/"
+    ],
+    "takeaway": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration.",
+    "explanations": [
+      "Les contrôles systématiques réduisent les erreurs médicamenteuses."
+    ]
+  },
+  {
+    "correct": "Vérifier patient, médicament, dose, voie, moment et autres droits de sécurité",
+    "i": 67,
+    "indices": [
+      68
+    ],
+    "map": {
+      "Demander au voisin": "Un autre patient n’est pas une source fiable pour vérifier l’identité et la prescription.",
+      "Ignorer les allergies": "Ignorer une allergie expose à une réaction évitable.",
+      "Se fier seulement à la couleur du comprimé": "La couleur ne permet pas d’identifier sûrement le médicament ou la dose.",
+      "Vérifier patient, médicament, dose, voie, moment et autres droits de sécurité": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration.",
+      "demander à un autre patient": "Un autre patient n’est pas une source fiable pour vérifier l’identité et la prescription.",
+      "ignorer les allergies": "Ignorer une allergie expose à une réaction évitable.",
+      "se fier à la couleur du comprimé": "La couleur ne permet pas d’identifier sûrement le médicament ou la dose.",
+      "vérifier l’identité, le médicament, la dose, la voie, le moment, les allergies et les autres contrôles requis": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK560654/"
+    ],
+    "takeaway": "Les contrôles d’identité, de prescription et d’allergie préviennent les erreurs d’administration.",
+    "explanations": [
+      "Les vérifications systématiques réduisent les erreurs médicamenteuses."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole",
+    "i": 68,
+    "indices": [
+      69
+    ],
+    "map": {
+      "faire marcher immédiatement sans évaluation": "La mobilisation ne doit pas précéder l’évaluation initiale d’une éventuelle complication.",
+      "ignorer la couleur du liquide": "L’aspect du liquide apporte des données cliniques utiles qu’il ne faut pas ignorer.",
+      "retarder toute surveillance": "Une surveillance retardée peut manquer une anomalie fœtale.",
+      "évaluer rapidement le rythme cardiaque fœtal et les caractéristiques du liquide selon protocole": "Après rupture des membranes, le rythme fœtal et l’aspect du liquide aident à détecter une complication et orienter les soins."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng235/chapter/Recommendations"
+    ],
+    "takeaway": "Après rupture des membranes, le rythme fœtal et l’aspect du liquide aident à détecter une complication et orienter les soins.",
+    "explanations": [
+      "Après rupture des membranes, l’évaluation fœtale aide à détecter rapidement certaines complications."
+    ]
+  },
+  {
+    "correct": "prendre en charge en priorité la menace immédiate des voies aériennes",
+    "i": 69,
+    "indices": [
+      70
+    ],
+    "map": {
+      "attendre l’ordre d’arrivée sans triage": "L’ordre d’arrivée ne reflète pas la gravité clinique.",
+      "prendre en charge en priorité la menace immédiate des voies aériennes": "Une obstruction des voies aériennes menace immédiatement la vie et prime au triage.",
+      "traiter d’abord la demande administrative": "Une demande administrative peut attendre la stabilisation d’une urgence vitale.",
+      "voir d’abord la petite coupure": "Une petite égratignure sans gravité ne prime pas sur une obstruction respiratoire."
+    },
+    "references": [
+      "https://www.who.int/tools/triage"
+    ],
+    "takeaway": "Une obstruction des voies aériennes menace immédiatement la vie et prime au triage.",
+    "explanations": [
+      "Au triage, les menaces vitales immédiates ont priorité."
+    ]
+  },
+  {
+    "correct": "maintenir un système fermé, hygiène appropriée et poche sous le niveau de la vessie",
+    "i": 70,
+    "indices": [
+      71
+    ],
+    "map": {
+      "déconnecter souvent le système": "Les déconnexions répétées ouvrent une voie de contamination.",
+      "irriguer sans indication": "Une irrigation sans indication ajoute des manipulations et n’est pas une mesure préventive systématique.",
+      "maintenir un système fermé, hygiène appropriée et poche sous le niveau de la vessie": "Le système fermé limite les contaminations ; la poche située sous la vessie favorise l’écoulement sans reflux.",
+      "poser la poche sur le lit au-dessus de la vessie": "Une poche trop haute favorise le reflux vers la vessie."
+    },
+    "references": [
+      "https://www.cdc.gov/infection-control/hcp/cauti/summary-of-recommendations.html"
+    ],
+    "takeaway": "Le système fermé limite les contaminations ; la poche située sous la vessie favorise l’écoulement sans reflux.",
+    "explanations": [
+      "Ces mesures réduisent le risque d’infection et favorisent un drainage correct."
+    ]
+  },
+  {
+    "correct": "organiser une évaluation obstétricale urgente et appliquer les mesures de sécurité prescrites",
+    "i": 71,
+    "indices": [
+      72
+    ],
+    "map": {
+      "attendre plusieurs jours": "Attendre plusieurs jours expose à une complication materno-fœtale grave.",
+      "encourager l’exercice intense": "L’exercice intense ne traite pas cette urgence.",
+      "organiser une évaluation obstétricale urgente et appliquer les mesures de sécurité prescrites": "Pendant la grossesse, hypertension sévère, céphalées et troubles visuels font suspecter une pré-éclampsie sévère nécessitant une évaluation urgente.",
+      "renvoyer sans surveillance": "Un retour sans surveillance ne répond pas aux signes de gravité."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+    ],
+    "takeaway": "Pendant la grossesse, hypertension sévère, céphalées et troubles visuels font suspecter une pré-éclampsie sévère nécessitant une évaluation urgente.",
+    "explanations": [
+      "Ces signes peuvent annoncer une pré-éclampsie sévère et des complications neurologiques."
+    ]
+  },
+  {
+    "correct": "surveiller bilan hydrique, poids, signes vitaux et signaler l’aggravation",
+    "i": 72,
+    "indices": [
+      73
+    ],
+    "map": {
+      "encourager des litres d’eau sans prescription": "Un apport massif non prescrit peut aggraver une surcharge hydrique.",
+      "ignorer la diurèse": "La diurèse est une donnée essentielle pour repérer une aggravation.",
+      "mesurer seulement la taille": "La taille seule ne mesure pas les variations rapides de rétention hydrique.",
+      "surveiller bilan hydrique, poids, signes vitaux et signaler l’aggravation": "Oligurie, œdèmes et prise de poids rapide imposent de quantifier les entrées-sorties et de rechercher une aggravation rénale ou circulatoire."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng148/chapter/Recommendations"
+    ],
+    "takeaway": "Oligurie, œdèmes et prise de poids rapide imposent de quantifier les entrées-sorties et de rechercher une aggravation rénale ou circulatoire.",
+    "explanations": [
+      "Ces signes peuvent refléter une rétention hydrosodée ou une altération rénale."
+    ]
+  },
+  {
+    "correct": "reconnaître son expérience sans confirmer les voix et évaluer le risque de passage à l’acte",
+    "i": 73,
+    "indices": [
+      74
+    ],
+    "map": {
+      "confirmer que les voix sont réelles": "Confirmer les voix renforce l’expérience hallucinatoire plutôt que de soutenir un repérage de la réalité.",
+      "ignorer le contenu des voix": "Le contenu peut révéler des ordres dangereux pour le patient ou pour autrui.",
+      "reconnaître son expérience sans confirmer les voix et évaluer le risque de passage à l’acte": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+      "se moquer": "La moquerie rompt la confiance et peut augmenter la détresse."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK616969/"
+    ],
+    "takeaway": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+    "explanations": [
+      "Il faut éviter de renforcer l’hallucination tout en évaluant la sécurité."
+    ]
+  },
+  {
+    "correct": "surveiller poids, abdomen, bilan hydrique et état respiratoire",
+    "i": 74,
+    "indices": [
+      75
+    ],
+    "map": {
+      "administrer du sel supplémentaire": "Un apport supplémentaire de sel peut favoriser la rétention hydrosodée.",
+      "encourager l’alcool": "Encourager l’alcool n’est pas une réponse thérapeutique et peut aggraver une maladie hépatique.",
+      "ignorer la confusion": "Une confusion peut révéler une complication importante et doit être évaluée.",
+      "surveiller poids, abdomen, bilan hydrique et état respiratoire": "L’évolution du poids, de l’abdomen, des entrées-sorties et de la respiration aide à évaluer une accumulation liquidienne."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK470482/"
+    ],
+    "takeaway": "L’évolution du poids, de l’abdomen, des entrées-sorties et de la respiration aide à évaluer une accumulation liquidienne.",
+    "explanations": [
+      "L’ascite et la rétention hydrique nécessitent une surveillance clinique structurée."
+    ]
+  },
+  {
+    "correct": "respecter l’hygiène des mains et la technique aseptique indiquée",
+    "i": 75,
+    "indices": [
+      76
+    ],
+    "map": {
+      "respecter l’hygiène des mains et la technique aseptique indiquée": "L’hygiène des mains et la technique aseptique limitent la contamination de la plaie.",
+      "réutiliser du matériel tombé au sol": "Un matériel tombé au sol est contaminé et doit être remplacé.",
+      "réutiliser une compresse souillée": "Une compresse souillée peut transférer des microbes vers la plaie.",
+      "toucher la plaie à mains nues": "Les mains nues risquent de contaminer la plaie."
+    },
+    "references": [
+      "https://www.cdc.gov/clean-hands/hcp/clinical-safety/index.html"
+    ],
+    "takeaway": "L’hygiène des mains et la technique aseptique limitent la contamination de la plaie.",
+    "explanations": [
+      "L’asepsie et l’hygiène des mains réduisent le risque d’infection associée aux soins."
+    ]
+  },
+  {
+    "correct": "reconnaître une hémorragie du postpartum possible et déclencher la prise en charge urgente",
+    "i": 76,
+    "indices": [
+      77
+    ],
+    "map": {
+      "attendre une heure": "Attendre une heure laisse progresser une hémorragie potentiellement grave.",
+      "donner seulement de l’eau": "De l’eau seule ne contrôle ni le saignement ni une éventuelle instabilité circulatoire.",
+      "faire marcher la patiente": "Faire marcher une patiente qui saigne expose au malaise et retarde les soins.",
+      "reconnaître une hémorragie du postpartum possible et déclencher la prise en charge urgente": "Après l’accouchement, un saignement abondant avec utérus mou évoque une atonie et impose une prise en charge urgente de l’hémorragie."
+    },
+    "references": [
+      "https://www.who.int/publications/i/item/9789240115637"
+    ],
+    "takeaway": "Après l’accouchement, un saignement abondant avec utérus mou évoque une atonie et impose une prise en charge urgente de l’hémorragie.",
+    "explanations": [
+      "L’atonie utérine est une cause majeure d’hémorragie du postpartum et nécessite une action rapide."
+    ]
+  },
+  {
+    "correct": "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente",
+    "i": 77,
+    "indices": [
+      78
+    ],
+    "map": {
+      "donner à boire pendant la crise": "Boire pendant une convulsion expose à une fausse route.",
+      "la laisser seule": "La patiente nécessite une surveillance continue et une aide urgente.",
+      "mettre un objet dans la bouche": "Un objet dans la bouche peut blesser ou obstruer les voies aériennes.",
+      "protéger la patiente, soutenir ABC et déclencher la prise en charge obstétricale urgente": "Une convulsion chez une femme enceinte hypertendue fait suspecter une éclampsie : protéger la patiente et soutenir voies aériennes, respiration et circulation sont prioritaires."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng133/chapter/recommendations"
+    ],
+    "takeaway": "Déclencher l’aide obstétricale urgente et préparer les traitements prescrits sans retarder le soutien vital.",
+    "explanations": [
+      "L’éclampsie est une urgence maternelle nécessitant sécurité, soutien vital et traitement rapide."
+    ]
+  },
+  {
+    "correct": "utiliser une question ouverte et une attitude calme pour explorer ses préoccupations",
+    "i": 78,
+    "indices": [
+      79
+    ],
+    "map": {
+      "dire « calmez-vous »": "Une injonction seule n’aide pas à exprimer ni à comprendre l’inquiétude.",
+      "minimiser ses émotions": "Minimiser les émotions peut faire sentir au patient qu’il n’est pas entendu.",
+      "quitter la pièce sans explication": "Partir sans explication peut accentuer l’insécurité et rompre la relation.",
+      "utiliser une question ouverte et une attitude calme pour explorer ses préoccupations": "Une écoute calme avec questions ouvertes aide à comprendre les préoccupations et à diminuer la tension."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK590036/"
+    ],
+    "takeaway": "Une écoute calme avec questions ouvertes aide à comprendre les préoccupations et à diminuer la tension.",
+    "explanations": [
+      "L’écoute active et les questions ouvertes favorisent l’expression et l’évaluation."
+    ]
+  },
+  {
+    "correct": "évaluer rapidement l’état général, les signes vitaux et rechercher des signes de gravité",
+    "i": 79,
+    "indices": [
+      80
+    ],
+    "map": {
+      "faire un bain glacé prolongé": "Un bain glacé ne traite pas la cause et peut provoquer des effets indésirables.",
+      "ignorer la perfusion": "Une mauvaise perfusion est un signe d’alerte à rechercher et surveiller.",
+      "se fier uniquement au chiffre de température": "La température seule ne mesure pas la gravité de l’état circulatoire ou neurologique.",
+      "évaluer rapidement l’état général, les signes vitaux et rechercher des signes de gravité": "La fièvre avec léthargie et mauvaise perfusion nécessite une évaluation urgente de l’ensemble des signes de gravité."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng143/chapter/recommendations"
+    ],
+    "takeaway": "La fièvre avec léthargie et mauvaise perfusion nécessite une évaluation urgente de l’ensemble des signes de gravité.",
+    "explanations": [
+      "L’état général et la perfusion sont essentiels pour reconnaître un enfant gravement malade."
+    ]
+  },
+  {
+    "correct": "évaluer systématiquement la douleur, intervenir selon prescription puis réévaluer",
+    "i": 80,
+    "indices": [
+      81
+    ],
+    "map": {
+      "attendre plusieurs heures": "Attendre plusieurs heures prolonge une douleur non soulagée et peut retarder le diagnostic.",
+      "dire que la douleur est normale": "Banaliser une douleur intense empêche de répondre au besoin et de rechercher sa cause.",
+      "documenter sans intervenir": "Documenter est nécessaire mais ne remplace pas l’intervention clinique.",
+      "évaluer systématiquement la douleur, intervenir selon prescription puis réévaluer": "Une douleur importante doit être caractérisée, traitée selon prescription puis réévaluée pour mesurer l’effet et rechercher une complication."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK2658/"
+    ],
+    "takeaway": "Une douleur importante doit être caractérisée, traitée selon prescription puis réévaluée pour mesurer l’effet et rechercher une complication.",
+    "explanations": [
+      "L’évaluation et la réévaluation de la douleur permettent de juger l’efficacité des interventions."
+    ]
+  },
+  {
+    "correct": "réduire les stimuli, garder une distance sûre, parler calmement et demander du renfort si nécessaire",
+    "i": 81,
+    "indices": [
+      82
+    ],
+    "map": {
+      "bloquer seul toutes les sorties": "Bloquer seul les sorties peut accroître la tension et compromettre la sécurité du soignant.",
+      "crier plus fort que lui": "Crier peut accentuer l’agitation.",
+      "le provoquer": "La provocation augmente la perception de menace.",
+      "réduire les stimuli, garder une distance sûre, parler calmement et demander du renfort si nécessaire": "Une approche calme, non provocante, avec distance sûre et renfort si nécessaire limite l’escalade."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng10/chapter/recommendations"
+    ],
+    "takeaway": "Une approche calme, non provocante, avec distance sûre et renfort si nécessaire limite l’escalade.",
+    "explanations": [
+      "La désescalade et la sécurité sont prioritaires lors d’une agitation croissante."
+    ]
+  },
+  {
+    "correct": "évaluer le degré de déshydratation et commencer la réhydratation appropriée",
+    "i": 82,
+    "indices": [
+      83
+    ],
+    "map": {
+      "arrêter tous les liquides": "Supprimer les liquides aggrave les pertes non compensées.",
+      "attendre plusieurs jours": "Attendre plusieurs jours peut laisser s’aggraver la déshydratation.",
+      "donner uniquement une boisson gazeuse": "Une boisson gazeuse n’a pas la composition adaptée d’une solution de réhydratation orale.",
+      "évaluer le degré de déshydratation et commencer la réhydratation appropriée": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Yeux enfoncés, sécheresse et baisse des urines orientent vers une déshydratation à évaluer pour choisir la réhydratation adaptée.",
+    "explanations": [
+      "La diarrhée peut entraîner rapidement une déshydratation chez l’enfant."
+    ]
+  },
+  {
+    "correct": "suspecter une infection et organiser une évaluation rapide",
+    "i": 83,
+    "indices": [
+      84
+    ],
+    "map": {
+      "considérer cela toujours normal": "Cette association n’est pas un changement postpartum à banaliser.",
+      "faire un effort physique intense": "Un effort intense ne traite pas l’infection et peut aggraver la fatigue.",
+      "retarder l’évaluation plusieurs jours": "Un délai peut laisser progresser l’infection.",
+      "suspecter une infection et organiser une évaluation rapide": "Fièvre, douleur utérine et lochies malodorantes après l’accouchement font suspecter une infection et nécessitent une évaluation rapide."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng194/chapter/Recommendations"
+    ],
+    "takeaway": "Fièvre, douleur utérine et lochies malodorantes après l’accouchement font suspecter une infection et nécessitent une évaluation rapide.",
+    "explanations": [
+      "La fièvre et les lochies malodorantes postpartum peuvent indiquer une infection."
+    ]
+  },
+  {
+    "correct": "évaluer selon le protocole de malnutrition et rechercher les signes nécessitant une prise en charge urgente",
+    "i": 84,
+    "indices": [
+      85
+    ],
+    "map": {
+      "donner n’importe quel repas en grande quantité immédiatement": "Une réalimentation excessive non évaluée peut entraîner des complications ; elle doit être adaptée et surveillée.",
+      "faire faire un exercice intense": "Un exercice intense augmente les besoins d’un organisme déjà fragilisé.",
+      "ignorer les œdèmes": "Les œdèmes sont une donnée importante, pas un signe à négliger.",
+      "évaluer selon le protocole de malnutrition et rechercher les signes nécessitant une prise en charge urgente": "Un amaigrissement sévère ou des œdèmes bilatéraux nécessitent une évaluation structurée de la malnutrition et de ses complications."
+    },
+    "references": [
+      "https://www.who.int/publications/i/item/9789240082830"
+    ],
+    "takeaway": "Un amaigrissement sévère ou des œdèmes bilatéraux nécessitent une évaluation structurée de la malnutrition et de ses complications.",
+    "explanations": [
+      "La malnutrition aiguë sévère avec complications nécessite une évaluation et une prise en charge structurées."
+    ]
+  },
+  {
+    "correct": "installer en position semi-assise, évaluer la respiration et appliquer les mesures prescrites",
+    "i": 85,
+    "indices": [
+      86
+    ],
+    "map": {
+      "augmenter immédiatement les liquides": "Des apports hydriques augmentés sans indication peuvent aggraver la congestion.",
+      "encourager un effort physique": "L’effort accroît les besoins en oxygène pendant la détresse.",
+      "installer en position semi-assise, évaluer la respiration et appliquer les mesures prescrites": "L’orthopnée et les crépitants avec dyspnée croissante évoquent une congestion : faciliter la respiration et évaluer l’oxygénation sont prioritaires.",
+      "placer à plat sans évaluation": "La position à plat peut majorer l’orthopnée."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg187/chapter/Recommendations"
+    ],
+    "takeaway": "L’orthopnée et les crépitants avec dyspnée croissante évoquent une congestion : faciliter la respiration et évaluer l’oxygénation sont prioritaires.",
+    "explanations": [
+      "La position redressée et l’évaluation respiratoire peuvent réduire le travail ventilatoire et guider la prise en charge."
+    ]
+  },
+  {
+    "correct": "protéger des blessures, dégager l’environnement et maintenir la sécurité des voies aériennes",
+    "i": 86,
+    "indices": [
+      87
+    ],
+    "map": {
+      "donner à boire pendant la crise": "Donner à boire pendant la crise expose à une fausse route.",
+      "immobiliser fortement les membres": "Une contention forcée peut provoquer des blessures sans arrêter la crise.",
+      "introduire un objet dans la bouche": "Un objet dans la bouche peut blesser ou obstruer les voies aériennes.",
+      "protéger des blessures, dégager l’environnement et maintenir la sécurité des voies aériennes": "Pendant une convulsion, prévenir les blessures et maintenir la sécurité respiratoire sont les priorités immédiates."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/seizures"
+    ],
+    "takeaway": "Pendant une convulsion, prévenir les blessures et maintenir la sécurité respiratoire sont les priorités immédiates.",
+    "explanations": [
+      "La priorité est de prévenir les blessures et de soutenir les fonctions vitales sans mettre d’objet en bouche."
+    ]
+  },
+  {
+    "correct": "appeler de l’aide immédiatement et appliquer les mesures visant à réduire la compression du cordon",
+    "i": 87,
+    "indices": [
+      88
+    ],
+    "map": {
+      "appeler de l’aide immédiatement et appliquer les mesures visant à réduire la compression du cordon": "La compression du cordon peut interrompre les échanges fœtaux ; alerter et appliquer immédiatement le protocole est prioritaire.",
+      "attendre les contractions suivantes": "L’attente prolonge le risque de manque d’oxygène fœtal.",
+      "faire marcher la patiente": "La marche ne lève pas de façon sûre la compression et retarde les mesures urgentes.",
+      "repousser brutalement le cordon": "Une manipulation brutale peut léser le cordon ou provoquer un spasme vasculaire."
+    },
+    "references": [
+      "https://www.rcog.org.uk/guidance/browse-all-guidance/green-top-guidelines/umbilical-cord-prolapse-green-top-guideline-no-50/"
+    ],
+    "takeaway": "La compression du cordon peut interrompre les échanges fœtaux ; alerter et appliquer immédiatement le protocole est prioritaire.",
+    "explanations": [
+      "La procidence du cordon menace rapidement l’oxygénation fœtale."
+    ]
+  },
+  {
+    "correct": "surveiller les modifications cervicales, la descente fœtale, les contractions et le bien-être materno-fœtal",
+    "i": 88,
+    "indices": [
+      89
+    ],
+    "map": {
+      "ignorer le rythme fœtal": "Ignorer le rythme fœtal peut faire manquer une anomalie.",
+      "mesurer uniquement la taille maternelle": "La taille maternelle seule ne mesure pas la progression du travail.",
+      "surveiller les modifications cervicales, la descente fœtale, les contractions et le bien-être materno-fœtal": "Les modifications cervicales et la descente renseignent sur la progression ; contractions et état materno-fœtal complètent la surveillance.",
+      "évaluer seulement la couleur des yeux": "La couleur des yeux ne renseigne pas sur le travail."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng235/chapter/Recommendations"
+    ],
+    "takeaway": "Les modifications cervicales et la descente renseignent sur la progression ; contractions et état materno-fœtal complètent la surveillance.",
+    "explanations": [
+      "La progression du travail s’évalue avec les données maternelles, fœtales et cervicales pertinentes."
+    ]
+  },
+  {
+    "correct": "garder liquides chauds, flammes et ustensiles dangereux hors de portée",
+    "i": 89,
+    "indices": [
+      90
+    ],
+    "map": {
+      "garder liquides chauds, flammes et ustensiles dangereux hors de portée": "Mettre les sources de chaleur et les récipients dangereux hors de portée réduit les expositions évitables.",
+      "laisser les casseroles au bord": "Une casserole au bord peut être renversée ou tirée par l’enfant.",
+      "laisser l’enfant seul près du feu": "L’absence de surveillance près d’une flamme augmente le risque de brûlure.",
+      "mettre l’eau bouillante au sol": "L’eau bouillante au sol est directement accessible à l’enfant."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/burns"
+    ],
+    "takeaway": "Mettre les sources de chaleur et les récipients dangereux hors de portée réduit les expositions évitables.",
+    "explanations": [
+      "La réduction de l’exposition aux sources de chaleur prévient de nombreuses brûlures."
+    ]
+  },
+  {
+    "correct": "évaluer l’oxygénation, les signes vitaux et appliquer les soins prescrits",
+    "i": 90,
+    "indices": [
+      91
+    ],
+    "map": {
+      "faire marcher malgré la détresse": "La marche en détresse augmente les besoins en oxygène.",
+      "ignorer la saturation": "Ignorer la saturation fait perdre un indicateur important de l’oxygénation.",
+      "supprimer toute hydratation": "Supprimer toute hydratation sans indication peut aggraver un déficit hydrique.",
+      "évaluer l’oxygénation, les signes vitaux et appliquer les soins prescrits": "Tachypnée et baisse de saturation nécessitent une évaluation respiratoire et les soins prescrits sans délai."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK591819/"
+    ],
+    "takeaway": "Tachypnée et baisse de saturation nécessitent une évaluation respiratoire et les soins prescrits sans délai.",
+    "explanations": [
+      "La surveillance respiratoire permet de détecter rapidement une aggravation."
+    ]
+  },
+  {
+    "correct": "vérifier les allergies et surveiller les signes de réaction indésirable",
+    "i": 91,
+    "indices": [
+      92
+    ],
+    "map": {
+      "arrêter chaque antibiotique dès amélioration sans prescription": "L’arrêt ne doit pas être automatique après une dose ; il dépend de l’évaluation et de la prescription.",
+      "ignorer toute éruption": "Une éruption peut signaler une réaction médicamenteuse et doit être évaluée.",
+      "partager les doses entre patients": "Une dose est prescrite pour un patient donné, pas partagée.",
+      "vérifier les allergies et surveiller les signes de réaction indésirable": "Avant et après un antibiotique, rechercher les allergies et surveiller les réactions contribue à sécuriser le traitement."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg183/chapter/Recommendations"
+    ],
+    "takeaway": "Avant et après un antibiotique, rechercher les allergies et surveiller les réactions contribue à sécuriser le traitement.",
+    "explanations": [
+      "La vérification des allergies et la surveillance des réactions sont des éléments de sécurité médicamenteuse."
+    ]
+  },
+  {
+    "correct": "vérifier la glycémie et la disponibilité du repas selon le plan thérapeutique",
+    "i": 92,
+    "indices": [
+      93
+    ],
+    "map": {
+      "administrer sans connaître la glycémie": "L’absence de contrôle requis peut faire administrer une dose inadaptée à la situation.",
+      "doubler la dose si le patient a faim": "La faim seule ne justifie jamais de doubler une dose.",
+      "retarder le repas plusieurs heures après la dose": "Un repas très retardé après l’insuline rapide expose à l’hypoglycémie.",
+      "vérifier la glycémie et la disponibilité du repas selon le plan thérapeutique": "La glycémie et la disponibilité du repas permettent de sécuriser l’insuline rapide selon le plan thérapeutique."
+    },
+    "references": [
+      "https://www.nhs.uk/medicines/insulin/rapid-acting-insulin/how-and-when-to-take-rapid-acting-insulin/"
+    ],
+    "takeaway": "La glycémie et la disponibilité du repas permettent de sécuriser l’insuline rapide selon le plan thérapeutique.",
+    "explanations": [
+      "Le lien entre glycémie, repas et insuline rapide est essentiel à la sécurité."
+    ]
+  },
+  {
+    "correct": "sécher rapidement et favoriser le peau-à-peau si l’état le permet",
+    "i": 93,
+    "indices": [
+      94
+    ],
+    "map": {
+      "le baigner immédiatement à l’eau froide": "Un bain froid accentue le refroidissement.",
+      "le laisser mouillé": "L’humidité favorise les pertes de chaleur par évaporation.",
+      "le placer devant un courant d’air": "Un courant d’air augmente les pertes de chaleur.",
+      "sécher rapidement et favoriser le peau-à-peau si l’état le permet": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur."
+    },
+    "references": [
+      "https://www.who.int/westernpacific/newsroom/feature-stories/item/skin-to-skin-contact-helps-newborns-breastfeed"
+    ],
+    "takeaway": "Sécher le nouveau-né et favoriser le peau-à-peau surveillé, si son état le permet, limitent les pertes de chaleur.",
+    "explanations": [
+      "Le séchage et le peau-à-peau réduisent les pertes thermiques."
+    ]
+  },
+  {
+    "correct": "suspecter une hémorragie, évaluer rapidement et alerter",
+    "i": 94,
+    "indices": [
+      95
+    ],
+    "map": {
+      "attendre le repas": "L’attente peut laisser s’aggraver une défaillance circulatoire.",
+      "donner un laxatif": "Un laxatif ne traite pas l’instabilité hémodynamique.",
+      "faire lever seul": "Un lever sans assistance expose au malaise et à la chute.",
+      "suspecter une hémorragie, évaluer rapidement et alerter": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-internal"
+    ],
+    "takeaway": "Après chirurgie, pâleur, tachycardie et hypotension font rechercher un saignement ou une autre cause de choc.",
+    "explanations": [
+      "Le tableau suggère une perte sanguine postopératoire potentiellement grave."
+    ]
+  },
+  {
+    "correct": "noter l’heure de début/dernière fois normale et déclencher l’évaluation urgente",
+    "i": 95,
+    "indices": [
+      96
+    ],
+    "map": {
+      "donner à boire immédiatement": "Boire avant la vérification de la déglutition peut entraîner une fausse route.",
+      "faire marcher sans aide": "La marche sans aide expose à une chute.",
+      "laisser dormir plusieurs heures": "Laisser dormir retarde une prise en charge sensible au temps.",
+      "noter l’heure de début/dernière fois normale et déclencher l’évaluation urgente": "Un déficit neurologique soudain impose de noter le début ou la dernière fois normale et de déclencher l’évaluation urgente."
+    },
+    "references": [
+      "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+    ],
+    "takeaway": "Un déficit neurologique soudain impose de noter le début ou la dernière fois normale et de déclencher l’évaluation urgente.",
+    "explanations": [
+      "Le temps de début des symptômes est essentiel dans l’évaluation d’un AVC aigu."
+    ]
+  },
+  {
+    "correct": "évaluer immédiatement la respiration et l’oxygénation",
+    "i": 96,
+    "indices": [
+      97
+    ],
+    "map": {
+      "attendre sans surveillance": "Attendre sans surveillance peut faire manquer une dégradation.",
+      "donner un repas forcé": "Un repas forcé peut accroître la fatigue et provoquer une fausse route.",
+      "laisser pleurer longtemps": "Laisser pleurer longtemps ne traite pas la gêne respiratoire.",
+      "évaluer immédiatement la respiration et l’oxygénation": "Tirage, geignement et difficulté à s’alimenter imposent une évaluation immédiate de la respiration."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Observation_and_continuous_monitoring/"
+    ],
+    "takeaway": "Tirage, geignement et difficulté à s’alimenter imposent une évaluation immédiate de la respiration.",
+    "explanations": [
+      "Le tirage et les difficultés alimentaires peuvent signaler une détresse respiratoire importante."
+    ]
+  },
+  {
+    "correct": "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul",
+    "i": 97,
+    "indices": [
+      98
+    ],
+    "map": {
+      "estimer la dose selon l’âge seulement": "L’âge seul ne remplace pas le poids dans une prescription en mg/kg.",
+      "ignorer l’unité de mesure": "Une erreur d’unité peut entraîner une erreur majeure de dose.",
+      "utiliser le poids du parent": "Le poids du parent n’est pas celui du patient traité.",
+      "utiliser un poids actuel fiable en kilogrammes et vérifier le calcul": "Pour une prescription en mg/kg, le poids actuel fiable en kilogrammes est la base du calcul à vérifier."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK593207/"
+    ],
+    "takeaway": "Pour une prescription en mg/kg, le poids actuel fiable en kilogrammes est la base du calcul à vérifier.",
+    "explanations": [
+      "Les doses pédiatriques doivent être calculées avec précision à partir du poids lorsqu’elles sont prescrites en mg/kg."
+    ]
+  },
+  {
+    "correct": "prioriser l’évaluation des voies aériennes et de la respiration",
+    "i": 98,
+    "indices": [
+      99
+    ],
+    "map": {
+      "appliquer de la glace directement sur toute la brûlure": "La glace sur une grande surface peut léser les tissus et favoriser l’hypothermie.",
+      "donner un repas avant l’évaluation": "L’alimentation retarde l’évaluation d’une menace respiratoire et peut être inadaptée.",
+      "percer les cloques": "Percer les cloques ne traite pas l’inhalation et expose la plaie à la contamination.",
+      "prioriser l’évaluation des voies aériennes et de la respiration": "Une brûlure avec suspicion d’inhalation peut menacer rapidement les voies aériennes : l’évaluation respiratoire prime."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/burns"
+    ],
+    "takeaway": "Une brûlure avec suspicion d’inhalation peut menacer rapidement les voies aériennes : l’évaluation respiratoire prime.",
+    "explanations": [
+      "Les signes d’inhalation font craindre un œdème des voies aériennes."
+    ]
+  },
+  {
+    "correct": "vérifier les données cliniques et biologiques, notamment le potassium, et signaler",
+    "i": 99,
+    "indices": [
+      100
+    ],
+    "map": {
+      "donner du potassium sans prescription": "Donner du potassium sans connaître la situation et sans prescription peut être dangereux.",
+      "encourager un effort intense": "L’effort intense peut aggraver une mauvaise tolérance cardiaque.",
+      "ignorer le rythme": "Un rythme irrégulier doit être évalué, pas ignoré.",
+      "vérifier les données cliniques et biologiques, notamment le potassium, et signaler": "Faiblesse musculaire et rythme irrégulier sous diurétique imposent de vérifier les données cliniques et biologiques, notamment les électrolytes."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK557838/"
+    ],
+    "takeaway": "Faiblesse musculaire et rythme irrégulier sous diurétique imposent de vérifier les données cliniques et biologiques, notamment les électrolytes.",
+    "explanations": [
+      "Les troubles du potassium peuvent provoquer faiblesse et arythmies."
+    ]
+  },
+  {
+    "correct": "évaluer ABC, signes vitaux, douleur et alerter rapidement l’équipe",
+    "i": 100,
+    "indices": [
+      102
+    ],
+    "map": {
+      "attendre une heure avant de réévaluer": "L’attente retarde le diagnostic et le traitement.",
+      "donner un repas copieux": "Un repas ne traite pas la cause et n’est pas prioritaire.",
+      "faire marcher le patient pour tester sa tolérance": "Un effort volontaire peut aggraver une ischémie.",
+      "évaluer ABC, signes vitaux, douleur et alerter rapidement l’équipe": "Une douleur thoracique avec sueurs et nausées peut traduire une urgence coronarienne : évaluer les fonctions vitales et alerter."
+    },
+    "references": [
+      "https://www.heart.org/en/health-topics/heart-attack/warning-signs-of-a-heart-attack"
+    ],
+    "takeaway": "Une douleur thoracique avec sueurs et nausées peut traduire une urgence coronarienne : évaluer les fonctions vitales et alerter.",
+    "explanations": [
+      "Un syndrome coronarien aigu doit être envisagé; l’évaluation et l’alerte rapides sont prioritaires."
+    ]
+  },
+  {
+    "correct": "évaluer la gravité respiratoire et administrer le traitement prescrit sans délai",
+    "i": 101,
+    "indices": [
+      103
+    ],
+    "map": {
+      "attendre la disparition spontanée": "Attendre peut laisser s’aggraver l’obstruction.",
+      "demander au patient de courir": "Courir accroît les besoins respiratoires.",
+      "faire boire beaucoup avant toute évaluation": "Faire boire avant l’évaluation retarde les soins et peut être mal toléré.",
+      "évaluer la gravité respiratoire et administrer le traitement prescrit sans délai": "Une dyspnée avec difficulté à parler traduit une gêne importante : apprécier la gravité et administrer le traitement prescrit sans délai."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/asthma-attack"
+    ],
+    "takeaway": "Une dyspnée avec difficulté à parler traduit une gêne importante : apprécier la gravité et administrer le traitement prescrit sans délai.",
+    "explanations": [
+      "Une exacerbation sévère peut rapidement compromettre la ventilation."
+    ]
+  },
+  {
+    "correct": "évaluer ABC, signes de choc et alerter immédiatement",
+    "i": 102,
+    "indices": [
+      104
+    ],
+    "map": {
+      "attendre le prochain service": "Attendre au lendemain peut laisser progresser une hémorragie.",
+      "donner un repas solide": "Un repas copieux ne traite pas le saignement et peut retarder les soins.",
+      "faire marcher le patient": "Faire marcher un patient potentiellement instable expose au malaise.",
+      "évaluer ABC, signes de choc et alerter immédiatement": "Méléna ou hématémèse avec faiblesse font rechercher une hémorragie digestive et son retentissement circulatoire."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/digestive-diseases/gastrointestinal-bleeding/symptoms-causes"
+    ],
+    "takeaway": "Méléna ou hématémèse avec faiblesse font rechercher une hémorragie digestive et son retentissement circulatoire.",
+    "explanations": [
+      "Une hémorragie digestive peut provoquer une instabilité hémodynamique."
+    ]
+  },
+  {
+    "correct": "évaluer l’état clinique, l’hydratation et rechercher des signes de décompensation",
+    "i": 103,
+    "indices": [
+      105
+    ],
+    "map": {
+      "donner systématiquement du sucre": "Le sucre systématique ne traite pas une hyperglycémie.",
+      "faire jeûner sans surveillance": "Un jeûne non surveillé ne remplace pas l’évaluation et le traitement.",
+      "ignorer l’état neurologique": "Une altération neurologique peut indiquer une complication grave.",
+      "évaluer l’état clinique, l’hydratation et rechercher des signes de décompensation": "Une glycémie très élevée avec polyurie et soif nécessite d’évaluer l’hydratation et les signes de décompensation."
+    },
+    "references": [
+      "https://www.nhs.uk/conditions/high-blood-sugar-hyperglycaemia/"
+    ],
+    "takeaway": "Une glycémie très élevée avec polyurie et soif nécessite d’évaluer l’hydratation et les signes de décompensation.",
+    "explanations": [
+      "Une hyperglycémie importante peut évoluer vers une urgence métabolique."
+    ]
+  },
+  {
+    "correct": "donner un glucide à action rapide puis contrôler de nouveau la glycémie",
+    "i": 104,
+    "indices": [
+      106
+    ],
+    "map": {
+      "administrer une dose supplémentaire d’insuline": "L’insuline supplémentaire abaisserait encore la glycémie.",
+      "attendre sans intervenir": "Attendre peut laisser progresser l’hypoglycémie et l’altération neurologique.",
+      "donner un glucide à action rapide puis contrôler de nouveau la glycémie": "Un glucide rapide permet de corriger une hypoglycémie chez un patient éveillé et capable d’avaler sans danger, puis la glycémie doit être contrôlée.",
+      "interdire toute prise orale malgré la conscience": "Une interdiction systématique n’est pas justifiée si la déglutition est sûre ; sinon une autre voie est nécessaire selon protocole."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
+    ],
+    "takeaway": "Vérifier la capacité à avaler : ne rien donner par la bouche en cas de déglutition dangereuse ou de conscience altérée.",
+    "explanations": [
+      "Une hypoglycémie consciente nécessite un glucide rapide suivi d’une réévaluation."
+    ]
+  },
+  {
+    "correct": "corriger la position et favoriser une prise profonde du sein",
+    "i": 105,
+    "indices": [
+      107
+    ],
+    "map": {
+      "arrêter définitivement l’allaitement sans évaluation": "Un arrêt définitif sans évaluation prive la mère d’une correction potentiellement simple.",
+      "corriger la position et favoriser une prise profonde du sein": "Corriger la position et obtenir une prise profonde réduit la compression du mamelon et améliore le transfert de lait.",
+      "faire pincer seulement le mamelon": "Pincer seulement le mamelon entretient la douleur et une prise inefficace.",
+      "réduire toutes les tétées": "Espacer fortement les tétées ne corrige pas la prise et peut nuire au transfert de lait."
+    },
+    "references": [
+      "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/positioning-and-attachment/"
+    ],
+    "takeaway": "Corriger la position et obtenir une prise profonde réduit la compression du mamelon et améliore le transfert de lait.",
+    "explanations": [
+      "Une prise profonde améliore le transfert de lait et réduit les traumatismes du mamelon."
+    ]
+  },
+  {
+    "correct": "arrêter la transfusion et appliquer immédiatement le protocole de réaction transfusionnelle",
+    "i": 106,
+    "indices": [
+      108
+    ],
+    "map": {
+      "arrêter la transfusion et appliquer immédiatement le protocole de réaction transfusionnelle": "Des symptômes nouveaux au début d’une transfusion imposent son arrêt et la mise en œuvre du protocole de réaction.",
+      "augmenter le débit": "Accélérer augmente l’exposition au produit potentiellement responsable.",
+      "continuer jusqu’à la fin": "Poursuivre risque d’aggraver la réaction.",
+      "jeter la poche sans prévenir": "La poche doit être conservée et prise en charge selon protocole pour l’investigation, pas jetée sans avertir."
+    },
+    "references": [
+      "https://www.lifeblood.com.au/health-professionals/clinical-practice/adverse-events/management-of-suspected-reactions"
+    ],
+    "takeaway": "Des symptômes nouveaux au début d’une transfusion imposent son arrêt et la mise en œuvre du protocole de réaction.",
+    "explanations": [
+      "Une réaction transfusionnelle doit être suspectée et la transfusion interrompue selon protocole."
+    ]
+  },
+  {
+    "correct": "appliquer rapidement les précautions et l’évaluation prescrites selon la suspicion clinique",
+    "i": 107,
+    "indices": [
+      109
+    ],
+    "map": {
+      "appliquer rapidement les précautions et l’évaluation prescrites selon la suspicion clinique": "Fièvre, raideur de nuque et céphalée intense font suspecter une infection méningée : évaluation urgente et précautions adaptées sont nécessaires.",
+      "laisser circuler sans précaution": "L’absence de précautions peut exposer d’autres personnes selon l’agent en cause.",
+      "partager le matériel sans désinfection": "Un matériel non désinfecté favorise la transmission.",
+      "retarder l’évaluation": "Le retard peut laisser progresser une infection grave."
+    },
+    "references": [
+      "https://www.cdc.gov/infection-control/hcp/healthcare-personnel-epidemiology-control/meningococcal-disease.html"
+    ],
+    "takeaway": "Fièvre, raideur de nuque et céphalée intense font suspecter une infection méningée : évaluation urgente et précautions adaptées sont nécessaires.",
+    "explanations": [
+      "Une suspicion de méningite nécessite une prise en charge rapide et des précautions adaptées."
+    ]
+  },
+  {
+    "correct": "limiter les manipulations inutiles, évaluer et signaler rapidement",
+    "i": 108,
+    "indices": [
+      110
+    ],
+    "map": {
+      "appliquer une pression forte sans évaluation": "Une compression forte improvisée sans évaluation n’est pas une prise en charge sûre.",
+      "faire courir le patient": "Faire courir le patient n’aide pas à confirmer la cause et retarde les soins.",
+      "limiter les manipulations inutiles, évaluer et signaler rapidement": "Un mollet gonflé et douloureux d’un seul côté fait suspecter une thrombose : évaluer et signaler rapidement, sans massage vigoureux.",
+      "masser vigoureusement le mollet": "Un massage profond du membre suspect de thrombose est à éviter ; il ne remplace pas l’évaluation."
+    },
+    "references": [
+      "https://www.nhs.uk/conditions/deep-vein-thrombosis-dvt/"
+    ],
+    "takeaway": "Un mollet gonflé et douloureux d’un seul côté fait suspecter une thrombose : évaluer et signaler rapidement, sans massage vigoureux.",
+    "explanations": [
+      "Une thrombose veineuse profonde doit être envisagée en raison du risque embolique."
+    ]
+  },
+  {
+    "correct": "Évaluer immédiatement, surveiller les signes vitaux et alerter l’équipe",
+    "i": 109,
+    "indices": [
+      111
+    ],
+    "map": {
+      "Attendre la fin du service": "Attendre la fin du service est incompatible avec une possible urgence.",
+      "Lui donner un laxatif": "Un laxatif ne traite pas une urgence coronarienne.",
+      "Lui proposer de dormir": "Faire dormir retarde l’identification de la cause et la prise en charge.",
+      "Évaluer immédiatement, surveiller les signes vitaux et alerter l’équipe": "Une douleur thoracique oppressive avec sueurs peut être une urgence coronarienne et nécessite une évaluation rapide avec alerte."
+    },
+    "references": [
+      "https://www.heart.org/en/health-topics/heart-attack/warning-signs-of-a-heart-attack"
+    ],
+    "takeaway": "Une douleur thoracique oppressive avec sueurs peut être une urgence coronarienne et nécessite une évaluation rapide avec alerte.",
+    "explanations": [
+      "Ce tableau peut évoquer une urgence coronarienne et nécessite une prise en charge rapide."
+    ]
+  },
+  {
+    "correct": "Administrer un glucide à action rapide par voie orale puis réévaluer",
+    "i": 110,
+    "indices": [
+      112
+    ],
+    "map": {
+      "Administrer davantage d’insuline": "Le jeûne ne corrige pas le manque de glucose.",
+      "Administrer un glucide à action rapide par voie orale puis réévaluer": "Un glucide rapide corrige une hypoglycémie si le patient est suffisamment éveillé et avale sans danger, puis la glycémie est recontrôlée.",
+      "Donner seulement de l’eau": "L’eau seule ne contient pas le glucose nécessaire.",
+      "Le faire jeûner": "L’insuline supplémentaire abaisse encore la glycémie."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/diabetes/overview/preventing-problems/low-blood-glucose-hypoglycemia"
+    ],
+    "takeaway": "Vérifier la sécurité de la déglutition ; sinon utiliser la conduite alternative prévue au protocole.",
+    "explanations": [
+      "Chez un patient conscient, une hypoglycémie se corrige rapidement avec un glucide à action rapide, suivie d’une réévaluation."
+    ]
+  },
+  {
+    "correct": "Hémorragie et état de choc",
+    "i": 111,
+    "indices": [
+      113
+    ],
+    "map": {
+      "Constipation simple": "Une constipation simple n’explique pas ce tableau d’instabilité aiguë.",
+      "Hémorragie et état de choc": "Pâleur, tachycardie et hypotension après chirurgie font rechercher en priorité une hémorragie avec retentissement circulatoire.",
+      "Myopie": "La myopie n’explique pas ces signes circulatoires.",
+      "Otite": "Une otite n’est pas la complication prioritaire évoquée après chirurgie par cette association."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-internal"
+    ],
+    "takeaway": "Pâleur, tachycardie et hypotension après chirurgie font rechercher en priorité une hémorragie avec retentissement circulatoire.",
+    "explanations": [
+      "L’association pâleur, tachycardie et hypotension peut indiquer une perte sanguine importante."
+    ]
+  },
+  {
+    "correct": "L’hygiène des mains aux moments indiqués",
+    "i": 112,
+    "indices": [
+      114
+    ],
+    "map": {
+      "Changer de chaussures après chaque patient": "Changer de chaussures ne remplace pas l’hygiène des mains.",
+      "Fermer toutes les fenêtres": "Fermer les fenêtres ne remplace pas la mesure fondamentale recherchée.",
+      "L’hygiène des mains aux moments indiqués": "L’hygiène des mains aux moments indiqués interrompt la transmission des microbes entre patients et soins.",
+      "Porter une montre supplémentaire": "Une montre supplémentaire ne prévient pas la transmission."
+    },
+    "references": [
+      "https://www.cdc.gov/clean-hands/hcp/clinical-safety/index.html"
+    ],
+    "takeaway": "L’hygiène des mains aux moments indiqués interrompt la transmission des microbes entre patients et soins.",
+    "explanations": [
+      "L’hygiène des mains est une mesure essentielle de prévention des infections associées aux soins."
+    ]
+  },
+  {
+    "correct": "La vaccination",
+    "i": 113,
+    "indices": [
+      115
+    ],
+    "map": {
+      "Dialyse": "La dialyse traite une défaillance rénale existante.",
+      "La dialyse": "La dialyse traite une défaillance rénale existante.",
+      "La rééducation après AVC": "La rééducation vise à limiter les conséquences d’un AVC déjà survenu.",
+      "La vaccination": "La vaccination vise à prévenir une maladie avant son apparition : c’est une prévention primaire.",
+      "Le traitement d’une complication": "Traiter une complication intervient après l’apparition de la maladie.",
+      "Rééducation après AVC": "La rééducation vise à limiter les conséquences d’un AVC déjà survenu.",
+      "Traitement d’une complication": "Traiter une complication intervient après l’apparition de la maladie.",
+      "Vaccination": "La vaccination vise à prévenir une maladie avant son apparition : c’est une prévention primaire."
+    },
+    "references": [
+      "https://www.cdc.gov/vaccines/basics/index.html"
+    ],
+    "takeaway": "La vaccination vise à prévenir une maladie avant son apparition : c’est une prévention primaire.",
+    "explanations": [
+      "La prévention primaire vise à empêcher la maladie avant son apparition."
+    ]
+  },
+  {
+    "correct": "L’heure exacte du début ou la dernière fois où le patient était normal",
+    "i": 114,
+    "indices": [
+      116
+    ],
+    "map": {
+      "L’heure exacte du début ou la dernière fois où le patient était normal": "L’heure de début ou la dernière fois normale aide à déterminer les possibilités de traitement d’un AVC suspecté.",
+      "Sa pointure": "La pointure ne guide pas la prise en charge aiguë.",
+      "Son dernier repas préféré": "La préférence alimentaire ne permet pas de dater le déficit.",
+      "Son groupe sanguin uniquement": "Le groupe sanguin seul n’indique pas depuis quand le déficit est présent."
+    },
+    "references": [
+      "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+    ],
+    "takeaway": "L’heure de début ou la dernière fois normale aide à déterminer les possibilités de traitement d’un AVC suspecté.",
+    "explanations": [
+      "Le délai depuis le début des symptômes influence l’évaluation et les options de prise en charge d’un AVC."
+    ]
+  },
+  {
+    "correct": "Une hémorragie digestive",
+    "i": 115,
+    "indices": [
+      117
+    ],
+    "map": {
+      "Une conjonctivite": "Une conjonctivite ne provoque pas un méléna.",
+      "Une fracture": "Une fracture n’explique pas directement des selles goudronneuses.",
+      "Une hémorragie digestive": "Des selles noires goudronneuses avec faiblesse évoquent un méléna et une possible hémorragie digestive.",
+      "Une otite": "Une otite n’explique pas ce saignement digestif suspecté."
+    },
+    "references": [
+      "https://www.niddk.nih.gov/health-information/digestive-diseases/gastrointestinal-bleeding/symptoms-causes"
+    ],
+    "takeaway": "Des selles noires goudronneuses avec faiblesse évoquent un méléna et une possible hémorragie digestive.",
+    "explanations": [
+      "Le méléna peut traduire un saignement digestif et doit être évalué rapidement."
+    ]
+  },
+  {
+    "correct": "La fréquence et la qualité respiratoires",
+    "i": 116,
+    "indices": [
+      118
+    ],
+    "map": {
+      "Couleur des yeux": "La couleur des yeux ne mesure pas la ventilation.",
+      "Fréquence et qualité respiratoires": "Les opioïdes peuvent déprimer la ventilation : fréquence et qualité respiratoires font partie de la surveillance prioritaire.",
+      "La couleur des yeux": "La couleur des yeux ne mesure pas la ventilation.",
+      "La fréquence et la qualité respiratoires": "Les opioïdes peuvent déprimer la ventilation : fréquence et qualité respiratoires font partie de la surveillance prioritaire.",
+      "La longueur des cheveux": "La longueur des cheveux n’indique pas la tolérance respiratoire.",
+      "La pointure": "La pointure ne renseigne pas sur la ventilation.",
+      "Longueur des ongles": "La longueur des ongles ne mesure pas la ventilation.",
+      "Pointure": "La pointure ne renseigne pas sur la ventilation."
+    },
+    "references": [
+      "https://www.cdc.gov/overdose-prevention/reversing-overdose/about-naloxone.html"
+    ],
+    "takeaway": "Les opioïdes peuvent déprimer la ventilation : fréquence et qualité respiratoires font partie de la surveillance prioritaire.",
+    "explanations": [
+      "Les opioïdes peuvent provoquer une dépression respiratoire."
+    ]
+  },
+  {
+    "correct": "Le poids mesuré dans des conditions comparables",
+    "i": 117,
+    "indices": [
+      119
+    ],
+    "map": {
+      "La couleur des yeux": "La couleur des yeux ne varie pas avec le bilan hydrique.",
+      "La taille une fois par mois": "La taille mensuelle ne suit pas une variation liquidienne quotidienne.",
+      "Le nombre de visiteurs": "Le nombre de visiteurs ne mesure pas la surcharge hydrique.",
+      "Le poids mesuré dans des conditions comparables": "Un poids mesuré dans des conditions comparables aide à repérer les variations quotidiennes de rétention liquidienne."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/cg187/chapter/Recommendations"
+    ],
+    "takeaway": "Un poids mesuré dans des conditions comparables aide à repérer les variations quotidiennes de rétention liquidienne.",
+    "explanations": [
+      "Les variations rapides de poids reflètent souvent les changements du volume hydrique."
+    ]
+  },
+  {
+    "correct": "Évaluer ABC, installer pour faciliter la respiration et appliquer l’oxygène selon protocole/prescription",
+    "i": 118,
+    "indices": [
+      120
+    ],
+    "map": {
+      "Attendre sans réévaluer": "Attendre sans réévaluation peut manquer une aggravation de l’hypoxémie.",
+      "Donner un repas": "Un repas n’est pas prioritaire et peut exposer à une fausse route en pleine détresse.",
+      "Faire marcher le patient": "Marcher augmente les besoins en oxygène et expose au malaise.",
+      "Évaluer ABC, installer pour faciliter la respiration et appliquer l’oxygène selon protocole/prescription": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK591819/"
+    ],
+    "takeaway": "Une saturation basse avec détresse respiratoire impose d’évaluer et soutenir rapidement les voies aériennes et la respiration.",
+    "explanations": [
+      "Une détresse respiratoire impose d’abord l’évaluation et le soutien des voies aériennes et de la respiration."
+    ]
+  },
+  {
+    "correct": "Celui qui présente une obstruction des voies aériennes",
+    "i": 119,
+    "indices": [
+      121
+    ],
+    "map": {
+      "Celui qui a une douleur chronique stable": "Une douleur chronique stable ne présente pas la même urgence immédiate.",
+      "Celui qui a une petite égratignure": "Une petite égratignure sans gravité ne prime pas sur une obstruction respiratoire.",
+      "Celui qui demande un document": "Une demande de document peut attendre.",
+      "Celui qui présente une obstruction des voies aériennes": "Une obstruction des voies aériennes menace immédiatement la respiration et doit être priorisée.",
+      "Un patient avec douleur chronique stable": "Une douleur chronique stable ne présente pas la même urgence immédiate.",
+      "Un patient avec obstruction des voies aériennes": "Une obstruction des voies aériennes menace immédiatement la respiration et doit être priorisée.",
+      "Un patient avec petite égratignure": "Une petite égratignure sans gravité ne prime pas sur une obstruction respiratoire.",
+      "Un patient demandant un certificat": "Une demande de document peut attendre."
+    },
+    "references": [
+      "https://www.who.int/tools/triage"
+    ],
+    "takeaway": "Une obstruction des voies aériennes menace immédiatement la respiration et doit être priorisée.",
+    "explanations": [
+      "Une obstruction des voies aériennes constitue une menace vitale immédiate."
+    ]
+  },
+  {
+    "correct": "Bouche largement ouverte avec prise profonde de l’aréole",
+    "i": 120,
+    "indices": [
+      122
+    ],
+    "map": {
+      "Aucun mouvement de succion": "Sans succion, la prise seule ne permet pas un transfert efficace de lait.",
+      "Bouche largement ouverte avec prise d’une bonne partie de l’aréole": "Une bouche largement ouverte et une prise profonde favorisent une tétée efficace sans compression excessive du mamelon.",
+      "Bouche largement ouverte avec prise profonde de l’aréole": "Une bouche largement ouverte et une prise profonde favorisent une tétée efficace sans compression excessive du mamelon.",
+      "Douleur maternelle intense continue": "Une douleur intense continue peut indiquer une prise inadéquate ou un autre problème à évaluer.",
+      "Il pince seulement le mamelon": "Pincer seulement le mamelon favorise douleur et transfert inefficace.",
+      "La mère ressent une douleur intense continue": "Une douleur intense continue peut indiquer une prise inadéquate ou un autre problème à évaluer."
+    },
+    "references": [
+      "https://www.nhs.uk/baby/breastfeeding-and-bottle-feeding/breastfeeding/positioning-and-attachment/"
+    ],
+    "takeaway": "Une bouche largement ouverte et une prise profonde favorisent une tétée efficace sans compression excessive du mamelon.",
+    "explanations": [
+      "Une prise profonde favorise un transfert efficace du lait et réduit les traumatismes du mamelon."
+    ]
+  },
+  {
+    "correct": "« Dites-moi ce qui vous inquiète le plus. »",
+    "i": 121,
+    "indices": [
+      123
+    ],
+    "map": {
+      "« Arrêtez de vous inquiéter. »": "Une injonction à ne plus s’inquiéter n’aide pas à préciser le besoin.",
+      "« Ce n’est rien. »": "Dire que ce n’est rien banalise l’inquiétude sans l’explorer.",
+      "« Dites-moi ce qui vous inquiète le plus. »": "Inviter le patient à exprimer sa principale inquiétude ouvre un échange et aide à comprendre son anxiété.",
+      "« Vous exagérez. »": "Qualifier sa réaction d’exagérée porte un jugement et freine l’expression."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK590036/"
+    ],
+    "takeaway": "Inviter le patient à exprimer sa principale inquiétude ouvre un échange et aide à comprendre son anxiété.",
+    "explanations": [
+      "Une question ouverte favorise l’expression et l’évaluation des préoccupations."
+    ]
+  },
+  {
+    "correct": "Extrémité froide, pâle, engourdie ou douleur croissante",
+    "i": 122,
+    "indices": [
+      124
+    ],
+    "map": {
+      "Cheveux secs": "Des cheveux secs n’indiquent pas une complication aiguë du membre.",
+      "Extrémité froide, pâle, engourdie ou douleur croissante": "Froid, pâleur, engourdissement ou douleur croissante après immobilisation peuvent signaler une atteinte neurovasculaire.",
+      "Faim normale": "La faim habituelle n’est pas un signe d’atteinte neurovasculaire.",
+      "Sommeil habituel": "Un sommeil habituel ne renseigne pas sur la perfusion distale."
+    },
+    "references": [
+      "https://www.rch.org.au/rchcpg/hospital_clinical_guideline_index/Neurovascular_observations/"
+    ],
+    "takeaway": "Froid, pâleur, engourdissement ou douleur croissante après immobilisation peuvent signaler une atteinte neurovasculaire.",
+    "explanations": [
+      "Ces signes peuvent traduire une atteinte neurovasculaire ou un syndrome de compartiment."
+    ]
+  },
+  {
+    "correct": "Déshydratation",
+    "i": 123,
+    "indices": [
+      125
+    ],
+    "map": {
+      "Déshydratation": "Les pertes digestives associées à des yeux enfoncés, une bouche sèche et peu d’urines évoquent une déshydratation.",
+      "Hypertension": "Une hypertension n’explique pas au mieux cette association de pertes et de signes de déficit hydrique.",
+      "Myopie": "La myopie n’explique pas cette présentation.",
+      "Otite": "Une otite n’explique pas directement les signes de déshydratation."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Les pertes digestives associées à des yeux enfoncés, une bouche sèche et peu d’urines évoquent une déshydratation.",
+    "explanations": [
+      "Ces signes sont compatibles avec une déshydratation dont la gravité doit être évaluée."
+    ]
+  },
+  {
+    "correct": "Garder liquides chauds, flammes et casseroles hors de portée",
+    "i": 124,
+    "indices": [
+      126
+    ],
+    "map": {
+      "Garder liquides chauds, flammes et casseroles hors de portée": "Mettre les sources de chaleur et les récipients dangereux hors de portée réduit les expositions évitables.",
+      "Laisser les casseroles au bord": "Une casserole au bord peut être renversée ou tirée par l’enfant.",
+      "Laisser l’enfant jouer près du feu": "L’absence de surveillance près d’une flamme augmente le risque de brûlure.",
+      "Mettre l’eau bouillante au sol": "L’eau bouillante au sol est directement accessible à l’enfant."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/burns"
+    ],
+    "takeaway": "Mettre les sources de chaleur et les récipients dangereux hors de portée réduit les expositions évitables.",
+    "explanations": [
+      "Éloigner les sources de chaleur réduit le risque de brûlure."
+    ]
+  },
+  {
+    "correct": "Reconnaître son vécu sans confirmer les voix et évaluer la sécurité",
+    "i": 125,
+    "indices": [
+      127
+    ],
+    "map": {
+      "Confirmer que les voix sont réelles": "Confirmer les voix renforce l’expérience hallucinatoire plutôt que de soutenir un repérage de la réalité.",
+      "Ignorer tout risque": "Le contenu peut révéler des ordres dangereux pour le patient ou pour autrui.",
+      "Reconnaître son vécu sans confirmer les voix et évaluer la sécurité": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+      "Se moquer": "La moquerie rompt la confiance et peut augmenter la détresse."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK616969/"
+    ],
+    "takeaway": "Accueillir la détresse sans affirmer que les voix sont réelles préserve la relation et permet d’évaluer un danger.",
+    "explanations": [
+      "Il faut reconnaître l’expérience sans renforcer l’hallucination et rechercher un éventuel danger."
+    ]
+  },
+  {
+    "correct": "Les modifications du col utérin et la descente fœtale",
+    "i": 126,
+    "indices": [
+      128
+    ],
+    "map": {
+      "La couleur des yeux": "La couleur des yeux ne mesure pas le travail.",
+      "La pointure": "La pointure ne mesure pas l’évolution du col.",
+      "Le poids du conjoint": "Le poids du conjoint n’a pas de valeur pour suivre le travail.",
+      "Les modifications du col utérin et la descente fœtale": "Les modifications du col et la descente fœtale renseignent directement sur la progression du travail."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng235/chapter/Recommendations"
+    ],
+    "takeaway": "Les modifications du col et la descente fœtale renseignent directement sur la progression du travail.",
+    "explanations": [
+      "La dilatation, l’effacement et la descente fœtale renseignent sur la progression du travail."
+    ]
+  },
+  {
+    "correct": "Appliquer une pression directe ferme avec une protection adaptée",
+    "i": 127,
+    "indices": [
+      129
+    ],
+    "map": {
+      "Appliquer une pression directe ferme avec une protection adaptée": "Une pression directe ferme aide à limiter immédiatement un saignement externe important.",
+      "Attendre sans intervenir": "L’inaction prolonge les pertes sanguines.",
+      "Donner un repas": "Un repas ne contrôle pas l’hémorragie.",
+      "Faire marcher le patient": "La marche ne comprime pas la source du saignement et expose au malaise."
+    },
+    "references": [
+      "https://www.redcross.org/take-a-class/resources/learn-first-aid/bleeding-life-threatening-external"
+    ],
+    "takeaway": "Une pression directe ferme aide à limiter immédiatement un saignement externe important.",
+    "explanations": [
+      "La pression directe est une mesure initiale majeure de contrôle d’une hémorragie externe."
+    ]
+  },
+  {
+    "correct": "Évaluer rapidement la déshydratation et commencer la réhydratation appropriée",
+    "i": 128,
+    "indices": [
+      130
+    ],
+    "map": {
+      "Attendre plusieurs jours": "L’attente peut laisser évoluer la déshydratation vers le choc.",
+      "Donner seulement un antitussif": "Un antitussif ne remplace ni l’eau ni les électrolytes perdus.",
+      "Le faire jeûner sans liquide": "Interdire tous les liquides aggrave le déficit hydrique.",
+      "Évaluer rapidement la déshydratation et commencer la réhydratation appropriée": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes."
+    },
+    "references": [
+      "https://www.who.int/news-room/fact-sheets/detail/diarrhoeal-disease"
+    ],
+    "takeaway": "Une diarrhée profuse avec signes de déshydratation nécessite une évaluation rapide et une compensation adaptée des pertes.",
+    "explanations": [
+      "La réhydratation rapide est déterminante pour prévenir le choc et les complications."
+    ]
+  },
+  {
+    "correct": "La glycémie et la disponibilité du repas selon le plan",
+    "i": 129,
+    "indices": [
+      131
+    ],
+    "map": {
+      "La couleur du plateau": "La couleur du plateau ne confirme ni le contenu ni la disponibilité effective du repas.",
+      "La glycémie et la disponibilité du repas selon le plan": "Contrôler la glycémie et s’assurer du repas prévu sécurisent l’insuline rapide selon le plan thérapeutique.",
+      "La météo": "La météo ne guide pas ce contrôle médicamenteux.",
+      "Le nombre de visiteurs": "Le nombre de visiteurs ne détermine pas la sécurité de la dose."
+    },
+    "references": [
+      "https://www.nhs.uk/medicines/insulin/rapid-acting-insulin/how-and-when-to-take-rapid-acting-insulin/"
+    ],
+    "takeaway": "Contrôler la glycémie et s’assurer du repas prévu sécurisent l’insuline rapide selon le plan thérapeutique.",
+    "explanations": [
+      "Le moment du repas et la glycémie influencent la sécurité de l’insuline rapide."
+    ]
+  },
+  {
+    "correct": "Un saignement inhabituel",
+    "i": 130,
+    "indices": [
+      132
+    ],
+    "map": {
+      "Des cheveux longs": "La longueur des cheveux n’est pas un signe hémorragique.",
+      "Un saignement inhabituel": "Un saignement inhabituel sous anticoagulant nécessite une évaluation car il peut révéler une complication.",
+      "Un sommeil normal": "Un sommeil habituel n’est pas un signe de saignement.",
+      "Une faim normale": "Une faim habituelle n’est pas un signe hémorragique."
+    },
+    "references": [
+      "https://www.nhs.uk/medicines/anticoagulants/side-effects/"
+    ],
+    "takeaway": "Un saignement inhabituel sous anticoagulant nécessite une évaluation car il peut révéler une complication.",
+    "explanations": [
+      "Les anticoagulants augmentent le risque de saignement."
+    ]
+  },
+  {
+    "correct": "Une hémorragie du postpartum avec atonie utérine possible",
+    "i": 131,
+    "indices": [
+      133
+    ],
+    "map": {
+      "Une hémorragie du postpartum avec atonie utérine possible": "Après l’accouchement, saignement abondant et utérus mou font suspecter une hémorragie par atonie.",
+      "Une migraine simple": "Une migraine n’explique pas le saignement utérin abondant.",
+      "Une myopie": "La myopie n’explique pas cette présentation.",
+      "Une otite": "Une otite n’explique pas le saignement postpartum."
+    },
+    "references": [
+      "https://www.who.int/publications/i/item/9789240115637"
+    ],
+    "takeaway": "Après l’accouchement, saignement abondant et utérus mou font suspecter une hémorragie par atonie.",
+    "explanations": [
+      "Un utérus mou avec saignement abondant évoque notamment une atonie utérine et nécessite une prise en charge urgente."
+    ]
+  },
+  {
+    "correct": "Aider aux déplacements et garder les objets utiles à portée",
+    "i": 132,
+    "indices": [
+      134
+    ],
+    "map": {
+      "Aider aux déplacements et garder les objets utiles à portée": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+      "Laisser le sol mouillé": "Un sol mouillé augmente le risque de glissade.",
+      "Le faire se lever brusquement seul": "Un lever brusque et sans aide augmente le risque de malaise et de chute.",
+      "Éloigner la sonnette": "Une sonnette éloignée peut pousser le patient à se déplacer seul pour demander de l’aide."
+    },
+    "references": [
+      "https://www.ahrq.gov/patient-safety/settings/hospital/fall-tips/index.html"
+    ],
+    "takeaway": "L’aide au déplacement et un environnement accessible réduisent l’exposition à une chute chez un patient faible ou étourdi.",
+    "explanations": [
+      "Une assistance adaptée et un environnement sûr réduisent les chutes."
+    ]
+  },
+  {
+    "correct": "Factuelle, précise, datée et réalisée au moment approprié",
+    "i": 133,
+    "indices": [
+      135
+    ],
+    "map": {
+      "Basée sur des rumeurs": "Une rumeur n’est pas une observation clinique vérifiée.",
+      "Effacée si importante": "Une correction doit rester traçable conformément à la procédure, pas effacée arbitrairement.",
+      "Factuelle, précise, datée et réalisée au moment approprié": "Des notes factuelles, datées et précises permettent une transmission fiable et une continuité des soins.",
+      "Écrite par un visiteur": "Le professionnel responsable doit documenter ses soins ; un visiteur ne peut s’y substituer."
+    },
+    "references": [
+      "https://www.nmc.org.uk/standards/code/read-the-code-online/"
+    ],
+    "takeaway": "Des notes factuelles, datées et précises permettent une transmission fiable et une continuité des soins.",
+    "explanations": [
+      "Une documentation exacte soutient la continuité et la sécurité des soins."
+    ]
+  },
+  {
+    "correct": "Le poids actuel en kilogrammes",
+    "i": 134,
+    "indices": [
+      136
+    ],
+    "map": {
+      "La pointure": "La pointure ne permet pas de calculer une dose en mg/kg.",
+      "La taille de la chambre": "La taille de la chambre n’intervient pas dans le calcul.",
+      "Le poids actuel en kilogrammes": "Le poids actuel en kilogrammes est indispensable pour calculer une prescription en mg/kg.",
+      "Le poids du parent": "Le poids du parent ne remplace pas celui de l’enfant."
+    },
+    "references": [
+      "https://www.ncbi.nlm.nih.gov/books/NBK593207/"
+    ],
+    "takeaway": "Le poids actuel en kilogrammes est indispensable pour calculer une prescription en mg/kg.",
+    "explanations": [
+      "Une dose en mg/kg exige un poids fiable exprimé en kilogrammes."
+    ]
+  },
+  {
+    "correct": "Assurer sa sécurité, évaluer le risque et alerter immédiatement selon le protocole",
+    "i": 135,
+    "indices": [
+      137
+    ],
+    "map": {
+      "Assurer sa sécurité, évaluer le risque et alerter immédiatement selon le protocole": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+      "Changer de sujet": "Changer de sujet ne répond pas au danger exprimé.",
+      "Le laisser seul": "Laisser seul peut permettre un passage à l’acte avant l’évaluation.",
+      "Promettre le secret absolu": "Le secret absolu ne doit pas être promis lorsqu’une protection urgente peut nécessiter de partager les informations utiles."
+    },
+    "references": [
+      "https://www.nice.org.uk/guidance/ng225/chapter/Recommendations"
+    ],
+    "takeaway": "Une intention suicidaire avec plan nécessite une protection immédiate, une évaluation du risque et une alerte selon le protocole.",
+    "explanations": [
+      "Une intention suicidaire avec plan précis représente un risque élevé."
+    ]
+  },
+  {
+    "correct": "Procéder de la zone la plus propre vers la plus contaminée selon la technique indiquée",
+    "i": 136,
+    "indices": [
+      138
+    ],
+    "map": {
+      "Procéder de la zone la plus propre vers la plus contaminée selon la technique indiquée": "Nettoyer du plus propre vers le plus contaminé limite le transfert de contaminants vers les zones les moins souillées.",
+      "Réutiliser du matériel tombé au sol": "Le matériel tombé est contaminé et doit être remplacé.",
+      "Réutiliser la même compresse sale": "Une compresse sale peut ramener des microbes vers une zone nettoyée.",
+      "Toucher la plaie à mains nues": "Les mains nues risquent de contaminer la plaie."
+    },
+    "references": [
+      "https://www.cdc.gov/clean-hands/hcp/clinical-safety/index.html"
+    ],
+    "takeaway": "Nettoyer du plus propre vers le plus contaminé limite le transfert de contaminants vers les zones les moins souillées.",
+    "explanations": [
+      "Une technique appropriée évite de ramener des microorganismes vers les zones les plus propres."
+    ]
+  }
+]
