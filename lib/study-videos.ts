@@ -1027,6 +1027,60 @@ export const studyVideos: readonly StudyVideo[] = [
     "publisher": "INRSFrance",
     "language": "Français",
     "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "W75QqXLO9_w",
+    "title": "La cyclosporine (Neoral)",
+    "durationSeconds": 153,
+    "sourceUrl": "https://www.chumontreal.qc.ca/fiches-sante/cyclosporine-neoral",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "scYH9gOHGfA",
+    "title": "Le tacrolimus à courte action (Prograf)",
+    "durationSeconds": 164,
+    "sourceUrl": "https://www.chumontreal.qc.ca/fiches-sante/tacrolimus-courte-action-prograf",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "5PwrvDPqQdM",
+    "title": "Thérapie orale contre le cancer à la maison – manipulation sécuritaire et gestion des déchets",
+    "durationSeconds": 436,
+    "sourceUrl": "https://www.chumontreal.qc.ca/repertoire/centre-integre-cancerologie-cicc/traitements-contre-cancer/chimiotherapie-therapie-orale",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "JQBQLo25iRY",
+    "title": "Thérapie orale contre le cancer à la maison – assiduité au traitement",
+    "durationSeconds": 316,
+    "sourceUrl": "https://www.chumontreal.qc.ca/repertoire/centre-integre-cancerologie-cicc/traitements-contre-cancer/chimiotherapie-therapie-orale",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "gsaGQawzoog",
+    "title": "Thérapie orale contre le cancer à la maison – des professionnels pour vous appuyer",
+    "durationSeconds": 348,
+    "sourceUrl": "https://www.chumontreal.qc.ca/repertoire/centre-integre-cancerologie-cicc/traitements-contre-cancer/chimiotherapie-therapie-orale",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "nBgQFxI3HzI",
+    "title": "Thérapie orale contre le cancer à la maison – gestion des effets secondaires",
+    "durationSeconds": 803,
+    "sourceUrl": "https://www.chumontreal.qc.ca/repertoire/centre-integre-cancerologie-cicc/traitements-contre-cancer/chimiotherapie-therapie-orale",
+    "publisher": "Centre hospitalier de l’Université de Montréal (CHUM)",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
   }
 ];
 
@@ -1985,6 +2039,57 @@ export const studyVideoAssignments: readonly {
     "subtopic": "Obstruction des voies aériennes",
     "videoIds": [
       "b0T4Y5RmHqM"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Rénal",
+    "subtopic": "Transplantation rénale",
+    "videoIds": [
+      "W75QqXLO9_w",
+      "scYH9gOHGfA"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Hématologie",
+    "subtopic": "Chimiothérapie et soins de support",
+    "videoIds": [
+      "5PwrvDPqQdM",
+      "nBgQFxI3HzI",
+      "gsaGQawzoog"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Principes pharmacologiques",
+    "subtopic": "Observance et éducation thérapeutique",
+    "videoIds": [
+      "JQBQLo25iRY"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Principes pharmacologiques",
+    "subtopic": "Médicaments à haut risque",
+    "videoIds": [
+      "5PwrvDPqQdM"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Sécurité du patient",
+    "subtopic": "Gestion des déchets",
+    "videoIds": [
+      "5PwrvDPqQdM"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Santé publique",
+    "subtopic": "Gestion des déchets de soins",
+    "videoIds": [
+      "5PwrvDPqQdM"
     ]
   }
 ];

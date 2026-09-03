@@ -1,9 +1,9 @@
 {
   "checkedAt": "2026-09-03",
   "totalSubtopics": 793,
-  "coveredSubtopics": 113,
-  "uniqueVideos": 113,
-  "missingSubtopics": 680,
+  "coveredSubtopics": 119,
+  "uniqueVideos": 119,
+  "missingSubtopics": 674,
   "topics": [
     {
       "category": "Médecine–Chirurgie",
@@ -39,13 +39,13 @@
       "category": "Médecine–Chirurgie",
       "topic": "Rénal",
       "total": 21,
-      "withVideo": 1
+      "withVideo": 2
     },
     {
       "category": "Médecine–Chirurgie",
       "topic": "Hématologie",
       "total": 20,
-      "withVideo": 4
+      "withVideo": 5
     },
     {
       "category": "Médecine–Chirurgie",
@@ -117,7 +117,7 @@
       "category": "Pharmacologie",
       "topic": "Principes pharmacologiques",
       "total": 15,
-      "withVideo": 0
+      "withVideo": 2
     },
     {
       "category": "Pharmacologie",
@@ -219,7 +219,7 @@
       "category": "Santé communautaire",
       "topic": "Santé publique",
       "total": 15,
-      "withVideo": 1
+      "withVideo": 2
     },
     {
       "category": "Fondements des soins infirmiers",
@@ -237,7 +237,7 @@
       "category": "Fondements des soins infirmiers",
       "topic": "Sécurité du patient",
       "total": 15,
-      "withVideo": 5
+      "withVideo": 6
     },
     {
       "category": "Fondements des soins infirmiers",

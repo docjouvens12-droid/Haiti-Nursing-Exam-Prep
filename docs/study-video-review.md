@@ -54,3 +54,15 @@ Chaque ajout possède une source, un titre, une chaîne identifiable, une durée
 La tâche mensuelle existante lit le catalogue courant ; elle inclut donc ces ajouts sans nouvelle programmation.
 
 Validation de l’intégration : vérification TypeScript du projet, compilation et prérendu de l’accueil et de `/categories`, contrôle des correspondances exactes et de la conservation des 65 anciennes vidéos. Les deux pages présentent les compteurs 113/793, 160 liens vidéo avec leurs sources, et aucun lecteur tiers avant interaction. Le parcours visuel en navigateur de production n’a pas été rejoué.
+
+## Troisième extension du 3 septembre 2026 — CHUM
+
+Ajout de 6 vidéos uniques dans 6 sous-thématiques auparavant sans vidéo. Total : **119 vidéos, 119 sous-thématiques sur 793 ; 674 restent sans ressource sélectionnée**.
+
+Les sources sont les pages officielles CHUM sur la cyclosporine après greffe, le tacrolimus à courte action après greffe et la série sur la chimiothérapie orale à domicile. Les six pages YouTube ont confirmé la chaîne « chumontreal », une durée individuelle inférieure à 900 secondes, un statut OK et l’intégration autorisée. Les durées exactes (153, 164, 436, 316, 348 et 803 secondes) viennent de YouTube et peuvent différer de quelques secondes du texte de présentation du CHUM. Les preuves minimales sont dans `study-video-review-chum.json`.
+
+La transplantation rénale est illustrée sur l’aspect des médicaments antirejet. L’observance, les médicaments à haut risque et les déchets de soins sont illustrés par le cas précis de la chimiothérapie orale : les titres conservent cette portée. Aucun film n’est présenté comme un cours complet ni comme un protocole haïtien.
+
+Les correspondances exactes, l’unicité des identifiants, la limite de durée, les compteurs et la conservation intégrale des 113 vidéos et 113 anciennes affectations ont été vérifiés avant publication. L’environnement d’exécution local s’est déconnecté pendant les recherches ; aucune nouvelle compilation locale ni vérification visuelle n’a été possible pour ce lot de données. La compilation de production est vérifiée via le statut du déploiement Vercel.
+
+Recherches à reprendre : collections prénatales de Santé Québec Chaudière-Appalaches, vidéos d’accouchement du CHUM, ressources rénales pédiatriques du CUSM et bibliothèque Fondation HTA. Les lecteurs Vimeo du CHU Sainte-Justine essayés renvoyaient 403 ; ils ne sont pas intégrés. Les ressources découvertes mais non contrôlées ne sont pas affectées aux sous-thématiques. Pas de visionnage intégral ni de validation clinique indépendante.
