@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getStudyTextById, studyTexts } from "@/lib/study-texts";
 import { doseExamples, studyDiagrams } from "@/lib/study-examples";
+import AnatomyFigures from "@/components/AnatomyFigures";
 import styles from "./page.module.css";
 
 type Props = { params: Promise<{ id: string }> };
@@ -30,6 +31,7 @@ export default async function StudyTextPage({ params }: Props) {
         {diagram && <p>Schéma explicatif dans la rubrique 2 : « Comprendre le mécanisme ».</p>}
         {example && <p><a href="#definition">Voir l’exemple corrigé ↓</a></p>}
       </header>
+      <AnatomyFigures id={text.id}/>
       <div className={styles.sections}>
         {text.sections.map((section, index) => <details
           key={section.id}
