@@ -10871,20 +10871,20 @@
     "updatedAt": "2026-09-03"
   },
   {
-    "id": "fiche-640",
     "category": "Santé communautaire",
-    "topic": "Santé publique",
-    "subtopic": "Éthique et confidentialité en santé publique",
+    "id": "fiche-640",
     "paragraphs": [
       "La santé publique utilise parfois des données personnelles pour protéger une population. Leur utilisation doit rester justifiée, proportionnée et encadrée.",
       "Limiter les données au nécessaire et sécuriser l’accès. Expliquer les usages et suivre les règles locales de partage, même dans une situation d’urgence."
     ],
     "sources": [
       {
-        "title": "OMS — Déterminants sociaux de la santé (anglais)",
-        "url": "https://www.who.int/health-topics/social-determinants-of-health"
+        "title": "OMS — Éthique de la surveillance en santé publique, 2024 (anglais)",
+        "url": "https://www.who.int/news-room/questions-and-answers/item/q-a-ethics-in-public-health-surveillance"
       }
     ],
+    "subtopic": "Éthique et confidentialité en santé publique",
+    "topic": "Santé publique",
     "updatedAt": "2026-09-03"
   },
   {
@@ -11483,20 +11483,20 @@
     "updatedAt": "2026-09-03"
   },
   {
-    "id": "fiche-676",
     "category": "Fondements des soins infirmiers",
-    "topic": "Sécurité du patient",
-    "subtopic": "Consentement et respect des droits",
+    "id": "fiche-676",
     "paragraphs": [
       "Le consentement suppose une information compréhensible et une décision libre dans le cadre applicable. Il ne se réduit pas à une signature.",
       "Vérifier compréhension et possibilité de poser des questions. Respecter refus et confidentialité, puis solliciter l’équipe en cas de doute sur la capacité ou d’urgence."
     ],
     "sources": [
       {
-        "title": "Open RN — Sécurité des soins (anglais)",
-        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610816/"
+        "title": "Conseil international des infirmières — Code déontologique, 2021 (versions française et anglaise)",
+        "url": "https://www.icn.ch/resources/publications-and-reports/icn-code-ethics-nurses"
       }
     ],
+    "subtopic": "Consentement et respect des droits",
+    "topic": "Sécurité du patient",
     "updatedAt": "2026-09-03"
   },
   {
@@ -11891,20 +11891,20 @@
     "updatedAt": "2026-09-03"
   },
   {
-    "id": "fiche-700",
     "category": "Fondements des soins infirmiers",
-    "topic": "Documentation",
-    "subtopic": "Confidentialité et accès au dossier",
+    "id": "fiche-700",
     "paragraphs": [
       "L’accès au dossier est réservé aux usages autorisés dans la prise en charge. La curiosité ou un lien personnel ne justifie pas sa consultation.",
       "Utiliser les accès individuels et fermer les sessions. Éviter les échanges dans les lieux publics et suivre les règles de partage sécurisé."
     ],
     "sources": [
       {
-        "title": "Open RN — Démarche de soins infirmiers (anglais)",
-        "url": "https://www.ncbi.nlm.nih.gov/books/NBK591807/"
+        "title": "Conseil international des infirmières — Code déontologique, 2021 (versions française et anglaise)",
+        "url": "https://www.icn.ch/resources/publications-and-reports/icn-code-ethics-nurses"
       }
     ],
+    "subtopic": "Confidentialité et accès au dossier",
+    "topic": "Documentation",
     "updatedAt": "2026-09-03"
   },
   {

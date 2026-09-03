@@ -1,5 +1,53 @@
 [
   {
+    "alerts": "Pour un mineur, une capacité de décision incertaine ou une urgence, solliciter rapidement le responsable et appliquer le cadre local : aucune règle juridique haïtienne particulière n’est établie ici. Ne pas assimiler un désaccord à une incapacité ni abandonner une personne qui refuse un soin.",
+    "assessment": "Demander : « Pouvez-vous m’expliquer avec vos mots ce que vous avez compris ? » Faire clarifier par le professionnel compétent le but du soin, les bénéfices, risques et alternatives. Vérifier que la décision est libre, comprise et toujours valable au moment du soin.",
+    "context": "Cas fictif : avant un soin non urgent, Mme Rose dit qu’elle n’a pas compris son utilité et demande d’attendre. Le fait d’être hospitalisée ou d’avoir signé un formulaire général ne suffit pas à résoudre cette situation.",
+    "ids": [
+      "fiche-676"
+    ],
+    "kind": "concept",
+    "mechanism": "L’autonomie signifie participer aux décisions ; la bienfaisance, rechercher le bénéfice ; la non-malfaisance, éviter un préjudice ; la justice, traiter équitablement. Ces repères se discutent ensemble, sans imposer ses propres valeurs au patient.",
+    "observations": "Écouter ses questions, sa langue préférée, ses craintes et toute pression de l’entourage. Une difficulté de langue ou de lecture ne signifie pas une incapacité à décider. Prévoir une aide linguistique adaptée et confidentielle.",
+    "takeaways": [
+      "Dans ce cas non urgent, suspendre le geste, clarifier et rechercher la décision de Mme Rose.",
+      "Si elle refuse encore, transmettre et documenter sans jugement ; maintenir les autres soins appropriés.",
+      "Référence éthique internationale : elle ne remplace ni la loi haïtienne ni les procédures de l’établissement."
+    ]
+  },
+  {
+    "alerts": "Ne pas envoyer un dossier dans une messagerie personnelle ou le saisir dans un outil d’IA non autorisé. Si une divulgation accidentelle survient, limiter l’exposition et la signaler immédiatement selon la procédure, sans dissimuler l’incident. Les obligations légales de signalement doivent être vérifiées localement.",
+    "assessment": "Avant tout partage, vérifier l’identité du destinataire, son rôle, le motif et l’autorisation ou autre fondement applicable. En cas de doute, demander au responsable plutôt que divulguer. Les droits d’accès du patient suivent une procédure d’identification et le cadre local.",
+    "context": "Cas fictif : un voisin de Mme Rose téléphone et demande son diagnostic. Le connaître personnellement ne lui donne pas automatiquement accès à ses informations. Une discussion de cas pédagogique ne justifie pas non plus d’utiliser son identité.",
+    "ids": [
+      "fiche-700"
+    ],
+    "kind": "concept",
+    "mechanism": "Protéger le dossier soutient la confiance. Même lorsqu’un accès informatique est possible, chaque consultation doit avoir un motif professionnel autorisé. Partager uniquement les informations nécessaires avec les destinataires habilités.",
+    "observations": "Repérer écrans visibles, dossiers laissés ouverts, conversations dans le couloir, photos et messages sur téléphone personnel. Retirer le nom seul ne garantit pas l’anonymat si d’autres détails permettent de reconnaître la personne.",
+    "takeaways": [
+      "Réponse possible au voisin : « Je ne peux pas communiquer ces informations ; je peux vous indiquer la procédure appropriée. »",
+      "Tracer les communications autorisées et protéger ses identifiants.",
+      "Ces exemples sont fictifs et ne décrivent pas un régime juridique haïtien validé."
+    ]
+  },
+  {
+    "alerts": "Ne pas publier de listes nominatives ni promettre un secret absolu sans connaître les obligations applicables. Les modalités de notification au MSPP et les éventuelles exceptions au consentement doivent être vérifiées dans les textes et protocoles en vigueur.",
+    "assessment": "Vérifier la finalité, le fondement applicable, le destinataire, la sécurité et les règles de conservation. Examiner si des données agrégées ou moins détaillées suffisent. Une mission de surveillance ne signifie pas que toute réutilisation est autorisée.",
+    "context": "Cas fictif : une équipe prépare un bilan communautaire d’infections. Un partenaire demande un tableau nominatif alors que des nombres par secteur suffiraient à sa mission. Distinguer le suivi individuel autorisé de la communication publique.",
+    "ids": [
+      "fiche-640"
+    ],
+    "kind": "community",
+    "mechanism": "La protection collective doit être mise en balance avec la vie privée, les risques de stigmatisation et l’équité. Définir une finalité précise et éviter de collecter ou diffuser des données sans nécessité.",
+    "observations": "Recueillir seulement les éléments utiles à l’action prévue. Identifier les personnes autorisées à utiliser les données, les groupes exposés à la stigmatisation et le risque qu’un petit effectif révèle indirectement une identité.",
+    "takeaways": [
+      "Dans l’exemple, proposer un bilan agrégé et vérifier que les petits groupes ne permettent pas une réidentification.",
+      "Pour une notification individuelle légalement requise, suivre le circuit autorisé et sécurisé, après vérification du cadre applicable.",
+      "L’intérêt collectif n’autorise pas un partage illimité ; documenter la décision et demander conseil en cas de doute."
+    ]
+  },
+  {
     "alerts": "Ne pas déduire un diagnostic d’une seule étiquette ni confondre diagnostic médical et réponse humaine. Une détresse respiratoire, un malaise ou un saignement impose une évaluation urgente avant le travail de rédaction. La formulation doit suivre le référentiel de l’établissement ; ceci n’est pas un modèle officiel MSPP.",
     "assessment": "Exemple de formulation pédagogique, sans code de classification : mobilité limitée liée à la douleur au mouvement, se manifestant par un besoin d’aide au lever. Un risque de chute repose sur des facteurs de risque : ne pas inventer une chute déjà survenue. Vérifier chaque hypothèse avec la patiente et l’évaluation clinique.",
     "context": "Cas fictif commun aux deux fiches : Mme Rose, 68 ans, est hospitalisée après une intervention. Son état est stable et le lever accompagné est autorisé. Elle souhaite rejoindre le fauteuil, mais dit : « J’ai mal quand je bouge et j’ai peur de tomber. »",
@@ -215,8 +263,7 @@
       "fiche-635",
       "fiche-637",
       "fiche-638",
-      "fiche-639",
-      "fiche-640"
+      "fiche-639"
     ],
     "kind": "community",
     "mechanism": "Une action de santé publique organise des ressources pour répondre à un besoin collectif tout en considérant l’équité.",
@@ -688,8 +735,7 @@
       "fiche-669",
       "fiche-671",
       "fiche-672",
-      "fiche-675",
-      "fiche-676"
+      "fiche-675"
     ],
     "kind": "procedure",
     "mechanism": "La sécurité repose sur des contrôles fiables et une communication qui repère les erreurs avant qu’elles atteignent le patient.",
@@ -747,7 +793,6 @@
       "fiche-697",
       "fiche-698",
       "fiche-699",
-      "fiche-700",
       "fiche-701",
       "fiche-702"
     ],
