@@ -959,6 +959,14 @@ export const studyCategories: readonly StudyCategory[] = [
           "Transmission structurée entre professionnels",
           "Accompagnement du deuil"
         ]
+      },
+      {
+        "title": "Organisation des soins",
+        "subtopics": [
+          "Priorités des soins",
+          "Travail d’équipe",
+          "Délégation et supervision"
+        ]
       }
     ]
   },

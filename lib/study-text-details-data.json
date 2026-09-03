@@ -1,5 +1,53 @@
 [
   {
+    "alerts": "Ne pas attendre de terminer un soin de routine devant une dégradation aiguë. Ne pas considérer tous les soins programmés comme reportables : certains traitements ont une échéance critique. Si les ressources manquent, alerter le responsable et rendre explicites les besoins non couverts.",
+    "assessment": "Dans cet exemple, la dyspnée soudaine de M. Jean exige une évaluation immédiate. Le transfert et le pansement peuvent être réorganisés après vérification de leur sécurité. Une liste fixe ou une règle mnémotechnique ne remplace pas le jugement clinique.",
+    "context": "Cas fictif commun aux trois fiches : M. Jean présente une dyspnée soudaine ; Mme Rose, stable, attend une aide au fauteuil ; un troisième patient stable attend un pansement programmé. Aucun autre signe d’alarme n’a été signalé chez ces deux derniers patients.",
+    "ids": [
+      "fiche-794"
+    ],
+    "kind": "concept",
+    "mechanism": "Une dégradation récente et les menaces vitales passent avant un soin de routine. Après chaque intervention ou nouvelle information, revoir l’ordre des priorités ; une personne initialement stable peut se détériorer.",
+    "observations": "Rechercher immédiatement difficulté respiratoire, conscience altérée, saignement important ou autre changement aigu. Recueillir les observations disponibles sans retarder l’appel à l’aide. Vérifier aussi les contraintes horaires et les risques liés au report des autres soins.",
+    "takeaways": [
+      "Repérer l’urgence, appeler et agir dans ses compétences.",
+      "Attribuer le suivi des besoins différés et informer les patients.",
+      "Réévaluer après chaque changement ; ce cas n’est pas un protocole d’urgence MSPP."
+    ]
+  },
+  {
+    "alerts": "Un message envoyé n’est pas forcément reçu. Sans réponse à une alerte urgente, utiliser le circuit d’escalade prévu. Un désaccord de sécurité doit être exprimé factuellement et porté au responsable, sans humiliation ni partage inutile de données personnelles.",
+    "assessment": "Vérifier que chacun connaît sa mission, dispose des compétences et peut réellement l’accomplir. Pour une transmission structurée, préciser situation, contexte, évaluation et demande ; ne pas inventer une mesure manquante.",
+    "context": "Dans le cas fictif de M. Jean et Mme Rose, l’urgence modifie la répartition habituelle. L’équipe doit savoir qui évalue, qui appelle, qui assure les autres soins et à qui transmettre les résultats.",
+    "ids": [
+      "fiche-795"
+    ],
+    "kind": "concept",
+    "mechanism": "Une communication en boucle fermée associe demande précise, reformulation et confirmation de réalisation. Elle permet de repérer un malentendu avant qu’il devienne un retard de soins.",
+    "observations": "Recueillir les informations utiles : identité du patient, changement observé, heure, actions déjà faites et besoin actuel. Repérer une tâche sans responsable, une consigne ambiguë ou une surcharge de travail.",
+    "takeaways": [
+      "Dire qui fait quoi et quel retour est attendu.",
+      "Confirmer la réception et l’exécution, puis actualiser le plan.",
+      "Après l’événement, faire un bref retour d’équipe sur les oublis, les délais et les améliorations possibles."
+    ]
+  },
+  {
+    "alerts": "Ne pas transposer en Haïti les catégories professionnelles ou autorisations américaines de la source. Les actes délégables et les responsabilités légales locales restent à vérifier. Une urgence ou un manque de personnel ne suffit pas à autoriser une tâche hors compétence.",
+    "assessment": "Faire reformuler la tâche, le moment prévu, les limites et le retour attendu. Confirmer qui supervise. L’évaluation clinique et la décision de soins doivent rester assurées par un professionnel habilité ; ne pas les remplacer par une simple consigne d’exécution.",
+    "context": "Mme Rose est stable et son lever accompagné est autorisé. Cependant, la disponibilité d’un collègue ne prouve ni sa compétence ni son habilitation. Si son état change, réexaminer la décision avant le transfert.",
+    "ids": [
+      "fiche-796"
+    ],
+    "kind": "concept",
+    "mechanism": "Examiner cinq points : tâche appropriée, circonstances adaptées, personne compétente, consignes précises et supervision disponible. Ce sont des repères pédagogiques ; ils ne donnent pas une autorisation légale de pratiquer un acte.",
+    "observations": "Vérifier les capacités de Mme Rose, la douleur, les vertiges éventuels, les dispositifs et les restrictions. Examiner la formation du collègue, son expérience vérifiée, sa charge de travail et la possibilité d’obtenir rapidement de l’aide.",
+    "takeaways": [
+      "Le collègue signale tout malaise et interrompt le transfert ; une réévaluation est alors nécessaire.",
+      "Après la tâche, vérifier le résultat auprès du patient, recueillir le retour et documenter les actions réelles.",
+      "Sans cadre clair, compétence confirmée et supervision possible, solliciter le responsable avant de déléguer."
+    ]
+  },
+  {
     "alerts": "Pour un mineur, une capacité de décision incertaine ou une urgence, solliciter rapidement le responsable et appliquer le cadre local : aucune règle juridique haïtienne particulière n’est établie ici. Ne pas assimiler un désaccord à une incapacité ni abandonner une personne qui refuse un soin.",
     "assessment": "Demander : « Pouvez-vous m’expliquer avec vos mots ce que vous avez compris ? » Faire clarifier par le professionnel compétent le but du soin, les bénéfices, risques et alternatives. Vérifier que la décision est libre, comprise et toujours valable au moment du soin.",
     "context": "Cas fictif : avant un soin non urgent, Mme Rose dit qu’elle n’a pas compris son utilité et demande d’attendre. Le fait d’être hospitalisée ou d’avoir signé un formulaire général ne suffit pas à résoudre cette situation.",

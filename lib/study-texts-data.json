@@ -1,5 +1,56 @@
 [
   {
+    "category": "Fondements des soins infirmiers",
+    "id": "fiche-794",
+    "paragraphs": [
+      "Prioriser consiste à décider quel besoin exige une action immédiate, lequel doit être traité rapidement et lequel peut attendre avec surveillance. L’ordre dépend de l’état clinique et du risque, pas simplement de l’ordre des demandes.",
+      "Dans le cas fictif présenté ici, rester auprès de la personne soudainement essoufflée, appeler l’aide prévue et débuter l’évaluation ainsi que les mesures autorisées par les protocoles. Demander à un collègue compétent de prendre en charge les autres besoins, puis vérifier leur suivi. Reporter un soin ne signifie pas l’oublier."
+    ],
+    "sources": [
+      {
+        "title": "Open RN — Prioritization (anglais)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610461/"
+      }
+    ],
+    "subtopic": "Priorités des soins",
+    "topic": "Organisation des soins",
+    "updatedAt": "2026-09-03"
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "id": "fiche-795",
+    "paragraphs": [
+      "Le travail d’équipe associe des professionnels aux compétences complémentaires autour des besoins du patient. Une répartition explicite et une information partagée réduisent les oublis, les doublons et les retards.",
+      "Exemple fictif : annoncer clairement « Je reste avec M. Jean ; peux-tu appeler l’équipe d’urgence selon le protocole et me confirmer que l’appel est passé ? » Le collègue reformule, effectue l’action puis confirme. Réattribuer aussi le suivi de Mme Rose et du pansement, avec un responsable identifié et un retour attendu."
+    ],
+    "sources": [
+      {
+        "title": "Open RN — Nursing Management and Professional Concepts (anglais)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610445/"
+      }
+    ],
+    "subtopic": "Travail d’équipe",
+    "topic": "Organisation des soins",
+    "updatedAt": "2026-09-03"
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "id": "fiche-796",
+    "paragraphs": [
+      "Déléguer une tâche demande de vérifier qu’elle est autorisée, adaptée au patient et confiée à une personne compétente. Superviser signifie rester disponible, suivre son exécution et en évaluer le résultat. La délégation n’est pas un abandon du suivi.",
+      "Cas fictif : avant de confier l’aide au fauteuil de Mme Rose, vérifier l’autorisation locale, la compétence du collègue, l’état de la patiente et les consignes de mobilisation. Préciser l’aide nécessaire, les signes imposant l’arrêt et qui appeler. Sans ces garanties, ne pas confier la tâche et demander une autre organisation au responsable."
+    ],
+    "sources": [
+      {
+        "title": "Open RN — Delegation and Supervision (cadre américain, anglais)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610432/"
+      }
+    ],
+    "subtopic": "Délégation et supervision",
+    "topic": "Organisation des soins",
+    "updatedAt": "2026-09-03"
+  },
+  {
     "category": "Médecine–Chirurgie",
     "topic": "Endocrinologie",
     "subtopic": "Diabète de type 1",
