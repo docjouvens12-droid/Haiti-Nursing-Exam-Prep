@@ -595,6 +595,438 @@ export const studyVideos: readonly StudyVideo[] = [
     "publisher": "Hôpitaux universitaires de Genève",
     "language": "Français",
     "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "-2prtCXSem8",
+    "title": "Afrique : Tous les conseils d'hygiène alimentaire à adopter pour éviter la transmission de maladies",
+    "durationSeconds": 139,
+    "sourceUrl": "https://www.sikana.tv/fr/health/hydration-hygiene/water-and-food-hygiene-africa",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "-SIicpbmrX0",
+    "title": "Atelier IFSI Foch- Utilisation d'un pousse seringue électrique",
+    "durationSeconds": 661,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Hopital Foch",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "-iLZk3OFCKg",
+    "title": "Le rinçage pulsé : quand, comment et pourquoi ?",
+    "durationSeconds": 160,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Centre hospitalier Métropole Savoie",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "1qfdF6vyitI",
+    "title": "La planification des soins",
+    "durationSeconds": 132,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Marie-Dominique Asson-Riou",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "1z0wfwxQsTQ",
+    "title": "Comprendre les addictions avec la neurobiologie",
+    "durationSeconds": 518,
+    "sourceUrl": "https://www.maad-digital.fr/video/comprendre-les-addictions-avec-la-neurobiologie/",
+    "publisher": "Maad Digital",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "2ozx4Uah94M",
+    "title": "Premiers secours : Plaie grave | Secourisme",
+    "durationSeconds": 87,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-serious-wound",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "5W2mZNRTrEU",
+    "title": "Prévoir un plan familial d'urgence | Catastrophe naturelle",
+    "durationSeconds": 147,
+    "sourceUrl": "https://www.sikana.tv/fr/health/natural-disaster/major-disasters-prepare-a-family-emergency-plan",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "88_ojm6-Mig",
+    "title": "Cathéter veineux périphérique chez l'adulte",
+    "durationSeconds": 740,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Hopitaux Universitaires de Genève",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "8zJOr3P6DbA",
+    "title": "Premiers secours : Crise convulsive | Secourisme",
+    "durationSeconds": 151,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-convulsive-seizure",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "9k6YgtJFSrI",
+    "title": "4/5 [Rôle infirmier autonome] Douleur et pansement",
+    "durationSeconds": 833,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CNRD - Centre National Ressources Douleur",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "AEeGU7-riUE",
+    "title": "Diagnostics infirmiers - Cas n° 4 : Amandine",
+    "durationSeconds": 780,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "De Boeck Supérieur",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "CMgDVSgWPjc",
+    "title": "Port du masque chirurgical",
+    "durationSeconds": 65,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CPIAS Nouvelle-Aquitaine",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "Cj1BJvg1V4w",
+    "title": "Comprendre le Rétablissement (en moins de 8 mn)",
+    "durationSeconds": 470,
+    "sourceUrl": "https://www.psycom.org/sinformer/le-retablissement/le-retablissement-des-troubles-psy/",
+    "publisher": "La Psychiatrie du Soleil",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "HcQvvtHK3a4",
+    "title": "Prise en charge de la douleur chez la personne âgée : échelle ALGOPLUS",
+    "durationSeconds": 610,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "QualiREL Santé",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "LVgnSzVpMRc",
+    "title": "UE 4 4 S2 Calculs de dose appliqués en situation simulée",
+    "durationSeconds": 747,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "IFPS Croix Saint-Simon",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "Lbrz36OGXms",
+    "title": "Psycare, la série qui explique...Les hallucinations",
+    "durationSeconds": 119,
+    "sourceUrl": "https://institutdepsychiatrie.org/reseau-transition/pour-le-public/",
+    "publisher": "Institut de Psychiatrie",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "LpqLDIWlkL0",
+    "title": "Bonnes pratiques cathéter sous cutane",
+    "durationSeconds": 398,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CPias Ara",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "Nn8zyaJ73vg",
+    "title": "PsyCARE, la série qui explique.... Les symptômes négatifs",
+    "durationSeconds": 125,
+    "sourceUrl": "https://institutdepsychiatrie.org/reseau-transition/pour-le-public/",
+    "publisher": "Institut de Psychiatrie",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "Q_AfuNSfcIQ",
+    "title": "UE 4.4 S4 Pose d'une transfusion sanguine en situation simulée",
+    "durationSeconds": 811,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "IFPS Croix Saint-Simon",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "RkpJW5pS6Nc",
+    "title": "Formation pratique à la trachéotomie pour des soignants ou accompagnants de patients trachéotomisés",
+    "durationSeconds": 292,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CHUlimoges",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "S9m0_t7VO3A",
+    "title": "Premiers secours : Hémorragie | Secourisme",
+    "durationSeconds": 95,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-bleeding",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "SLfk_tdY4uU",
+    "title": "2/5 [Rôle infirmier autonome] Prélèvement veineux",
+    "durationSeconds": 617,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CNRD - Centre National Ressources Douleur",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "TRmqzCTFuVY",
+    "title": "Premiers secours : Dégagement d'urgence | Secourisme",
+    "durationSeconds": 81,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-emergency-drag",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "W9OxknDjvHA",
+    "title": "Quelle vie pour les patients souffrant de schizophrénie?",
+    "durationSeconds": 227,
+    "sourceUrl": "https://www.fondation-fondamental.org/les-maladies-mentales/schizophrenie",
+    "publisher": "Fondation FondaMental",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "YHiH4tvHNxA",
+    "title": "Se préparer face à un séisme | Catastrophe naturelle",
+    "durationSeconds": 218,
+    "sourceUrl": "https://www.sikana.tv/fr/health/natural-disaster/major-disasters-how-to-protect-yourself-during-an-earthquake",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "YmID7CiLLs4",
+    "title": "Premiers secours: Plaie simple | Secourisme",
+    "durationSeconds": 106,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-minor-wound",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "YxDNS8um4W0",
+    "title": "la pose de gants stériles",
+    "durationSeconds": 98,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "IFPS Croix Saint-Simon",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "ZNbtrD4pG3M",
+    "title": "Premiers secours : Fracture du membre inférieur | Secourisme",
+    "durationSeconds": 87,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-broken-leg",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "_XL09m6PCqs",
+    "title": "Pose et retrait d'aiguille sur chambre implantable",
+    "durationSeconds": 499,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Hopitaux Universitaires de Genève",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "b0T4Y5RmHqM",
+    "title": "Premiers secours : Etouffement d'un adulte | Secourisme",
+    "durationSeconds": 160,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-choking-adult",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "dnu40D8_73w",
+    "title": "Atelier IFSI Foch: Préparation d'injectable",
+    "durationSeconds": 546,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Hopital Foch",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "eX8L2xHPaew",
+    "title": "Premiers secours : Fracture du membre supérieur | Secourisme",
+    "durationSeconds": 88,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-broken-arm",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "fDWaXwLnfY8",
+    "title": "La pose de voie veineuse periphérique",
+    "durationSeconds": 654,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "IFPS Croix Saint-Simon",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "h2KaLNID5yI",
+    "title": "PCA Morphine",
+    "durationSeconds": 332,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Daniel Annequin",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "idWrK5FH3wA",
+    "title": "Profamille",
+    "durationSeconds": 198,
+    "sourceUrl": "https://www.psycom.org/sinformer/la-sante-mentale/les-troubles-psy/troubles-schizophreniques/",
+    "publisher": "Centre ressource réhabilitation psychosociale",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "m1GHd7uyYgA",
+    "title": "Technique d’ablation des drains aspiratifs type Redon",
+    "durationSeconds": 166,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CHU de Rouen",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "mEuokfY0EH0",
+    "title": "Système de récompense et addiction",
+    "durationSeconds": 188,
+    "sourceUrl": "https://www.inserm.fr/dossier/addictions/",
+    "publisher": "Maad Digital",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "mYoN3fpiCYU",
+    "title": "Sécuriser les soins sur chambres à cathéter implantable au domicile",
+    "durationSeconds": 603,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "CPIAS Nouvelle-Aquitaine",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "mZU5fJ82ucA",
+    "title": "Premiers secours : Traumatisme de la colonne vertebrale et de la tête | Secourisme",
+    "durationSeconds": 95,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-spinal-column-injuries",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "mxOZLc-ncxw",
+    "title": "Premiers secours - Adulte : Réanimation cardio-pulmonaire | Secourisme",
+    "durationSeconds": 175,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/first-aid-adult-cardiopulmonary-resuscitation",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "nnTBSsY5klE",
+    "title": "Les effets de l'alcool sur le foie",
+    "durationSeconds": 340,
+    "sourceUrl": "https://www.maad-digital.fr/video/les-effets-de-lalcool-sur-le-foie/",
+    "publisher": "Maad Digital",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "qwcEIKS4eDo",
+    "title": "PICC-Line : Protocole de la réfection du pansement PICC-Line",
+    "durationSeconds": 417,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Condorcet - e-Learning thématiques biomédicales",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "svWSyUiu8CY",
+    "title": "Diagnostics infirmiers - cas n° 1 : Agnès",
+    "durationSeconds": 824,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "De Boeck Supérieur",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "u98iVPOQGLA",
+    "title": "Comprendre les analyses sanguines",
+    "durationSeconds": 690,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "The Leukemia & Lymphoma Society of Canada",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "vPm36wAJb9U",
+    "title": "Étiquetage d’un médicament administré au moyen d’un pousse seringue électrique",
+    "durationSeconds": 124,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "Hôpital Saint-Louis AP-HP",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "vPuaBSnNvbQ",
+    "title": "Prévenir les accidents du quotidien | Secourisme",
+    "durationSeconds": 167,
+    "sourceUrl": "https://www.sikana.tv/fr/health/first-aid/prevenir-les-accidents-du-quotidien",
+    "publisher": "SIKANA Français",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "yh93CwMwGac",
+    "title": "Les mécanismes du binge drinking",
+    "durationSeconds": 200,
+    "sourceUrl": "https://www.maad-digital.fr/video/les-mecanismes-du-binge-drinking/",
+    "publisher": "Maad Digital",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
+  },
+  {
+    "id": "zI2-ChcyRaM",
+    "title": "Comment bien ajuster son masque de protection respiratoire ?",
+    "durationSeconds": 71,
+    "sourceUrl": "https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf",
+    "publisher": "INRSFrance",
+    "language": "Français",
+    "checkedAt": "2026-09-03"
   }
 ];
 
@@ -868,7 +1300,8 @@ export const studyVideoAssignments: readonly {
     "topic": "Neurologie",
     "subtopic": "Épilepsie et crises convulsives",
     "videoIds": [
-      "_1pq4VAcg4U"
+      "_1pq4VAcg4U",
+      "8zJOr3P6DbA"
     ]
   },
   {
@@ -1115,6 +1548,443 @@ export const studyVideoAssignments: readonly {
     "subtopic": "Déficit neurologique aigu au triage",
     "videoIds": [
       "6tGxVW2_uck"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Respiratoire",
+    "subtopic": "Trachéotomie et soins associés",
+    "videoIds": [
+      "RkpJW5pS6Nc"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Hématologie",
+    "subtopic": "Numération formule sanguine",
+    "videoIds": [
+      "u98iVPOQGLA"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Hématologie",
+    "subtopic": "Physiologie du sang et hématopoïèse",
+    "videoIds": [
+      "u98iVPOQGLA"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Hématologie",
+    "subtopic": "Prélèvements et examens hématologiques",
+    "videoIds": [
+      "SLfk_tdY4uU"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Hématologie",
+    "subtopic": "Transfusion sanguine",
+    "videoIds": [
+      "Q_AfuNSfcIQ"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Infectiologie",
+    "subtopic": "Précautions standard et complémentaires",
+    "videoIds": [
+      "CMgDVSgWPjc",
+      "zI2-ChcyRaM"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Analgésiques",
+    "subtopic": "Analgésie contrôlée par le patient",
+    "videoIds": [
+      "h2KaLNID5yI"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Analgésiques",
+    "subtopic": "Évaluation de la douleur",
+    "videoIds": [
+      "HcQvvtHK3a4"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Analgésiques",
+    "subtopic": "Antalgie chez l’enfant et la personne âgée",
+    "videoIds": [
+      "h2KaLNID5yI",
+      "HcQvvtHK3a4"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Analgésiques",
+    "subtopic": "Approches non médicamenteuses complémentaires",
+    "videoIds": [
+      "9k6YgtJFSrI"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Calculs de doses",
+    "subtopic": "Pousse-seringue électrique",
+    "videoIds": [
+      "-SIicpbmrX0"
+    ]
+  },
+  {
+    "category": "Pharmacologie",
+    "topic": "Calculs de doses",
+    "subtopic": "Vérification des doses et prévention des erreurs",
+    "videoIds": [
+      "LVgnSzVpMRc"
+    ]
+  },
+  {
+    "category": "Pédiatrie",
+    "topic": "Maladies pédiatriques",
+    "subtopic": "Douleur chez l’enfant",
+    "videoIds": [
+      "h2KaLNID5yI"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Signes vitaux",
+    "subtopic": "Évaluation de la douleur",
+    "videoIds": [
+      "HcQvvtHK3a4"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Sécurité du patient",
+    "subtopic": "Précautions standard",
+    "videoIds": [
+      "CMgDVSgWPjc",
+      "YxDNS8um4W0"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Sécurité du patient",
+    "subtopic": "Sécurité des médicaments",
+    "videoIds": [
+      "vPm36wAJb9U"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Sécurité du patient",
+    "subtopic": "Sécurité transfusionnelle",
+    "videoIds": [
+      "Q_AfuNSfcIQ"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Administration des médicaments",
+    "subtopic": "Injection sous-cutanée",
+    "videoIds": [
+      "LpqLDIWlkL0"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Administration des médicaments",
+    "subtopic": "Administration intraveineuse",
+    "videoIds": [
+      "88_ojm6-Mig",
+      "fDWaXwLnfY8"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Administration des médicaments",
+    "subtopic": "Compatibilités et préparation",
+    "videoIds": [
+      "dnu40D8_73w"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Documentation",
+    "subtopic": "Documentation des médicaments",
+    "videoIds": [
+      "vPm36wAJb9U"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Documentation",
+    "subtopic": "Diagnostics infirmiers",
+    "videoIds": [
+      "svWSyUiu8CY",
+      "AEeGU7-riUE"
+    ]
+  },
+  {
+    "category": "Fondements des soins infirmiers",
+    "topic": "Documentation",
+    "subtopic": "Plan de soins",
+    "videoIds": [
+      "1qfdF6vyitI"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "État de choc",
+    "subtopic": "Accès vasculaires",
+    "videoIds": [
+      "88_ojm6-Mig"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Surveillance du patient critique",
+    "subtopic": "Surveillance des cathéters et drains",
+    "videoIds": [
+      "m1GHd7uyYgA",
+      "_XL09m6PCqs"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Surveillance du patient critique",
+    "subtopic": "Prévention des infections liées aux dispositifs",
+    "videoIds": [
+      "qwcEIKS4eDo",
+      "-iLZk3OFCKg"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Prise en charge de la douleur",
+    "videoIds": [
+      "9k6YgtJFSrI"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Prévention",
+    "subtopic": "Santé au travail",
+    "videoIds": [
+      "zI2-ChcyRaM"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Santé familiale",
+    "subtopic": "Maladies chroniques au domicile",
+    "videoIds": [
+      "mYoN3fpiCYU"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Schizophrénie",
+    "subtopic": "Hallucinations",
+    "videoIds": [
+      "Lbrz36OGXms"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Schizophrénie",
+    "subtopic": "Symptômes positifs",
+    "videoIds": [
+      "Lbrz36OGXms"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Schizophrénie",
+    "subtopic": "Symptômes négatifs",
+    "videoIds": [
+      "Nn8zyaJ73vg"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Schizophrénie",
+    "subtopic": "Accompagnement des proches",
+    "videoIds": [
+      "idWrK5FH3wA"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Schizophrénie",
+    "subtopic": "Réhabilitation psychosociale",
+    "videoIds": [
+      "Cj1BJvg1V4w",
+      "W9OxknDjvHA"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Dépendances",
+    "subtopic": "Usage nocif et dépendance",
+    "videoIds": [
+      "mEuokfY0EH0",
+      "1z0wfwxQsTQ"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Réanimation",
+    "subtopic": "Reconnaissance de l’arrêt cardiorespiratoire",
+    "videoIds": [
+      "mxOZLc-ncxw"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Réanimation",
+    "subtopic": "Réanimation cardiopulmonaire de base",
+    "videoIds": [
+      "mxOZLc-ncxw"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Réanimation",
+    "subtopic": "Compressions thoraciques",
+    "videoIds": [
+      "mxOZLc-ncxw"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Réanimation",
+    "subtopic": "Ventilation pendant la réanimation",
+    "videoIds": [
+      "mxOZLc-ncxw"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Hémorragie externe",
+    "videoIds": [
+      "S9m0_t7VO3A"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Fractures et luxations",
+    "videoIds": [
+      "eX8L2xHPaew",
+      "ZNbtrD4pG3M"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Immobilisation et transfert",
+    "videoIds": [
+      "TRmqzCTFuVY"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Plaies et lésions des tissus mous",
+    "videoIds": [
+      "YmID7CiLLs4",
+      "2ozx4Uah94M"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Traumatisme rachidien",
+    "videoIds": [
+      "mZU5fJ82ucA"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Traumatismes",
+    "subtopic": "Traumatisme crânien",
+    "videoIds": [
+      "mZU5fJ82ucA"
+    ]
+  },
+  {
+    "category": "Pédiatrie",
+    "topic": "Croissance et développement",
+    "subtopic": "Prévention des accidents selon l’âge",
+    "videoIds": [
+      "vPuaBSnNvbQ"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Prévention",
+    "subtopic": "Prévention des accidents",
+    "videoIds": [
+      "vPuaBSnNvbQ"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Prévention",
+    "subtopic": "Eau potable et sécurité alimentaire",
+    "videoIds": [
+      "-2prtCXSem8"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Prévention",
+    "subtopic": "Hygiène et assainissement",
+    "videoIds": [
+      "-2prtCXSem8"
+    ]
+  },
+  {
+    "category": "Santé communautaire",
+    "topic": "Santé publique",
+    "subtopic": "Préparation aux catastrophes",
+    "videoIds": [
+      "5W2mZNRTrEU",
+      "YHiH4tvHNxA"
+    ]
+  },
+  {
+    "category": "Médecine–Chirurgie",
+    "topic": "Gastro-intestinal",
+    "subtopic": "Cirrhose et hypertension portale",
+    "videoIds": [
+      "nnTBSsY5klE"
+    ]
+  },
+  {
+    "category": "Santé mentale / Psychiatrie",
+    "topic": "Dépendances",
+    "subtopic": "Trouble de l’usage de l’alcool",
+    "videoIds": [
+      "yh93CwMwGac",
+      "nnTBSsY5klE"
+    ]
+  },
+  {
+    "category": "Urgences et soins critiques",
+    "topic": "Détresse respiratoire",
+    "subtopic": "Obstruction des voies aériennes",
+    "videoIds": [
+      "b0T4Y5RmHqM"
     ]
   }
 ];

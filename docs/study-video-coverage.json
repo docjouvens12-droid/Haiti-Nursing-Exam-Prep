@@ -1,0 +1,297 @@
+{
+  "checkedAt": "2026-09-03",
+  "totalSubtopics": 793,
+  "coveredSubtopics": 113,
+  "uniqueVideos": 113,
+  "missingSubtopics": 680,
+  "topics": [
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Cardiovasculaire",
+      "total": 27,
+      "withVideo": 7
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Respiratoire",
+      "total": 21,
+      "withVideo": 4
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Neurologie",
+      "total": 21,
+      "withVideo": 4
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Gastro-intestinal",
+      "total": 22,
+      "withVideo": 1
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Endocrinologie",
+      "total": 21,
+      "withVideo": 6
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Rénal",
+      "total": 21,
+      "withVideo": 1
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Hématologie",
+      "total": 20,
+      "withVideo": 4
+    },
+    {
+      "category": "Médecine–Chirurgie",
+      "topic": "Infectiologie",
+      "total": 21,
+      "withVideo": 2
+    },
+    {
+      "category": "Pédiatrie",
+      "topic": "Nouveau-né",
+      "total": 16,
+      "withVideo": 3
+    },
+    {
+      "category": "Pédiatrie",
+      "topic": "Croissance et développement",
+      "total": 16,
+      "withVideo": 3
+    },
+    {
+      "category": "Pédiatrie",
+      "topic": "Maladies pédiatriques",
+      "total": 18,
+      "withVideo": 3
+    },
+    {
+      "category": "Pédiatrie",
+      "topic": "Vaccination",
+      "total": 12,
+      "withVideo": 1
+    },
+    {
+      "category": "Pédiatrie",
+      "topic": "Urgences pédiatriques",
+      "total": 16,
+      "withVideo": 0
+    },
+    {
+      "category": "Maternité–Obstétrique / Gynécologie",
+      "topic": "Grossesse",
+      "total": 16,
+      "withVideo": 0
+    },
+    {
+      "category": "Maternité–Obstétrique / Gynécologie",
+      "topic": "Travail et accouchement",
+      "total": 16,
+      "withVideo": 0
+    },
+    {
+      "category": "Maternité–Obstétrique / Gynécologie",
+      "topic": "Postpartum",
+      "total": 16,
+      "withVideo": 3
+    },
+    {
+      "category": "Maternité–Obstétrique / Gynécologie",
+      "topic": "Complications obstétricales",
+      "total": 22,
+      "withVideo": 0
+    },
+    {
+      "category": "Maternité–Obstétrique / Gynécologie",
+      "topic": "Santé reproductive",
+      "total": 17,
+      "withVideo": 0
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Principes pharmacologiques",
+      "total": 15,
+      "withVideo": 0
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Antibiotiques",
+      "total": 18,
+      "withVideo": 0
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Médicaments cardiovasculaires",
+      "total": 17,
+      "withVideo": 3
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Analgésiques",
+      "total": 14,
+      "withVideo": 5
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Insulines",
+      "total": 15,
+      "withVideo": 10
+    },
+    {
+      "category": "Pharmacologie",
+      "topic": "Calculs de doses",
+      "total": 15,
+      "withVideo": 2
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Dépression",
+      "total": 14,
+      "withVideo": 2
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Anxiété",
+      "total": 14,
+      "withVideo": 2
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Schizophrénie",
+      "total": 15,
+      "withVideo": 5
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Troubles de la personnalité",
+      "total": 15,
+      "withVideo": 0
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Dépendances",
+      "total": 16,
+      "withVideo": 2
+    },
+    {
+      "category": "Santé mentale / Psychiatrie",
+      "topic": "Urgences psychiatriques",
+      "total": 16,
+      "withVideo": 0
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Prévention",
+      "total": 14,
+      "withVideo": 4
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Épidémiologie",
+      "total": 14,
+      "withVideo": 0
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Vaccination",
+      "total": 14,
+      "withVideo": 1
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Éducation sanitaire",
+      "total": 14,
+      "withVideo": 1
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Santé familiale",
+      "total": 14,
+      "withVideo": 2
+    },
+    {
+      "category": "Santé communautaire",
+      "topic": "Santé publique",
+      "total": 15,
+      "withVideo": 1
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Signes vitaux",
+      "total": 14,
+      "withVideo": 1
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Hygiène et confort",
+      "total": 15,
+      "withVideo": 0
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Sécurité du patient",
+      "total": 15,
+      "withVideo": 5
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Administration des médicaments",
+      "total": 17,
+      "withVideo": 4
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Documentation",
+      "total": 15,
+      "withVideo": 3
+    },
+    {
+      "category": "Fondements des soins infirmiers",
+      "topic": "Communication thérapeutique",
+      "total": 16,
+      "withVideo": 2
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "État de choc",
+      "total": 15,
+      "withVideo": 1
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "Détresse respiratoire",
+      "total": 16,
+      "withVideo": 1
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "Réanimation",
+      "total": 15,
+      "withVideo": 4
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "Traumatismes",
+      "total": 16,
+      "withVideo": 7
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "Triage",
+      "total": 14,
+      "withVideo": 1
+    },
+    {
+      "category": "Urgences et soins critiques",
+      "topic": "Surveillance du patient critique",
+      "total": 17,
+      "withVideo": 2
+    }
+  ]
+}

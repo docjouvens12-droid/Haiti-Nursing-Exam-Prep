@@ -30,3 +30,27 @@ Les identifiants proviennent de lecteurs ou de liens présents sur les sites sou
 Exclusions : les films HUG sur l’insuffisance cardiaque (903 s), l’insuffisance rénale (1059 s), Alzheimer (1025 s), et le développement de l’enfant prématuré (981 s) dépassent la limite. Le film Psycom sur les troubles anxieux de 2933 s est également exclu. D’autres liens, dont la péridurale, n’ont pas pu être validés sans connexion par l’outil ; cela ne démontre pas leur indisponibilité pour tous les utilisateurs. Aucune ressource bloquée ou de durée inconnue n’a été intégrée.
 
 Cette vérification reste documentaire et technique : elle ne constitue ni un visionnage intégral, ni une validation clinique indépendante, ni une validation de protocoles applicables en Haïti. Aucun lien vidéo n’est présenté comme un cours couvrant toute la sous-thématique.
+
+## Deuxième extension du 3 septembre 2026
+
+Ajout de 48 vidéos et de 53 sous-thématiques jusqu’ici sans vidéo. La rubrique déjà équipée sur les crises convulsives reçoit aussi un complément. Total publié : **113 vidéos uniques, 113 sous-thématiques sur 793 ; 680 restent sans vidéo**. La couverture par thématique est enregistrée dans `study-video-coverage.json` ; les compteurs de l’interface restent calculés depuis le catalogue.
+
+### Sources et correspondances
+
+- Ressources de formation référencées dans le [répertoire CEFIEC des supports pour étudiants infirmiers](https://www.cefiec.fr/Document/Communication/COVID-19/temoignages/listeSitesGratuitsdeE-learningpourlesetudiantssoinsinfirmiersV4-31mars2020.pdf) : HUG, IFSI Foch, IFPS Croix Saint-Simon, CPias, CNRD, CHU Rouen et Limoges, AP-HP, QualiREL, HEPH Condorcet et CH Métropole Savoie, entre autres. Les titres, descriptions et chaînes individuelles ont été contrôlés. Cette liste de 2020 est un outil de découverte, pas une certification de l’actualité des protocoles. Les démonstrations restent rattachées à leur établissement auteur.
+- Capsules françaises Sikana : gestes de secours chez l’adulte, prévention des accidents, hygiène alimentaire et préparation familiale aux catastrophes. Les transcriptions françaises des vidéos retenues ont été lues ; seules des correspondances décrivant un aspect réellement traité sont ajoutées. Une capsule sur les fractures ne prétend pas enseigner les luxations ; une capsule de premiers secours ne remplace pas un cours de soins critiques.
+- Institut de Psychiatrie/PsyCARE, Fondation FondaMental, Centre ressource réhabilitation psychosociale et AP-HM via Psycom : hallucinations, symptômes négatifs, accompagnement des proches et réhabilitation.
+- MAAD Digital et dossier Inserm : système de récompense, neurobiologie des addictions, alcoolisation et effets hépatiques. Le film sur le foie contient explicitement un chapitre sur la cirrhose ; il est proposé pour cet aspect de la rubrique « Cirrhose et hypertension portale ».
+
+Chaque ajout possède une source, un titre, une chaîne identifiable, une durée YouTube strictement inférieure à 900 secondes, un statut public OK et une intégration autorisée au moment du contrôle. Les durées viennent de YouTube : elles diffèrent parfois de quelques secondes de l’index Sikana. Les preuves individuelles sont dans `study-video-review-completion.json`. Aucun média n’est téléchargé ni réhébergé.
+
+### Exclusions et limites
+
+- Vidéos de plus de 15 minutes : notamment plusieurs ECG, calculs de doses, cathéter du nouveau-né, PCA et réanimation pédiatrique. Les identifiants exigeant une connexion, refusant l’intégration, supprimés ou sans métadonnées confirmées sont exclus. Un échec d’accès par l’outil n’est pas une preuve d’indisponibilité universelle.
+- Les contenus Sikana sur la déshydratation de l’enfant ne sont pas retenus : leur transcription contient des consignes d’eau pour le nouveau-né incompatibles avec les [conseils de l’OMS sur l’allaitement](https://www.who.int/news-room/questions-and-answers/item/breastfeeding).
+- Réanimation et désobstruction du nourrisson Sikana : non retenues, notamment en raison de la technique de compression à deux doigts et de la nécessité d’une revue au regard des [recommandations pédiatriques AHA/AAP de 2025](https://newsroom.heart.org/news/updated-cpr-guidelines-released-for-pediatric-and-neonatal-emergency-care-and-resuscitation). Les vidéos sur l’engorgement mammaire, le sommeil, les brûlures et la noyade sont également laissées de côté en attendant une revue clinique spécifique. Les résultats de recherches expérimentales ne sont pas ajoutés comme traitements infirmiers usuels.
+- Pas de visionnage intégral de chaque vidéo ni de validation clinique indépendante. Les mots « validé médicalement », « cours complet » ou « toutes les sous-thématiques complétées » ne doivent pas être utilisés. La recherche et la vérification documentaire ne permettent pas de remplir honnêtement les 680 rubriques restantes avec cette sélection.
+
+La tâche mensuelle existante lit le catalogue courant ; elle inclut donc ces ajouts sans nouvelle programmation.
+
+Validation de l’intégration : vérification TypeScript du projet, compilation et prérendu de l’accueil et de `/categories`, contrôle des correspondances exactes et de la conservation des 65 anciennes vidéos. Les deux pages présentent les compteurs 113/793, 160 liens vidéo avec leurs sources, et aucun lecteur tiers avant interaction. Le parcours visuel en navigateur de production n’a pas été rejoué.

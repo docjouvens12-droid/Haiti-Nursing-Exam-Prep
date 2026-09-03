@@ -31,7 +31,7 @@ export default function StudyVideoList({ videos }: { videos: readonly StudyVideo
         <span aria-hidden="true">▷ </span>
         {videos.length === 1 ? "1 vidéo explicative" : `${videos.length} vidéos explicatives`}
       </summary>
-      <p className={styles.note}>Vidéos pour comprendre les notions et l’éducation du patient. Consultez le titre pour connaître le sujet précis de chaque capsule.</p>
+      <p className={styles.note}>Capsules explicatives et démonstrations de soins. Le titre précise l’aspect abordé ; les gestes techniques suivent les protocoles de l’établissement auteur.</p>
       <div className={styles.choices}>
         {videos.map((video) => (
           <div key={video.id} className={styles.choice}>
