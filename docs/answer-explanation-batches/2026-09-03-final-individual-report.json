@@ -1,0 +1,14 @@
+{
+  "status": "applied-and-verified",
+  "newlyEnriched": 152,
+  "totalEnriched": 6356,
+  "totalQuestions": 6425,
+  "remaining": 69,
+  "mismatches": 0,
+  "backupCommit": "8f5bd428c8245959224e9dc9270d77c2a60d3182",
+  "pendingEditorialReview": [
+    "68 questions omettent le contexte de grossesse nécessaire au corrigé.",
+    "La position genu-pectorale ne doit pas être recommandée indifféremment pendant un transfert en ambulance ; corriger la question 34f004c6-7ddd-4258-b7e4-641aac06058f.",
+    "Relecture clinique indépendante non certifiée."
+  ]
+}
