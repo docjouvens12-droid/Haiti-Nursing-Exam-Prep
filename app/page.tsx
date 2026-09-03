@@ -1,4 +1,5 @@
 import StudyTopicDetails from "@/components/StudyTopicDetails";
+import StudyVideoOverview from "@/components/StudyVideoOverview";
 import { studyCategories } from "@/lib/study-categories";
 import Link from "next/link";
 import "./home-categories.css";
@@ -49,6 +50,7 @@ export default function Accueil() {
           <p className="muted">
             Explorez les principaux domaines de préparation, leurs thématiques et sous-thématiques.
           </p>
+          <StudyVideoOverview />
         </div>
 
         <div className="home-category-grid">

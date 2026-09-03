@@ -31,7 +31,7 @@ export default function StudyVideoList({ videos }: { videos: readonly StudyVideo
         <span aria-hidden="true">▷ </span>
         {videos.length === 1 ? "1 vidéo explicative" : `${videos.length} vidéos explicatives`}
       </summary>
-      <p className={styles.note}>Capsules en français pour comprendre les notions et l’éducation du patient.</p>
+      <p className={styles.note}>Vidéos pour comprendre les notions et l’éducation du patient. Consultez le titre pour connaître le sujet précis de chaque capsule.</p>
       <div className={styles.choices}>
         {videos.map((video) => (
           <div key={video.id} className={styles.choice}>
@@ -45,9 +45,12 @@ export default function StudyVideoList({ videos }: { videos: readonly StudyVideo
                 {activeId === video.id ? "Fermer la vidéo" : "Voir la vidéo"}
                 <span className={styles.srOnly}> : {video.title}</span>
               </button>
-              <a href={video.sourceUrl} target="_blank" rel="noopener noreferrer">Source HUG ↗<span className={styles.srOnly}> (nouvel onglet)</span></a>
+              <a href={video.sourceUrl} target="_blank" rel="noopener noreferrer">Source ↗<span className={styles.srOnly}> : {video.publisher} (nouvel onglet)</span></a>
               <a href={`https://www.youtube.com/watch?v=${video.id}`} target="_blank" rel="noopener noreferrer">YouTube ↗<span className={styles.srOnly}> (nouvel onglet)</span></a>
             </div>
+            <p className={styles.credit}>
+              {video.publisher} · Source et durée contrôlées le {video.checkedAt.split("-").reverse().join("/")}.
+            </p>
           </div>
         ))}
       </div>
@@ -64,9 +67,6 @@ export default function StudyVideoList({ videos }: { videos: readonly StudyVideo
           </>
         ) : null}
       </div>
-      <p className={styles.credit}>
-        {videos[0].publisher} · Source et durée contrôlées le {videos[0].checkedAt.split("-").reverse().join("/")}.
-      </p>
     </details>
   );
 }
