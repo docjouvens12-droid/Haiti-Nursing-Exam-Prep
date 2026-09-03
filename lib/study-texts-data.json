@@ -1378,37 +1378,45 @@
   },
   {
     "category": "Fondements des soins infirmiers",
-    "topic": "Documentation",
-    "subtopic": "Diagnostics infirmiers",
+    "id": "fiche-082",
     "paragraphs": [
       "Le diagnostic infirmier décrit une réponse humaine ou un risque sur lequel les soins infirmiers peuvent agir. Il s’appuie sur les données recueillies et se distingue du nom médical de la maladie.",
-      "Par exemple, une difficulté à se déplacer doit être reliée aux observations et aux facteurs contributifs. Éviter de choisir une étiquette sans données. Réévaluer le diagnostic lorsque l’état du patient évolue."
+      "Pour Mme Rose, expliquer le problème retenu et vérifier qu’il correspond à son vécu. Associer la prise en charge de la douleur à une mobilisation sécurisée selon les consignes. Réévaluer la formulation après les soins : les capacités et les priorités peuvent changer. La fiche « Plan de soins » poursuit ce même cas fictif."
     ],
-    "updatedAt": "2026-09-03",
-    "id": "fiche-082",
     "sources": [
+      {
+        "title": "Open RN — Démarche de soins infirmiers, 2024 (anglais)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610818/"
+      },
       {
         "title": "OpenStax — Démarche et diagnostic infirmiers (anglais)",
         "url": "https://openstax.org/books/fundamentals-nursing/pages/13-1-evolution-of-nursing-diagnosis"
       }
-    ]
+    ],
+    "subtopic": "Diagnostics infirmiers",
+    "topic": "Documentation",
+    "updatedAt": "2026-09-03"
   },
   {
     "category": "Fondements des soins infirmiers",
-    "topic": "Documentation",
-    "subtopic": "Plan de soins",
+    "id": "fiche-083",
     "paragraphs": [
       "Le plan de soins relie les problèmes identifiés, les objectifs du patient et les interventions prévues. Il organise les priorités et permet à l’équipe d’évaluer les résultats.",
-      "Formuler un objectif observable et réaliste, préciser les actions et leur surveillance, puis comparer les résultats attendus et obtenus. Adapter le plan si l’intervention ne fonctionne pas ou si un nouveau besoin apparaît."
+      "Pour Mme Rose : expliquer le transfert et obtenir son accord ; installer confortablement et appliquer les mesures antalgiques prescrites avec surveillance de leur effet ; préparer le fauteuil, sécuriser les freins et l’environnement ; mobiliser avec l’aide humaine ou technique adaptée aux consignes. Réévaluer la tolérance pendant et après le transfert, puis noter le résultat et le transmettre à l’équipe."
     ],
-    "updatedAt": "2026-09-03",
-    "id": "fiche-083",
     "sources": [
+      {
+        "title": "Open RN — Démarche de soins infirmiers, 2024 (anglais)",
+        "url": "https://www.ncbi.nlm.nih.gov/books/NBK610818/"
+      },
       {
         "title": "OpenStax — Démarche et diagnostic infirmiers (anglais)",
         "url": "https://openstax.org/books/fundamentals-nursing/pages/13-1-evolution-of-nursing-diagnosis"
       }
-    ]
+    ],
+    "subtopic": "Plan de soins",
+    "topic": "Documentation",
+    "updatedAt": "2026-09-03"
   },
   {
     "category": "Urgences et soins critiques",

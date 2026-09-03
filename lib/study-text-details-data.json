@@ -1,5 +1,37 @@
 [
   {
+    "alerts": "Ne pas déduire un diagnostic d’une seule étiquette ni confondre diagnostic médical et réponse humaine. Une détresse respiratoire, un malaise ou un saignement impose une évaluation urgente avant le travail de rédaction. La formulation doit suivre le référentiel de l’établissement ; ceci n’est pas un modèle officiel MSPP.",
+    "assessment": "Exemple de formulation pédagogique, sans code de classification : mobilité limitée liée à la douleur au mouvement, se manifestant par un besoin d’aide au lever. Un risque de chute repose sur des facteurs de risque : ne pas inventer une chute déjà survenue. Vérifier chaque hypothèse avec la patiente et l’évaluation clinique.",
+    "context": "Cas fictif commun aux deux fiches : Mme Rose, 68 ans, est hospitalisée après une intervention. Son état est stable et le lever accompagné est autorisé. Elle souhaite rejoindre le fauteuil, mais dit : « J’ai mal quand je bouge et j’ai peur de tomber. »",
+    "ids": [
+      "fiche-082"
+    ],
+    "kind": "concept",
+    "mechanism": "Partir des données du patient, regrouper les indices et identifier sa réponse au problème de santé. Une maladie est un diagnostic médical ; la difficulté à se déplacer ou le risque de chute orientent les soins infirmiers.",
+    "observations": "Données subjectives : douleur déclarée à 6/10 au mouvement et peur de tomber. Données objectives : elle protège la zone opérée et a besoin d’aide pour se lever. Compléter par ses capacités habituelles, l’équilibre, les vertiges éventuels et les consignes de mobilisation.",
+    "takeaways": [
+      "Recueillir les faits avant de conclure.",
+      "Relier le problème aux facteurs et aux observations ; pour un risque, préciser les facteurs de risque.",
+      "Prioriser la sécurité et les besoins de la personne, puis poursuivre avec la fiche « Plan de soins »."
+    ]
+  },
+  {
+    "alerts": "Arrêter la mobilisation et demander une évaluation si malaise, douleur nouvelle importante, dyspnée ou autre dégradation. Si l’objectif n’est pas atteint, rechercher l’obstacle et réviser le plan avec l’équipe ; ne pas forcer le transfert ni augmenter seul un traitement.",
+    "assessment": "Objectif négocié dans cet exemple : dans les deux heures, effectuer le transfert lit-fauteuil avec l’aide adaptée, sans malaise ni chute, avec une douleur jugée acceptable par Mme Rose, cible convenue ≤ 3/10. Ce délai et cette cible sont pédagogiques, pas une règle universelle.",
+    "context": "Suite du cas fictif de Mme Rose, 68 ans : état postopératoire stable, lever accompagné autorisé, douleur au mouvement à 6/10 et besoin d’aide. Le problème retenu est la mobilité limitée ; la patiente souhaite s’asseoir au fauteuil.",
+    "ids": [
+      "fiche-083"
+    ],
+    "kind": "concept",
+    "mechanism": "La démarche forme une boucle : recueillir les données, identifier les problèmes, fixer des objectifs, prévoir et réaliser les interventions, puis évaluer. Un résultat insuffisant conduit à réexaminer les données et à ajuster le plan.",
+    "observations": "Avant le transfert, réévaluer douleur, vigilance, équilibre, vertiges et tolérance à l’effort. Vérifier l’autorisation de mobilisation, les dispositifs en place, l’aide nécessaire et l’accord de Mme Rose. Ces observations déterminent si l’objectif reste approprié.",
+    "takeaways": [
+      "Exemple de résultat fictif à deux heures : transfert accompagné réalisé, sans malaise, douleur à 3/10 ; objectif atteint pour ce transfert, mais aide et surveillance toujours nécessaires.",
+      "Si douleur à 5/10 ou transfert impossible : objectif non atteint ou partiellement atteint, réévaluation et adaptation nécessaires.",
+      "Tracer l’heure, les actions réellement effectuées, la réponse et la suite prévue. Un objectif atteint ne clôt pas toute la prise en charge."
+    ]
+  },
+  {
     "ids": [
       "fiche-088",
       "fiche-566",
@@ -706,8 +738,6 @@
   {
     "ids": [
       "fiche-081",
-      "fiche-082",
-      "fiche-083",
       "fiche-691",
       "fiche-692",
       "fiche-693",
