@@ -19,7 +19,7 @@ export default function CategoriesPage() {
             </summary>
             <div className="topic-list">
               {category.topics.map((topic) => (
-                  <StudyTopicDetails key={topic.title} topic={topic} />
+                  <StudyTopicDetails key={topic.title} category={category.title} topic={topic} />
                 ))}
             </div>
           </details>

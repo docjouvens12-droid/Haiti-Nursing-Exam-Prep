@@ -64,7 +64,7 @@ export default function Accueil() {
               </summary>
               <div className="home-topic-list">
                 {category.topics.map((topic) => (
-                  <StudyTopicDetails key={topic.title} topic={topic} />
+                  <StudyTopicDetails key={topic.title} category={category.title} topic={topic} />
                 ))}
               </div>
             </details>
