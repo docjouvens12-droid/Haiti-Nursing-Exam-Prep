@@ -1,5 +1,5 @@
 import StudyTopicDetails from "@/components/StudyTopicDetails";
-import StudyVideoOverview from "@/components/StudyVideoOverview";
+import StudyTextOverview from "@/components/StudyTextOverview";
 import { studyCategories } from "@/lib/study-categories";
 
 export default function CategoriesPage() {
@@ -9,7 +9,7 @@ export default function CategoriesPage() {
         <span className="categories-kicker">Programme de révision</span>
         <h1>Catégories et thématiques</h1>
         <p>Explorez les domaines de préparation, leurs thématiques et sous-thématiques.</p>
-        <StudyVideoOverview />
+        <StudyTextOverview />
       </header>
       <section className="categories-grid">
         {studyCategories.map((category) => (
