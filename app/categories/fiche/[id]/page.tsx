@@ -14,23 +14,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function StudyTextPage({ params }: Props) {
   const text = getStudyTextById((await params).id);
   if (!text) notFound();
-  const minutes = Math.max(1, Math.ceil(text.paragraphs.join(" ").split(/\s+/).length / 180));
+  const minutes = Math.max(1, Math.ceil(text.sections.flatMap(section => section.paragraphs).join(" ").split(/\s+/).length / 180));
   return <main className={styles.page}>
     <Link className={styles.back} href="/categories">← Catégories et thématiques</Link>
     <article className={styles.article}>
       <header>
         <p className={styles.breadcrumb}>{text.category} · {text.topic}</p>
         <h1>{text.subtopic}</h1>
-        <p className={styles.meta}>Fiche de révision · Lecture : environ {minutes} min</p>
+        <p className={styles.meta}>8 rubriques · Lecture : environ {minutes} min</p>
+        <p className={styles.hint}>Ouvrez chaque rubrique pour avancer à votre rythme.</p>
       </header>
-      <section aria-labelledby="comprendre">
-        <h2 id="comprendre">Comprendre simplement</h2>
-        <p>{text.paragraphs[0]}</p>
-      </section>
-      <section className={styles.essentials} aria-labelledby="essentiel">
-        <h2 id="essentiel">Points essentiels pour les soins</h2>
-        <p>{text.paragraphs[1]}</p>
-      </section>
+      <div className={styles.sections}>
+        {text.sections.map((section, index) => <details
+          key={section.id}
+          id={section.id}
+          className={`${styles.section} ${section.id === "alertes" ? styles.alerts : ""} ${section.id === "retenir" ? styles.takeaways : ""}`}
+          open={index === 0}
+        >
+          <summary className={styles.summary}>
+            <span className={styles.number} aria-hidden="true">{index + 1}</span>
+            <h2>{section.title}</h2>
+            <span className={styles.chevron} aria-hidden="true">⌄</span>
+          </summary>
+          <div className={styles.content}>
+            {section.id === "retenir"
+              ? <ul>{section.paragraphs.map(paragraph => <li key={paragraph}>{paragraph}</li>)}</ul>
+              : section.paragraphs.map(paragraph => <p key={paragraph}>{paragraph}</p>)}
+          </div>
+        </details>)}
+      </div>
       <footer className={styles.footer}>
         <h2>Pour approfondir</h2>
         <ul>{text.sources.map(source => <li key={source.url}><a href={source.url} target="_blank" rel="noopener noreferrer">{source.title}<span className={styles.srOnly}> (nouvel onglet)</span> ↗</a></li>)}</ul>
