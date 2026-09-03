@@ -1,3 +1,4 @@
+import { StudentMenuButton } from "@/components/StudentMenuContext";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -125,7 +126,7 @@ export default async function TableauDeBord() {
 
       <main className="dashboard-main">
         <header className="dashboard-topbar modern-topbar">
-          <button className="menu-button" aria-label="Menu">☰</button>
+          <StudentMenuButton />
           <div className="dashboard-search">⌕ <span>Rechercher (ex: pharmacologie, pédiatrie...)</span></div>
           <div className="topbar-spacer" />
           <div className="study-streak">🔥 <span><small>Série d’étude</small><strong>{serieEtude} jours</strong></span></div>

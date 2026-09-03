@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import MobileStudentNav from "@/components/MobileStudentNav";
+import { StudentMenuProvider } from "@/components/StudentMenuContext";
 import PWARegister from "@/components/PWARegister";
 
 export const metadata: Metadata = {
@@ -30,8 +31,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="fr">
       <body>
-        {children}
-        <MobileStudentNav />
+        <StudentMenuProvider>
+          {children}
+          <MobileStudentNav />
+        </StudentMenuProvider>
         <PWARegister />
       </body>
     </html>

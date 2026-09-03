@@ -1,7 +1,8 @@
 "use client";
 
+import { useStudentMenu } from "./StudentMenuContext";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
@@ -30,7 +31,8 @@ const drawerItems = [
 export default function MobileStudentNav() {
   const pathname = usePathname();
   const router = useRouter();
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const { drawerOpen, setDrawerOpen } = useStudentMenu();
+  const drawerRef = useRef<HTMLElement>(null);
   const [isAdmin, setIsAdmin] = useState(false);
 
   const hidden =
@@ -42,18 +44,6 @@ export default function MobileStudentNav() {
     pathname.startsWith("/resultats/") ||
     /^\/examens\/\d+/.test(pathname);
 
-  useEffect(() => {
-    if (hidden) return;
-    function handleMenuClick(event: MouseEvent) {
-      const target = event.target as HTMLElement | null;
-      if (target?.closest(".menu-button")) {
-        event.preventDefault();
-        setDrawerOpen(true);
-      }
-    }
-    document.addEventListener("click", handleMenuClick);
-    return () => document.removeEventListener("click", handleMenuClick);
-  }, [hidden]);
 
   useEffect(() => {
     if (hidden) return;
@@ -74,19 +64,36 @@ export default function MobileStudentNav() {
     return () => { active = false; };
   }, [hidden, pathname]);
 
-  useEffect(() => { setDrawerOpen(false); }, [pathname]);
+  useEffect(() => { setDrawerOpen(false); }, [pathname, setDrawerOpen]);
 
   useEffect(() => {
     if (!drawerOpen) return;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    function onKeyDown(event: KeyboardEvent) { if (event.key === "Escape") setDrawerOpen(false); }
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const drawer = drawerRef.current;
+    drawer?.querySelector<HTMLButtonElement>("button")?.focus();
+    function onKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setDrawerOpen(false);
+      if (event.key !== "Tab" || !drawer) return;
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last?.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first?.focus();
+      }
+    }
     window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      if (previousFocus?.isConnected) previousFocus.focus();
     };
-  }, [drawerOpen]);
+  }, [drawerOpen, setDrawerOpen]);
 
   async function deconnecter() {
     const supabase = createClient();
@@ -103,7 +110,7 @@ export default function MobileStudentNav() {
       {drawerOpen && (
         <div className="mobile-drawer-layer" role="presentation">
           <button className="mobile-drawer-backdrop" aria-label="Fermer le menu" onClick={() => setDrawerOpen(false)} />
-          <aside className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu principal">
+          <aside id="student-menu" ref={drawerRef} className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu principal">
             <div className="mobile-drawer-head">
               <div><strong>Haiti Nursing</strong><span>Exam Prep</span></div>
               <button className="mobile-drawer-close" aria-label="Fermer" onClick={() => setDrawerOpen(false)}>×</button>
@@ -139,11 +146,11 @@ export default function MobileStudentNav() {
         })}
       </nav>
       <style jsx global>{`
-        .mobile-drawer-layer{display:none}
-        @media(max-width:800px){
+        .menu-button{min-width:44px;min-height:44px;cursor:pointer;touch-action:manipulation}
+        .menu-button:focus-visible{outline:3px solid #2474ff;outline-offset:2px;border-radius:8px}
           .mobile-drawer-layer{display:block;position:fixed;inset:0;z-index:1000}
           .mobile-drawer-backdrop{position:absolute;inset:0;border:0;background:rgba(5,16,45,.48);padding:0}
-          .mobile-drawer{position:absolute;top:0;left:0;width:min(86vw,340px);height:100%;background:#fff;box-shadow:18px 0 45px rgba(7,27,80,.22);padding:20px 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .18s ease-out}
+          .mobile-drawer{position:absolute;top:0;left:0;width:min(86vw,340px);height:100%;background:#fff;box-shadow:18px 0 45px rgba(7,27,80,.22);padding:calc(20px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .18s ease-out}
           .mobile-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:6px 6px 18px;border-bottom:1px solid #e8edf5}
           .mobile-drawer-head strong{display:block;color:#0b1f59;font-size:18px}.mobile-drawer-head span{display:block;color:#71809e;font-size:11px;margin-top:2px}
           .mobile-drawer-close{border:0;background:#f1f5fb;color:#0b1f59;width:38px;height:38px;border-radius:50%;font-size:27px;line-height:1;cursor:pointer}
@@ -152,7 +159,7 @@ export default function MobileStudentNav() {
           .mobile-drawer-nav a.mobile-drawer-admin{background:#eff8f3;color:#137a4d;margin-top:6px}.mobile-drawer-nav a.mobile-drawer-admin>span:first-child{color:#137a4d}
           .mobile-drawer-logout{margin-top:auto;width:100%;border:1px solid #d7dfeb;background:#fff;color:#b42318;border-radius:11px;padding:13px 14px;font-weight:800;cursor:pointer}
           @keyframes drawerIn{from{transform:translateX(-16px);opacity:.7}to{transform:translateX(0);opacity:1}}
-        }
+        @media(prefers-reduced-motion:reduce){.mobile-drawer{animation:none}}
       `}</style>
     </>
   );
