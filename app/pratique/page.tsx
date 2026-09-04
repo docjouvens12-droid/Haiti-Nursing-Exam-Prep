@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import QuestionInteractiveAvancee from "@/components/QuestionInteractiveAvancee";
 import PracticeFilters from "@/components/PracticeFilters";
-import { CATEGORIES_QUESTIONS } from "@/lib/categories";
+import { CATEGORIES_QUESTIONS, libelleCategorie } from "@/lib/categories";
 import "./pratique.css";
 
 type SearchParams = {
@@ -106,8 +106,10 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
     supabase.from("questions").select("annee").not("annee", "is", null),
   ]);
 
-  const categoriesExistantes = (taxonomyData ?? []).map((x) => x.categorie).filter(Boolean) as string[];
-  const categories = Array.from(new Set([...CATEGORIES_QUESTIONS, ...categoriesExistantes])).sort((a, b) => a.localeCompare(b, "fr"));
+  const categoriesExistantes = Array.from(new Set((taxonomyData ?? []).map((x) => x.categorie).filter(Boolean) as string[]));
+  const categoriesPrincipales = CATEGORIES_QUESTIONS.filter((categorie) => categoriesExistantes.includes(categorie));
+  const categoriesSupplementaires = categoriesExistantes.filter((categorie) => !CATEGORIES_QUESTIONS.includes(categorie as any)).sort((a, b) => a.localeCompare(b, "fr"));
+  const categories = [...categoriesPrincipales, ...categoriesSupplementaires];
   const annees = Array.from(new Set((anneesData ?? []).map((x) => x.annee).filter(Boolean))).sort((a, b) => Number(b) - Number(a));
   const statutLabel = PRACTICE_STATUSES.find((item) => item.value === statutSelectionne)?.label ?? "Toutes les questions";
   const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}-${chronometreActif ? "chrono" : "libre"}`;
@@ -132,7 +134,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
         <header className="practice-topbar"><div><span className="practice-breadcrumb">Accueil / Questions</span><h1>Pratique de questions</h1></div><Link href="/categories" className="practice-back-link">← Catégories & thématiques</Link></header>
         <section className="practice-content">
           <div className="practice-filter-card">
-            <div><span className="practice-eyebrow">Personnalisez votre session</span><h2>Choisissez ce que vous souhaitez réviser</h2><p>Choisissez une catégorie : la liste des thématiques correspondantes s’ouvre immédiatement.</p></div>
+            <div><span className="practice-eyebrow">Programme infirmier haïtien</span><h2>Choisissez le domaine que vous souhaitez réviser</h2><p>Les catégories suivent les grands domaines de la formation infirmière et restent reliées aux 6 425 questions existantes.</p></div>
             <PracticeFilters
               categories={categories}
               topicRows={taxonomyData ?? []}
@@ -144,7 +146,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
           </div>
 
           <div className="practice-session-summary">
-            <div><span>Catégorie</span><strong>{categorieSelectionnee || "Toutes"}</strong></div>
+            <div><span>Catégorie</span><strong>{categorieSelectionnee ? libelleCategorie(categorieSelectionnee) : "Toutes"}</strong></div>
             <div><span>Thématique</span><strong>{sousCategorieSelectionnee || "Toutes"}</strong></div>
             <div><span>Type</span><strong>{statutLabel}</strong></div>
             <div><span>Chronomètre</span><strong>{chronometreActif ? "Activé" : "Désactivé"}</strong></div>
