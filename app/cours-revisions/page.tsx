@@ -14,48 +14,9 @@ const domaines = [
   { titre: "Fondements des soins infirmiers", description: "Principes essentiels, sécurité, hygiène et démarche de soins.", modules: ["Démarche de soins", "Sécurité du patient", "Hygiène et infection", "Soins de base"] },
   { titre: "Urgences et soins critiques", description: "Priorités, stabilisation et surveillance du patient critique.", modules: ["Évaluation ABCDE", "État de choc", "Urgences respiratoires", "Urgences cardiovasculaires"] },
 ];
-
-const routesMedicoChirurgicales: Record<string, string> = {
-  Cardiovasculaire: "/cours-revisions/cardiovasculaire",
-  Respiratoire: "/cours-revisions/respiratoire",
-  Neurologie: "/cours-revisions/neurologie",
-  "Gastro-intestinal": "/cours-revisions/gastro-intestinal",
-  Rénal: "/cours-revisions/renal",
-  Endocrinologie: "/cours-revisions/endocrinologie",
-  Hématologie: "/cours-revisions/hematologie",
-};
-
-export default async function CoursRevisionsPage() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
-  if (!data?.claims?.sub) redirect("/connexion");
-
-  return (
-    <main style={{ maxWidth: 1100, margin: "0 auto", padding: "28px 18px 90px" }}>
-      <section style={{ background: "linear-gradient(135deg,#071b4f,#1748b7)", color: "white", borderRadius: 22, padding: "28px 24px", marginBottom: 24 }}>
-        <div style={{ fontSize: 13, fontWeight: 800, opacity: .8, textTransform: "uppercase", letterSpacing: 1 }}>Bibliothèque d’apprentissage</div>
-        <h1 style={{ fontSize: 32, margin: "8px 0" }}>Cours & Révisions</h1>
-        <p style={{ maxWidth: 720, lineHeight: 1.65, margin: 0, opacity: .92 }}>Étudiez les notions essentielles des sciences infirmières grâce à des modules structurés, indépendants de la banque de questions et des examens.</p>
-      </section>
-
-      <div style={{ display: "grid", gap: 16 }}>
-        {domaines.map((domaine, index) => (
-          <section key={domaine.titre} style={{ border: "1px solid #e3e9f3", borderRadius: 18, background: "white", padding: 20, boxShadow: "0 6px 22px rgba(11,31,89,.05)" }}>
-            <h2 style={{ color: "#0b1f59", fontSize: 20, margin: "0 0 7px" }}>{domaine.titre}</h2>
-            <p style={{ color: "#64748b", lineHeight: 1.55, margin: "0 0 16px" }}>{domaine.description}</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 9 }}>
-              {domaine.modules.map((module) => {
-                const href = index === 0 ? routesMedicoChirurgicales[module] : undefined;
-                return href ? (
-                  <a key={module} href={href} style={{ background: "#eaf2ff", color: "#1657d8", border: "1px solid #bfd3ff", padding: "9px 13px", borderRadius: 999, fontWeight: 800, fontSize: 13 }}>{module} →</a>
-                ) : (
-                  <span key={module} style={{ background: "#f5f7fb", color: "#64748b", border: "1px solid #e5eaf2", padding: "9px 13px", borderRadius: 999, fontWeight: 700, fontSize: 13 }}>{module}</span>
-                );
-              })}
-            </div>
-          </section>
-        ))}
-      </div>
-    </main>
-  );
+const routesMedicoChirurgicales: Record<string,string>={Cardiovasculaire:"/cours-revisions/cardiovasculaire",Respiratoire:"/cours-revisions/respiratoire",Neurologie:"/cours-revisions/neurologie","Gastro-intestinal":"/cours-revisions/gastro-intestinal",Rénal:"/cours-revisions/renal",Endocrinologie:"/cours-revisions/endocrinologie",Hématologie:"/cours-revisions/hematologie"};
+const routesMaternite:Record<string,string>={Grossesse:"/cours-revisions/maternite/grossesse","Travail et accouchement":"/cours-revisions/maternite/travail-accouchement",Postpartum:"/cours-revisions/maternite/postpartum","Nouveau-né":"/cours-revisions/maternite/nouveau-ne"};
+export default async function CoursRevisionsPage(){
+ const supabase=await createClient(); const {data}=await supabase.auth.getClaims(); if(!data?.claims?.sub) redirect("/connexion");
+ return <main style={{maxWidth:1100,margin:"0 auto",padding:"28px 18px 90px"}}><section style={{background:"linear-gradient(135deg,#071b4f,#1748b7)",color:"white",borderRadius:22,padding:"28px 24px",marginBottom:24}}><div style={{fontSize:13,fontWeight:800,opacity:.8,textTransform:"uppercase",letterSpacing:1}}>Bibliothèque d’apprentissage</div><h1 style={{fontSize:32,margin:"8px 0"}}>Cours & Révisions</h1><p style={{maxWidth:720,lineHeight:1.65,margin:0,opacity:.92}}>Étudiez les notions essentielles des sciences infirmières grâce à des modules structurés, indépendants de la banque de questions et des examens.</p></section><div style={{display:"grid",gap:16}}>{domaines.map((domaine,index)=><section key={domaine.titre} style={{border:"1px solid #e3e9f3",borderRadius:18,background:"white",padding:20,boxShadow:"0 6px 22px rgba(11,31,89,.05)"}}><h2 style={{color:"#0b1f59",fontSize:20,margin:"0 0 7px"}}>{domaine.titre}</h2><p style={{color:"#64748b",lineHeight:1.55,margin:"0 0 16px"}}>{domaine.description}</p><div style={{display:"flex",flexWrap:"wrap",gap:9}}>{domaine.modules.map(module=>{const href=index===0?routesMedicoChirurgicales[module]:index===1?routesMaternite[module]:undefined;return href?<a key={module} href={href} style={{background:index===1?"#fff1f6":"#eaf2ff",color:index===1?"#a61e59":"#1657d8",border:`1px solid ${index===1?"#f4c7da":"#bfd3ff"}`,padding:"9px 13px",borderRadius:999,fontWeight:800,fontSize:13}}>{module} →</a>:<span key={module} style={{background:"#f5f7fb",color:"#64748b",border:"1px solid #e5eaf2",padding:"9px 13px",borderRadius:999,fontWeight:700,fontSize:13}}>{module}</span>})}</div></section>)}</div></main>
 }
