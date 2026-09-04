@@ -53,13 +53,10 @@ export default function CardiovascularReferences() {
       >
         <h2
           id="references-cardiovasculaires"
-          style={{ color: "#0b1f59", margin: "0 0 8px", fontSize: 21 }}
+          style={{ color: "#0b1f59", margin: "0 0 14px", fontSize: 21 }}
         >
           Références principales
         </h2>
-        <p style={{ color: "#64748b", margin: "0 0 14px", lineHeight: 1.6, fontSize: 13 }}>
-          Sélection de recommandations professionnelles utilisées comme références de révision pour ce module. Elles ne remplacent pas les protocoles locaux ni les mises à jour institutionnelles.
-        </p>
 
         <ol style={{ margin: 0, paddingLeft: 20, display: "grid", gap: 10 }}>
           {references.map((reference) => (
