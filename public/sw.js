@@ -1,4 +1,4 @@
-const CACHE_NAME = "haiti-nursing-exam-prep-v2";
+const CACHE_NAME = "haiti-nursing-exam-prep-v3";
 const OFFLINE_URL = "/hors-connexion";
 const APP_SHELL = ["/", "/connexion", OFFLINE_URL, "/manifest.webmanifest", "/pwa-icon.svg", "/pwa-icon-maskable.svg"];
 
@@ -9,9 +9,15 @@ self.addEventListener("install", (event) => {
 
 self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
+    Promise.all([
+      caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))),
+      self.clients.claim(),
+    ])
   );
-  self.clients.claim();
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") self.skipWaiting();
 });
 
 self.addEventListener("fetch", (event) => {
@@ -21,15 +27,12 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
 
-  // Ne jamais mettre en cache les API, l'authentification ou les réponses dynamiques Supabase.
   if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) return;
 
   if (request.mode === "navigate") {
     event.respondWith(
-      fetch(request)
+      fetch(request, { cache: "no-store" })
         .then((response) => {
-          // Les pages authentifiées/dynamiques ne sont pas conservées comme source de vérité hors ligne.
-          // On garde uniquement les pages publiques essentielles et la page de secours.
           if (["/", "/connexion", OFFLINE_URL].includes(url.pathname) && response.ok) {
             const copy = response.clone();
             event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)));
@@ -44,7 +47,6 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Assets statiques : cache-first. Les requêtes Next.js dynamiques restent network-first.
   const isStaticAsset =
     url.pathname.startsWith("/_next/static/") ||
     /\.(?:css|js|svg|png|jpg|jpeg|webp|ico|woff2?)$/i.test(url.pathname);
@@ -64,5 +66,5 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  event.respondWith(fetch(request).catch(() => caches.match(request)));
+  event.respondWith(fetch(request, { cache: "no-store" }).catch(() => caches.match(request)));
 });
