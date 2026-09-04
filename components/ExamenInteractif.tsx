@@ -28,17 +28,11 @@ type Props = {
   sousTitreSession?: string;
 };
 
-export default function ExamenInteractif({
-  questions,
-  tailleDemandee,
-  dureeMinutes,
-  modeSession,
-  titreSession,
-  sousTitreSession,
-}: Props) {
+export default function ExamenInteractif({ questions, tailleDemandee, dureeMinutes, modeSession, titreSession, sousTitreSession }: Props) {
   const router = useRouter();
   const [index, setIndex] = useState(0);
   const [reponses, setReponses] = useState<Reponses>({});
+  const [marquees, setMarquees] = useState<Set<string>>(new Set());
   const [secondesRestantes, setSecondesRestantes] = useState(dureeMinutes * 60);
   const [soumission, setSoumission] = useState(false);
   const question = questions[index];
@@ -46,11 +40,7 @@ export default function ExamenInteractif({
   useEffect(() => {
     const timer = setInterval(() => {
       setSecondesRestantes((s) => {
-        if (s <= 1) {
-          clearInterval(timer);
-          void soumettreExamen();
-          return 0;
-        }
+        if (s <= 1) { clearInterval(timer); void soumettreExamen(); return 0; }
         return s - 1;
       });
     }, 1000);
@@ -65,6 +55,14 @@ export default function ExamenInteractif({
 
   const progression = Math.round(((index + 1) / questions.length) * 100);
   const repondues = Object.keys(reponses).length;
+
+  function basculerRevision(id: string) {
+    setMarquees((courantes) => {
+      const suivant = new Set(courantes);
+      if (suivant.has(id)) suivant.delete(id); else suivant.add(id);
+      return suivant;
+    });
+  }
 
   async function soumettreExamen() {
     if (soumission) return;
@@ -101,13 +99,7 @@ export default function ExamenInteractif({
   return (
     <main className="exam-session-shell">
       <header className="exam-session-header">
-        <Link href="/examens" className="exam-session-brand">
-          <span className="brand-mark">✚</span>
-          <span>
-            <strong>{titreSession || "Haiti Nursing Exam Prep"}</strong>
-            <small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small>
-          </span>
-        </Link>
+        <Link href="/examens" className="exam-session-brand"><span className="brand-mark">✚</span><span><strong>{titreSession || "Haiti Nursing Exam Prep"}</strong><small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small></span></Link>
         <div className="exam-timer"><span>◷</span><span>Temps restant</span><strong>{temps}</strong></div>
         <Link href="/examens" className="exam-session-exit">Quitter l’examen</Link>
       </header>
@@ -116,69 +108,53 @@ export default function ExamenInteractif({
 
       <div className="exam-session-body">
         <section className="exam-question-card">
-          <div className="exam-question-meta">
-            <span>Question {index + 1} sur {questions.length}</span>
-            <span className="exam-category-chip">{question.categorie || "Sciences infirmières"}</span>
+          <div className="exam-question-meta"><span>Question {index + 1} sur {questions.length}</span><span className="exam-category-chip">{question.categorie || "Sciences infirmières"}</span></div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 10 }}>
+            <button type="button" onClick={() => basculerRevision(question.id)} aria-pressed={marquees.has(question.id)} style={{ border: "1px solid #dce3ef", borderRadius: 9, padding: "9px 12px", background: marquees.has(question.id) ? "#fff4d6" : "#fff", color: "#24304d", fontWeight: 700, cursor: "pointer" }}>
+              {marquees.has(question.id) ? "⚑ Marquée pour révision" : "⚐ Marquer pour révision"}
+            </button>
           </div>
-
           <h2>{question.question}</h2>
 
           <div className="exam-answer-list">
             {options.map(([lettre, texte]) => (
-              <button
-                type="button"
-                key={lettre}
-                className={`exam-answer ${reponses[question.id] === lettre ? "selected" : ""}`}
-                onClick={() => setReponses((r) => ({ ...r, [question.id]: lettre }))}
-              >
-                <span className="exam-answer-letter">{lettre}</span>
-                <span>{texte}</span>
+              <button type="button" key={lettre} className={`exam-answer ${reponses[question.id] === lettre ? "selected" : ""}`} onClick={() => setReponses((r) => ({ ...r, [question.id]: lettre }))}>
+                <span className="exam-answer-letter">{lettre}</span><span>{texte}</span>
               </button>
             ))}
           </div>
 
           <div className="exam-question-actions">
             <button className="exam-nav-button" disabled={index === 0} onClick={() => setIndex((i) => Math.max(0, i - 1))}>← Précédente</button>
-            {index < questions.length - 1 ? (
-              <button className="exam-nav-button primary" onClick={() => setIndex((i) => Math.min(questions.length - 1, i + 1))}>Suivante →</button>
-            ) : (
-              <button className="exam-submit-button" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Terminer l’examen"}</button>
-            )}
+            {index < questions.length - 1 ? <button className="exam-nav-button primary" onClick={() => setIndex((i) => Math.min(questions.length - 1, i + 1))}>Suivante →</button> : <button className="exam-submit-button" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Terminer l’examen"}</button>}
           </div>
         </section>
 
         <aside className="exam-question-sidebar">
           <section className="exam-status-card">
             <h3>Progression</h3>
-            <div className="exam-status-stats">
-              <div><strong>{repondues}</strong><span>Répondues</span></div>
-              <div><strong>{questions.length - repondues}</strong><span>Restantes</span></div>
-            </div>
+            <div className="exam-status-stats"><div><strong>{repondues}</strong><span>Répondues</span></div><div><strong>{questions.length - repondues}</strong><span>Restantes</span></div><div><strong>{marquees.size}</strong><span>À revoir</span></div></div>
           </section>
 
           <section className="exam-status-card">
             <h3>Questions</h3>
             <div className="exam-question-nav">
               {questions.map((q, i) => (
-                <button
-                  type="button"
-                  key={q.id}
-                  aria-label={`Question ${i + 1}`}
-                  className={`${i === index ? "current" : ""} ${reponses[q.id] ? "answered" : ""}`}
-                  onClick={() => setIndex(i)}
-                >{i + 1}</button>
+                <button type="button" key={q.id} aria-label={`Question ${i + 1}${marquees.has(q.id) ? ", marquée pour révision" : ""}`} className={`${i === index ? "current" : ""} ${reponses[q.id] ? "answered" : ""}`} onClick={() => setIndex(i)} style={marquees.has(q.id) ? { outline: "2px solid #f2a900", outlineOffset: "2px" } : undefined}>{i + 1}</button>
               ))}
             </div>
-            <div className="exam-status-legend"><span><i /> Non répondue</span><span><i /> Répondue</span></div>
+            <div className="exam-status-legend"><span><i /> Non répondue</span><span><i /> Répondue</span><span>⚑ À revoir</span></div>
           </section>
+
+          {marquees.size > 0 && <section className="exam-status-card"><h3>Marquées pour révision</h3><div className="exam-question-nav">{questions.map((q, i) => marquees.has(q.id) ? <button type="button" key={q.id} onClick={() => setIndex(i)}>{i + 1}</button> : null)}</div></section>}
 
           <section className="exam-submit-card">
             <strong>Prêt à terminer ?</strong>
-            <p>Vous avez répondu à {repondues} question{repondues > 1 ? "s" : ""} sur {questions.length}. Les questions non répondues seront comptées comme incorrectes.</p>
+            <p>Vous avez répondu à {repondues} question{repondues > 1 ? "s" : ""} sur {questions.length}. {marquees.size > 0 ? `${marquees.size} question${marquees.size > 1 ? "s sont" : " est"} encore marquée${marquees.size > 1 ? "s" : ""} pour révision. ` : ""}Les questions non répondues seront comptées comme incorrectes.</p>
             <button type="button" disabled={soumission} onClick={soumettreExamen}>{soumission ? "Soumission..." : "Soumettre l’examen"}</button>
           </section>
 
-          <p className="exam-loading-note">Vos réponses restent enregistrées dans cette session jusqu’à la soumission.</p>
+          <p className="exam-loading-note">Aucune correction n’est affichée pendant l’examen. Les réponses et explications apparaissent seulement après la soumission.</p>
         </aside>
       </div>
     </main>
