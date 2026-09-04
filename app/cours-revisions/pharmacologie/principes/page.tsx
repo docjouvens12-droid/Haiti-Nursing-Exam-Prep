@@ -6,17 +6,18 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 type QuizQuestion = {
+  id: string;
   question_order: number;
-  question_type: "mcq" | "case";
+  question_type: string;
   question: string;
   option_a: string;
   option_b: string;
   option_c: string;
   option_d: string;
-  correct_answer: "A" | "B" | "C" | "D";
+  correct_answer: string;
   explanation: string;
   option_rationales: Record<string, string> | null;
-  learning_point: string | null;
+  learning_point: string;
 };
 
 export default async function Page() {
@@ -41,7 +42,7 @@ export default async function Page() {
       .order("display_order"),
     supabase
       .from("learning_module_quiz_questions")
-      .select("question_order,question_type,question,option_a,option_b,option_c,option_d,correct_answer,explanation,option_rationales,learning_point")
+      .select("id,question_order,question_type,question,option_a,option_b,option_c,option_d,correct_answer,explanation,option_rationales,learning_point")
       .eq("module_id", module.id)
       .order("question_order"),
   ]);
