@@ -7,6 +7,7 @@ import { perioperatoire } from "@/lib/cours/perioperatoire";
 import { equilibreHydroelectrolytique } from "@/lib/cours/equilibre-hydroelectrolytique";
 import { sepsisInfectionsSystemiques } from "@/lib/cours/sepsis-infections-systemiques";
 import { oncologie } from "@/lib/cours/oncologie";
+import { musculosquelettiqueRhumatologie } from "@/lib/cours/musculosquelettique-rhumatologie";
 import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +33,9 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
         ? sepsisInfectionsSystemiques
         : slug === "oncologie"
           ? oncologie
-          : undefined;
+          : slug === "musculosquelettique-rhumatologie"
+            ? musculosquelettiqueRhumatologie
+            : undefined;
   const systeme = moduleSpecial ?? getAutreSysteme(slug);
   if (!systeme) notFound();
   const pathologies = moduleSpecial ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
