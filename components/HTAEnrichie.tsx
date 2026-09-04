@@ -21,17 +21,18 @@ export default function HTAEnrichie() {
 
   useEffect(() => {
     const findSection = () => {
-      const heading = Array.from(document.querySelectorAll("h1,h2,h3,h4")).find((node) =>
+      const heading = Array.from(document.querySelectorAll<HTMLElement>("h1,h2,h3,h4")).find((node) =>
         node.textContent?.toLowerCase().includes("hypertension artérielle")
       );
-      const section = heading?.closest("section") as HTMLElement | null;
+      if (!heading) return false;
+      const section = heading.closest("section") as HTMLElement | null;
       if (!section) return false;
 
       let host = document.getElementById("hta-enrichie-host");
       if (!host) {
         host = document.createElement("div");
         host.id = "hta-enrichie-host";
-        const headerContainer = heading?.parentElement;
+        const headerContainer = heading.parentElement;
         if (headerContainer && headerContainer !== section) {
           let sibling = headerContainer.nextElementSibling;
           while (sibling) {
@@ -42,7 +43,7 @@ export default function HTAEnrichie() {
           headerContainer.insertAdjacentElement("afterend", host);
         } else {
           Array.from(section.children).forEach((child) => {
-            if (!child.contains(heading) && child !== heading) child.remove();
+            if (child !== heading && !child.contains(heading)) child.remove();
           });
           section.appendChild(host);
         }
