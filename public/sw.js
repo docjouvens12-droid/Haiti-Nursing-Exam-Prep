@@ -1,4 +1,4 @@
-const CACHE_NAME = "haiti-nursing-exam-prep-v3";
+const CACHE_NAME = "haiti-nursing-exam-prep-v4";
 const OFFLINE_URL = "/hors-connexion";
 const APP_SHELL = ["/", "/connexion", OFFLINE_URL, "/manifest.webmanifest", "/pwa-icon.svg", "/pwa-icon-maskable.svg"];
 
