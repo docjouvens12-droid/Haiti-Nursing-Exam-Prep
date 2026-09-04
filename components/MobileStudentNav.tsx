@@ -118,6 +118,13 @@ export default function MobileStudentNav() {
             <nav className="mobile-drawer-nav" aria-label="Menu mobile complet">
               {drawerItems.map((item) => {
                 const active = pathname === item.href || (item.href !== "/tableau-de-bord" && pathname.startsWith(`${item.href}/`));
+                if (item.href === "/cours-revisions") {
+                  return (
+                    <a key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setDrawerOpen(false)}>
+                      <span aria-hidden="true">{item.icon}</span><span>{item.label}</span>
+                    </a>
+                  );
+                }
                 return (
                   <Link key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setDrawerOpen(false)}>
                     <span aria-hidden="true">{item.icon}</span><span>{item.label}</span>
