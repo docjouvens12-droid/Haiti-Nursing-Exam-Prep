@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 
+const VERSION_STORAGE_KEY = "haiti-nursing-app-version";
+const RELOAD_GUARD_KEY = "haiti-nursing-version-reload";
+
 export default function PWARegister() {
   const [showSplash, setShowSplash] = useState(true);
   const [offline, setOffline] = useState(false);
@@ -9,6 +12,50 @@ export default function PWARegister() {
   useEffect(() => {
     let timer: number | undefined;
     let reloadOnControllerChange = true;
+    let checkingVersion = false;
+
+    const checkAppVersion = async () => {
+      if (!navigator.onLine || checkingVersion) return;
+      checkingVersion = true;
+
+      try {
+        const response = await fetch(`/api/app-version?t=${Date.now()}`, {
+          cache: "no-store",
+          headers: { "Cache-Control": "no-cache" },
+        });
+        if (!response.ok) return;
+
+        const payload = (await response.json()) as { version?: string };
+        const version = payload.version;
+        if (!version || version === "development") return;
+
+        const previousVersion = localStorage.getItem(VERSION_STORAGE_KEY);
+        localStorage.setItem(VERSION_STORAGE_KEY, version);
+
+        if (previousVersion && previousVersion !== version) {
+          const reloadGuard = sessionStorage.getItem(RELOAD_GUARD_KEY);
+          if (reloadGuard === version) return;
+
+          sessionStorage.setItem(RELOAD_GUARD_KEY, version);
+          const freshUrl = new URL(window.location.href);
+          freshUrl.searchParams.set("pwa_refresh", Date.now().toString());
+          window.location.replace(freshUrl.toString());
+        }
+      } catch (error) {
+        console.error("Impossible de vérifier la version de l’application", error);
+      } finally {
+        checkingVersion = false;
+      }
+    };
+
+    const removeRefreshParameter = () => {
+      const url = new URL(window.location.href);
+      if (!url.searchParams.has("pwa_refresh")) return;
+      url.searchParams.delete("pwa_refresh");
+      window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+    };
+
+    removeRefreshParameter();
 
     if ("serviceWorker" in navigator) {
       const onControllerChange = () => {
@@ -45,6 +92,8 @@ export default function PWARegister() {
           console.error("Échec de l’enregistrement du service worker", error);
         });
 
+      void checkAppVersion();
+
       const clearReloadFlag = window.setTimeout(() => {
         sessionStorage.removeItem("pwa-auto-reloaded");
       }, 8000);
@@ -53,30 +102,49 @@ export default function PWARegister() {
       if (!standalone) setShowSplash(false);
       timer = standalone ? window.setTimeout(() => setShowSplash(false), 950) : undefined;
 
-      const updateConnection = () => setOffline(!navigator.onLine);
+      const updateConnection = () => {
+        setOffline(!navigator.onLine);
+        if (navigator.onLine) void checkAppVersion();
+      };
+
+      const onVisibilityChange = () => {
+        if (document.visibilityState === "visible") void checkAppVersion();
+      };
+
       updateConnection();
       window.addEventListener("online", updateConnection);
       window.addEventListener("offline", updateConnection);
+      document.addEventListener("visibilitychange", onVisibilityChange);
 
       return () => {
         if (timer) window.clearTimeout(timer);
         window.clearTimeout(clearReloadFlag);
         window.removeEventListener("online", updateConnection);
         window.removeEventListener("offline", updateConnection);
+        document.removeEventListener("visibilitychange", onVisibilityChange);
         navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
       };
     }
 
-    const updateConnection = () => setOffline(!navigator.onLine);
+    const updateConnection = () => {
+      setOffline(!navigator.onLine);
+      if (navigator.onLine) void checkAppVersion();
+    };
+    const onVisibilityChange = () => {
+      if (document.visibilityState === "visible") void checkAppVersion();
+    };
+
     updateConnection();
     window.addEventListener("online", updateConnection);
     window.addEventListener("offline", updateConnection);
+    document.addEventListener("visibilitychange", onVisibilityChange);
     setShowSplash(false);
 
     return () => {
       if (timer) window.clearTimeout(timer);
       window.removeEventListener("online", updateConnection);
       window.removeEventListener("offline", updateConnection);
+      document.removeEventListener("visibilitychange", onVisibilityChange);
     };
   }, []);
 
