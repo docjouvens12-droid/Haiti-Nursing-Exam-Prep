@@ -8,6 +8,7 @@ import { equilibreHydroelectrolytique } from "@/lib/cours/equilibre-hydroelectro
 import { sepsisInfectionsSystemiques } from "@/lib/cours/sepsis-infections-systemiques";
 import { oncologie } from "@/lib/cours/oncologie";
 import { musculosquelettiqueRhumatologie } from "@/lib/cours/musculosquelettique-rhumatologie";
+import { transfusionSecurite } from "@/lib/cours/transfusion-securite";
 import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +36,9 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
           ? oncologie
           : slug === "musculosquelettique-rhumatologie"
             ? musculosquelettiqueRhumatologie
-            : undefined;
+            : slug === "transfusion-securite"
+              ? transfusionSecurite
+              : undefined;
   const systeme = moduleSpecial ?? getAutreSysteme(slug);
   if (!systeme) notFound();
   const pathologies = moduleSpecial ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
