@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { getAutreSysteme } from "@/lib/cours/autres-systemes";
+import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -51,6 +52,8 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
           <p key={texte} style={{ color: "#334155", lineHeight: 1.72, margin: "0 0 10px" }}>{texte}</p>
         ))}
       </section>
+
+      <SystemAnatomyDiagrams systeme={slug} />
 
       <div style={{ display: "grid", gap: 18 }}>
         {systeme.pathologies.map((pathologie, index) => (
