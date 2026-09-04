@@ -11,6 +11,7 @@ type SearchParams = {
   annee?: string;
   nombre?: string;
   statut?: string;
+  chrono?: string;
 };
 
 type PracticeStatus = "toutes" | "nouvelles" | "incorrectes" | "favorites";
@@ -48,6 +49,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const anneeSelectionnee = (params.annee ?? "").trim();
   const statutDemande = (params.statut ?? "toutes").trim() as PracticeStatus;
   const statutSelectionne: PracticeStatus = PRACTICE_STATUSES.some((item) => item.value === statutDemande) ? statutDemande : "toutes";
+  const chronometreActif = params.chrono === "oui";
   const nombreDemande = Number(params.nombre ?? 25);
   const nombreQuestions = SESSION_SIZES.includes(nombreDemande as (typeof SESSION_SIZES)[number]) ? nombreDemande : 25;
 
@@ -122,7 +124,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const annees = Array.from(new Set((anneesData ?? []).map((x) => x.annee).filter(Boolean))).sort((a, b) => Number(b) - Number(a));
   const sousCategories = Array.from(new Set((topicsData ?? []).map((x) => x.sous_categorie).filter(Boolean) as string[])).sort((a, b) => a.localeCompare(b, "fr"));
   const statutLabel = PRACTICE_STATUSES.find((item) => item.value === statutSelectionne)?.label ?? "Toutes les questions";
-  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}`;
+  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}-${chronometreActif ? "chrono" : "libre"}`;
 
   return (
     <div className="practice-shell">
@@ -142,7 +144,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
         </nav>
         <div className="practice-sidebar-note">
           <strong>Conseil d’étude</strong>
-          <p>Utilisez « Nouvelles » pour avancer dans la banque et « Incorrectes » pour renforcer vos points faibles.</p>
+          <p>Activez le chronomètre pour vous entraîner à gérer votre temps, ou laissez-le désactivé pour étudier sans pression.</p>
         </div>
       </aside>
 
@@ -160,7 +162,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
             <div>
               <span className="practice-eyebrow">Personnalisez votre session</span>
               <h2>Choisissez ce que vous souhaitez réviser</h2>
-              <p>Filtrez la banque par catégorie, thématique, statut, année et nombre de questions.</p>
+              <p>Filtrez la banque et choisissez si vous souhaitez afficher un chronomètre pendant la session.</p>
             </div>
             <form method="get" action="/pratique" className="practice-filter-form">
               <label>
@@ -190,6 +192,13 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
                 </select>
               </label>
               <label>
+                <span>Chronomètre</span>
+                <select name="chrono" defaultValue={chronometreActif ? "oui" : "non"}>
+                  <option value="non">Sans chronomètre</option>
+                  <option value="oui">Avec chronomètre</option>
+                </select>
+              </label>
+              <label>
                 <span>Année</span>
                 <select name="annee" defaultValue={anneeSelectionnee}>
                   <option value="">Toutes les années</option>
@@ -205,6 +214,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
             <div><span>Catégorie</span><strong>{categorieSelectionnee || "Toutes"}</strong></div>
             <div><span>Thématique</span><strong>{sousCategorieSelectionnee || "Toutes"}</strong></div>
             <div><span>Type</span><strong>{statutLabel}</strong></div>
+            <div><span>Chronomètre</span><strong>{chronometreActif ? "Activé" : "Désactivé"}</strong></div>
             <div><span>Questions chargées</span><strong>{questions.length} / {nombreQuestions}</strong></div>
           </div>
 
@@ -215,7 +225,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
               <p>Aucune question ne correspond à ces filtres pour votre compte. Modifiez le type de questions, la catégorie ou la thématique.</p>
             </div>
           ) : (
-            <QuestionInteractiveAvancee key={cleGroupe} questions={questions} />
+            <QuestionInteractiveAvancee key={cleGroupe} questions={questions} chronometre={chronometreActif} />
           )}
         </section>
       </main>
