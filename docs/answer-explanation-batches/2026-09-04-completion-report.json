@@ -1,0 +1,16 @@
+{
+  "date": "2026-09-04",
+  "status": "applied-and-verified",
+  "newlyEnriched": 69,
+  "total": 6425,
+  "enriched": 6425,
+  "remaining": 0,
+  "mismatches": 0,
+  "backupCommit": "aa7611b3806031e76f0fcbb015ad72ecbb53d9e7",
+  "changes": {
+    "pregnancyContext": 68,
+    "ambulancePosition": 1,
+    "correctAnswerKeysChanged": 0
+  },
+  "limits": "Vérification des données et du format ; pas de certification clinique indépendante ni de test navigateur authentifié."
+}
