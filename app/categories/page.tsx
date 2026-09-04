@@ -58,7 +58,7 @@ export default async function CategoriesPage() {
       <header className="categories-header">
         <span className="categories-kicker">Banque de questions</span>
         <h1>Catégories & thématiques</h1>
-        <p>Explorez les vraies catégories de la banque et choisissez le domaine que vous souhaitez réviser.</p>
+        <p>Explorez les vraies catégories de la banque et lancez une séance de pratique directement sur la thématique choisie.</p>
         <div className="taxonomy-stats" aria-label="Résumé de la banque">
           <div><strong>{totalQuestions.toLocaleString("fr-FR")}</strong><span>questions</span></div>
           <div><strong>{categories.length}</strong><span>catégories</span></div>
@@ -80,11 +80,18 @@ export default async function CategoriesPage() {
             <div className="topic-list">
               {category.topics.map((topic) => (
                 <div className="topic-row" key={topic.name}>
-                  <span><strong>{topic.name}</strong><small>{topic.count.toLocaleString("fr-FR")} questions</small></span>
+                  <span className="topic-meta"><strong>{topic.name}</strong><small>{topic.count.toLocaleString("fr-FR")} questions</small></span>
+                  <Link
+                    className="topic-practice-link"
+                    href={`/pratique?categorie=${encodeURIComponent(category.name)}&sous_categorie=${encodeURIComponent(topic.name)}&nombre=25`}
+                    aria-label={`Pratiquer ${topic.name}`}
+                  >
+                    Pratiquer <span aria-hidden="true">→</span>
+                  </Link>
                 </div>
               ))}
-              <Link className="practice-link" href={`/pratique?categorie=${encodeURIComponent(category.name)}`}>
-                Pratiquer cette catégorie <span aria-hidden="true">→</span>
+              <Link className="practice-link" href={`/pratique?categorie=${encodeURIComponent(category.name)}&nombre=25`}>
+                Pratiquer toute la catégorie <span aria-hidden="true">→</span>
               </Link>
             </div>
           </details>
@@ -100,9 +107,9 @@ export default async function CategoriesPage() {
         .category-card>summary{list-style:none;display:flex;align-items:center;gap:14px;padding:20px;cursor:pointer}.category-card>summary::-webkit-details-marker{display:none}
         .category-icon{width:46px;height:46px;display:grid;place-items:center;border-radius:14px;background:#eef4ff;font-size:24px}.category-name{display:flex;flex-direction:column;gap:5px;flex:1}.category-name strong{font-size:17px}.category-name small{color:#7a879f;line-height:1.35}
         .category-arrow{font-size:24px;color:#4a67df;transition:transform .2s}.category-card[open]>summary .category-arrow{transform:rotate(180deg)}.topic-list{display:grid;gap:8px;padding:0 20px 20px}
-        .topic-row{border-top:1px solid #edf1f7;padding:11px 2px}.topic-row>span{display:flex;align-items:center;justify-content:space-between;gap:12px}.topic-row strong{font-size:14px}.topic-row small{color:#7a879f;white-space:nowrap}
+        .topic-row{border-top:1px solid #edf1f7;padding:11px 2px;display:flex;align-items:center;justify-content:space-between;gap:12px}.topic-meta{display:flex;min-width:0;flex-direction:column;gap:3px}.topic-row strong{font-size:14px}.topic-row small{color:#7a879f}.topic-practice-link{flex:none;background:#eef4ff;color:#2367e8;border-radius:9px;padding:8px 10px;font-size:12px;font-weight:800}
         .practice-link{margin-top:5px;display:flex;justify-content:center;gap:8px;background:#2367e8;color:#fff;padding:12px 14px;border-radius:11px;font-weight:800;font-size:14px}
-        @media(max-width:700px){.categories-page{padding:24px 16px 110px}.categories-header h1{font-size:27px}.categories-grid{grid-template-columns:1fr}.category-card>summary{padding:17px}.topic-list{padding:0 17px 17px}.taxonomy-stats{grid-template-columns:repeat(3,1fr)}.taxonomy-stats div{padding:11px 9px}.taxonomy-stats strong{font-size:18px}.topic-row>span{align-items:flex-start;flex-direction:column;gap:3px}}
+        @media(max-width:700px){.categories-page{padding:24px 16px 110px}.categories-header h1{font-size:27px}.categories-grid{grid-template-columns:1fr}.category-card>summary{padding:17px}.topic-list{padding:0 17px 17px}.taxonomy-stats{grid-template-columns:repeat(3,1fr)}.taxonomy-stats div{padding:11px 9px}.taxonomy-stats strong{font-size:18px}.topic-row{align-items:flex-start}.topic-practice-link{margin-top:1px}}
       `}</style>
     </main>
   );
