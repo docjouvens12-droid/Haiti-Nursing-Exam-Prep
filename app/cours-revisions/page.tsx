@@ -1,6 +1,8 @@
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 const domaines = [
   { titre: "Soins infirmiers médico-chirurgicaux", description: "Révision structurée des principaux systèmes et pathologies de l’adulte.", modules: ["Cardiovasculaire", "Respiratoire", "Neurologie", "Gastro-intestinal", "Rénal", "Endocrinologie", "Hématologie"] },
@@ -35,7 +37,7 @@ export default async function CoursRevisionsPage() {
               {domaine.modules.map((module) => {
                 const cardiovasculaire = index === 0 && module === "Cardiovasculaire";
                 return cardiovasculaire ? (
-                  <Link key={module} href="/cours-revisions/cardiovasculaire" style={{ background: "#eaf2ff", color: "#1657d8", border: "1px solid #bfd3ff", padding: "9px 13px", borderRadius: 999, fontWeight: 800, fontSize: 13 }}>{module} →</Link>
+                  <a key={module} href="/cours-revisions/cardiovasculaire" style={{ background: "#eaf2ff", color: "#1657d8", border: "1px solid #bfd3ff", padding: "9px 13px", borderRadius: 999, fontWeight: 800, fontSize: 13 }}>{module} →</a>
                 ) : (
                   <span key={module} style={{ background: "#f5f7fb", color: "#64748b", border: "1px solid #e5eaf2", padding: "9px 13px", borderRadius: 999, fontWeight: 700, fontSize: 13 }}>{module}</span>
                 );
