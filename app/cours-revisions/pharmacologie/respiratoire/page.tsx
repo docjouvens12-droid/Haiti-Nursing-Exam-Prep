@@ -1,9 +1,12 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import ModuleQuiz from "@/components/ModuleQuiz";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+type QuizQuestion={id:string;question_order:number;question_type:string;question:string;option_a:string;option_b:string;option_c:string;option_d:string;correct_answer:string;explanation:string;option_rationales:Record<string,string>|null;learning_point:string};
 
 export default async function Page() {
   const supabase = await createClient();
@@ -19,11 +22,10 @@ export default async function Page() {
 
   if (!module) redirect("/cours-revisions");
 
-  const { data: sections } = await supabase
-    .from("learning_module_sections")
-    .select("id,title,content,display_order")
-    .eq("module_id", module.id)
-    .order("display_order");
+  const [{ data: sections },{data: quiz}] = await Promise.all([
+    supabase.from("learning_module_sections").select("id,title,content,display_order").eq("module_id", module.id).order("display_order"),
+    supabase.from("learning_module_quiz_questions").select("id,question_order,question_type,question,option_a,option_b,option_c,option_d,correct_answer,explanation,option_rationales,learning_point").eq("module_id",module.id).order("question_order")
+  ]);
 
   const objectives = Array.isArray(module.learning_objectives)
     ? (module.learning_objectives as string[])
@@ -39,7 +41,7 @@ export default async function Page() {
         <div style={{ opacity: .82, fontSize: 13, fontWeight: 800 }}>PHARMACOLOGIE • RESPIRATOIRE</div>
         <h1 style={{ margin: "7px 0 8px", fontSize: 34 }}>{module.title}</h1>
         <p style={{ margin: 0, lineHeight: 1.65, opacity: .95 }}>{module.summary}</p>
-        <div style={{ marginTop: 14, fontSize: 13, fontWeight: 800 }}>⏱ Environ {module.estimated_minutes} minutes</div>
+        <div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:14}}><span style={{background:'rgba(255,255,255,.14)',padding:'7px 10px',borderRadius:999,fontSize:13,fontWeight:800}}>⏱ {module.estimated_minutes} min</span><span style={{background:'rgba(255,255,255,.14)',padding:'7px 10px',borderRadius:999,fontSize:13,fontWeight:800}}>📘 {(sections??[]).length} sections</span><span style={{background:'rgba(255,255,255,.14)',padding:'7px 10px',borderRadius:999,fontSize:13,fontWeight:800}}>📝 {(quiz??[]).length} questions</span></div>
       </header>
 
       <section style={{ background: "#f0f9ff", border: "1px solid #bae6fd", borderRadius: 18, padding: 20, marginBottom: 22 }}>
@@ -64,6 +66,8 @@ export default async function Page() {
           </article>
         ))}
       </div>
+
+      <ModuleQuiz questions={(quiz??[]) as QuizQuestion[]} description="8 QCM directs et 7 cas cliniques sur les bronchodilatateurs, corticostéroïdes, anticholinergiques, exacerbations et technique d’inhalation. La correction détaillée apparaît après chaque réponse." />
 
       <section style={{ background: "#ecfdf5", border: "1px solid #a7f3d0", borderRadius: 18, padding: 20, marginTop: 22 }}>
         <h2 style={{ color: "#047857", margin: "0 0 8px", fontSize: 20 }}>Références pédagogiques principales</h2>
