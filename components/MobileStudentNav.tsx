@@ -16,6 +16,7 @@ const items = [
 
 const drawerItems = [
   { href: "/tableau-de-bord", label: "Accueil", icon: "⌂" },
+  { href: "/cours-revisions", label: "Cours & Révisions", icon: "▥" },
   { href: "/pratique", label: "Questions", icon: "▤" },
   { href: "/categories", label: "Catégories & thématiques", icon: "▦" },
   { href: "/examens", label: "Examens", icon: "▣" },
@@ -43,7 +44,6 @@ export default function MobileStudentNav() {
     pathname.startsWith("/admin") ||
     pathname.startsWith("/resultats/") ||
     /^\/examens\/\d+/.test(pathname);
-
 
   useEffect(() => {
     if (hidden) return;
@@ -148,17 +148,17 @@ export default function MobileStudentNav() {
       <style jsx global>{`
         .menu-button{min-width:44px;min-height:44px;cursor:pointer;touch-action:manipulation}
         .menu-button:focus-visible{outline:3px solid #2474ff;outline-offset:2px;border-radius:8px}
-          .mobile-drawer-layer{display:block;position:fixed;inset:0;z-index:1000}
-          .mobile-drawer-backdrop{position:absolute;inset:0;border:0;background:rgba(5,16,45,.48);padding:0}
-          .mobile-drawer{position:absolute;top:0;left:0;width:min(86vw,340px);height:100%;background:#fff;box-shadow:18px 0 45px rgba(7,27,80,.22);padding:calc(20px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .18s ease-out}
-          .mobile-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:6px 6px 18px;border-bottom:1px solid #e8edf5}
-          .mobile-drawer-head strong{display:block;color:#0b1f59;font-size:18px}.mobile-drawer-head span{display:block;color:#71809e;font-size:11px;margin-top:2px}
-          .mobile-drawer-close{border:0;background:#f1f5fb;color:#0b1f59;width:38px;height:38px;border-radius:50%;font-size:27px;line-height:1;cursor:pointer}
-          .mobile-drawer-nav{display:grid;gap:5px;padding:14px 0}.mobile-drawer-nav a{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:11px;color:#172442;font-size:14px;font-weight:700}
-          .mobile-drawer-nav a>span:first-child{width:24px;text-align:center;color:#4561e8;font-size:18px}.mobile-drawer-nav a.active{background:#eef4ff;color:#1f5fe8}
-          .mobile-drawer-nav a.mobile-drawer-admin{background:#eff8f3;color:#137a4d;margin-top:6px}.mobile-drawer-nav a.mobile-drawer-admin>span:first-child{color:#137a4d}
-          .mobile-drawer-logout{margin-top:auto;width:100%;border:1px solid #d7dfeb;background:#fff;color:#b42318;border-radius:11px;padding:13px 14px;font-weight:800;cursor:pointer}
-          @keyframes drawerIn{from{transform:translateX(-16px);opacity:.7}to{transform:translateX(0);opacity:1}}
+        .mobile-drawer-layer{display:block;position:fixed;inset:0;z-index:1000}
+        .mobile-drawer-backdrop{position:absolute;inset:0;border:0;background:rgba(5,16,45,.48);padding:0}
+        .mobile-drawer{position:absolute;top:0;left:0;width:min(86vw,340px);height:100%;background:#fff;box-shadow:18px 0 45px rgba(7,27,80,.22);padding:calc(20px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom));display:flex;flex-direction:column;overflow-y:auto;animation:drawerIn .18s ease-out}
+        .mobile-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:6px 6px 18px;border-bottom:1px solid #e8edf5}
+        .mobile-drawer-head strong{display:block;color:#0b1f59;font-size:18px}.mobile-drawer-head span{display:block;color:#71809e;font-size:11px;margin-top:2px}
+        .mobile-drawer-close{border:0;background:#f1f5fb;color:#0b1f59;width:38px;height:38px;border-radius:50%;font-size:27px;line-height:1;cursor:pointer}
+        .mobile-drawer-nav{display:grid;gap:5px;padding:14px 0}.mobile-drawer-nav a{display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:11px;color:#172442;font-size:14px;font-weight:700}
+        .mobile-drawer-nav a>span:first-child{width:24px;text-align:center;color:#4561e8;font-size:18px}.mobile-drawer-nav a.active{background:#eef4ff;color:#1f5fe8}
+        .mobile-drawer-nav a.mobile-drawer-admin{background:#eff8f3;color:#137a4d;margin-top:6px}.mobile-drawer-nav a.mobile-drawer-admin>span:first-child{color:#137a4d}
+        .mobile-drawer-logout{margin-top:auto;width:100%;border:1px solid #d7dfeb;background:#fff;color:#b42318;border-radius:11px;padding:13px 14px;font-weight:800;cursor:pointer}
+        @keyframes drawerIn{from{transform:translateX(-16px);opacity:.7}to{transform:translateX(0);opacity:1}}
         @media(prefers-reduced-motion:reduce){.mobile-drawer{animation:none}}
       `}</style>
     </>
