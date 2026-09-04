@@ -7,20 +7,71 @@ export default function PWARegister() {
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
+    let timer: number | undefined;
+    let reloadOnControllerChange = true;
+
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").catch((error) => {
-        console.error("Échec de l’enregistrement du service worker", error);
-      });
+      const onControllerChange = () => {
+        if (!reloadOnControllerChange) return;
+        reloadOnControllerChange = false;
+        if (sessionStorage.getItem("pwa-auto-reloaded") !== "1") {
+          sessionStorage.setItem("pwa-auto-reloaded", "1");
+          window.location.reload();
+        }
+      };
+
+      navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
+
+      navigator.serviceWorker
+        .register("/sw.js", { updateViaCache: "none" })
+        .then(async (registration) => {
+          await registration.update();
+
+          if (registration.waiting) {
+            registration.waiting.postMessage({ type: "SKIP_WAITING" });
+          }
+
+          registration.addEventListener("updatefound", () => {
+            const worker = registration.installing;
+            if (!worker) return;
+            worker.addEventListener("statechange", () => {
+              if (worker.state === "installed" && navigator.serviceWorker.controller) {
+                worker.postMessage({ type: "SKIP_WAITING" });
+              }
+            });
+          });
+        })
+        .catch((error) => {
+          console.error("Échec de l’enregistrement du service worker", error);
+        });
+
+      const clearReloadFlag = window.setTimeout(() => {
+        sessionStorage.removeItem("pwa-auto-reloaded");
+      }, 8000);
+
+      const standalone = window.matchMedia("(display-mode: standalone)").matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
+      if (!standalone) setShowSplash(false);
+      timer = standalone ? window.setTimeout(() => setShowSplash(false), 950) : undefined;
+
+      const updateConnection = () => setOffline(!navigator.onLine);
+      updateConnection();
+      window.addEventListener("online", updateConnection);
+      window.addEventListener("offline", updateConnection);
+
+      return () => {
+        if (timer) window.clearTimeout(timer);
+        window.clearTimeout(clearReloadFlag);
+        window.removeEventListener("online", updateConnection);
+        window.removeEventListener("offline", updateConnection);
+        navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
+      };
     }
 
     const updateConnection = () => setOffline(!navigator.onLine);
     updateConnection();
     window.addEventListener("online", updateConnection);
     window.addEventListener("offline", updateConnection);
-
-    const standalone = window.matchMedia("(display-mode: standalone)").matches || Boolean((navigator as Navigator & { standalone?: boolean }).standalone);
-    if (!standalone) setShowSplash(false);
-    const timer = standalone ? window.setTimeout(() => setShowSplash(false), 950) : undefined;
+    setShowSplash(false);
 
     return () => {
       if (timer) window.clearTimeout(timer);
