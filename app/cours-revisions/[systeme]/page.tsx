@@ -6,6 +6,7 @@ import { getComplementsSysteme } from "@/lib/cours/complements-systemes";
 import { perioperatoire } from "@/lib/cours/perioperatoire";
 import { equilibreHydroelectrolytique } from "@/lib/cours/equilibre-hydroelectrolytique";
 import { sepsisInfectionsSystemiques } from "@/lib/cours/sepsis-infections-systemiques";
+import { oncologie } from "@/lib/cours/oncologie";
 import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
@@ -29,7 +30,9 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
       ? equilibreHydroelectrolytique
       : slug === "sepsis-infections-systemiques"
         ? sepsisInfectionsSystemiques
-        : undefined;
+        : slug === "oncologie"
+          ? oncologie
+          : undefined;
   const systeme = moduleSpecial ?? getAutreSysteme(slug);
   if (!systeme) notFound();
   const pathologies = moduleSpecial ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
