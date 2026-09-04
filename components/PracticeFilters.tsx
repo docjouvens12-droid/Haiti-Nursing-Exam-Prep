@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { libelleCategorie } from "@/lib/categories";
 
 type Status = { value: string; label: string };
 type TopicRow = { categorie: string | null; sous_categorie: string | null };
@@ -48,8 +49,8 @@ export default function PracticeFilters({ categories, topicRows, statuses, sessi
             setSousCategorie("");
           }}
         >
-          <option value="">Toutes les catégories</option>
-          {categories.map((c) => <option key={c} value={c}>{c}</option>)}
+          <option value="">Toutes les catégories du programme</option>
+          {categories.map((c) => <option key={c} value={c}>{libelleCategorie(c)}</option>)}
         </select>
       </label>
       <label>
