@@ -45,7 +45,7 @@ export default async function Page(){
 
     <div style={{display:'grid',gap:14}}>{((sections??[]) as Section[]).map(section=><article key={section.id} style={{background:'white',border:'1px solid #e3e9ef',borderRadius:17,padding:'19px 20px',boxShadow:'0 5px 18px rgba(127,29,29,.04)'}}><h2 style={{fontSize:20,color:'#7f1d1d',margin:'0 0 8px'}}>{section.title}</h2><p style={{margin:0,color:'#475569',lineHeight:1.72}}>{section.content}</p></article>)}</div>
 
-    <ModuleQuiz questions={(quiz??[]) as QuizQuestion[]} title="Médicaments cardiovasculaires" description="15 questions : QCM directs et cas cliniques sur les médicaments cardiovasculaires. La correction détaillée apparaît après chaque réponse."/>
+    <ModuleQuiz questions={(quiz??[]) as QuizQuestion[]}/>
 
     <section style={{marginTop:22,background:'#f8fafc',border:'1px solid #dfe6f0',borderRadius:16,padding:18}}><h2 style={{fontSize:18,color:'#0b1f59',margin:'0 0 8px'}}>Références principales</h2><p style={{margin:0,color:'#64748b',lineHeight:1.65}}>Contenu aligné sur les principes actuels de prise en charge de l’hypertension, de l’insuffisance cardiaque et de la fibrillation auriculaire, avec adaptation aux rôles de surveillance et de sécurité infirmière. Les protocoles locaux et prescriptions individuelles restent prioritaires.</p></section>
   </main>;
