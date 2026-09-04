@@ -1,0 +1,130 @@
+export const musculosquelettiqueRhumatologie = {
+  slug: "musculosquelettique-rhumatologie",
+  titre: "Musculosquelettique et rhumatologie",
+  objectifs: "Reconnaître les principales atteintes musculosquelettiques et rhumatologiques, détecter rapidement une compromission neurovasculaire, prévenir les complications de l’immobilisation et des fractures, soutenir la mobilité et l’autonomie, et assurer une éducation sécuritaire du patient.",
+  rappel: [
+    "Le système musculosquelettique comprend les os, articulations, muscles, tendons et ligaments. Il assure soutien, mouvement et protection. Une lésion peut compromettre douleur, mobilité, perfusion distale et autonomie.",
+    "L’évaluation infirmière associe douleur, mobilité, peau et fonction à une surveillance neurovasculaire distale : couleur et température, remplissage capillaire, pouls, sensibilité et motricité. Une aggravation rapide impose une escalade immédiate.",
+    "La récupération ne s’arrête pas à la consolidation : mobilisation sécuritaire, prévention des chutes, aides techniques et réadaptation contribuent au retour de la fonction."
+  ],
+  pathologies: [
+    {
+      nom: "Fractures : évaluation initiale et soins infirmiers",
+      definition: "Rupture partielle ou complète de la continuité osseuse, traumatique ou liée à une fragilité osseuse.",
+      physiopathologie: "La rupture entraîne douleur, saignement local, œdème et inflammation. Le déplacement des fragments peut léser vaisseaux, nerfs et tissus mous. La guérison passe par formation d’un hématome, cal osseux puis remodelage.",
+      risques: "Traumatisme, chute, âge avancé, ostéoporose, faible masse osseuse, corticothérapie prolongée et certaines maladies chroniques.",
+      manifestations: "Douleur, impotence fonctionnelle, œdème, ecchymose, déformation ou raccourcissement. Une fracture ouverte communique avec une plaie et augmente le risque infectieux.",
+      examens: "Radiographies selon le site; imagerie complémentaire selon indication. Évaluation répétée de la peau et de l’état neurovasculaire distal avant et après immobilisation ou intervention.",
+      traitement: "Alignement/réduction selon indication, immobilisation, analgésie et traitement chirurgical si nécessaire. Les fractures ouvertes nécessitent une prise en charge urgente selon protocole.",
+      soins: "Immobiliser et soutenir le membre, éviter les manipulations inutiles, surveiller douleur, saignement, peau et état neurovasculaire distal. Prévenir complications de l’immobilité et favoriser la mobilisation autorisée.",
+      complications: "Hémorragie, atteinte vasculo-nerveuse, syndrome des loges, infection, retard de consolidation, thrombose, embolie et perte fonctionnelle.",
+      education: "Respecter les restrictions d’appui et les aides prescrites; signaler douleur croissante, engourdissement, faiblesse, extrémité froide/pâle/bleutée, fièvre ou écoulement de plaie.",
+      points: "Une fracture est aussi un problème potentiel de perfusion, de nerfs, de peau et de fonction; la surveillance distale répétée est essentielle.",
+      priorite: "Après stabilisation générale du patient, protéger le membre et comparer immédiatement puis régulièrement l’état neurovasculaire distal; escalader toute détérioration."
+    },
+    {
+      nom: "Plâtres, attelles et traction : surveillance sécuritaire",
+      definition: "Dispositifs d’immobilisation utilisés pour maintenir un alignement, limiter le mouvement et favoriser la guérison.",
+      physiopathologie: "L’œdème peut augmenter après le traumatisme. Un dispositif trop compressif ou un gonflement important peut réduire la perfusion et comprimer les nerfs.",
+      risques: "Œdème aigu, dispositif serré ou endommagé, pression prolongée, diminution de sensibilité et mauvaise observance des consignes.",
+      manifestations: "Douleur anormale ou croissante, paresthésies, faiblesse, modification de couleur/température, gonflement distal, lésions cutanées ou odeur/écoulement inhabituel.",
+      examens: "Évaluation clinique et neurovasculaire répétée; inspection des bords, points de pression et peau accessible.",
+      traitement: "Ajustement ou réévaluation urgente du dispositif en cas de suspicion de compression; prise en charge de la cause selon prescription/protocole.",
+      soins: "Maintenir l’alignement prescrit, protéger la peau, garder le plâtre sec selon consignes, ne pas introduire d’objet sous le plâtre et documenter les contrôles neurovasculaires. Pour une traction, préserver l’alignement et le fonctionnement du système selon protocole.",
+      complications: "Compression neurovasculaire, lésions de pression, syndrome des loges, infection et perte d’alignement.",
+      education: "Ne pas modifier soi-même le dispositif. Consulter rapidement si douleur non contrôlée, engourdissement, faiblesse, gonflement important, changement de couleur/température ou problème cutané.",
+      points: "L’immobilisation doit stabiliser sans compromettre perfusion, nerfs ni peau.",
+      priorite: "Devant une douleur disproportionnée ou un changement neurovasculaire sous immobilisation, considérer une complication compressive et obtenir une évaluation urgente."
+    },
+    {
+      nom: "Syndrome des loges aigu",
+      definition: "Urgence dans laquelle la pression augmente dans un compartiment musculaire fermé et menace la perfusion ainsi que la fonction nerveuse et musculaire.",
+      physiopathologie: "Œdème ou saignement dans un espace fascial non extensible augmente la pression, diminue la perfusion capillaire et peut provoquer ischémie puis nécrose.",
+      risques: "Fractures, traumatismes par écrasement, hémorragie, reperfusion et compression externe excessive.",
+      manifestations: "Douleur intense ou disproportionnée, douleur à l’étirement passif, tension du compartiment, paresthésies et déficit moteur progressif. Les signes vasculaires tardifs ne doivent pas être attendus pour agir.",
+      examens: "Diagnostic principalement clinique avec mesure de pression compartimentale lorsque nécessaire par l’équipe spécialisée.",
+      traitement: "Décompression urgente, souvent par fasciotomie, et correction de toute compression externe selon l’équipe traitante.",
+      soins: "Reconnaître l’évolution, répéter l’examen neurovasculaire, documenter l’heure et les changements, alerter immédiatement et préparer le patient à une intervention urgente selon indication.",
+      complications: "Nécrose musculaire, atteinte nerveuse permanente, contracture, rhabdomyolyse, insuffisance rénale, amputation.",
+      education: "Après une fracture ou immobilisation, expliquer que douleur rapidement croissante, engourdissement ou faiblesse nécessitent une évaluation immédiate.",
+      points: "Le syndrome des loges est une urgence dépendante du temps; un pouls encore présent n’exclut pas une atteinte grave.",
+      priorite: "Alerter immédiatement devant douleur disproportionnée et signes neurologiques progressifs; ne pas attendre la disparition du pouls."
+    },
+    {
+      nom: "Ostéoporose et fractures de fragilité",
+      definition: "L’ostéoporose réduit la résistance osseuse et augmente le risque de fracture après un traumatisme de faible énergie, souvent une chute de sa hauteur.",
+      physiopathologie: "La diminution de densité et l’altération de la microarchitecture osseuse fragilisent l’os. Les fractures touchent fréquemment hanche, vertèbres, poignet et humérus proximal.",
+      risques: "Âge, sexe féminin, ménopause, antécédent de fracture, faible poids, inactivité, tabac, alcool, carences nutritionnelles, certains médicaments et risque de chute.",
+      manifestations: "Souvent silencieuse jusqu’à une fracture; douleurs dorsales, perte de taille ou déformation peuvent accompagner des fractures vertébrales.",
+      examens: "Évaluation du risque fracturaire, densité minérale osseuse lorsque indiquée et recherche des facteurs secondaires selon contexte.",
+      traitement: "Mesures nutritionnelles et d’activité adaptées, traitement de l’ostéoporose selon prescription, prévention des chutes et prise en charge/réadaptation après fracture.",
+      soins: "Évaluer risque de chute, douleur, mobilité, nutrition, traitements et sécurité du domicile; soutenir l’adhésion thérapeutique et la réadaptation.",
+      complications: "Fractures récidivantes, perte d’autonomie, douleur chronique, complications d’immobilisation et mortalité accrue après certaines fractures comme la hanche.",
+      education: "Activité physique adaptée, nutrition adéquate, arrêt du tabac, limitation de l’alcool, prévention des chutes et prise correcte des traitements prescrits.",
+      points: "Une fracture de fragilité doit conduire à penser prévention secondaire : traiter la fracture mais aussi réduire le risque de la suivante.",
+      priorite: "Après une fracture de faible énergie, sécuriser mobilité et prévention des chutes tout en favorisant l’évaluation du risque de nouvelle fracture."
+    },
+    {
+      nom: "Arthrose",
+      definition: "Affection articulaire chronique caractérisée par altération progressive des structures articulaires, douleur et limitation fonctionnelle.",
+      physiopathologie: "Dégradation du cartilage et changements de l’os sous-chondral entraînent douleur mécanique, raideur et perte progressive de fonction.",
+      risques: "Âge, surcharge pondérale, antécédents de traumatisme articulaire, contraintes répétées et facteurs anatomiques.",
+      manifestations: "Douleur liée à l’activité, raideur souvent brève après repos, limitation d’amplitude, crépitations et difficulté dans les activités quotidiennes.",
+      examens: "Évaluation clinique et fonctionnelle; imagerie selon indication et diagnostic différentiel.",
+      traitement: "Éducation, exercice/renforcement adaptés, gestion du poids si nécessaire, analgésie selon prescription, aides techniques et chirurgie dans certaines formes avancées.",
+      soins: "Évaluer douleur et retentissement fonctionnel, encourager activité graduée, techniques de protection articulaire et utilisation sécuritaire des aides à la marche.",
+      complications: "Douleur chronique, déconditionnement, limitation d’activité, chutes et perte d’autonomie.",
+      education: "Rester actif dans les limites sécuritaires, alterner activité et repos, maintenir les exercices recommandés et signaler une aggravation inhabituelle.",
+      points: "L’objectif n’est pas uniquement de réduire la douleur mais de préserver mobilité, participation et autonomie.",
+      priorite: "Préserver la fonction par une stratégie équilibrant contrôle de la douleur, activité sécuritaire et prévention du déconditionnement."
+    },
+    {
+      nom: "Polyarthrite rhumatoïde",
+      definition: "Maladie inflammatoire auto-immune chronique pouvant provoquer synovite persistante, destruction articulaire et manifestations systémiques.",
+      physiopathologie: "L’inflammation synoviale chronique peut endommager cartilage et os et entraîner déformations et perte fonctionnelle.",
+      risques: "Prédisposition génétique, tabagisme et facteurs immunologiques/environnementaux.",
+      manifestations: "Douleur et gonflement articulaires, raideur matinale prolongée, fatigue et atteinte souvent symétrique de plusieurs articulations.",
+      examens: "Évaluation clinique, marqueurs inflammatoires et auto-anticorps selon prescription; imagerie pour évaluer les atteintes.",
+      traitement: "Traitements de fond et autres médicaments selon spécialiste, contrôle de la douleur/inflammation, exercice et réadaptation adaptés.",
+      soins: "Surveiller douleur, fatigue, mobilité, effets indésirables et signes d’infection chez les patients sous traitements immunomodulateurs; soutenir économie articulaire et activité adaptée.",
+      complications: "Déformations, handicap fonctionnel, atteintes extra-articulaires, risque infectieux lié à certains traitements et comorbidités cardiovasculaires.",
+      education: "Adhérer au suivi, ne pas interrompre ou modifier les traitements sans avis, maintenir activité adaptée et signaler rapidement fièvre ou signes d’infection selon traitement.",
+      points: "Une prise en charge précoce et continue vise à contrôler l’inflammation et préserver la fonction.",
+      priorite: "Distinguer poussée inflammatoire d’une infection potentiellement grave, particulièrement chez un patient immunomodulé, et escalader les signes systémiques."
+    },
+    {
+      nom: "Arthroplastie de hanche ou de genou : soins postopératoires",
+      definition: "Remplacement chirurgical d’une articulation endommagée par une prothèse afin de réduire douleur et restaurer la fonction.",
+      physiopathologie: "La chirurgie crée un traumatisme tissulaire avec douleur et inflammation transitoires; l’immobilité postopératoire favorise complications thromboemboliques, respiratoires et fonctionnelles.",
+      risques: "Âge, comorbidités, immobilité, antécédent thromboembolique, infection et facteurs propres à la chirurgie.",
+      manifestations: "Douleur et limitation initiale attendues; douleur disproportionnée, déficit neurovasculaire, dyspnée, fièvre persistante, drainage anormal ou instabilité nécessitent évaluation.",
+      examens: "Surveillance clinique, plaie, état neurovasculaire, douleur, mobilité et examens postopératoires selon prescription.",
+      traitement: "Analgésie multimodale, prophylaxie thromboembolique selon protocole, mobilisation/réadaptation précoces et soins de plaie.",
+      soins: "Surveiller douleur, plaie, perfusion/sensibilité/motricité distales; appliquer précautions de mobilité propres à l’intervention; favoriser mobilisation sécuritaire, exercices prescrits et prévention des chutes.",
+      complications: "TVP/embolie pulmonaire, infection, luxation selon articulation, saignement, atteinte neurovasculaire, chute et perte fonctionnelle.",
+      education: "Utiliser correctement aides techniques et médicaments; respecter les précautions spécifiques données par l’équipe; reconnaître signes d’infection et de thrombose/embolie.",
+      points: "La récupération repose sur sécurité, contrôle de la douleur, prévention des complications et réadaptation précoce individualisée.",
+      priorite: "Détecter d’abord toute complication aiguë — détresse respiratoire, saignement, déficit neurovasculaire ou infection — puis favoriser une mobilisation précoce sécuritaire selon protocole."
+    },
+    {
+      nom: "Mobilité, aides techniques et prévention des chutes",
+      definition: "Ensemble des mesures visant à préserver ou restaurer les déplacements tout en réduisant le risque de chute et de nouvelle blessure.",
+      physiopathologie: "Douleur, faiblesse, déconditionnement, troubles d’équilibre et peur de tomber réduisent l’activité; l’inactivité aggrave ensuite faiblesse et perte fonctionnelle.",
+      risques: "Âge, fracture récente, faiblesse, hypotension orthostatique, troubles sensoriels/cognitifs, médicaments sédatifs, environnement dangereux et aide technique mal adaptée.",
+      manifestations: "Marche instable, transferts difficiles, besoin d’assistance, chutes ou quasi-chutes, limitation des activités quotidiennes.",
+      examens: "Évaluation fonctionnelle, marche/transferts, environnement, médicaments et facteurs de risque; collaboration avec réadaptation selon besoin.",
+      traitement: "Programme individualisé de mobilité/renforcement, correction des facteurs modifiables, aides techniques adaptées et modifications environnementales.",
+      soins: "Évaluer le niveau d’assistance avant le lever, sécuriser chaussures et environnement, enseigner l’utilisation correcte des aides, planifier les transferts et encourager la progression sans dépasser les restrictions prescrites.",
+      complications: "Chutes, refracture, peur de marcher, déconditionnement, thrombose, lésions de pression et perte d’autonomie.",
+      education: "Demander de l’aide si nécessaire, se lever progressivement, utiliser l’aide prescrite, dégager les obstacles et poursuivre les exercices recommandés.",
+      points: "La prévention des chutes et la réadaptation font partie du traitement, particulièrement après une fracture ou chirurgie.",
+      priorite: "Avant chaque mobilisation à risque, déterminer les capacités réelles, restrictions d’appui et niveau d’assistance requis afin d’éviter une chute ou une nouvelle lésion."
+    }
+  ],
+  references: [
+    { label: "OMS — Musculoskeletal conditions", href: "https://www.who.int/news-room/fact-sheets/detail/musculoskeletal-conditions" },
+    { label: "OMS — Fragility fractures", href: "https://www.who.int/news-room/fact-sheets/detail/fragility-fractures" },
+    { label: "OMS — Package of interventions for rehabilitation: musculoskeletal conditions", href: "https://www.who.int/publications/i/item/9789240071100" },
+    { label: "OMS — Rehabilitation", href: "https://www.who.int/news-room/fact-sheets/detail/rehabilitation" }
+  ]
+};
