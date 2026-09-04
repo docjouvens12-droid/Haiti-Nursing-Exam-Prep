@@ -1,0 +1,130 @@
+export const transfusionSecurite = {
+  slug: "transfusion-securite",
+  titre: "Transfusion sanguine et sécurité transfusionnelle",
+  objectifs: "Comprendre les indications et les étapes sécuritaires d’une transfusion, réaliser les vérifications infirmières essentielles, surveiller le patient et reconnaître rapidement les principales réactions transfusionnelles afin d’interrompre la transfusion et d’alerter sans délai lorsqu’une réaction est suspectée.",
+  rappel: [
+    "Le sang transporte l’oxygène, participe à l’hémostase et au maintien du volume circulant. Les produits sanguins sont sélectionnés selon le besoin clinique : concentrés de globules rouges, plaquettes, plasma ou autres composants selon les protocoles locaux.",
+    "La sécurité transfusionnelle repose sur une chaîne continue : prescription appropriée, identification correcte du patient, prélèvement et étiquetage fiables, compatibilité, transport et conservation adéquats, vérification finale au lit du patient, administration, surveillance et traçabilité.",
+    "Une erreur d’identification peut entraîner une transfusion incompatible potentiellement mortelle. Toute discordance entre patient, documents et produit impose de ne pas commencer la transfusion et de faire vérifier la situation."
+  ],
+  pathologies: [
+    {
+      nom: "Préparation et vérifications prétransfusionnelles",
+      definition: "Ensemble des contrôles effectués avant l’administration d’un produit sanguin afin de confirmer l’indication, l’identité du patient et la concordance avec le produit délivré.",
+      physiopathologie: "La compatibilité immuno-hématologique réduit le risque de destruction immunitaire des globules rouges transfusés. Une erreur d’identité, de prélèvement, d’étiquetage ou de produit peut rompre cette sécurité.",
+      risques: "Erreurs d’identification, prélèvement mal étiqueté, antécédent de réaction transfusionnelle, allo-immunisation, produit mal conservé ou discordance documentaire.",
+      manifestations: "Avant la transfusion, rechercher notamment fièvre, dyspnée, surcharge circulatoire préexistante et antécédents de réaction afin de disposer d’un état clinique de référence.",
+      examens: "Vérifier selon prescription et protocole le groupe sanguin, les tests de compatibilité requis, les résultats biologiques justifiant la transfusion et les constantes vitales de référence.",
+      traitement: "Administrer uniquement le produit prescrit et validé selon les procédures institutionnelles de transfusion.",
+      soins: "Expliquer le soin, vérifier l’identité avec les identifiants requis, comparer patient-produit-documents, contrôler intégrité et identification de la poche, disposer d’un abord veineux approprié et enregistrer les constantes de référence. Respecter la procédure locale de double contrôle lorsqu’elle est exigée.",
+      complications: "Transfusion au mauvais patient, incompatibilité ABO, réaction hémolytique aiguë, retard de prise en charge et événement indésirable grave.",
+      education: "Demander au patient de signaler immédiatement frissons, chaleur, prurit, éruption, douleur lombaire ou thoracique, dyspnée, malaise ou tout symptôme inhabituel.",
+      points: "Patient, produit et documents doivent concorder avant le début. Une discordance n’est jamais banalisée.",
+      priorite: "Ne pas commencer la transfusion tant que l’identité du patient, le produit sanguin et les documents requis ne concordent pas complètement."
+    },
+    {
+      nom: "Administration et surveillance d’une transfusion",
+      definition: "Administration contrôlée d’un produit sanguin avec observation clinique avant, pendant et après la transfusion.",
+      physiopathologie: "Les réactions aiguës peuvent apparaître rapidement après le début de l’exposition au produit transfusé. Une surveillance rapprochée permet d’identifier précocement un changement clinique.",
+      risques: "Antécédent transfusionnel, insuffisance cardiaque ou rénale, âge extrême, transfusions répétées et état clinique instable.",
+      manifestations: "Surveiller température, pouls, pression artérielle, fréquence respiratoire, oxygénation selon le contexte, état général et apparition de symptômes nouveaux.",
+      examens: "Constantes vitales selon le protocole de l’établissement et examens post-transfusionnels lorsque prescrits pour évaluer l’efficacité ou une complication.",
+      traitement: "Respecter le débit, la durée, le dispositif et les solutions compatibles définis par le protocole local et la prescription.",
+      soins: "Observer particulièrement le patient au début de la transfusion, réévaluer régulièrement les constantes et l’état respiratoire/hémodynamique, maintenir la traçabilité du produit et documenter le début, la fin, la tolérance et tout événement indésirable.",
+      complications: "Réaction fébrile, allergique ou hémolytique, anaphylaxie, surcharge circulatoire, atteinte pulmonaire aiguë et contamination bactérienne.",
+      education: "Expliquer que les symptômes doivent être signalés immédiatement même s’ils semblent légers.",
+      points: "La surveillance clinique est une composante essentielle de la sécurité transfusionnelle et ne se limite pas à brancher la poche.",
+      priorite: "Détecter immédiatement tout changement clinique après le début de la transfusion et intervenir selon le protocole sans attendre l’aggravation."
+    },
+    {
+      nom: "Réaction hémolytique aiguë",
+      definition: "Réaction transfusionnelle grave provoquée notamment par une incompatibilité immunologique entraînant la destruction rapide des globules rouges transfusés.",
+      physiopathologie: "Les anticorps du receveur peuvent provoquer hémolyse intravasculaire, activation inflammatoire, hypotension, coagulation intravasculaire disséminée et atteinte rénale aiguë.",
+      risques: "Erreur d’identification, incompatibilité ABO, erreur d’étiquetage ou de vérification prétransfusionnelle.",
+      manifestations: "Fièvre, frissons, douleur lombaire ou thoracique, malaise, dyspnée, hypotension, tachycardie, urines foncées ou saignement anormal peuvent survenir.",
+      examens: "Bilan transfusionnel et hémolytique selon protocole : vérification des identités, prélèvements sanguins, analyse urinaire et examens complémentaires prescrits.",
+      traitement: "Arrêt immédiat de la transfusion, alerte médicale et du service transfusionnel, maintien d’un accès veineux selon protocole et prise en charge de l’instabilité hémodynamique et des complications.",
+      soins: "Rester auprès du patient, réévaluer ABC, constantes et diurèse, suivre la procédure institutionnelle concernant la tubulure et la poche, effectuer les prélèvements demandés et documenter précisément l’événement.",
+      complications: "Choc, insuffisance rénale aiguë, coagulation intravasculaire disséminée, défaillance multiviscérale et décès.",
+      education: "Après stabilisation, expliquer l’événement et l’importance de signaler tout antécédent transfusionnel lors de soins futurs.",
+      points: "Une réaction hémolytique aiguë est une urgence. La transfusion suspecte ne doit pas être poursuivie.",
+      priorite: "STOPPER immédiatement la transfusion suspecte, évaluer le patient et déclencher sans délai la procédure de réaction transfusionnelle."
+    },
+    {
+      nom: "Réactions fébriles et allergiques",
+      definition: "Réactions pouvant se manifester par fièvre/frissons ou par prurit, urticaire et autres signes d’hypersensibilité pendant ou après une transfusion.",
+      physiopathologie: "Les mécanismes peuvent impliquer cytokines, anticorps dirigés contre des éléments cellulaires ou hypersensibilité à des protéines plasmatiques.",
+      risques: "Transfusions antérieures, grossesse antérieure, antécédent de réaction et exposition répétée aux produits sanguins.",
+      manifestations: "Fièvre, frissons, céphalées, prurit, urticaire; une réaction sévère peut comporter œdème, bronchospasme, hypotension ou anaphylaxie.",
+      examens: "Toute nouvelle fièvre ou réaction doit être évaluée afin d’exclure une hémolyse ou une contamination bactérienne; suivre le bilan prévu par le protocole.",
+      traitement: "Interrompre la transfusion lors d’une réaction suspectée et obtenir une évaluation. Les traitements symptomatiques et toute éventuelle reprise dépendent du diagnostic, de la gravité, d’une autorisation explicite et du protocole local.",
+      soins: "Évaluer voies aériennes, respiration et circulation, surveiller les constantes, rechercher des signes de gravité et préparer le traitement d’urgence prescrit en cas d’anaphylaxie.",
+      complications: "Anaphylaxie, détresse respiratoire, choc ou confusion avec une réaction plus grave si les symptômes sont minimisés.",
+      education: "Informer le patient qu’un simple prurit, une sensation de chaleur ou des frissons doivent être signalés rapidement.",
+      points: "Une fièvre pendant une transfusion n’est pas automatiquement bénigne; il faut d’abord interrompre et évaluer la réaction selon le protocole.",
+      priorite: "Interrompre la transfusion suspecte et rechercher immédiatement les signes de gravité respiratoire ou hémodynamique."
+    },
+    {
+      nom: "Surcharge circulatoire associée à la transfusion (TACO)",
+      definition: "Complication liée à une surcharge volémique survenant en association temporelle avec une transfusion.",
+      physiopathologie: "Un apport de volume supérieur à la capacité cardiovasculaire augmente les pressions de remplissage et favorise congestion et œdème pulmonaire.",
+      risques: "Insuffisance cardiaque, insuffisance rénale, âge avancé, petit poids, anémie chronique et administration rapide ou importante de volume.",
+      manifestations: "Dyspnée, orthopnée, tachypnée, hypoxémie, crépitants, hypertension possible, distension jugulaire et signes de surcharge.",
+      examens: "Évaluation clinique, saturation, imagerie thoracique et autres examens prescrits selon le contexte.",
+      traitement: "Arrêter la transfusion lors d’une réaction suspectée, soutenir l’oxygénation et appliquer les mesures prescrites pour la surcharge, notamment diurétiques lorsque indiqués.",
+      soins: "Installer le patient pour faciliter la respiration, surveiller oxygénation, pression artérielle, bilan hydrique et réponse au traitement; alerter rapidement.",
+      complications: "Œdème aigu pulmonaire, insuffisance respiratoire et décompensation cardiaque.",
+      education: "Chez les patients à risque, expliquer pourquoi le débit et la surveillance sont particulièrement importants.",
+      points: "Une dyspnée pendant une transfusion doit faire rechercher immédiatement une complication grave, dont la surcharge circulatoire.",
+      priorite: "Arrêter la transfusion suspecte, soutenir la respiration et évaluer rapidement la surcharge et l’état hémodynamique."
+    },
+    {
+      nom: "Atteinte pulmonaire aiguë associée à la transfusion (TRALI)",
+      definition: "Complication transfusionnelle aiguë caractérisée par une détresse respiratoire et un œdème pulmonaire non expliqué principalement par une surcharge circulatoire.",
+      physiopathologie: "Une activation inflammatoire pulmonaire augmente la perméabilité capillaire et provoque un œdème pulmonaire non cardiogénique.",
+      risques: "Patients gravement malades et certains contextes inflammatoires; le diagnostic repose surtout sur la présentation clinique et l’exclusion d’autres causes.",
+      manifestations: "Dyspnée aiguë, hypoxémie, tachypnée, cyanose possible et infiltrats pulmonaires bilatéraux, souvent avec détérioration rapide.",
+      examens: "Évaluation de l’oxygénation, imagerie thoracique et bilan permettant de différencier TRALI, TACO et autres causes de détresse respiratoire.",
+      traitement: "Arrêt de la transfusion, soutien respiratoire et prise en charge urgente selon la gravité; signalement au service transfusionnel.",
+      soins: "Évaluer ABC, administrer l’oxygène selon protocole/prescription, préparer une assistance ventilatoire si nécessaire et assurer une surveillance rapprochée.",
+      complications: "Insuffisance respiratoire aiguë, ventilation mécanique et décès.",
+      education: "Informer le patient après stabilisation de la nécessité de conserver l’information sur l’événement transfusionnel.",
+      points: "TRALI et TACO peuvent tous deux donner une dyspnée aiguë mais leurs mécanismes et leur prise en charge ne sont pas identiques.",
+      priorite: "Traiter toute détresse respiratoire associée à une transfusion comme une urgence : arrêter la transfusion, soutenir l’oxygénation et alerter immédiatement."
+    },
+    {
+      nom: "Contamination bactérienne et réaction septique transfusionnelle",
+      definition: "Réaction grave provoquée par la transfusion d’un produit sanguin contaminé par des bactéries ou leurs toxines.",
+      physiopathologie: "La prolifération bactérienne dans un produit contaminé peut entraîner une réponse inflammatoire systémique rapide, sepsis et choc.",
+      risques: "Rupture de chaîne de sécurité, contamination lors du prélèvement ou de la manipulation, conditions de stockage inadéquates et certains composants plus exposés selon leurs conditions de conservation.",
+      manifestations: "Fièvre élevée, frissons intenses, tachycardie, hypotension, nausées, dyspnée et détérioration rapide.",
+      examens: "Hémocultures du patient et investigations du produit selon protocole, avec bilan de sepsis et dysfonction d’organes selon l’état clinique.",
+      traitement: "Arrêt immédiat de la transfusion, alerte urgente, prélèvements appropriés sans retarder les soins et antibiothérapie/prise en charge du sepsis selon prescription et protocole.",
+      soins: "Surveiller ABC, perfusion, état mental, diurèse et constantes; appliquer le protocole de sepsis et de réaction transfusionnelle et préserver la traçabilité du produit.",
+      complications: "Choc septique, coagulation intravasculaire disséminée, défaillance multiviscérale et décès.",
+      education: "Expliquer que des frissons importants ou une fièvre brutale pendant une transfusion doivent être signalés immédiatement.",
+      points: "Une fièvre importante avec frissons et hypotension pendant une transfusion peut traduire une contamination bactérienne et exige une réponse urgente.",
+      priorite: "STOPPER la transfusion, évaluer et traiter immédiatement comme une urgence potentiellement septique tout en alertant le service transfusionnel."
+    },
+    {
+      nom: "Traçabilité, documentation et hémovigilance",
+      definition: "Enregistrement, signalement et analyse des transfusions et événements indésirables afin de garantir la continuité des soins et prévenir la répétition d’erreurs.",
+      physiopathologie: "La traçabilité n’agit pas sur une maladie mais sur le système de sécurité : elle permet de relier patient, produit, événement et actions correctives.",
+      risques: "Documentation incomplète, identifiants manquants, absence de signalement, transmission insuffisante et répétition d’une erreur évitable.",
+      manifestations: "Les événements à documenter comprennent symptômes, heure d’apparition, constantes, produit concerné, volume administré et interventions réalisées.",
+      examens: "Les investigations dépendent du type de réaction; leur résultat doit être relié à l’événement transfusionnel et transmis aux équipes concernées.",
+      traitement: "Appliquer les procédures institutionnelles de déclaration, investigation et suivi des événements transfusionnels.",
+      soins: "Documenter le produit et ses identifiants, heures de début/fin, surveillance, tolérance, réaction éventuelle, actions entreprises et personnes alertées; compléter les formulaires d’hémovigilance requis.",
+      complications: "Perte d’information, réexposition à un risque, difficulté d’enquête et répétition d’événements évitables.",
+      education: "Encourager le patient à mentionner les réactions transfusionnelles antérieures lors de futures hospitalisations.",
+      points: "La sécurité transfusionnelle continue après l’administration : documentation et signalement font partie du soin.",
+      priorite: "Assurer une traçabilité complète et signaler tout événement indésirable selon la procédure afin de protéger le patient et les futurs receveurs."
+    }
+  ],
+  references: [
+    { label: "OMS — Patient Blood Management and Clinical Use of Blood", href: "https://www.who.int/teams/health-product-policy-and-standards/standards-and-specifications/blood-and-products-of-human-origin/patient-blood-management-and-clinical-use-of-blood" },
+    { label: "OMS — Clinical Transfusion Process and Patient Safety", href: "https://www.who.int/publications/i/item/WHO-EHT-10.05" },
+    { label: "OMS — Blood safety and availability", href: "https://www.who.int/news-room/fact-sheets/detail/blood-safety-and-availability" },
+    { label: "OMS — Guide to establishing a national haemovigilance system", href: "https://www.who.int/publications/b/31380" }
+  ]
+};
