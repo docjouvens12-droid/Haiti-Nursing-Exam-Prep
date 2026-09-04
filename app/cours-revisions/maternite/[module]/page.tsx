@@ -5,6 +5,7 @@ import { getModuleMaternite } from "@/lib/cours/maternite";
 import { getComplementsMaternite } from "@/lib/cours/complements-maternite";
 import { complementsTravailAccouchement } from "@/lib/cours/complements-travail-accouchement";
 import { complementsPostpartum } from "@/lib/cours/complements-postpartum";
+import { complementsNouveauNe } from "@/lib/cours/complements-nouveau-ne";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -23,7 +24,7 @@ function Schema({slug}:{slug:string}){
 export default async function Page({params}:{params:Promise<{module:string}>}){
  const supabase=await createClient(); const {data}=await supabase.auth.getClaims(); if(!data?.claims?.sub) redirect("/connexion");
  const {module:slug}=await params; const module=getModuleMaternite(slug); if(!module) notFound();
- const sujets=[...module.sujets,...getComplementsMaternite(slug),...(slug==="travail-accouchement"?complementsTravailAccouchement:[]),...(slug==="postpartum"?complementsPostpartum:[])];
+ const sujets=[...module.sujets,...getComplementsMaternite(slug),...(slug==="travail-accouchement"?complementsTravailAccouchement:[]),...(slug==="postpartum"?complementsPostpartum:[]),...(slug==="nouveau-ne"?complementsNouveauNe:[])];
  return <main style={{maxWidth:920,margin:"0 auto",padding:"26px 18px 90px"}}>
  <Link href="/cours-revisions" style={{color:"#2563eb",fontWeight:800,fontSize:14}}>← Cours & Révisions</Link>
  <header style={{margin:"18px 0 22px",background:"linear-gradient(135deg,#7c1649,#c0266d)",color:"white",borderRadius:22,padding:"28px 24px"}}><div style={{opacity:.82,fontSize:13,fontWeight:800}}>SANTÉ MATERNELLE, OBSTÉTRIQUE ET NÉONATALE</div><h1 style={{margin:"7px 0 8px",fontSize:34}}>{module.titre}</h1><p style={{margin:0,lineHeight:1.6,opacity:.92}}>Révision structurée, surveillance infirmière, urgences et éducation.</p></header>
