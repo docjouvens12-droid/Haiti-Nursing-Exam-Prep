@@ -16,6 +16,11 @@ const rubriques: Array<[keyof PathologieCardiovasculaire, string]> = [
   ["points", "Points clés à retenir"],
 ];
 
+const prioritesInfirmieres: Partial<Record<number, string>> = {
+  0: "Devant une pression très élevée, évaluer immédiatement le patient et rechercher des signes d’atteinte aiguë d’organe. La gravité dépend du contexte clinique et de l’atteinte d’organe, pas uniquement du chiffre affiché sur le tensiomètre.",
+  1: "Devant une douleur ou une pression thoracique nouvelle, persistante, survenant au repos ou associée à dyspnée, sueurs, nausées, malaise ou syncope, considérer d’abord un syndrome coronarien aigu. Interrompre l’effort, évaluer rapidement les signes vitaux et la perfusion, obtenir un ECG selon le protocole, maintenir une surveillance rapprochée et alerter sans retarder la prise en charge urgente.",
+};
+
 export default async function CardiovasculairePage() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
@@ -59,11 +64,11 @@ export default async function CardiovasculairePage() {
                 </section>
               ))}
 
-              {index === 0 && (
+              {prioritesInfirmieres[index] && (
                 <aside style={{ background: "#eef6ff", border: "1px solid #cfe3fb", borderRadius: 14, padding: 14, marginTop: 8 }}>
                   <strong style={{ color: "#0b1f59" }}>Priorité infirmière</strong>
                   <p style={{ margin: "6px 0 0", color: "#475569", lineHeight: 1.65, fontSize: 14 }}>
-                    Devant une pression très élevée, évaluer immédiatement le patient et rechercher des signes d’atteinte aiguë d’organe. La gravité dépend du contexte clinique et de l’atteinte d’organe, pas uniquement du chiffre affiché sur le tensiomètre.
+                    {prioritesInfirmieres[index]}
                   </p>
                 </aside>
               )}
