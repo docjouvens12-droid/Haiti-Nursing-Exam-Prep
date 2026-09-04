@@ -15,6 +15,16 @@ const domaines = [
   { titre: "Urgences et soins critiques", description: "Priorités, stabilisation et surveillance du patient critique.", modules: ["Évaluation ABCDE", "État de choc", "Urgences respiratoires", "Urgences cardiovasculaires"] },
 ];
 
+const routesMedicoChirurgicales: Record<string, string> = {
+  Cardiovasculaire: "/cours-revisions/cardiovasculaire",
+  Respiratoire: "/cours-revisions/respiratoire",
+  Neurologie: "/cours-revisions/neurologie",
+  "Gastro-intestinal": "/cours-revisions/gastro-intestinal",
+  Rénal: "/cours-revisions/renal",
+  Endocrinologie: "/cours-revisions/endocrinologie",
+  Hématologie: "/cours-revisions/hematologie",
+};
+
 export default async function CoursRevisionsPage() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
@@ -35,9 +45,9 @@ export default async function CoursRevisionsPage() {
             <p style={{ color: "#64748b", lineHeight: 1.55, margin: "0 0 16px" }}>{domaine.description}</p>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 9 }}>
               {domaine.modules.map((module) => {
-                const cardiovasculaire = index === 0 && module === "Cardiovasculaire";
-                return cardiovasculaire ? (
-                  <a key={module} href="/cours-revisions/cardiovasculaire" style={{ background: "#eaf2ff", color: "#1657d8", border: "1px solid #bfd3ff", padding: "9px 13px", borderRadius: 999, fontWeight: 800, fontSize: 13 }}>{module} →</a>
+                const href = index === 0 ? routesMedicoChirurgicales[module] : undefined;
+                return href ? (
+                  <a key={module} href={href} style={{ background: "#eaf2ff", color: "#1657d8", border: "1px solid #bfd3ff", padding: "9px 13px", borderRadius: 999, fontWeight: 800, fontSize: 13 }}>{module} →</a>
                 ) : (
                   <span key={module} style={{ background: "#f5f7fb", color: "#64748b", border: "1px solid #e5eaf2", padding: "9px 13px", borderRadius: 999, fontWeight: 700, fontSize: 13 }}>{module}</span>
                 );
