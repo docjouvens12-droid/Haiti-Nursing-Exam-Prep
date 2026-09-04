@@ -4,9 +4,27 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
 
-function formatDate(value: string | null) {
-  if (!value) return "—";
-  return new Intl.DateTimeFormat("fr-FR", { day: "2-digit", month: "short", year: "numeric" }).format(new Date(value));
+const DAILY_GOAL = 25;
+const STUDY_TIME_ZONE = "America/Denver";
+
+function dayKey(value: string | Date) {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: STUDY_TIME_ZONE,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(typeof value === "string" ? new Date(value) : value);
+}
+
+function addDays(key: string, delta: number) {
+  const [year, month, day] = key.split("-").map(Number);
+  const date = new Date(Date.UTC(year, month - 1, day + delta, 12));
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "UTC",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
 export default async function TableauDeBord() {
@@ -88,7 +106,24 @@ export default async function TableauDeBord() {
 
   const examensCompletes = new Set((sessions ?? []).map((session: any) => session.mode).filter(Boolean)).size;
   const examensDisponibles = (historicalExamCount ?? 0) + 3;
-  const serieEtude = totalTentatives > 0 ? Math.min(6, Math.max(1, Math.ceil(totalTentatives / 25))) : 0;
+
+  const aujourdHui = dayKey(new Date());
+  const activiteParJour = new Map<string, number>();
+  for (const r of reponses ?? []) {
+    if (!(r as any).answered_at) continue;
+    const key = dayKey((r as any).answered_at);
+    activiteParJour.set(key, (activiteParJour.get(key) ?? 0) + 1);
+  }
+  const questionsAujourdhui = activiteParJour.get(aujourdHui) ?? 0;
+  const objectifPourcentage = Math.min(100, Math.round((questionsAujourdhui / DAILY_GOAL) * 100));
+  const objectifRestant = Math.max(0, DAILY_GOAL - questionsAujourdhui);
+  const joursEtudies = new Set(activiteParJour.keys());
+  let curseur = joursEtudies.has(aujourdHui) ? aujourdHui : addDays(aujourdHui, -1);
+  let serieEtude = 0;
+  while (joursEtudies.has(curseur)) {
+    serieEtude += 1;
+    curseur = addDays(curseur, -1);
+  }
 
   return (
     <div className="dashboard-shell modern-dashboard">
@@ -101,6 +136,7 @@ export default async function TableauDeBord() {
         <nav className="side-nav modern-nav">
           <Link className="active" href="/tableau-de-bord">⌂ <span>Accueil</span></Link>
           <Link href="/pratique">▤ <span>Questions</span></Link>
+          <Link href="/categories">▦ <span>Catégories & thématiques</span></Link>
           <Link href="/examens">▣ <span>Examens</span></Link>
           <Link href="/historique">▥ <span>Plan d’étude</span></Link>
           <Link href="/performance">⌁ <span>Performance</span></Link>
@@ -129,7 +165,7 @@ export default async function TableauDeBord() {
           <StudentMenuButton />
           <div className="dashboard-search">⌕ <span>Rechercher (ex: pharmacologie, pédiatrie...)</span></div>
           <div className="topbar-spacer" />
-          <div className="study-streak">🔥 <span><small>Série d’étude</small><strong>{serieEtude} jours</strong></span></div>
+          <div className="study-streak">🔥 <span><small>Série d’étude</small><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong></span></div>
           <div className="notif">♢<span>1</span></div>
           <div className="top-user"><div className="avatar small">{prenom.charAt(0).toUpperCase()}</div><span>Bonjour, {prenom}</span></div>
         </header>
@@ -143,11 +179,17 @@ export default async function TableauDeBord() {
             <Link className="continue-button" href="/pratique">CONTINUER À PRATIQUER →</Link>
           </div>
 
+          <div className="daily-goal-card">
+            <div className="daily-goal-copy"><span className="daily-goal-icon">🎯</span><div><small>Objectif quotidien</small><strong>{questionsAujourdhui} / {DAILY_GOAL} questions aujourd’hui</strong><p>{objectifRestant === 0 ? "Objectif atteint — excellent travail aujourd’hui !" : `Encore ${objectifRestant} question${objectifRestant > 1 ? "s" : ""} pour atteindre votre objectif.`}</p></div></div>
+            <div className="daily-goal-progress"><div><span style={{ width: `${objectifPourcentage}%` }} /></div><b>{objectifPourcentage}%</b></div>
+            <Link href={`/pratique?nombre=${objectifRestant > 0 ? Math.min(25, objectifRestant) : 25}&statut=toutes`}>{objectifRestant > 0 ? "CONTINUER L’OBJECTIF →" : "CONTINUER À PRATIQUER →"}</Link>
+          </div>
+
           <div className="metric-grid modern-metrics">
             <div className="metric-card"><span className="metric-icon blue">?</span><div><small>Questions répondues</small><strong>{questionsRepondues.toLocaleString("fr-FR")} <i>/ {totalQuestions.toLocaleString("fr-FR")}</i></strong><div className="mini-progress"><span style={{ width: `${progressionQuestions}%` }} /></div><em>{progressionQuestions}% complété</em></div></div>
             <div className="metric-card"><span className="metric-icon green">✓</span><div><small>Taux de réussite</small><strong>{taux}%</strong><em>{bonnes} bonnes réponses</em></div></div>
             <div className="metric-card"><span className="metric-icon purple">▣</span><div><small>Examens complétés</small><strong>{examensCompletes} <i>/ {examensDisponibles}</i></strong><em>{examensDisponibles} formats disponibles</em></div></div>
-            <div className="metric-card"><span className="metric-icon orange">🔥</span><div><small>Série d’étude</small><strong>{serieEtude} jours</strong><em>Continuez votre série !</em></div></div>
+            <div className="metric-card"><span className="metric-icon orange">🔥</span><div><small>Série d’étude réelle</small><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong><em>{questionsAujourdhui > 0 ? "Activité enregistrée aujourd’hui" : "Répondez à une question aujourd’hui"}</em></div></div>
           </div>
 
           <div className="mock-grid">
@@ -202,10 +244,11 @@ export default async function TableauDeBord() {
               </section>
 
               <section className="panel today-panel">
-                <h2>Activité aujourd’hui</h2>
-                <Link href="/pratique" className="today-task"><span>▤</span><div><strong>25 questions</strong><small>Médecine</small></div><i>○</i></Link>
-                <Link href="/pratique" className="today-task"><span>♙</span><div><strong>15 questions</strong><small>Pédiatrie</small></div><i>○</i></Link>
-                <Link href="/questions-incorrectes" className="today-task"><span>▣</span><div><strong>Réviser</strong><small>{Math.min(8, incorrectes.length)} questions incorrectes</small></div><i>○</i></Link>
+                <h2>Aujourd’hui</h2>
+                <div className="today-real-summary"><span>{questionsAujourdhui >= DAILY_GOAL ? "✓" : "🎯"}</span><div><strong>{questionsAujourdhui} questions répondues</strong><small>Objectif : {DAILY_GOAL} questions par jour</small></div><b>{objectifPourcentage}%</b></div>
+                <div className="mini-progress today-progress"><span style={{ width: `${objectifPourcentage}%` }} /></div>
+                <Link href="/pratique" className="today-task"><span>▤</span><div><strong>{objectifRestant > 0 ? `Faire ${Math.min(25, objectifRestant)} questions` : "Objectif atteint"}</strong><small>{objectifRestant > 0 ? `${objectifRestant} restantes aujourd’hui` : "Vous pouvez continuer librement"}</small></div><i>→</i></Link>
+                <Link href="/questions-incorrectes" className="today-task"><span>▣</span><div><strong>Réviser les erreurs</strong><small>{incorrectes.length} à revoir</small></div><i>→</i></Link>
                 <Link className="plan-link" href="/historique">Voir le plan complet →</Link>
               </section>
 
@@ -227,9 +270,9 @@ export default async function TableauDeBord() {
       </main>
 
       <style>{`
-        .modern-dashboard{background:#f7f9fd}.modern-sidebar{width:auto}.modern-brand .brand-mark{background:#2474ff;color:white;border:0;border-radius:50%}.modern-brand strong{color:white;font-size:18px}.modern-brand small{color:#d9e6ff;letter-spacing:0;font-size:12px;text-transform:none}.modern-nav a.active{background:#2474ff}.modern-nav b{background:#ef4b58}.modern-premium{border-color:#ba943e}.modern-premium button{background:#ffcf61;color:#132238}.modern-topbar{height:78px}.dashboard-search{min-width:370px;display:flex;align-items:center;gap:10px;background:#f7f9fc;border:1px solid #edf0f5;border-radius:24px;padding:11px 16px;color:#96a0b5;font-size:12px}.study-streak{display:flex;align-items:center;gap:8px;padding:0 12px}.study-streak span{display:grid}.study-streak small{font-size:10px;color:#69738d}.study-streak strong{font-size:12px;color:#ef7d00}.modern-content{max-width:1400px}.modern-welcome{align-items:center;margin-bottom:18px}.continue-button{margin-left:auto;background:#2474ff;color:#fff;border-radius:9px;padding:14px 22px;font-size:11px;font-weight:800;box-shadow:0 8px 18px rgba(36,116,255,.2)}.modern-metrics{margin-top:0}.metric-card strong i{font-size:11px;font-style:normal;color:#6e7891;font-weight:600}.mini-progress{height:5px;background:#edf1f7;border-radius:10px;overflow:hidden;margin:7px 0}.mini-progress span{display:block;height:100%;background:#2474ff}.mock-grid{display:grid;grid-template-columns:1.75fr .85fr;gap:16px}.mock-main-column,.mock-side-column{display:grid;gap:16px;align-content:start}.progress-panel{padding:20px}.subject-row{display:grid;grid-template-columns:30px minmax(115px,1fr) 1.5fr 45px 86px;align-items:center;gap:10px;padding:10px 0;font-size:11px}.subject-dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#eaf2ff;color:#2474ff}.subject-row:nth-of-type(3) .bar i{background:#23b26d}.subject-row:nth-of-type(4) .bar i{background:#ef5f87}.subject-row:nth-of-type(5) .bar i{background:#7d5ce8}.subject-row:nth-of-type(6) .bar i{background:#f4a62a}.subject-row small{color:#7b8499}.focus-card{background:#f7f5ff;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:center}.focus-card>span{font-size:28px;color:#7d5ce8}.focus-card strong,.focus-card b{display:block}.focus-card b{font-size:12px;color:#ff7c31;margin-top:5px}.focus-bar{margin:14px 0 5px}.focus-bar i{background:#7d5ce8}.focus-target{text-align:right;font-size:10px;color:#7b8499}.incorrect-count{display:block;color:#ef4b58;font-size:13px;margin:18px 0}.review-button{display:block;border:1px solid #2474ff;color:#2474ff;text-align:center;border-radius:8px;padding:11px;font-size:11px;font-weight:800}.today-panel h2{margin-bottom:8px}.today-task{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0f5}.today-task>span{width:30px;height:30px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.today-task div strong,.today-task div small{display:block}.today-task div strong{font-size:11px}.today-task div small{font-size:10px;color:#69738d;margin-top:3px}.today-task i{font-style:normal;color:#9da7bb}.plan-link{display:block;margin-top:13px;color:#2474ff;font-size:11px;font-weight:700}.ai-panel{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center}.ai-badge{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#7d5ce8;color:white;font-weight:800}.ai-panel strong{font-size:13px}.ai-panel p{font-size:10px;color:#6d7790;line-height:1.5;margin:4px 0}.ai-panel>a{grid-column:2;color:#2474ff;font-size:10px;font-weight:700}.state-exam-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.state-exam-card{border:1px solid #e7ebf3;border-radius:10px;padding:14px;display:grid;gap:5px}.exam-doc{width:32px;height:32px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.state-exam-card strong{font-size:12px}.state-exam-card small,.state-exam-card p{font-size:10px;color:#6e7891;margin:0}.state-exam-card a{border:1px solid #2474ff;color:#2474ff;border-radius:7px;text-align:center;padding:8px;margin-top:5px;font-size:10px;font-weight:700}.state-exam-card:nth-child(2) .exam-doc{background:#e9f8ef;color:#1caf65}.state-exam-card:nth-child(3) .exam-doc{background:#f1edff;color:#7d5ce8}.state-exam-card:nth-child(4) .exam-doc{background:#fff3e8;color:#f18a22}.dashboard-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border:1px solid #e7ebf3;border-radius:13px;margin-top:16px;padding:18px}.dashboard-benefits>div{display:flex;align-items:flex-start;gap:10px}.dashboard-benefits>div>span{font-size:24px;color:#2474ff}.dashboard-benefits p{margin:0;font-size:10px;color:#65708a;line-height:1.5}.dashboard-benefits strong{display:block;color:#17213f;font-size:11px;margin-bottom:3px}
-        @media(max-width:1100px){.mock-grid{grid-template-columns:1fr}.state-exam-grid{grid-template-columns:repeat(2,1fr)}.dashboard-search{min-width:260px}.dashboard-benefits{grid-template-columns:repeat(2,1fr)}}
-        @media(max-width:800px){.modern-sidebar{display:none}.modern-topbar{height:64px}.dashboard-search,.study-streak,.notif{display:none}.modern-content{padding:16px 14px 90px}.modern-welcome{display:block}.continue-button{display:block;margin:16px 0 0;text-align:center}.modern-metrics{grid-template-columns:repeat(2,1fr)!important}.metric-card{min-height:118px;padding:13px}.subject-row{grid-template-columns:30px 1fr 45px}.subject-row .bar{grid-column:2/4}.subject-row small{display:none}.state-exam-grid{grid-template-columns:1fr 1fr}.dashboard-benefits{grid-template-columns:1fr}.top-user{margin-left:auto}.mock-grid{grid-template-columns:1fr}.modern-welcome h1{font-size:24px}.modern-welcome p{font-size:12px}}
+        .modern-dashboard{background:#f7f9fd}.modern-sidebar{width:auto}.modern-brand .brand-mark{background:#2474ff;color:white;border:0;border-radius:50%}.modern-brand strong{color:white;font-size:18px}.modern-brand small{color:#d9e6ff;letter-spacing:0;font-size:12px;text-transform:none}.modern-nav a.active{background:#2474ff}.modern-nav b{background:#ef4b58}.modern-premium{border-color:#ba943e}.modern-premium button{background:#ffcf61;color:#132238}.modern-topbar{height:78px}.dashboard-search{min-width:370px;display:flex;align-items:center;gap:10px;background:#f7f9fc;border:1px solid #edf0f5;border-radius:24px;padding:11px 16px;color:#96a0b5;font-size:12px}.study-streak{display:flex;align-items:center;gap:8px;padding:0 12px}.study-streak span{display:grid}.study-streak small{font-size:10px;color:#69738d}.study-streak strong{font-size:12px;color:#ef7d00}.modern-content{max-width:1400px}.modern-welcome{align-items:center;margin-bottom:18px}.continue-button{margin-left:auto;background:#2474ff;color:#fff;border-radius:9px;padding:14px 22px;font-size:11px;font-weight:800;box-shadow:0 8px 18px rgba(36,116,255,.2)}.daily-goal-card{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(220px,.8fr) auto;gap:18px;align-items:center;background:#fff;border:1px solid #e7ebf3;border-radius:14px;padding:18px 20px;margin:0 0 16px;box-shadow:0 5px 18px rgba(30,55,90,.04)}.daily-goal-copy{display:flex;align-items:center;gap:12px}.daily-goal-icon{width:42px;height:42px;border-radius:12px;background:#eef4ff;display:grid;place-items:center;font-size:22px}.daily-goal-copy small,.daily-goal-copy strong{display:block}.daily-goal-copy small{font-size:10px;color:#69738d;text-transform:uppercase;letter-spacing:.04em}.daily-goal-copy strong{font-size:15px;color:#17213f;margin-top:3px}.daily-goal-copy p{margin:4px 0 0;font-size:10px;color:#6e7891}.daily-goal-progress{display:flex;align-items:center;gap:10px}.daily-goal-progress>div{height:9px;flex:1;background:#edf1f7;border-radius:10px;overflow:hidden}.daily-goal-progress span{display:block;height:100%;background:#2474ff}.daily-goal-progress b{font-size:12px;color:#2474ff}.daily-goal-card>a{background:#2474ff;color:#fff;padding:11px 14px;border-radius:8px;font-size:10px;font-weight:800;white-space:nowrap}.modern-metrics{margin-top:0}.metric-card strong i{font-size:11px;font-style:normal;color:#6e7891;font-weight:600}.mini-progress{height:5px;background:#edf1f7;border-radius:10px;overflow:hidden;margin:7px 0}.mini-progress span{display:block;height:100%;background:#2474ff}.mock-grid{display:grid;grid-template-columns:1.75fr .85fr;gap:16px}.mock-main-column,.mock-side-column{display:grid;gap:16px;align-content:start}.progress-panel{padding:20px}.subject-row{display:grid;grid-template-columns:30px minmax(115px,1fr) 1.5fr 45px 86px;align-items:center;gap:10px;padding:10px 0;font-size:11px}.subject-dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#eaf2ff;color:#2474ff}.subject-row:nth-of-type(3) .bar i{background:#23b26d}.subject-row:nth-of-type(4) .bar i{background:#ef5f87}.subject-row:nth-of-type(5) .bar i{background:#7d5ce8}.subject-row:nth-of-type(6) .bar i{background:#f4a62a}.subject-row small{color:#7b8499}.focus-card{background:#f7f5ff;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:center}.focus-card>span{font-size:28px;color:#7d5ce8}.focus-card strong,.focus-card b{display:block}.focus-card b{font-size:12px;color:#ff7c31;margin-top:5px}.focus-bar{margin:14px 0 5px}.focus-bar i{background:#7d5ce8}.focus-target{text-align:right;font-size:10px;color:#7b8499}.incorrect-count{display:block;color:#ef4b58;font-size:13px;margin:18px 0}.review-button{display:block;border:1px solid #2474ff;color:#2474ff;text-align:center;border-radius:8px;padding:11px;font-size:11px;font-weight:800}.today-panel h2{margin-bottom:8px}.today-real-summary{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:center;padding:10px 0 8px}.today-real-summary>span{width:32px;height:32px;border-radius:9px;background:#eef4ff;display:grid;place-items:center}.today-real-summary strong,.today-real-summary small{display:block}.today-real-summary strong{font-size:11px}.today-real-summary small{font-size:10px;color:#69738d;margin-top:3px}.today-real-summary b{font-size:12px;color:#2474ff}.today-progress{margin:2px 0 8px}.today-task{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0f5}.today-task>span{width:30px;height:30px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.today-task div strong,.today-task div small{display:block}.today-task div strong{font-size:11px}.today-task div small{font-size:10px;color:#69738d;margin-top:3px}.today-task i{font-style:normal;color:#9da7bb}.plan-link{display:block;margin-top:13px;color:#2474ff;font-size:11px;font-weight:700}.ai-panel{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center}.ai-badge{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#7d5ce8;color:white;font-weight:800}.ai-panel strong{font-size:13px}.ai-panel p{font-size:10px;color:#6d7790;line-height:1.5;margin:4px 0}.ai-panel>a{grid-column:2;color:#2474ff;font-size:10px;font-weight:700}.state-exam-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.state-exam-card{border:1px solid #e7ebf3;border-radius:10px;padding:14px;display:grid;gap:5px}.exam-doc{width:32px;height:32px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.state-exam-card strong{font-size:12px}.state-exam-card small,.state-exam-card p{font-size:10px;color:#6e7891;margin:0}.state-exam-card a{border:1px solid #2474ff;color:#2474ff;border-radius:7px;text-align:center;padding:8px;margin-top:5px;font-size:10px;font-weight:700}.state-exam-card:nth-child(2) .exam-doc{background:#e9f8ef;color:#1caf65}.state-exam-card:nth-child(3) .exam-doc{background:#f1edff;color:#7d5ce8}.state-exam-card:nth-child(4) .exam-doc{background:#fff3e8;color:#f18a22}.dashboard-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border:1px solid #e7ebf3;border-radius:13px;margin-top:16px;padding:18px}.dashboard-benefits>div{display:flex;align-items:flex-start;gap:10px}.dashboard-benefits>div>span{font-size:24px;color:#2474ff}.dashboard-benefits p{margin:0;font-size:10px;color:#65708a;line-height:1.5}.dashboard-benefits strong{display:block;color:#17213f;font-size:11px;margin-bottom:3px}
+        @media(max-width:1100px){.mock-grid{grid-template-columns:1fr}.state-exam-grid{grid-template-columns:repeat(2,1fr)}.dashboard-search{min-width:260px}.dashboard-benefits{grid-template-columns:repeat(2,1fr)}.daily-goal-card{grid-template-columns:1fr 1fr}.daily-goal-card>a{grid-column:1/3;text-align:center}}
+        @media(max-width:800px){.modern-sidebar{display:none}.modern-topbar{height:64px}.dashboard-search,.study-streak,.notif{display:none}.modern-content{padding:16px 14px 90px}.modern-welcome{display:block}.continue-button{display:block;margin:16px 0 0;text-align:center}.daily-goal-card{grid-template-columns:1fr;padding:16px}.daily-goal-card>a{grid-column:auto;text-align:center}.modern-metrics{grid-template-columns:repeat(2,1fr)!important}.metric-card{min-height:118px;padding:13px}.subject-row{grid-template-columns:30px 1fr 45px}.subject-row .bar{grid-column:2/4}.subject-row small{display:none}.state-exam-grid{grid-template-columns:1fr 1fr}.dashboard-benefits{grid-template-columns:1fr}.top-user{margin-left:auto}.mock-grid{grid-template-columns:1fr}.modern-welcome h1{font-size:24px}.modern-welcome p{font-size:12px}}
       `}</style>
     </div>
   );
