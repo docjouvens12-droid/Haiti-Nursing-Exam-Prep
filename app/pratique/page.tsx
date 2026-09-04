@@ -10,9 +10,31 @@ type SearchParams = {
   sous_categorie?: string;
   annee?: string;
   nombre?: string;
+  statut?: string;
 };
 
+type PracticeStatus = "toutes" | "nouvelles" | "incorrectes" | "favorites";
+
 const SESSION_SIZES = [10, 25, 50, 100] as const;
+const PRACTICE_STATUSES: { value: PracticeStatus; label: string }[] = [
+  { value: "toutes", label: "Toutes les questions" },
+  { value: "nouvelles", label: "Nouvelles" },
+  { value: "incorrectes", label: "Incorrectes" },
+  { value: "favorites", label: "Favorites" },
+];
+
+async function fetchPagedIds(buildQuery: (from: number, to: number) => any) {
+  const ids: string[] = [];
+  const pageSize = 1000;
+  for (let from = 0; ; from += pageSize) {
+    const { data, error } = await buildQuery(from, from + pageSize - 1);
+    if (error) throw error;
+    const rows = (data ?? []) as { question_id?: string | null; id?: string | null }[];
+    ids.push(...rows.map((row) => row.question_id ?? row.id).filter(Boolean) as string[]);
+    if (rows.length < pageSize) break;
+  }
+  return ids;
+}
 
 export default async function Pratique({ searchParams }: { searchParams: Promise<SearchParams> }) {
   const params = await searchParams;
@@ -20,22 +42,72 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const { data: claimsData } = await supabase.auth.getClaims();
   if (!claimsData?.claims) redirect("/connexion");
 
+  const userId = String(claimsData.claims.sub);
   const categorieSelectionnee = (params.categorie ?? "").trim();
   const sousCategorieSelectionnee = (params.sous_categorie ?? "").trim();
   const anneeSelectionnee = (params.annee ?? "").trim();
+  const statutDemande = (params.statut ?? "toutes").trim() as PracticeStatus;
+  const statutSelectionne: PracticeStatus = PRACTICE_STATUSES.some((item) => item.value === statutDemande) ? statutDemande : "toutes";
   const nombreDemande = Number(params.nombre ?? 25);
   const nombreQuestions = SESSION_SIZES.includes(nombreDemande as (typeof SESSION_SIZES)[number]) ? nombreDemande : 25;
 
-  let query = supabase
-    .from("questions")
-    .select("id,annee,categorie,sous_categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication")
-    .order("id")
-    .limit(nombreQuestions);
+  const applyScope = (query: any) => {
+    let scoped = query;
+    if (categorieSelectionnee) scoped = scoped.eq("categorie", categorieSelectionnee);
+    if (sousCategorieSelectionnee) scoped = scoped.eq("sous_categorie", sousCategorieSelectionnee);
+    if (anneeSelectionnee) scoped = scoped.eq("annee", Number(anneeSelectionnee));
+    return scoped;
+  };
 
-  if (categorieSelectionnee) query = query.eq("categorie", categorieSelectionnee);
-  if (sousCategorieSelectionnee) query = query.eq("sous_categorie", sousCategorieSelectionnee);
-  if (anneeSelectionnee) query = query.eq("annee", Number(anneeSelectionnee));
-  const { data: questions } = await query;
+  let questions: any[] = [];
+
+  if (statutSelectionne === "toutes") {
+    const { data } = await applyScope(
+      supabase
+        .from("questions")
+        .select("id,annee,categorie,sous_categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication")
+        .order("id")
+        .limit(nombreQuestions)
+    );
+    questions = data ?? [];
+  } else {
+    const scopedIds = await fetchPagedIds((from, to) =>
+      applyScope(supabase.from("questions").select("id").order("id").range(from, to))
+    );
+
+    let eligible = new Set<string>();
+
+    if (statutSelectionne === "favorites") {
+      const favoriteIds = await fetchPagedIds((from, to) =>
+        supabase.from("favorites").select("question_id").eq("user_id", userId).range(from, to)
+      );
+      eligible = new Set(favoriteIds);
+    } else {
+      const answeredIds = await fetchPagedIds((from, to) =>
+        supabase.from("user_answers").select("question_id").eq("user_id", userId).range(from, to)
+      );
+
+      if (statutSelectionne === "nouvelles") {
+        const answered = new Set(answeredIds);
+        eligible = new Set(scopedIds.filter((id) => !answered.has(id)));
+      } else {
+        const incorrectIds = await fetchPagedIds((from, to) =>
+          supabase.from("user_answers").select("question_id").eq("user_id", userId).eq("correcte", false).range(from, to)
+        );
+        eligible = new Set(incorrectIds);
+      }
+    }
+
+    const selectedIds = scopedIds.filter((id) => eligible.has(id)).slice(0, nombreQuestions);
+    if (selectedIds.length > 0) {
+      const { data } = await supabase
+        .from("questions")
+        .select("id,annee,categorie,sous_categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication")
+        .in("id", selectedIds);
+      const byId = new Map((data ?? []).map((question: any) => [question.id, question]));
+      questions = selectedIds.map((id) => byId.get(id)).filter(Boolean);
+    }
+  }
 
   const [{ data: categoriesData }, { data: anneesData }, { data: topicsData }] = await Promise.all([
     supabase.from("questions").select("categorie").not("categorie", "is", null),
@@ -49,7 +121,8 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const categories = Array.from(new Set([...CATEGORIES_QUESTIONS, ...categoriesExistantes])).sort((a, b) => a.localeCompare(b, "fr"));
   const annees = Array.from(new Set((anneesData ?? []).map((x) => x.annee).filter(Boolean))).sort((a, b) => Number(b) - Number(a));
   const sousCategories = Array.from(new Set((topicsData ?? []).map((x) => x.sous_categorie).filter(Boolean) as string[])).sort((a, b) => a.localeCompare(b, "fr"));
-  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${nombreQuestions}`;
+  const statutLabel = PRACTICE_STATUSES.find((item) => item.value === statutSelectionne)?.label ?? "Toutes les questions";
+  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}`;
 
   return (
     <div className="practice-shell">
@@ -69,7 +142,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
         </nav>
         <div className="practice-sidebar-note">
           <strong>Conseil d’étude</strong>
-          <p>Travaillez une thématique à la fois et révisez les explications après chaque réponse.</p>
+          <p>Utilisez « Nouvelles » pour avancer dans la banque et « Incorrectes » pour renforcer vos points faibles.</p>
         </div>
       </aside>
 
@@ -87,7 +160,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
             <div>
               <span className="practice-eyebrow">Personnalisez votre session</span>
               <h2>Choisissez ce que vous souhaitez réviser</h2>
-              <p>Filtrez la banque par catégorie, thématique, année et nombre de questions.</p>
+              <p>Filtrez la banque par catégorie, thématique, statut, année et nombre de questions.</p>
             </div>
             <form method="get" action="/pratique" className="practice-filter-form">
               <label>
@@ -102,6 +175,12 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
                 <select name="sous_categorie" defaultValue={sousCategorieSelectionnee} disabled={!categorieSelectionnee}>
                   <option value="">{categorieSelectionnee ? "Toutes les thématiques" : "Choisissez d’abord une catégorie"}</option>
                   {sousCategories.map((topic) => <option key={topic} value={topic}>{topic}</option>)}
+                </select>
+              </label>
+              <label>
+                <span>Type de questions</span>
+                <select name="statut" defaultValue={statutSelectionne}>
+                  {PRACTICE_STATUSES.map((item) => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
               <label>
@@ -125,14 +204,15 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
           <div className="practice-session-summary">
             <div><span>Catégorie</span><strong>{categorieSelectionnee || "Toutes"}</strong></div>
             <div><span>Thématique</span><strong>{sousCategorieSelectionnee || "Toutes"}</strong></div>
-            <div><span>Questions chargées</span><strong>{questions?.length ?? 0} / {nombreQuestions}</strong></div>
+            <div><span>Type</span><strong>{statutLabel}</strong></div>
+            <div><span>Questions chargées</span><strong>{questions.length} / {nombreQuestions}</strong></div>
           </div>
 
-          {!questions || questions.length === 0 ? (
+          {questions.length === 0 ? (
             <div className="practice-empty-state">
               <span>?</span>
               <h2>Aucune question trouvée</h2>
-              <p>Choisissez une autre catégorie, thématique ou année pour continuer votre révision.</p>
+              <p>Aucune question ne correspond à ces filtres pour votre compte. Modifiez le type de questions, la catégorie ou la thématique.</p>
             </div>
           ) : (
             <QuestionInteractiveAvancee key={cleGroupe} questions={questions} />
