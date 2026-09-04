@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getAutreSysteme } from "@/lib/cours/autres-systemes";
 import { getComplementsSysteme } from "@/lib/cours/complements-systemes";
 import { perioperatoire } from "@/lib/cours/perioperatoire";
+import { equilibreHydroelectrolytique } from "@/lib/cours/equilibre-hydroelectrolytique";
 import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
@@ -21,9 +22,10 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
   const { data } = await supabase.auth.getClaims();
   if (!data?.claims?.sub) redirect("/connexion");
   const { systeme: slug } = await params;
-  const systeme = slug === "perioperatoire" ? perioperatoire : getAutreSysteme(slug);
+  const moduleSpecial = slug === "perioperatoire" ? perioperatoire : slug === "equilibre-hydroelectrolytique" ? equilibreHydroelectrolytique : undefined;
+  const systeme = moduleSpecial ?? getAutreSysteme(slug);
   if (!systeme) notFound();
-  const pathologies = slug === "perioperatoire" ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
+  const pathologies = moduleSpecial ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
 
   return (
     <main style={{ maxWidth: 920, margin: "0 auto", padding: "26px 18px 90px" }}>
@@ -40,7 +42,7 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
         <h2 style={{ color: "#0b1f59", margin: "0 0 12px", fontSize: 23 }}>Bref rappel d’anatomie et de physiologie</h2>
         {systeme.rappel.map((texte) => <p key={texte} style={{ color: "#334155", lineHeight: 1.72, margin: "0 0 10px" }}>{texte}</p>)}
       </section>
-      {slug !== "perioperatoire" && <SystemAnatomyDiagrams systeme={slug} />}
+      {!moduleSpecial && <SystemAnatomyDiagrams systeme={slug} />}
       <div style={{ display: "grid", gap: 18 }}>
         {pathologies.map((pathologie, index) => (
           <article key={pathologie.nom} style={{ background: "white", border: "1px solid #dfe6f0", borderRadius: 19, overflow: "hidden", boxShadow: "0 6px 20px rgba(11,31,89,.05)" }}>
