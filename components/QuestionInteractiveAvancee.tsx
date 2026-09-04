@@ -21,19 +21,33 @@ function melanger<T>(tableau: T[]) {
   return [...tableau].map((x) => ({ x, r: Math.random() })).sort((a, b) => a.r - b.r).map(({ x }) => x);
 }
 
-export default function QuestionInteractiveAvancee({ questions }: { questions: Question[] }) {
+function formaterTemps(secondes: number) {
+  const minutes = Math.floor(secondes / 60);
+  const reste = secondes % 60;
+  return `${String(minutes).padStart(2, "0")}:${String(reste).padStart(2, "0")}`;
+}
+
+export default function QuestionInteractiveAvancee({ questions, chronometre = false }: { questions: Question[]; chronometre?: boolean }) {
   const questionsMelangees = useMemo(() => melanger(questions), [questions]);
   const [index, setIndex] = useState(0);
   const [choix, setChoix] = useState<"A" | "B" | "C" | "D" | null>(null);
   const [valide, setValide] = useState(false);
   const [favori, setFavori] = useState(false);
+  const [secondes, setSecondes] = useState(0);
 
   useEffect(() => {
     setIndex(0);
     setChoix(null);
     setValide(false);
     setFavori(false);
-  }, [questions]);
+    setSecondes(0);
+  }, [questions, chronometre]);
+
+  useEffect(() => {
+    if (!chronometre) return;
+    const timer = window.setInterval(() => setSecondes((s) => s + 1), 1000);
+    return () => window.clearInterval(timer);
+  }, [chronometre, questions]);
 
   const q = questionsMelangees[index] ?? questionsMelangees[0];
   if (!q) return null;
@@ -81,6 +95,7 @@ export default function QuestionInteractiveAvancee({ questions }: { questions: Q
         <div>
           <span className="practice-eyebrow">Mode pratique</span>
           <p>Question {index + 1} sur {questionsMelangees.length}</p>
+          {chronometre && <p aria-live="polite"><strong>⏱ {formaterTemps(secondes)}</strong> écoulées</p>}
         </div>
         <button className={`practice-favorite ${favori ? "active" : ""}`} onClick={basculerFavori}>
           {favori ? "♥ Favori" : "♡ Ajouter aux favoris"}
