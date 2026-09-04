@@ -1,9 +1,23 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import ModuleQuiz, { type QuizQuestion } from "@/components/ModuleQuiz";
+import ModuleQuiz from "@/components/ModuleQuiz";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+type QuizQuestion = {
+  question_order: number;
+  question_type: "mcq" | "case";
+  question: string;
+  option_a: string;
+  option_b: string;
+  option_c: string;
+  option_d: string;
+  correct_answer: "A" | "B" | "C" | "D";
+  explanation: string;
+  option_rationales: Record<string, string> | null;
+  learning_point: string | null;
+};
 
 export default async function Page() {
   const supabase = await createClient();
