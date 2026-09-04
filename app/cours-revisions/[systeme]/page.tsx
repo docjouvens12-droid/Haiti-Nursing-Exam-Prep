@@ -5,6 +5,7 @@ import { getAutreSysteme } from "@/lib/cours/autres-systemes";
 import { getComplementsSysteme } from "@/lib/cours/complements-systemes";
 import { perioperatoire } from "@/lib/cours/perioperatoire";
 import { equilibreHydroelectrolytique } from "@/lib/cours/equilibre-hydroelectrolytique";
+import { sepsisInfectionsSystemiques } from "@/lib/cours/sepsis-infections-systemiques";
 import SystemAnatomyDiagrams from "@/components/SystemAnatomyDiagrams";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +23,13 @@ export default async function SystemeCoursPage({ params }: { params: Promise<{ s
   const { data } = await supabase.auth.getClaims();
   if (!data?.claims?.sub) redirect("/connexion");
   const { systeme: slug } = await params;
-  const moduleSpecial = slug === "perioperatoire" ? perioperatoire : slug === "equilibre-hydroelectrolytique" ? equilibreHydroelectrolytique : undefined;
+  const moduleSpecial = slug === "perioperatoire"
+    ? perioperatoire
+    : slug === "equilibre-hydroelectrolytique"
+      ? equilibreHydroelectrolytique
+      : slug === "sepsis-infections-systemiques"
+        ? sepsisInfectionsSystemiques
+        : undefined;
   const systeme = moduleSpecial ?? getAutreSysteme(slug);
   if (!systeme) notFound();
   const pathologies = moduleSpecial ? systeme.pathologies : [...systeme.pathologies, ...getComplementsSysteme(slug)];
