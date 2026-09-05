@@ -14,9 +14,11 @@ type SearchParams = {
   nombre?: string;
   statut?: string;
   chrono?: string;
+  correction?: string;
 };
 
 type PracticeStatus = "toutes" | "nouvelles" | "incorrectes" | "favorites";
+type CorrectionMode = "immediate" | "fin";
 
 const SESSION_SIZES = [10, 25, 50, 100] as const;
 const PRACTICE_STATUSES: { value: PracticeStatus; label: string }[] = [
@@ -52,6 +54,8 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const statutDemande = (params.statut ?? "toutes").trim() as PracticeStatus;
   const statutSelectionne: PracticeStatus = PRACTICE_STATUSES.some((item) => item.value === statutDemande) ? statutDemande : "toutes";
   const chronometreActif = params.chrono === "oui";
+  const correctionDemandee = (params.correction ?? "immediate").trim() as CorrectionMode;
+  const modeCorrection: CorrectionMode = correctionDemandee === "fin" ? "fin" : "immediate";
   const nombreDemande = Number(params.nombre ?? 25);
   const nombreQuestions = SESSION_SIZES.includes(nombreDemande as (typeof SESSION_SIZES)[number]) ? nombreDemande : 25;
 
@@ -113,7 +117,8 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   const categories = [...categoriesPrincipales, ...categoriesSupplementaires];
   const annees = Array.from(new Set((anneesData ?? []).map((x) => x.annee).filter(Boolean))).sort((a, b) => Number(b) - Number(a));
   const statutLabel = PRACTICE_STATUSES.find((item) => item.value === statutSelectionne)?.label ?? "Toutes les questions";
-  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}-${chronometreActif ? "chrono" : "libre"}`;
+  const correctionLabel = modeCorrection === "immediate" ? "Après chaque question" : "À la fin de la série";
+  const cleGroupe = `${categorieSelectionnee || "toutes"}-${sousCategorieSelectionnee || "toutes"}-${anneeSelectionnee || "toutes"}-${statutSelectionne}-${nombreQuestions}-${chronometreActif ? "chrono" : "libre"}-${modeCorrection}`;
 
   return (
     <div className="practice-shell">
@@ -122,27 +127,26 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
         <nav className="side-nav">
           <Link href="/tableau-de-bord">⌂ <span>Accueil</span></Link>
           <Link className="active" href="/pratique">✎ <span>Questions</span></Link>
-          <Link href="/categories">▦ <span>Catégories & thématiques</span></Link>
           <Link href="/examens">▣ <span>Examens</span></Link>
           <Link href="/questions-incorrectes">⊗ <span>Questions incorrectes</span></Link>
           <Link href="/favoris">♡ <span>Favoris</span></Link>
           <Link href="/nightingale">✦ <span>Nightingale AI</span></Link>
         </nav>
-        <div className="practice-sidebar-note"><strong>Conseil d’étude</strong><p>Activez le chronomètre pour vous entraîner à gérer votre temps, ou laissez-le désactivé pour étudier sans pression.</p></div>
+        <div className="practice-sidebar-note"><strong>Conseil d’étude</strong><p>Choisissez la correction immédiate pour apprendre question par question, ou la correction à la fin pour vous tester sans voir les réponses pendant la série.</p></div>
       </aside>
 
       <main className="practice-main">
-        <header className="practice-topbar"><div><span className="practice-breadcrumb">Accueil / Questions</span><h1>Pratique de questions</h1></div><Link href="/categories" className="practice-back-link">← Catégories & thématiques</Link></header>
+        <header className="practice-topbar"><div><span className="practice-breadcrumb">Accueil / Questions</span><h1>Pratique de questions</h1></div></header>
         <section className="practice-content">
           <div className="practice-filter-card">
-            <div><span className="practice-eyebrow">Programme infirmier haïtien</span><h2>Choisissez le domaine que vous souhaitez réviser</h2><p>Les catégories suivent les grands domaines de la formation infirmière et restent reliées aux 6 425 questions existantes.</p></div>
+            <div><span className="practice-eyebrow">Programme infirmier haïtien</span><h2>Choisissez le domaine que vous souhaitez réviser</h2><p>Configurez votre série, puis choisissez si vous voulez voir les corrections après chaque question ou seulement à la fin.</p></div>
             <PracticeFilters
               categories={categories}
               topicRows={taxonomyData ?? []}
               statuses={PRACTICE_STATUSES}
               sessionSizes={SESSION_SIZES}
               annees={annees}
-              initial={{ categorie: categorieSelectionnee, sousCategorie: sousCategorieSelectionnee, statut: statutSelectionne, nombre: nombreQuestions, chrono: chronometreActif, annee: anneeSelectionnee }}
+              initial={{ categorie: categorieSelectionnee, sousCategorie: sousCategorieSelectionnee, statut: statutSelectionne, nombre: nombreQuestions, chrono: chronometreActif, annee: anneeSelectionnee, correction: modeCorrection }}
             />
           </div>
 
@@ -150,6 +154,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
             <div><span>Catégorie</span><strong>{categorieSelectionnee ? libelleCategorie(categorieSelectionnee) : "Toutes"}</strong></div>
             <div><span>Thématique</span><strong>{sousCategorieSelectionnee || "Toutes"}</strong></div>
             <div><span>Type</span><strong>{statutLabel}</strong></div>
+            <div><span>Correction</span><strong>{correctionLabel}</strong></div>
             <div><span>Chronomètre</span><strong>{chronometreActif ? "Activé" : "Désactivé"}</strong></div>
             <div><span>Questions chargées</span><strong>{questions.length} / {nombreQuestions}</strong></div>
           </div>
@@ -157,7 +162,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
           {questions.length === 0 ? (
             <div className="practice-empty-state"><span>?</span><h2>Aucune question trouvée</h2><p>Aucune question ne correspond à ces filtres pour votre compte. Modifiez le type de questions, la catégorie ou la thématique.</p></div>
           ) : (
-            <QuestionInteractiveAvancee key={cleGroupe} questions={questions} chronometre={chronometreActif} />
+            <QuestionInteractiveAvancee key={cleGroupe} questions={questions} chronometre={chronometreActif} correctionMode={modeCorrection} />
           )}
         </section>
       </main>
