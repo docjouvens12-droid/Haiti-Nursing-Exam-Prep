@@ -9,60 +9,74 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page) .pwa-splash {
           display: none !important;
         }
-        body:has(.ps-page) {
-          padding-bottom: 0 !important;
-        }
-        #teacher-action-panel h3{margin-top:0}
-        #teacher-action-panel .teacher-action-grid{display:grid;gap:10px}
-        #teacher-action-panel .teacher-action-item{border:1px solid #dde6ef;border-radius:12px;padding:12px;background:#f8fafc}
+        body:has(.ps-page) { padding-bottom: 0 !important; }
+        #ps-add-student-wrap{margin:0 0 16px}
+        #ps-add-student-form{margin-top:12px;padding:14px;border:1px solid #dde6ef;border-radius:14px;background:#f8fafc}
+        #ps-add-student-form .ps-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        #ps-add-student-form label{display:block;font-size:13px;font-weight:800;margin-bottom:5px}
+        #ps-add-student-form input{width:100%;padding:11px;border:1px solid #dde6ef;border-radius:11px;background:#fff}
+        #ps-add-student-form .ps-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+        #ps-add-student-form button,#ps-add-student-toggle{border:0;border-radius:11px;padding:11px 14px;background:#0f4c81;color:#fff;font-weight:800;cursor:pointer}
+        #ps-add-student-cancel{background:#eef3f8!important;color:#0f4c81!important}
+        @media(max-width:720px){#ps-add-student-form .ps-grid{grid-template-columns:1fr}}
       `}</style>
       {children}
       <script dangerouslySetInnerHTML={{__html:`
         (function(){
-          function bindTeacherMenu(){
-            var menus=document.querySelectorAll('.menu');
-            menus.forEach(function(menu){
-              if(menu.dataset.teacherBound==='1') return;
-              var items=menu.querySelectorAll('.menuBtn');
-              if(items.length!==4) return;
-              menu.dataset.teacherBound='1';
-              var titlesHT=['Antre nòt','Nòt mwen voye','Klas mwen yo','Rezime klas'];
-              var titlesFR=['Saisir les notes','Notes envoyées','Mes classes','Résumé de classe'];
-              items.forEach(function(item,index){
-                item.setAttribute('role','button');
-                item.setAttribute('tabindex','0');
-                function open(){
-                  var old=document.getElementById('teacher-action-panel');
-                  if(old) old.remove();
-                  var french=document.body.innerText.indexOf('Tableau de bord Enseignant')!==-1;
-                  var title=(french?titlesFR:titlesHT)[index];
-                  var panel=document.createElement('section');
-                  panel.className='card';
-                  panel.id='teacher-action-panel';
-                  var content='';
-                  if(index===0){
-                    content=french
-                      ? '<p class="muted">Écran de saisie des notes prêt pour la prochaine connexion à Supabase.</p><div class="teacher-action-grid"><div class="teacher-action-item">Élève</div><div class="teacher-action-item">Matière</div><div class="teacher-action-item">Note</div><div class="teacher-action-item">Envoyer à la Direction</div></div>'
-                      : '<p class="muted">Ekran pou antre nòt la pare pou pwochen koneksyon ak Supabase.</p><div class="teacher-action-grid"><div class="teacher-action-item">Elèv</div><div class="teacher-action-item">Matiyè</div><div class="teacher-action-item">Nòt</div><div class="teacher-action-item">Voye bay Direksyon</div></div>';
-                  }else if(index===1){
-                    content=french?'<p class="muted">Les notes envoyées à la Direction apparaîtront ici.</p>':'<p class="muted">Nòt pwofesè a voye bay Direksyon ap parèt isit la.</p>';
-                  }else if(index===2){
-                    content=french?'<div class="teacher-action-grid"><div class="teacher-action-item"><b>9e Année Fondamentale – Section A</b><br/>Sciences</div><div class="teacher-action-item"><b>8e Année Fondamentale – Section B</b><br/>Sciences</div></div>':'<div class="teacher-action-grid"><div class="teacher-action-item"><b>9e Année Fondamentale – Section A</b><br/>Syans</div><div class="teacher-action-item"><b>8e Année Fondamentale – Section B</b><br/>Syans</div></div>';
-                  }else{
-                    content=french?'<p class="muted">Le résumé de classe affichera les effectifs, notes envoyées et moyennes.</p>':'<p class="muted">Rezime klas la ap montre kantite elèv, nòt voye ak mwayèn yo.</p>';
-                  }
-                  panel.innerHTML='<h3>'+title+'</h3>'+content;
-                  var card=menu.closest('.card');
-                  if(card&&card.parentNode) card.parentNode.insertBefore(panel,card.nextSibling);
-                  panel.scrollIntoView({behavior:'smooth',block:'start'});
-                }
-                item.addEventListener('click',open);
-                item.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open();}});
-              });
+          var KEY='portail_scolaire_extra_students_v1';
+          function read(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){return []}}
+          function write(v){localStorage.setItem(KEY,JSON.stringify(v))}
+          function isFrench(){return document.body.innerText.indexOf('Gérer les élèves')!==-1}
+          function findStudentsCard(){
+            var hs=document.querySelectorAll('h2');
+            for(var i=0;i<hs.length;i++){
+              var t=(hs[i].textContent||'').trim();
+              if(t==='Gérer les élèves'||t==='Jere elèv') return hs[i].closest('.card');
+            }
+            return null;
+          }
+          function renderRows(card){
+            var table=card&&card.querySelector('table'); if(!table) return;
+            var body=table.querySelector('tbody'); if(!body) return;
+            body.querySelectorAll('tr[data-extra-student="1"]').forEach(function(r){r.remove()});
+            read().forEach(function(s){
+              var tr=document.createElement('tr'); tr.setAttribute('data-extra-student','1');
+              tr.innerHTML='<td>'+s.id+'</td><td>'+s.name+'</td><td>'+s.level+'</td><td>'+s.section+'</td><td><span style="display:inline-block;padding:8px 10px;border-radius:9px;background:#eef3f8;color:#0f4c81;font-weight:700">'+(isFrench()?'Ajouté':'Ajoute')+'</span></td>';
+              body.appendChild(tr);
             });
           }
-          bindTeacherMenu();
-          new MutationObserver(bindTeacherMenu).observe(document.body,{subtree:true,childList:true});
+          function bind(){
+            var card=findStudentsCard(); if(!card) return;
+            renderRows(card);
+            if(card.querySelector('#ps-add-student-wrap')) return;
+            var table=card.querySelector('table'); if(!table) return;
+            var wrap=document.createElement('div'); wrap.id='ps-add-student-wrap';
+            var fr=isFrench();
+            wrap.innerHTML='<button id="ps-add-student-toggle" type="button">➕ '+(fr?'Ajouter un élève':'Ajoute yon elèv')+'</button>'+
+              '<form id="ps-add-student-form" style="display:none">'+
+              '<h3 style="margin-top:0">'+(fr?'Ajouter un élève':'Ajoute yon elèv')+'</h3>'+
+              '<div class="ps-grid">'+
+              '<div><label>'+(fr?'Nom de l’élève':'Non elèv')+'</label><input name="name" required></div>'+
+              '<div><label>'+(fr?'Classe / Niveau':'Klas / Nivo')+'</label><input name="level" required placeholder="9e Année Fondamentale"></div>'+
+              '<div><label>'+(fr?'Section':'Seksyon')+'</label><input name="section" required placeholder="A"></div>'+
+              '<div><label>'+(fr?'Année académique':'Ane akademik')+'</label><input name="year" required value="2026–2027"></div>'+
+              '</div><div class="ps-row"><button type="submit">'+(fr?'Enregistrer':'Anrejistre')+'</button><button type="button" id="ps-add-student-cancel">'+(fr?'Annuler':'Anile')+'</button></div></form>';
+            card.insertBefore(wrap,table);
+            var toggle=wrap.querySelector('#ps-add-student-toggle');
+            var form=wrap.querySelector('#ps-add-student-form');
+            var cancel=wrap.querySelector('#ps-add-student-cancel');
+            toggle.addEventListener('click',function(){form.style.display='block';toggle.style.display='none';});
+            cancel.addEventListener('click',function(){form.style.display='none';toggle.style.display='inline-block';form.reset();});
+            form.addEventListener('submit',function(e){
+              e.preventDefault();
+              var data=new FormData(form), extras=read();
+              var id='ELV-'+String(4+extras.length).padStart(3,'0');
+              extras.push({id:id,name:String(data.get('name')||''),level:String(data.get('level')||''),section:String(data.get('section')||''),year:String(data.get('year')||'')});
+              write(extras); form.reset(); form.style.display='none'; toggle.style.display='inline-block'; renderRows(card);
+            });
+          }
+          bind();
+          new MutationObserver(function(){setTimeout(bind,0)}).observe(document.body,{subtree:true,childList:true});
         })();
       `}} />
     </>
