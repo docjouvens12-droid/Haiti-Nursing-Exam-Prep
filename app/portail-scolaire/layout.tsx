@@ -158,6 +158,19 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           bind();
           new MutationObserver(function(){setTimeout(bind,0)}).observe(document.body,{subtree:true,childList:true});
         })();
+
+        (function(){
+          function polishFrenchDashboardTitles(){
+            document.querySelectorAll('h2').forEach(function(h){
+              var t=(h.textContent||'').trim();
+              if(t==='Tableau de bord Direction') h.textContent='Tableau de bord de la Direction';
+              if(t==='Tableau de bord Enseignant') h.textContent='Tableau de bord de l’Enseignant';
+              if(t==='Tableau de bord Élève') h.textContent='Tableau de bord de l’Élève';
+            });
+          }
+          polishFrenchDashboardTitles();
+          new MutationObserver(function(){setTimeout(polishFrenchDashboardTitles,0)}).observe(document.body,{subtree:true,childList:true});
+        })();
       `}} />
     </>
   )
