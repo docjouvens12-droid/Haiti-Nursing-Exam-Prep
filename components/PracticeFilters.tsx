@@ -6,6 +6,7 @@ import { libelleCategorie } from "@/lib/categories";
 
 type Status = { value: string; label: string };
 type TopicRow = { categorie: string | null; sous_categorie: string | null };
+type CorrectionMode = "immediate" | "fin";
 
 type Props = {
   categories: string[];
@@ -20,13 +21,14 @@ type Props = {
     nombre: number;
     chrono: boolean;
     annee: string;
-    correction: "immediate" | "fin";
+    correction: CorrectionMode;
   };
 };
 
 export default function PracticeFilters({ categories, topicRows, statuses, sessionSizes, annees, initial }: Props) {
   const [categorie, setCategorie] = useState(initial.categorie);
   const [sousCategorie, setSousCategorie] = useState(initial.sousCategorie);
+  const [correction, setCorrection] = useState<CorrectionMode>(initial.correction);
 
   const topics = useMemo(() => {
     if (!categorie) return [];
@@ -78,13 +80,30 @@ export default function PracticeFilters({ categories, topicRows, statuses, sessi
           {sessionSizes.map((size) => <option key={size} value={size}>{size} questions</option>)}
         </select>
       </label>
-      <label>
-        <span>Voir les corrections</span>
-        <select name="correction" defaultValue={initial.correction}>
-          <option value="immediate">Après chaque question</option>
-          <option value="fin">À la fin de la série</option>
-        </select>
-      </label>
+
+      <fieldset className="practice-correction-choice">
+        <legend>Quand voulez-vous voir les résultats ?</legend>
+        <input type="hidden" name="correction" value={correction} />
+        <button
+          type="button"
+          className={correction === "immediate" ? "active" : ""}
+          onClick={() => setCorrection("immediate")}
+          aria-pressed={correction === "immediate"}
+        >
+          <span className="practice-choice-icon">✓</span>
+          <span><strong>Après chaque question</strong><small>Voir immédiatement la bonne réponse et l’explication.</small></span>
+        </button>
+        <button
+          type="button"
+          className={correction === "fin" ? "active" : ""}
+          onClick={() => setCorrection("fin")}
+          aria-pressed={correction === "fin"}
+        >
+          <span className="practice-choice-icon">▣</span>
+          <span><strong>À la fin de la série</strong><small>Répondre sans correction puis voir le score et le corrigé complet.</small></span>
+        </button>
+      </fieldset>
+
       <label>
         <span>Chronomètre</span>
         <select name="chrono" defaultValue={initial.chrono ? "oui" : "non"}>
