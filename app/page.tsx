@@ -56,7 +56,7 @@ export default function Accueil() {
             6 425 QCM, des examens simulés et des cours de révision structurés.
           </p>
           <div className="home-actions">
-            <Link className="btn btn-primary home-main-cta" href="/inscription">Créer mon compte gratuitement</Link>
+            <Link className="btn btn-primary home-main-cta" href="/inscription">Créer mon compte</Link>
             <Link className="home-secondary-cta" href="/connexion">J’ai déjà un compte</Link>
           </div>
         </div>
