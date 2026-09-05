@@ -8,10 +8,9 @@ import { createClient } from "@/lib/supabase/client";
 
 const items = [
   { href: "/tableau-de-bord", label: "Accueil", icon: "⌂" },
-  { href: "/pratique", label: "Questions", icon: "▤" },
+  { href: "/pratique", label: "QCM", icon: "▤" },
   { href: "/examens", label: "Examens", icon: "▣" },
-  { href: "/performance", label: "Progrès", icon: "⌁" },
-  { href: "/profil", label: "Profil", icon: "○" },
+  { href: "/cours-revisions", label: "Cours", icon: "▥" },
 ];
 
 const drawerItems = [
@@ -118,13 +117,6 @@ export default function MobileStudentNav() {
             <nav className="mobile-drawer-nav" aria-label="Menu mobile complet">
               {drawerItems.map((item) => {
                 const active = pathname === item.href || (item.href !== "/tableau-de-bord" && pathname.startsWith(`${item.href}/`));
-                if (item.href === "/cours-revisions") {
-                  return (
-                    <a key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setDrawerOpen(false)}>
-                      <span aria-hidden="true">{item.icon}</span><span>{item.label}</span>
-                    </a>
-                  );
-                }
                 return (
                   <Link key={item.href} href={item.href} className={active ? "active" : ""} onClick={() => setDrawerOpen(false)}>
                     <span aria-hidden="true">{item.icon}</span><span>{item.label}</span>
@@ -151,6 +143,9 @@ export default function MobileStudentNav() {
             </Link>
           );
         })}
+        <button type="button" className={drawerOpen ? "active" : ""} onClick={() => setDrawerOpen(true)} aria-label="Plus d’options">
+          <span className="mobile-student-nav-icon" aria-hidden="true">•••</span><span>Plus</span>
+        </button>
       </nav>
       <style jsx global>{`
         .menu-button{min-width:44px;min-height:44px;cursor:pointer;touch-action:manipulation}
