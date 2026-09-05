@@ -6,18 +6,14 @@ import { createPortal } from "react-dom";
 import { usePathname } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 
-const DAILY_GOAL = 25;
-
 type LastActivity = {
   category: string;
-  question: string;
 };
 
 export default function DashboardContinueCards() {
   const pathname = usePathname();
   const [host, setHost] = useState<HTMLDivElement | null>(null);
   const [activity, setActivity] = useState<LastActivity | null>(null);
-  const [todayCount, setTodayCount] = useState(0);
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [loading, setLoading] = useState(true);
 
@@ -58,22 +54,14 @@ export default function DashboardContinueCards() {
         return;
       }
 
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      const [{ data: last }, { count: todayAnswers }, { count: questionCount }] = await Promise.all([
+      const [{ data: last }, { count: questionCount }] = await Promise.all([
         supabase
           .from("user_answers")
-          .select("answered_at,questions(categorie,question)")
+          .select("answered_at,questions(categorie)")
           .eq("user_id", auth.user.id)
           .order("answered_at", { ascending: false })
           .limit(1)
           .maybeSingle(),
-        supabase
-          .from("user_answers")
-          .select("question_id", { count: "exact", head: true })
-          .eq("user_id", auth.user.id)
-          .gte("answered_at", today.toISOString()),
         supabase.from("questions").select("id", { count: "exact", head: true }),
       ]);
 
@@ -84,12 +72,8 @@ export default function DashboardContinueCards() {
         : (last as any)?.questions;
 
       if (q) {
-        setActivity({
-          category: q.categorie || "Questions d’entraînement",
-          question: q.question || "Continuez votre entraînement là où vous vous êtes arrêté.",
-        });
+        setActivity({ category: q.categorie || "Questions d’entraînement" });
       }
-      setTodayCount(todayAnswers ?? 0);
       setTotalQuestions(questionCount ?? 0);
       setLoading(false);
     }
@@ -102,73 +86,88 @@ export default function DashboardContinueCards() {
 
   if (pathname !== "/tableau-de-bord" || !host) return null;
 
-  const progress = Math.min(100, Math.round((todayCount / DAILY_GOAL) * 100));
-
   return createPortal(
-    <div className="dashboard-continue-grid" aria-label="Reprendre votre préparation">
-      <Link href="/pratique" className="dashboard-continue-card practice-card">
-        <span className="dashboard-card-icon practice-icon" aria-hidden="true">▶</span>
-        <span className="dashboard-card-copy">
-          <small>CONTINUER À PRATIQUER</small>
-          <strong>{todayCount} / {DAILY_GOAL} questions aujourd’hui</strong>
-          <span className="dashboard-card-progress"><i style={{ width: `${progress}%` }} /></span>
-          <em>{progress}% · {totalQuestions.toLocaleString("fr-FR")} questions disponibles</em>
+    <div className="dashboard-model3-grid" aria-label="Reprendre votre préparation">
+      <Link href="/pratique" className="model3-card model3-practice">
+        <span className="model3-illustration practice-illustration" aria-hidden="true">
+          <span className="sheet"><i /><i /><i /></span>
+          <span className="pencil">✎</span>
         </span>
-        <span className="dashboard-card-arrow" aria-hidden="true">›</span>
+        <span className="model3-copy">
+          <small>ENTRAÎNEMENT</small>
+          <strong>Continuer à pratiquer</strong>
+          <p>Entraînez-vous avec des QCM adaptés à votre préparation.</p>
+          <span className="model3-action">Commencer maintenant →</span>
+        </span>
+        <span className="model3-metric">
+          <b>{totalQuestions.toLocaleString("fr-FR")}</b>
+          <em>questions</em>
+        </span>
       </Link>
 
-      <Link href="/pratique" className="dashboard-continue-card resume-card">
-        <span className="dashboard-card-icon resume-icon" aria-hidden="true">↻</span>
-        <span className="dashboard-card-copy">
-          <small>CONTINUER LÀ OÙ VOUS VOUS ÊTES ARRÊTÉ</small>
-          {loading ? (
-            <strong>Recherche de votre dernière activité…</strong>
-          ) : activity ? (
-            <>
-              <strong>{activity.category}</strong>
-              <em className="last-question">{activity.question}</em>
-            </>
-          ) : (
-            <>
-              <strong>Commencez votre première série de QCM</strong>
-              <em>Votre dernière activité apparaîtra ici automatiquement.</em>
-            </>
-          )}
+      <Link href="/pratique" className="model3-card model3-resume">
+        <span className="model3-illustration books-illustration" aria-hidden="true">
+          <span className="book one" />
+          <span className="book two" />
+          <span className="book three" />
         </span>
-        <span className="dashboard-card-arrow" aria-hidden="true">›</span>
+        <span className="model3-copy">
+          <small>DERNIÈRE ACTIVITÉ</small>
+          <strong>Continuer là où vous vous êtes arrêté</strong>
+          <p>
+            {loading
+              ? "Recherche de votre dernière activité…"
+              : activity
+                ? activity.category
+                : "Commencez votre première série de QCM."}
+          </p>
+          <span className="model3-action resume-action">{activity ? "Reprendre ma session →" : "Commencer →"}</span>
+        </span>
+        <span className="model3-last-badge">{activity ? "À reprendre" : "Nouveau"}</span>
       </Link>
 
       <style jsx>{`
-        .dashboard-continue-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 16px}
-        .dashboard-continue-card{min-width:0;display:grid;grid-template-columns:48px minmax(0,1fr) 34px;gap:14px;align-items:center;border-radius:20px;padding:18px 18px;text-decoration:none;border:1px solid transparent;box-shadow:0 10px 28px rgba(25,55,100,.07);transition:transform .16s ease,box-shadow .16s ease}
-        .dashboard-continue-card:hover{transform:translateY(-1px);box-shadow:0 14px 32px rgba(25,55,100,.1)}
-        .practice-card{background:linear-gradient(135deg,#f0f7ff,#e8f3ff);border-color:#d8e9fb;color:#102457}
-        .resume-card{background:linear-gradient(135deg,#f0fbf6,#e6f8ef);border-color:#d4efe1;color:#143b2b}
-        .dashboard-card-icon{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;font-size:19px;font-weight:900}
-        .practice-icon{background:#fff;color:#2474ff;box-shadow:0 5px 14px rgba(36,116,255,.12)}
-        .resume-icon{background:#fff;color:#19a866;box-shadow:0 5px 14px rgba(25,168,102,.12)}
-        .dashboard-card-copy{min-width:0;display:block}
-        .dashboard-card-copy small{display:block;font-size:9px;font-weight:900;letter-spacing:.75px;color:#687891;margin-bottom:5px}
-        .dashboard-card-copy strong{display:block;font-size:15px;line-height:1.25;color:inherit}
-        .dashboard-card-copy em{display:block;margin-top:6px;font-size:10px;line-height:1.35;font-style:normal;color:#70809a}
-        .resume-card .dashboard-card-copy em{color:#618171}
-        .last-question{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .dashboard-card-progress{display:block;height:7px;margin-top:9px;background:rgba(36,116,255,.12);border-radius:999px;overflow:hidden}
-        .dashboard-card-progress i{display:block;height:100%;background:linear-gradient(90deg,#2c9cff,#2474ff);border-radius:999px}
-        .dashboard-card-arrow{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:#fff;font-size:24px;font-weight:600;box-shadow:0 4px 12px rgba(20,55,90,.08)}
-        .practice-card .dashboard-card-arrow{color:#2474ff}.resume-card .dashboard-card-arrow{color:#19a866}
+        .dashboard-model3-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 16px}
+        .model3-card{min-width:0;display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:16px;align-items:center;border-radius:22px;padding:20px;text-decoration:none;overflow:hidden;position:relative;box-shadow:0 12px 28px rgba(20,45,85,.08);transition:transform .16s ease,box-shadow .16s ease}
+        .model3-card:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(20,45,85,.11)}
+        .model3-practice{background:linear-gradient(135deg,#1d78e8,#3e94f2);color:#fff}
+        .model3-resume{background:linear-gradient(135deg,#fff9ef,#fff3dd);border:1px solid #f2e3c3;color:#21314f}
+        .model3-illustration{width:82px;height:82px;display:grid;place-items:center;position:relative;flex:0 0 auto}
+        .practice-illustration{background:rgba(255,255,255,.14);border-radius:20px}
+        .sheet{width:42px;height:52px;background:#fff;border-radius:8px;display:grid;align-content:center;gap:6px;padding:0 9px;box-shadow:0 8px 16px rgba(0,0,0,.08);transform:rotate(-4deg)}
+        .sheet i{height:4px;background:#b9d8ff;border-radius:99px}.sheet i:nth-child(2){width:78%}.sheet i:nth-child(3){width:62%}
+        .pencil{position:absolute;right:10px;bottom:9px;width:30px;height:30px;border-radius:10px;background:#ffd969;color:#2f5e9c;display:grid;place-items:center;font-size:18px;font-weight:900;box-shadow:0 5px 12px rgba(0,0,0,.08)}
+        .books-illustration{border-radius:20px;background:#fff3d3}
+        .book{position:absolute;width:46px;height:14px;border-radius:5px;box-shadow:0 4px 8px rgba(110,75,20,.08)}
+        .book.one{background:#4e8fe7;transform:translateY(17px) rotate(2deg)}
+        .book.two{background:#f4a84b;transform:translateY(1px) rotate(-2deg)}
+        .book.three{background:#71b88c;transform:translateY(-15px) rotate(3deg)}
+        .model3-copy{min-width:0}
+        .model3-copy small{display:block;font-size:9px;font-weight:900;letter-spacing:.8px;margin-bottom:5px;opacity:.78}
+        .model3-copy strong{display:block;font-size:17px;line-height:1.2;font-weight:900}
+        .model3-copy p{margin:7px 0 0;font-size:11px;line-height:1.45;max-width:540px;opacity:.86}
+        .model3-action{display:inline-block;margin-top:12px;background:#fff;color:#1768cb;border-radius:10px;padding:9px 12px;font-size:10px;font-weight:900;box-shadow:0 5px 12px rgba(8,56,120,.08)}
+        .resume-action{background:#243a63;color:#fff;box-shadow:none}
+        .model3-metric{min-width:82px;text-align:center;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.24);border-radius:16px;padding:12px 10px}
+        .model3-metric b,.model3-metric em{display:block}.model3-metric b{font-size:20px;line-height:1;font-weight:900}.model3-metric em{margin-top:4px;font-size:9px;font-style:normal;opacity:.82}
+        .model3-last-badge{align-self:start;background:#fff6df;color:#9a6a18;border:1px solid #eed59e;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900;white-space:nowrap}
         @media(max-width:800px){
-          .dashboard-continue-grid{grid-template-columns:1fr;gap:11px;margin:0 0 14px}
-          .dashboard-continue-card{grid-template-columns:44px minmax(0,1fr) 32px;gap:11px;padding:15px;border-radius:18px}
-          .dashboard-card-icon{width:44px;height:44px;border-radius:13px;font-size:17px}
-          .dashboard-card-copy small{font-size:8px;letter-spacing:.6px}
-          .dashboard-card-copy strong{font-size:13px}
-          .dashboard-card-copy em{font-size:9px;margin-top:5px}
-          .dashboard-card-progress{height:6px;margin-top:8px}
-          .dashboard-card-arrow{width:32px;height:32px;font-size:21px}
-          .last-question{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+          .dashboard-model3-grid{grid-template-columns:1fr;gap:11px;margin:0 0 14px}
+          .model3-card{grid-template-columns:68px minmax(0,1fr) auto;gap:13px;padding:16px;border-radius:19px}
+          .model3-illustration{width:68px;height:68px;border-radius:17px}
+          .sheet{width:36px;height:46px;padding:0 8px;gap:5px}.pencil{width:25px;height:25px;right:7px;bottom:7px;font-size:15px}
+          .book{width:39px;height:12px}
+          .model3-copy strong{font-size:14px}.model3-copy p{font-size:10px;margin-top:5px}.model3-copy small{font-size:8px}
+          .model3-action{font-size:9px;padding:8px 10px;margin-top:9px}
+          .model3-metric{min-width:65px;padding:10px 8px;border-radius:13px}.model3-metric b{font-size:16px}.model3-metric em{font-size:8px}
+          .model3-last-badge{font-size:8px;padding:6px 8px}
         }
-        @media(prefers-reduced-motion:reduce){.dashboard-continue-card{transition:none}}
+        @media(max-width:390px){
+          .model3-card{grid-template-columns:60px minmax(0,1fr);align-items:start}
+          .model3-illustration{width:60px;height:60px}
+          .model3-metric,.model3-last-badge{grid-column:2;justify-self:start;margin-top:-2px}
+        }
+        @media(prefers-reduced-motion:reduce){.model3-card{transition:none}}
       `}</style>
     </div>,
     host,
