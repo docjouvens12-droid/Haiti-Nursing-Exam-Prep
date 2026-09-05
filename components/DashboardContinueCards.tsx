@@ -126,6 +126,7 @@ export default function DashboardContinueCards() {
       </Link>
 
       <style jsx global>{`
+        .modern-nav a[href="/categories"]{display:none!important}
         #dashboard-continue-cards-host{width:100%;display:block}
         .hn-continue-wrap{display:grid!important;grid-template-columns:1fr!important;gap:14px!important;margin:0 0 16px!important;width:100%!important}
         .hn-continue-card{width:100%!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:118px minmax(0,1fr) 170px!important;gap:22px!important;align-items:center!important;border-radius:24px!important;padding:24px 26px!important;text-decoration:none!important;overflow:hidden!important;position:relative!important;box-shadow:0 12px 30px rgba(20,45,85,.08)!important}
