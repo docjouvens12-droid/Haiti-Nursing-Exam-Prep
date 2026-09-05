@@ -66,7 +66,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           }
 
           var TEACHER_KEY='portail_scolaire_teachers_v2';
-          function tDefaults(){return [{id:'ENS-001',name:'Nadia Charles',subject:'Sciences',classes:'9e Année Fondamentale – A'},{id:'ENS-002',name:'Marc Pierre',subject:'Mathématiques',classes:'8e Année Fondamentale – B'}]}
+          function tDefaults(){return [{id:'ENS-001',name:'Nadia Charles',subject:'Sciences',classes:'9e Année Fondamentale',section:'A'},{id:'ENS-002',name:'Marc Pierre',subject:'Mathématiques',classes:'8e Année Fondamentale',section:'B'}]}
           function tRead(){try{var v=JSON.parse(localStorage.getItem(TEACHER_KEY)||'null');return Array.isArray(v)?v:tDefaults()}catch(e){return tDefaults()}}
           function tWrite(v){localStorage.setItem(TEACHER_KEY,JSON.stringify(v))}
           function isFrenchTeachers(){return document.body.innerText.indexOf('Gérer les enseignants')!==-1}
@@ -82,8 +82,9 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
             var list=card.querySelector('#ps-teacher-list');if(!list)return;
             var fr=isFrenchTeachers(),teachers=tRead();list.innerHTML='';
             teachers.forEach(function(t,index){
+              var section=t.section?(' • '+(fr?'Section ':'Seksyon ')+t.section):'';
               var item=document.createElement('div');item.className='ps-teacher-card';
-              item.innerHTML='<div class="ps-teacher-name">'+t.name+'</div><div class="ps-teacher-meta">'+t.id+' • '+t.subject+' • '+t.classes+'</div><div class="ps-teacher-actions"><button type="button" class="ps-teacher-action" data-act="edit" data-i="'+index+'">'+(fr?'Modifier':'Modifye')+'</button><button type="button" class="ps-teacher-action secondary" data-act="class" data-i="'+index+'">'+(fr?'Classes':'Klas')+'</button><button type="button" class="ps-teacher-action secondary" data-act="subject" data-i="'+index+'">'+(fr?'Matières':'Matiyè')+'</button><button type="button" class="ps-teacher-action danger" data-act="delete" data-i="'+index+'">'+(fr?'Retirer':'Retire')+'</button></div>';
+              item.innerHTML='<div class="ps-teacher-name">'+t.name+'</div><div class="ps-teacher-meta">'+t.id+' • '+t.subject+' • '+t.classes+section+'</div><div class="ps-teacher-actions"><button type="button" class="ps-teacher-action" data-act="edit" data-i="'+index+'">'+(fr?'Modifier':'Modifye')+'</button><button type="button" class="ps-teacher-action secondary" data-act="class" data-i="'+index+'">'+(fr?'Classes':'Klas')+'</button><button type="button" class="ps-teacher-action secondary" data-act="section" data-i="'+index+'">'+(fr?'Section':'Seksyon')+'</button><button type="button" class="ps-teacher-action secondary" data-act="subject" data-i="'+index+'">'+(fr?'Matières':'Matiyè')+'</button><button type="button" class="ps-teacher-action danger" data-act="delete" data-i="'+index+'">'+(fr?'Retirer':'Retire')+'</button></div>';
               list.appendChild(item);
             });
           }
@@ -94,9 +95,9 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
               if(confirm(fr?'Retirer cet enseignant de la liste ?':'Retire pwofesè sa a nan lis la?')){teachers.splice(i,1);tWrite(teachers);renderTeachers(card)}
               return;
             }
-            var field=act==='edit'?'name':act==='class'?'classes':'subject';
-            var label=act==='edit'?(fr?'Nom de l’enseignant':'Non pwofesè'):act==='class'?(fr?'Classes assignées':'Klas yo asiyen'):(fr?'Matières assignées':'Matiyè yo asiyen');
-            var value=prompt(label,t[field]);
+            var field=act==='edit'?'name':act==='class'?'classes':act==='section'?'section':'subject';
+            var label=act==='edit'?(fr?'Nom de l’enseignant':'Non pwofesè'):act==='class'?(fr?'Classes assignées':'Klas yo asiyen'):act==='section'?(fr?'Section assignée':'Seksyon li asiyen'):(fr?'Matières assignées':'Matiyè yo asiyen');
+            var value=prompt(label,t[field]||'');
             if(value!==null&&value.trim()){t[field]=value.trim();teachers[i]=t;tWrite(teachers);renderTeachers(card)}
           }
           function bindTeachers(){
@@ -107,12 +108,12 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
             var directButtons=card.querySelectorAll(':scope > .btn');directButtons.forEach(function(b){b.style.display='none'});
             var directForms=card.querySelectorAll(':scope > form');directForms.forEach(function(f){f.style.display='none'});
             var fr=isFrenchTeachers(),wrap=document.createElement('div');wrap.id='ps-teacher-manager';
-            wrap.innerHTML='<button id="ps-add-teacher-toggle" type="button">➕ '+(fr?'Ajouter un enseignant':'Ajoute yon pwofesè')+'</button><form id="ps-add-teacher-form" style="display:none"><h3 style="margin-top:0">'+(fr?'Ajouter un enseignant':'Ajoute yon pwofesè')+'</h3><div class="ps-grid"><div><label>'+(fr?'Nom complet':'Non konplè')+'</label><input name="name" required></div><div><label>'+(fr?'Matière principale':'Matiyè prensipal')+'</label><input name="subject" required></div><div><label>'+(fr?'Classes assignées':'Klas yo asiyen')+'</label><input name="classes" required></div></div><div class="ps-row"><button type="submit">'+(fr?'Enregistrer':'Anrejistre')+'</button><button type="button" id="ps-add-teacher-cancel">'+(fr?'Annuler':'Anile')+'</button></div></form><div id="ps-teacher-list"></div>';
+            wrap.innerHTML='<button id="ps-add-teacher-toggle" type="button">➕ '+(fr?'Ajouter un enseignant':'Ajoute yon pwofesè')+'</button><form id="ps-add-teacher-form" style="display:none"><h3 style="margin-top:0">'+(fr?'Ajouter un enseignant':'Ajoute yon pwofesè')+'</h3><div class="ps-grid"><div><label>'+(fr?'Nom complet':'Non konplè')+'</label><input name="name" required></div><div><label>'+(fr?'Matière principale':'Matiyè prensipal')+'</label><input name="subject" required></div><div><label>'+(fr?'Classes assignées':'Klas yo asiyen')+'</label><input name="classes" required></div><div><label>'+(fr?'Section':'Seksyon')+'</label><input name="section" required placeholder="A"></div></div><div class="ps-row"><button type="submit">'+(fr?'Enregistrer':'Anrejistre')+'</button><button type="button" id="ps-add-teacher-cancel">'+(fr?'Annuler':'Anile')+'</button></div></form><div id="ps-teacher-list"></div>';
             card.appendChild(wrap);
             var toggle=wrap.querySelector('#ps-add-teacher-toggle'),form=wrap.querySelector('#ps-add-teacher-form'),cancel=wrap.querySelector('#ps-add-teacher-cancel'),list=wrap.querySelector('#ps-teacher-list');
             toggle.addEventListener('click',function(){form.style.display='block';toggle.style.display='none'});
             cancel.addEventListener('click',function(){form.style.display='none';toggle.style.display='inline-block';form.reset()});
-            form.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(form),teachers=tRead();var id='ENS-'+String(teachers.length+1).padStart(3,'0');teachers.push({id:id,name:String(d.get('name')||''),subject:String(d.get('subject')||''),classes:String(d.get('classes')||'')});tWrite(teachers);form.reset();form.style.display='none';toggle.style.display='inline-block';renderTeachers(card)});
+            form.addEventListener('submit',function(e){e.preventDefault();var d=new FormData(form),teachers=tRead();var id='ENS-'+String(teachers.length+1).padStart(3,'0');teachers.push({id:id,name:String(d.get('name')||''),subject:String(d.get('subject')||''),classes:String(d.get('classes')||''),section:String(d.get('section')||'')});tWrite(teachers);form.reset();form.style.display='none';toggle.style.display='inline-block';renderTeachers(card)});
             list.addEventListener('click',function(e){handleTeacherAction(e,card)});
             renderTeachers(card);
             return true;
