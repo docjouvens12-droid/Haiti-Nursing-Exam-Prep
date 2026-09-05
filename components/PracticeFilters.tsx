@@ -20,6 +20,7 @@ type Props = {
     nombre: number;
     chrono: boolean;
     annee: string;
+    correction: "immediate" | "fin";
   };
 };
 
@@ -75,6 +76,13 @@ export default function PracticeFilters({ categories, topicRows, statuses, sessi
         <span>Nombre de questions</span>
         <select name="nombre" defaultValue={String(initial.nombre)}>
           {sessionSizes.map((size) => <option key={size} value={size}>{size} questions</option>)}
+        </select>
+      </label>
+      <label>
+        <span>Voir les corrections</span>
+        <select name="correction" defaultValue={initial.correction}>
+          <option value="immediate">Après chaque question</option>
+          <option value="fin">À la fin de la série</option>
         </select>
       </label>
       <label>
