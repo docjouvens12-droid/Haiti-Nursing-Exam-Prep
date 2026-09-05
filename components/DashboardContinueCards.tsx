@@ -87,31 +87,31 @@ export default function DashboardContinueCards() {
   if (pathname !== "/tableau-de-bord" || !host) return null;
 
   return createPortal(
-    <div className="dashboard-model3-grid" aria-label="Reprendre votre préparation">
-      <Link href="/pratique" className="model3-card model3-practice">
-        <span className="model3-illustration practice-illustration" aria-hidden="true">
-          <span className="sheet"><i /><i /><i /></span>
-          <span className="pencil">✎</span>
+    <div className="continue-premium-grid" aria-label="Reprendre votre préparation">
+      <Link href="/pratique" className="continue-premium-card practice-card">
+        <span className="practice-art" aria-hidden="true">
+          <span className="paper"><i /><i /><i /></span>
+          <span className="pen">✎</span>
         </span>
-        <span className="model3-copy">
+        <span className="premium-copy">
           <small>ENTRAÎNEMENT</small>
           <strong>Continuer à pratiquer</strong>
           <p>Entraînez-vous avec des QCM adaptés à votre préparation.</p>
-          <span className="model3-action">Commencer maintenant →</span>
+          <span className="practice-action">Commencer maintenant →</span>
         </span>
-        <span className="model3-metric">
+        <span className="question-count">
           <b>{totalQuestions.toLocaleString("fr-FR")}</b>
-          <em>questions</em>
+          <em>questions<br />disponibles</em>
         </span>
       </Link>
 
-      <Link href="/pratique" className="model3-card model3-resume">
-        <span className="model3-illustration books-illustration" aria-hidden="true">
-          <span className="book one" />
-          <span className="book two" />
-          <span className="book three" />
+      <Link href="/pratique" className="continue-premium-card resume-card">
+        <span className="books-art" aria-hidden="true">
+          <span className="book blue" />
+          <span className="book gold" />
+          <span className="book navy" />
         </span>
-        <span className="model3-copy">
+        <span className="premium-copy resume-copy">
           <small>DERNIÈRE ACTIVITÉ</small>
           <strong>Continuer là où vous vous êtes arrêté</strong>
           <p>
@@ -121,53 +121,58 @@ export default function DashboardContinueCards() {
                 ? activity.category
                 : "Commencez votre première série de QCM."}
           </p>
-          <span className="model3-action resume-action">{activity ? "Reprendre ma session →" : "Commencer →"}</span>
+          <span className="resume-action">{activity ? "Reprendre ma session →" : "Commencer →"}</span>
         </span>
-        <span className="model3-last-badge">{activity ? "À reprendre" : "Nouveau"}</span>
+        <span className="resume-status" aria-hidden="true">↻</span>
       </Link>
 
       <style jsx>{`
-        .dashboard-model3-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:0 0 16px}
-        .model3-card{min-width:0;display:grid;grid-template-columns:82px minmax(0,1fr) auto;gap:16px;align-items:center;border:2px solid #2474ff;border-radius:22px;padding:20px;text-decoration:none;overflow:hidden;position:relative;box-shadow:0 12px 28px rgba(20,45,85,.08);transition:transform .16s ease,box-shadow .16s ease}
-        .model3-card:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(20,45,85,.11)}
-        .model3-practice{background:linear-gradient(135deg,#1d78e8,#3e94f2);color:#fff}
-        .model3-resume{background:linear-gradient(135deg,#fff9ef,#fff3dd);color:#21314f}
-        .model3-illustration{width:82px;height:82px;display:grid;place-items:center;position:relative;flex:0 0 auto}
-        .practice-illustration{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.55);border-radius:20px}
-        .sheet{width:42px;height:52px;background:#fff;border:2px solid #2474ff;border-radius:8px;display:grid;align-content:center;gap:6px;padding:0 9px;box-shadow:0 8px 16px rgba(0,0,0,.08);transform:rotate(-4deg)}
-        .sheet i{height:4px;background:#b9d8ff;border-radius:99px}.sheet i:nth-child(2){width:78%}.sheet i:nth-child(3){width:62%}
-        .pencil{position:absolute;right:10px;bottom:9px;width:30px;height:30px;border:2px solid #2474ff;border-radius:10px;background:#ffd969;color:#2f5e9c;display:grid;place-items:center;font-size:18px;font-weight:900;box-shadow:0 5px 12px rgba(0,0,0,.08)}
-        .books-illustration{border:2px solid #2474ff;border-radius:20px;background:#fff3d3}
-        .book{position:absolute;width:46px;height:14px;border:1px solid #2474ff;border-radius:5px;box-shadow:0 4px 8px rgba(110,75,20,.08)}
-        .book.one{background:#4e8fe7;transform:translateY(17px) rotate(2deg)}
-        .book.two{background:#f4a84b;transform:translateY(1px) rotate(-2deg)}
-        .book.three{background:#71b88c;transform:translateY(-15px) rotate(3deg)}
-        .model3-copy{min-width:0}
-        .model3-copy small{display:block;font-size:9px;font-weight:900;letter-spacing:.8px;margin-bottom:5px;opacity:.78}
-        .model3-copy strong{display:block;font-size:17px;line-height:1.2;font-weight:900}
-        .model3-copy p{margin:7px 0 0;font-size:11px;line-height:1.45;max-width:540px;opacity:.86}
-        .model3-action{display:inline-block;margin-top:12px;background:#fff;color:#1768cb;border:2px solid #2474ff;border-radius:10px;padding:9px 12px;font-size:10px;font-weight:900;box-shadow:0 5px 12px rgba(8,56,120,.08)}
-        .resume-action{background:#243a63;color:#fff;box-shadow:none}
-        .model3-metric{min-width:82px;text-align:center;background:rgba(255,255,255,.14);border:2px solid #8fc2ff;border-radius:16px;padding:12px 10px}
-        .model3-metric b,.model3-metric em{display:block}.model3-metric b{font-size:20px;line-height:1;font-weight:900}.model3-metric em{margin-top:4px;font-size:9px;font-style:normal;opacity:.82}
-        .model3-last-badge{align-self:start;background:#fff6df;color:#1768cb;border:2px solid #2474ff;border-radius:999px;padding:7px 10px;font-size:9px;font-weight:900;white-space:nowrap}
+        .continue-premium-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 16px}
+        .continue-premium-card{min-width:0;display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:18px;align-items:center;border-radius:22px;padding:22px;text-decoration:none;overflow:hidden;position:relative;box-shadow:0 12px 30px rgba(20,45,85,.08);transition:transform .16s ease,box-shadow .16s ease}
+        .continue-premium-card:hover{transform:translateY(-1px);box-shadow:0 16px 34px rgba(20,45,85,.11)}
+        .practice-card{background:linear-gradient(135deg,#2c81f6 0%,#1768df 100%);color:#fff}
+        .resume-card{background:#fff;color:#122554;border:1px solid #e4eaf2}
+        .practice-art,.books-art{width:96px;height:96px;border-radius:24px;display:grid;place-items:center;position:relative}
+        .practice-art{background:rgba(255,255,255,.08)}
+        .paper{width:52px;height:64px;border-radius:10px;background:#fff;display:grid;align-content:center;gap:7px;padding:0 11px;box-shadow:0 10px 20px rgba(4,42,104,.18);transform:rotate(-5deg)}
+        .paper i{height:5px;border-radius:999px;background:#8cc0ff}.paper i:nth-child(2){width:80%}.paper i:nth-child(3){width:62%}
+        .pen{position:absolute;right:8px;bottom:12px;font-size:25px;transform:rotate(-12deg)}
+        .books-art{background:#eef5ff}
+        .book{position:absolute;width:56px;height:15px;border-radius:5px;box-shadow:0 5px 10px rgba(25,55,90,.10)}
+        .book.blue{background:#2f7fea;transform:translateY(-17px) rotate(-3deg)}
+        .book.gold{background:#f6b23b;transform:translateY(0) rotate(2deg)}
+        .book.navy{background:#173f85;transform:translateY(17px) rotate(-2deg)}
+        .premium-copy{min-width:0}
+        .premium-copy small{display:block;margin-bottom:5px;font-size:9px;font-weight:900;letter-spacing:.8px;opacity:.82}
+        .premium-copy strong{display:block;font-size:18px;line-height:1.2;font-weight:900}
+        .premium-copy p{margin:7px 0 0;font-size:11px;line-height:1.45;opacity:.9}
+        .practice-action,.resume-action{display:inline-block;margin-top:13px;border-radius:11px;padding:10px 14px;font-size:10px;font-weight:900}
+        .practice-action{background:#fff;color:#1768df;box-shadow:0 7px 16px rgba(4,42,104,.12)}
+        .resume-action{background:#2474ff;color:#fff;box-shadow:0 7px 16px rgba(36,116,255,.16)}
+        .question-count{min-width:110px;text-align:center;border-left:1px solid rgba(255,255,255,.28);padding-left:20px}
+        .question-count b,.question-count em{display:block}.question-count b{font-size:28px;line-height:1;font-weight:900}.question-count em{margin-top:8px;font-size:10px;line-height:1.35;font-style:normal;opacity:.9}
+        .resume-status{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#eef4ff;color:#2474ff;font-size:24px;font-weight:900}
         @media(max-width:800px){
-          .dashboard-model3-grid{grid-template-columns:1fr;gap:11px;margin:0 0 14px}
-          .model3-card{grid-template-columns:68px minmax(0,1fr) auto;gap:13px;padding:16px;border-radius:19px}
-          .model3-illustration{width:68px;height:68px;border-radius:17px}
-          .sheet{width:36px;height:46px;padding:0 8px;gap:5px}.pencil{width:25px;height:25px;right:7px;bottom:7px;font-size:15px}
-          .book{width:39px;height:12px}
-          .model3-copy strong{font-size:14px}.model3-copy p{font-size:10px;margin-top:5px}.model3-copy small{font-size:8px}
-          .model3-action{font-size:9px;padding:8px 10px;margin-top:9px}
-          .model3-metric{min-width:65px;padding:10px 8px;border-radius:13px}.model3-metric b{font-size:16px}.model3-metric em{font-size:8px}
-          .model3-last-badge{font-size:8px;padding:6px 8px}
+          .continue-premium-grid{grid-template-columns:1fr;gap:12px;margin:0 0 14px}
+          .continue-premium-card{grid-template-columns:76px minmax(0,1fr) auto;gap:14px;padding:17px;border-radius:20px}
+          .practice-art,.books-art{width:76px;height:76px;border-radius:19px}
+          .paper{width:42px;height:52px;padding:0 9px;gap:5px}.paper i{height:4px}.pen{font-size:21px;right:5px;bottom:7px}
+          .book{width:45px;height:12px}.book.blue{transform:translateY(-14px) rotate(-3deg)}.book.navy{transform:translateY(14px) rotate(-2deg)}
+          .premium-copy small{font-size:8px}.premium-copy strong{font-size:15px}.premium-copy p{font-size:10px;margin-top:5px}
+          .practice-action,.resume-action{font-size:9px;padding:9px 11px;margin-top:10px}
+          .question-count{min-width:82px;padding-left:14px}.question-count b{font-size:20px}.question-count em{font-size:8px;margin-top:5px}
+          .resume-status{width:38px;height:38px;font-size:20px}
         }
-        @media(max-width:390px){
-          .model3-card{grid-template-columns:60px minmax(0,1fr);align-items:start}
-          .model3-illustration{width:60px;height:60px}
-          .model3-metric,.model3-last-badge{grid-column:2;justify-self:start;margin-top:-2px}
+        @media(max-width:430px){
+          .continue-premium-card{grid-template-columns:64px minmax(0,1fr);gap:12px;padding:16px}
+          .practice-art,.books-art{width:64px;height:64px;border-radius:17px}
+          .paper{width:35px;height:44px}.pen{font-size:18px}
+          .book{width:38px;height:11px}.book.blue{transform:translateY(-12px) rotate(-3deg)}.book.navy{transform:translateY(12px) rotate(-2deg)}
+          .question-count{grid-column:2;border-left:0;border-top:1px solid rgba(255,255,255,.25);padding:10px 0 0;margin-top:2px;text-align:left;display:flex;gap:7px;align-items:baseline;min-width:0}
+          .question-count b{font-size:18px}.question-count em{font-size:8px;margin:0;line-height:1.2}
+          .resume-status{grid-column:2;justify-self:start;margin-top:2px}
         }
-        @media(prefers-reduced-motion:reduce){.model3-card{transition:none}}
+        @media(prefers-reduced-motion:reduce){.continue-premium-card{transition:none}}
       `}</style>
     </div>,
     host,
