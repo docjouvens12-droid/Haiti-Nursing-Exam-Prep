@@ -1,6 +1,3 @@
-import StudyTopicDetails from "@/components/StudyTopicDetails";
-import StudyTextOverview from "@/components/StudyTextOverview";
-import { studyCategories } from "@/lib/study-categories";
 import Link from "next/link";
 import "./home-categories.css";
 import "./home-modern.css";
@@ -31,7 +28,6 @@ export default function Accueil() {
         </Link>
         <div className="home-desktop-nav">
           <a href="#fonctionnalites">Fonctionnalités</a>
-          <a href="#categories">Catégories</a>
         </div>
         <div className="navlinks">
           <Link className="home-login-outline" href="/connexion">Se connecter</Link>
@@ -92,11 +88,6 @@ export default function Accueil() {
           <h3>Analyse des choix</h3><ul><li><b>A.</b> Ne correspond pas au tableau présenté.</li><li><b>B.</b> Correspond aux signes décrits.</li><li><b>C.</b> N’explique pas l’hypertension et les céphalées.</li><li><b>D.</b> N’explique pas ce tableau hypertensif.</li></ul>
           <div className="demo-point"><b>💡 Point à retenir</b><span>Reconnaître rapidement les signes d’alerte permet de prioriser la prise en charge.</span></div>
         </div>
-      </section>
-
-      <section id="categories" className="home-categories" aria-labelledby="categories-title">
-        <div className="home-categories-heading"><span className="badge">Programme de révision</span><h2 id="categories-title">Catégories et thématiques</h2><p className="muted">Explorez les principaux domaines de préparation, leurs thématiques et sous-thématiques.</p><StudyTextOverview /></div>
-        <div className="home-category-grid">{studyCategories.map((category)=><details className="home-category-card" key={category.title}><summary><span className="home-category-icon" aria-hidden="true">{category.icon}</span><span className="home-category-title-wrap"><strong>{category.title}</strong><small>{category.topics.length} thématiques</small></span><span className="home-category-chevron" aria-hidden="true">⌄</span></summary><div className="home-topic-list">{category.topics.map((topic)=><StudyTopicDetails key={topic.title} category={category.title} topic={topic} />)}</div></details>)}</div>
       </section>
 
       <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Créez votre compte, choisissez votre formule et avancez vers votre objectif avec méthode.</p></div><div><Link className="home-white-button" href="/inscription">Créer mon compte</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
