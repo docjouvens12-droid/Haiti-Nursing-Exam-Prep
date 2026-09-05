@@ -3,6 +3,7 @@ import "./globals.css";
 import "./dashboard-premium.css";
 import "./dashboard-mobile-fix.css";
 import MobileStudentNav from "@/components/MobileStudentNav";
+import ResumeLastActivity from "@/components/ResumeLastActivity";
 import { StudentMenuProvider } from "@/components/StudentMenuContext";
 import PWARegister from "@/components/PWARegister";
 
@@ -35,6 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <StudentMenuProvider>
           {children}
+          <ResumeLastActivity />
           <MobileStudentNav />
         </StudentMenuProvider>
         <PWARegister />
