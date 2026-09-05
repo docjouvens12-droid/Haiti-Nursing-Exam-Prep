@@ -5,6 +5,7 @@ import QuestionInteractiveAvancee from "@/components/QuestionInteractiveAvancee"
 import PracticeFilters from "@/components/PracticeFilters";
 import { CATEGORIES_QUESTIONS, libelleCategorie } from "@/lib/categories";
 import "./pratique.css";
+import "./qcm-mobile.css";
 
 type SearchParams = {
   categorie?: string;
