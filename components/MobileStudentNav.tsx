@@ -17,7 +17,6 @@ const drawerItems = [
   { href: "/tableau-de-bord", label: "Accueil", icon: "⌂" },
   { href: "/cours-revisions", label: "Cours & Révisions", icon: "▥" },
   { href: "/pratique", label: "Questions", icon: "▤" },
-  { href: "/categories", label: "Catégories & thématiques", icon: "▦" },
   { href: "/examens", label: "Examens", icon: "▣" },
   { href: "/historique", label: "Plan d’étude", icon: "▥" },
   { href: "/performance", label: "Performance", icon: "⌁" },
