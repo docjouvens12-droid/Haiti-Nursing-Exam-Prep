@@ -65,7 +65,7 @@ export default async function Examens() {
         <header className="exam-topbar">
           <div>
             <span className="exam-breadcrumb">Accueil / Examens</span>
-            <h1>Simulations d’examen</h1>
+            <h1>Examens</h1>
           </div>
           <Link href="/tableau-de-bord" className="exam-back-link">← Tableau de bord</Link>
         </header>
@@ -74,41 +74,42 @@ export default async function Examens() {
           <div className="exam-hero">
             <div>
               <span className="exam-eyebrow">Préparation en conditions réelles</span>
-              <h2>Choisissez votre simulation</h2>
-              <p>Chaque examen est chronométré. Votre score et toutes vos réponses sont enregistrés afin de suivre votre progression.</p>
+              <h2>Testez vos connaissances comme à l’examen</h2>
+              <p>Choisissez une simulation, travaillez sous chronomètre et retrouvez ensuite votre score dans l’historique.</p>
             </div>
             <div className="exam-hero-stats">
               <div><span>Banque disponible</span><strong>{totalQuestions ?? 0}</strong><small>questions</small></div>
-              <div><span>Examens historiques</span><strong>{banques?.length ?? 0}</strong><small>banques</small></div>
+              <div><span>Examens reconstitués</span><strong>{banques?.length ?? 0}</strong><small>banques</small></div>
               <div><span>Dernier score</span><strong>{dernierScore === null ? "—" : `${dernierScore}%`}</strong><small>performance</small></div>
             </div>
           </div>
 
-          <div className="exam-format-grid">
-            {formats.map((f, index) => (
-              <article className={`exam-format-card ${index === 1 ? "recommended" : ""}`} key={f.taille}>
-                {index === 1 && <span className="exam-recommended-badge">Recommandé</span>}
-                <div className="exam-format-icon">{f.icone}</div>
-                <span className="exam-format-level">{f.niveau}</span>
-                <h3>{f.taille} questions</h3>
-                <p>{f.description}</p>
-                <div className="exam-format-meta">
-                  <span>◷ {f.duree} min</span>
-                  <span>✓ Correction finale</span>
-                  <span>↗ Score enregistré</span>
-                </div>
-                <Link className="exam-start-button" href={`/examens/${f.taille}`}>Commencer l’examen <span>→</span></Link>
-              </article>
-            ))}
-          </div>
+          <section className="exam-section exam-simulations-section">
+            <div className="exam-section-heading">
+              <div><span className="exam-section-number">01</span><div><span className="exam-eyebrow">Simulations chronométrées</span><h2>Choisissez votre format</h2><p>25, 50 ou 100 questions selon le temps dont vous disposez.</p></div></div>
+            </div>
+            <div className="exam-format-grid">
+              {formats.map((f, index) => (
+                <article className={`exam-format-card ${index === 1 ? "recommended" : ""}`} key={f.taille}>
+                  {index === 1 && <span className="exam-recommended-badge">Recommandé</span>}
+                  <div className="exam-format-icon">{f.icone}</div>
+                  <span className="exam-format-level">{f.niveau}</span>
+                  <h3>{f.taille} questions</h3>
+                  <p>{f.description}</p>
+                  <div className="exam-format-meta">
+                    <span>◷ {f.duree} min</span>
+                    <span>✓ Correction finale</span>
+                    <span>↗ Score enregistré</span>
+                  </div>
+                  <Link className="exam-start-button" href={`/examens/${f.taille}`}>Commencer <span>→</span></Link>
+                </article>
+              ))}
+            </div>
+          </section>
 
-          <section className="exam-bank-section">
-            <div className="exam-panel-heading exam-bank-heading">
-              <div>
-                <span className="exam-eyebrow">Banque historique de préparation</span>
-                <h2>Examens reconstitués 2010–2023</h2>
-                <p>Ces banques sont des exercices de préparation reconstitués. Elles ne sont pas présentées comme des questionnaires officiels du MSPP/DFPSS.</p>
-              </div>
+          <section className="exam-bank-section exam-section">
+            <div className="exam-section-heading exam-bank-heading">
+              <div><span className="exam-section-number">02</span><div><span className="exam-eyebrow">Préparation historique</span><h2>Examens d’État reconstitués</h2><p>Banques 2010–2023 conçues pour la préparation. Elles ne sont pas présentées comme des questionnaires officiels du MSPP/DFPSS.</p></div></div>
               <span className="exam-bank-count">{banques?.length ?? 0} examens</span>
             </div>
 
@@ -135,18 +136,13 @@ export default async function Examens() {
             )}
           </section>
 
-          <div className="exam-lower-grid">
-            <section className="exam-info-panel">
-              <div className="exam-panel-heading"><div><span className="exam-eyebrow">Comment ça fonctionne</span><h2>Une simulation simple et efficace</h2></div></div>
-              <div className="exam-steps">
-                <div><b>1</b><span><strong>Choisissez un format</strong><small>25, 50 ou 100 questions, ou une banque historique.</small></span></div>
-                <div><b>2</b><span><strong>Répondez sous chronomètre</strong><small>Vous pouvez naviguer entre les questions.</small></span></div>
-                <div><b>3</b><span><strong>Analysez votre résultat</strong><small>Score, réponses et historique sont enregistrés.</small></span></div>
-              </div>
-            </section>
+          <section className="exam-section exam-history-section">
+            <div className="exam-section-heading">
+              <div><span className="exam-section-number">03</span><div><span className="exam-eyebrow">Vos résultats</span><h2>Historique des examens terminés</h2><p>Retrouvez vos dernières simulations et ouvrez le détail de chaque résultat.</p></div></div>
+              <Link href="/historique">Voir tout</Link>
+            </div>
 
-            <section className="exam-history-panel">
-              <div className="exam-panel-heading"><div><span className="exam-eyebrow">Historique récent</span><h2>Vos dernières simulations</h2></div><Link href="/historique">Voir tout</Link></div>
+            <div className="exam-history-panel exam-history-panel-full">
               {!sessions?.length ? (
                 <div className="exam-empty-history"><span>▣</span><p>Votre premier résultat apparaîtra ici après une simulation.</p></div>
               ) : sessions.map((session) => {
@@ -160,8 +156,17 @@ export default async function Examens() {
                   </Link>
                 );
               })}
-            </section>
-          </div>
+            </div>
+          </section>
+
+          <section className="exam-info-panel exam-how-panel">
+            <div className="exam-panel-heading"><div><span className="exam-eyebrow">Comment ça fonctionne</span><h2>Une simulation simple et efficace</h2></div></div>
+            <div className="exam-steps">
+              <div><b>1</b><span><strong>Choisissez un format</strong><small>25, 50 ou 100 questions, ou une banque historique.</small></span></div>
+              <div><b>2</b><span><strong>Répondez sous chronomètre</strong><small>Vous pouvez naviguer entre les questions.</small></span></div>
+              <div><b>3</b><span><strong>Analysez votre résultat</strong><small>Score, réponses et historique sont enregistrés.</small></span></div>
+            </div>
+          </section>
         </section>
       </main>
     </div>
