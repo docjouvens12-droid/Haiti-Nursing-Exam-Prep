@@ -21,13 +21,6 @@ const features = [
   { icon: "♥", title: "Favoris", text: "Enregistrez les questions importantes à revoir." },
 ];
 
-const reasons = [
-  { icon: "◎", title: "Contenu ciblé", text: "Pensé pour la préparation à l’Examen d’État infirmier." },
-  { icon: "✓", title: "Explications détaillées", text: "Pour comprendre le raisonnement derrière chaque réponse." },
-  { icon: "◉", title: "Interface simple", text: "Accessible sur téléphone, tablette et ordinateur." },
-  { icon: "♡", title: "Progression structurée", text: "Un parcours clair pour étudier avec méthode." },
-];
-
 export default function Accueil() {
   return (
     <main className="container home-modern">
@@ -39,7 +32,6 @@ export default function Accueil() {
         <div className="home-desktop-nav">
           <a href="#fonctionnalites">Fonctionnalités</a>
           <a href="#categories">Catégories</a>
-          <a href="#pourquoi">À propos</a>
         </div>
         <div className="navlinks">
           <Link className="home-login-outline" href="/connexion">Se connecter</Link>
@@ -55,9 +47,6 @@ export default function Accueil() {
           <div className="home-actions">
             <Link className="btn btn-primary home-main-blue" href="/inscription">Créer mon compte</Link>
             <Link className="home-outline-cta" href="/connexion">Se connecter</Link>
-          </div>
-          <div className="home-mini-proof">
-            <span>✓ Contenu structuré</span><span>✓ Conçu pour les étudiants infirmiers</span><span>✓ Suivi de progression</span>
           </div>
         </div>
 
@@ -105,11 +94,6 @@ export default function Accueil() {
         </div>
       </section>
 
-      <section id="pourquoi" className="home-why">
-        <div className="home-section-heading"><h2>Pourquoi choisir Haiti Nursing Exam Prep ?</h2><p>Une préparation pensée pour les étudiants infirmiers et centrée sur la compréhension.</p></div>
-        <div className="home-reason-grid">{reasons.map((r)=><article key={r.title}><span>{r.icon}</span><h3>{r.title}</h3><p>{r.text}</p></article>)}</div>
-      </section>
-
       <section id="categories" className="home-categories" aria-labelledby="categories-title">
         <div className="home-categories-heading"><span className="badge">Programme de révision</span><h2 id="categories-title">Catégories et thématiques</h2><p className="muted">Explorez les principaux domaines de préparation, leurs thématiques et sous-thématiques.</p><StudyTextOverview /></div>
         <div className="home-category-grid">{studyCategories.map((category)=><details className="home-category-card" key={category.title}><summary><span className="home-category-icon" aria-hidden="true">{category.icon}</span><span className="home-category-title-wrap"><strong>{category.title}</strong><small>{category.topics.length} thématiques</small></span><span className="home-category-chevron" aria-hidden="true">⌄</span></summary><div className="home-topic-list">{category.topics.map((topic)=><StudyTopicDetails key={topic.title} category={category.title} topic={topic} />)}</div></details>)}</div>
@@ -117,7 +101,7 @@ export default function Accueil() {
 
       <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Rejoignez Haiti Nursing Exam Prep et avancez vers votre objectif avec méthode.</p></div><div><Link className="home-white-button" href="/inscription">Créer mon compte</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
 
-      <footer className="home-footer clean-footer"><div className="home-footer-brand"><span className="home-brand-mark">H</span><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><a href="#pourquoi">À propos</a><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
+      <footer className="home-footer clean-footer"><div className="home-footer-brand"><span className="home-brand-mark">H</span><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
     </main>
   );
 }
