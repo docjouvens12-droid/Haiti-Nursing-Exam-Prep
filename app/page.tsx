@@ -89,7 +89,7 @@ export default function Accueil() {
         </div>
       </section>
 
-      <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Créez votre compte, choisissez votre formule et avancez vers votre objectif avec méthode.</p></div><div><Link className="home-white-button" href="/inscription">Commencer</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
+      <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Créez votre compte et accédez directement à la plateforme pendant la phase de test.</p></div><div><Link className="home-white-button" href="/inscription">Commencer</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
 
       <footer className="home-footer clean-footer"><div className="home-footer-brand"><span className="home-brand-mark">H</span><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
     </main>
