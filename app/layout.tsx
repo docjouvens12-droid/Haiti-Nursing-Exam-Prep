@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import "./dashboard-premium.css";
+import "./dashboard-mobile-fix.css";
 import MobileStudentNav from "@/components/MobileStudentNav";
 import { StudentMenuProvider } from "@/components/StudentMenuContext";
 import PWARegister from "@/components/PWARegister";
