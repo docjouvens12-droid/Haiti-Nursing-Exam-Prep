@@ -5,30 +5,18 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import "../auth-pages.css";
 
-const plans = [
-  { duration: "1 mois", price: "1 500", label: "Flexible", note: "Idéal pour une préparation courte et intensive." },
-  { duration: "3 mois", price: "4 000", label: "Populaire", note: "Un bon rythme pour progresser régulièrement." },
-  { duration: "6 mois", price: "6 500", label: "Recommandé", note: "Le meilleur équilibre entre durée et prix.", featured: true },
-  { duration: "1 an", price: "10 000", label: "Meilleure valeur", note: "Le tarif le plus avantageux pour une préparation complète.", bestValue: true },
-];
-
 export default function Inscription() {
   const [message, setMessage] = useState("");
   const [succes, setSucces] = useState(false);
   const [chargement, setChargement] = useState(false);
-  const [etape, setEtape] = useState<1 | 2>(1);
   const [nomComplet, setNomComplet] = useState("");
   const [email, setEmail] = useState("");
   const [motDePasse, setMotDePasse] = useState("");
-  const [plan, setPlan] = useState("6 mois");
 
-  function continuer(e: FormEvent<HTMLFormElement>) {
+  async function inscrire(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setMessage("");
-    setEtape(2);
-  }
+    if (chargement || succes) return;
 
-  async function inscrire() {
     setChargement(true);
     setMessage("");
     setSucces(false);
@@ -38,7 +26,7 @@ export default function Inscription() {
       email,
       password: motDePasse,
       options: {
-        data: { nom_complet: nomComplet, abonnement_souhaite: plan },
+        data: { nom_complet: nomComplet, acces_test: true },
         emailRedirectTo: `${window.location.origin}/auth/confirmation`,
       },
     });
@@ -50,7 +38,7 @@ export default function Inscription() {
     }
 
     setSucces(true);
-    setMessage(`Compte créé avec la formule ${plan}. Vérifiez votre e-mail pour confirmer votre inscription.`);
+    setMessage("Compte créé. Vérifiez votre e-mail pour confirmer votre inscription et accéder à la plateforme de test.");
   }
 
   return (
@@ -64,7 +52,7 @@ export default function Inscription() {
         <div className="signup-story-copy">
           <span className="signup-eyebrow">Préparation Examen d’État infirmier 🇭🇹</span>
           <h1>Votre réussite <em>commence ici.</em></h1>
-          <p>Créez votre espace personnel, choisissez votre formule et préparez-vous avec des outils structurés pour l’Examen d’État infirmier.</p>
+          <p>Créez votre espace personnel et accédez directement aux outils de préparation pendant la phase de test.</p>
 
           <div className="signup-benefit-list">
             <div><i>▤</i><span><b>6 425 QCM expliqués</b><small>Pour vous entraîner efficacement</small></span></div>
@@ -84,81 +72,32 @@ export default function Inscription() {
       <section className="signup-form-zone">
         <Link className="signup-back" href="/">← Retour à l’accueil</Link>
 
-        <div className={`signup-card ${etape === 2 ? "signup-card-plans" : ""}`}>
-          <div className="signup-stepper" aria-label="Étapes de l’inscription">
-            <span className={etape === 1 ? "active" : "done"}>1 <b>Compte</b></span>
-            <i />
-            <span className={etape === 2 ? "active" : ""}>2 <b>Formule</b></span>
+        <div className="signup-card">
+          <div className="signup-card-head">
+            <span>ACCÈS TESTEURS</span>
+            <h2>Créer votre compte</h2>
+            <p>Aucun tarif ni choix de formule pendant la phase de test. Créez simplement votre compte pour commencer.</p>
           </div>
 
-          {etape === 1 ? (
-            <>
-              <div className="signup-card-head">
-                <span>ÉTAPE 1 SUR 2</span>
-                <h2>Créer votre compte</h2>
-                <p>Renseignez vos informations avant de choisir votre formule.</p>
-              </div>
+          <form className="signup-form" onSubmit={inscrire}>
+            <label>
+              <span>Nom complet</span>
+              <div className="signup-input-wrap"><i>♙</i><input type="text" value={nomComplet} onChange={(e)=>setNomComplet(e.target.value)} required autoComplete="name" placeholder="Votre nom complet" /></div>
+            </label>
 
-              <form className="signup-form" onSubmit={continuer}>
-                <label>
-                  <span>Nom complet</span>
-                  <div className="signup-input-wrap"><i>♙</i><input type="text" value={nomComplet} onChange={(e)=>setNomComplet(e.target.value)} required autoComplete="name" placeholder="Votre nom complet" /></div>
-                </label>
+            <label>
+              <span>Adresse e-mail</span>
+              <div className="signup-input-wrap"><i>✉</i><input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required autoComplete="email" placeholder="votre@email.com" /></div>
+            </label>
 
-                <label>
-                  <span>Adresse e-mail</span>
-                  <div className="signup-input-wrap"><i>✉</i><input type="email" value={email} onChange={(e)=>setEmail(e.target.value)} required autoComplete="email" placeholder="votre@email.com" /></div>
-                </label>
+            <label>
+              <span>Mot de passe</span>
+              <div className="signup-input-wrap"><i>🔒</i><input type="password" value={motDePasse} onChange={(e)=>setMotDePasse(e.target.value)} minLength={8} required autoComplete="new-password" placeholder="Créez un mot de passe sécurisé" /></div>
+              <small className="signup-password-note">✓ Au moins 8 caractères · utilisez un mot de passe unique</small>
+            </label>
 
-                <label>
-                  <span>Mot de passe</span>
-                  <div className="signup-input-wrap"><i>🔒</i><input type="password" value={motDePasse} onChange={(e)=>setMotDePasse(e.target.value)} minLength={8} required autoComplete="new-password" placeholder="Créez un mot de passe sécurisé" /></div>
-                  <small className="signup-password-note">✓ Au moins 8 caractères · utilisez un mot de passe unique</small>
-                </label>
-
-                <button className="signup-submit" type="submit">Continuer vers les formules →</button>
-              </form>
-            </>
-          ) : (
-            <>
-              <div className="signup-card-head">
-                <span>ÉTAPE 2 SUR 2</span>
-                <h2>Choisissez votre formule</h2>
-                <p>Sélectionnez la durée qui correspond le mieux à votre préparation.</p>
-              </div>
-
-              <div className="signup-plan-grid">
-                {plans.map((item)=>(
-                  <button
-                    type="button"
-                    key={item.duration}
-                    className={`signup-plan${plan === item.duration ? " selected" : ""}${item.featured ? " featured" : ""}`}
-                    onClick={()=>setPlan(item.duration)}
-                    aria-pressed={plan === item.duration}
-                  >
-                    <div className="signup-plan-heading"><span>{item.label}</span><strong>{item.duration}</strong></div>
-                    <div className="signup-plan-price"><b>{item.price}</b><small>HTG</small></div>
-                    <p>{item.note}</p>
-                    <em>{plan === item.duration ? "✓ Sélectionné" : "Choisir"}</em>
-                  </button>
-                ))}
-              </div>
-
-              <div className="signup-plan-benefits">
-                <span>✓ 6 425 QCM expliqués</span>
-                <span>✓ Examens simulés</span>
-                <span>✓ 78 modules de cours</span>
-                <span>✓ Statistiques, erreurs et favoris</span>
-              </div>
-
-              <p className="signup-payment-note">Le paiement en ligne n’est pas encore activé. Votre choix de formule sera enregistré avec votre inscription.</p>
-
-              <div className="signup-plan-actions">
-                <button type="button" className="signup-back-step" onClick={()=>setEtape(1)}>← Modifier mes informations</button>
-                <button className="signup-submit" type="button" disabled={chargement || succes} onClick={inscrire}>{chargement ? "Création en cours..." : succes ? "Compte créé ✓" : "Créer mon compte →"}</button>
-              </div>
-            </>
-          )}
+            <button className="signup-submit" type="submit" disabled={chargement || succes}>{chargement ? "Création en cours..." : succes ? "Compte créé ✓" : "Créer mon compte →"}</button>
+          </form>
 
           {message && <div className={`auth-message ${succes ? "success" : ""}`}>{message}</div>}
 
