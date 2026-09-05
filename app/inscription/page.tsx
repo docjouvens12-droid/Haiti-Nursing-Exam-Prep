@@ -5,13 +5,6 @@ import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import "../auth-pages.css";
 
-const plans = [
-  { label: "1 mois", price: "1 500 HTG" },
-  { label: "3 mois", price: "4 000 HTG" },
-  { label: "6 mois", price: "6 500 HTG", badge: "Recommandé" },
-  { label: "1 an", price: "10 000 HTG", badge: "Meilleure valeur" },
-];
-
 export default function Inscription() {
   const [message, setMessage] = useState("");
   const [succes, setSucces] = useState(false);
@@ -50,85 +43,75 @@ export default function Inscription() {
   }
 
   return (
-    <main className="auth-shell auth-register-shell">
-      <section className="auth-panel auth-register-panel">
-        <Link href="/" className="auth-brand" aria-label="Retour à l’accueil">
-          <span className="auth-brand-mark">H</span>
+    <main className="signup-showcase">
+      <section className="signup-story">
+        <Link href="/" className="signup-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
+          <span className="signup-brand-mark">H</span>
           <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
         </Link>
 
-        <div className="auth-copy">
-          <span className="auth-kicker">Votre préparation commence ici</span>
-          <h1>Créez votre espace étudiant.</h1>
-          <p>Un compte unique pour pratiquer les QCM, suivre votre progression, accéder aux examens simulés et retrouver vos cours de révision.</p>
+        <div className="signup-story-copy">
+          <span className="signup-eyebrow">Préparation Examen d’État infirmier 🇭🇹</span>
+          <h1>Votre réussite <em>commence ici.</em></h1>
+          <p>Créez votre espace personnel et préparez-vous avec des outils structurés pour l’Examen d’État infirmier.</p>
 
-          <div className="auth-value-grid">
-            <div><b>6 425</b><small>QCM expliqués</small></div>
-            <div><b>78</b><small>Modules de cours</small></div>
-            <div><b>17</b><small>Formats d’examen</small></div>
-          </div>
-
-          <div className="auth-benefits auth-benefits-modern">
-            <div className="auth-benefit"><i>✓</i><div><strong>Explications complètes</strong><small>Bonne réponse, analyse A–D et point à retenir.</small></div></div>
-            <div className="auth-benefit"><i>✓</i><div><strong>Progression personnelle</strong><small>Résultats, erreurs et favoris réunis dans votre espace.</small></div></div>
-            <div className="auth-benefit"><i>✓</i><div><strong>Accessible partout</strong><small>Téléphone, tablette ou ordinateur.</small></div></div>
+          <div className="signup-benefit-list">
+            <div><i>▤</i><span><b>6 425 QCM expliqués</b><small>Pour vous entraîner efficacement</small></span></div>
+            <div><i>▣</i><span><b>78 modules de cours</b><small>Pour réviser par domaine infirmier</small></span></div>
+            <div><i>✓</i><span><b>17 formats d’examen</b><small>Pour varier vos entraînements</small></span></div>
+            <div><i>▥</i><span><b>Suivez vos progrès</b><small>Statistiques, erreurs et favoris</small></span></div>
           </div>
         </div>
 
-        <div className="auth-plan-preview" aria-label="Formules disponibles">
-          <div className="auth-plan-head"><strong>Formules disponibles</strong><small>Le paiement sera sélectionné après la création du compte.</small></div>
-          <div className="auth-plan-row">
-            {plans.map((plan) => (
-              <div className="auth-plan-chip" key={plan.label}>
-                {plan.badge && <span>{plan.badge}</span>}
-                <b>{plan.label}</b><small>{plan.price}</small>
-              </div>
-            ))}
-          </div>
+        <div className="signup-visual" aria-hidden="true">
+          <div className="signup-wave" />
+          <div className="signup-nurse-symbol">✚</div>
+          <p>Préparer aujourd’hui.<br/><strong>Réussir demain.</strong></p>
         </div>
       </section>
 
-      <section className="auth-form-side auth-register-form-side">
-        <div className="auth-card auth-register-card">
-          <Link className="auth-back" href="/">← Retour à l’accueil</Link>
+      <section className="signup-form-zone">
+        <Link className="signup-back" href="/">← Retour à l’accueil</Link>
 
-          <div className="auth-card-head">
-            <span className="auth-eyebrow">Créer votre compte</span>
-            <h2>Bienvenue 👋</h2>
-            <p>Renseignez vos informations. Vous pourrez choisir votre formule d’abonnement ensuite.</p>
+        <div className="signup-card">
+          <div className="signup-card-head">
+            <span>CRÉER VOTRE ESPACE</span>
+            <h2>Créer votre compte</h2>
+            <p>Renseignez vos informations pour commencer votre préparation.</p>
           </div>
 
-          <form className="auth-form" onSubmit={inscrire}>
-            <div className="auth-field">
-              <label htmlFor="nomComplet">Nom complet</label>
-              <input id="nomComplet" type="text" name="nomComplet" required autoComplete="name" placeholder="Votre nom complet" />
-            </div>
-            <div className="auth-field">
-              <label htmlFor="email">Adresse e-mail</label>
-              <input id="email" type="email" name="email" required autoComplete="email" placeholder="vous@exemple.com" />
-            </div>
-            <div className="auth-field">
-              <label htmlFor="motDePasse">Mot de passe</label>
-              <input id="motDePasse" type="password" name="motDePasse" minLength={6} required autoComplete="new-password" placeholder="Au moins 6 caractères" />
-              <span className="auth-field-hint">Utilisez au moins 6 caractères et évitez un mot de passe déjà utilisé ailleurs.</span>
-            </div>
+          <form className="signup-form" onSubmit={inscrire}>
+            <label>
+              <span>Nom complet</span>
+              <div className="signup-input-wrap"><i>♙</i><input type="text" name="nomComplet" required autoComplete="name" placeholder="Votre nom complet" /></div>
+            </label>
 
-            <button className="auth-submit" type="submit" disabled={chargement}>
-              {chargement ? "Création en cours..." : "Créer mon compte"}
+            <label>
+              <span>Adresse e-mail</span>
+              <div className="signup-input-wrap"><i>✉</i><input type="email" name="email" required autoComplete="email" placeholder="votre@email.com" /></div>
+            </label>
+
+            <label>
+              <span>Mot de passe</span>
+              <div className="signup-input-wrap"><i>🔒</i><input type="password" name="motDePasse" minLength={8} required autoComplete="new-password" placeholder="Créez un mot de passe sécurisé" /></div>
+              <small className="signup-password-note">✓ Au moins 8 caractères · utilisez un mot de passe unique</small>
+            </label>
+
+            <button className="signup-submit" type="submit" disabled={chargement}>
+              {chargement ? "Création en cours..." : "Créer mon compte →"}
             </button>
           </form>
 
           {message && <div className={`auth-message ${succes ? "success" : ""}`}>{message}</div>}
 
-          <div className="auth-trust-row">
-            <span>🔒 Connexion sécurisée</span>
-            <span>✉ Confirmation par e-mail</span>
+          <div className="signup-login-separator"><span>OU</span></div>
+          <p className="signup-existing">Déjà un compte ? <Link href="/connexion">Se connecter</Link></p>
+
+          <div className="signup-trust">
+            <div><b>🔒</b><span>Données protégées</span></div>
+            <div><b>✉</b><span>Confirmation par e-mail</span></div>
+            <div><b>📱</b><span>Mobile, tablette et ordinateur</span></div>
           </div>
-
-          <div className="auth-divider">VOUS AVEZ DÉJÀ UN COMPTE ?</div>
-          <p className="auth-switch">Déjà inscrit ? <Link href="/connexion">Se connecter</Link></p>
-
-          <p className="auth-legal-note">En créant un compte, vous pourrez ensuite choisir une formule d’accès adaptée à votre période de préparation.</p>
         </div>
       </section>
     </main>
