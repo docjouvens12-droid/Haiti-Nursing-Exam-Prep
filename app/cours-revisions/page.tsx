@@ -30,21 +30,35 @@ const transversal: Record<string,string> = { "Sécurité médicamenteuse":"/cour
 const destinations = [medico, maternite, pediatrie, pharmacologie, psy, communautaire, fondements, urgences, transversal];
 const totalModules = domaines.reduce((sum, domaine) => sum + domaine.modules.length, 0);
 
+type ProgressRow = { module_key: string; status: "a_commencer" | "en_cours" | "termine"; progress_percent: number };
+
 export default async function Page() {
   const supabase = await createClient();
   const { data } = await supabase.auth.getClaims();
-  if (!data?.claims?.sub) redirect("/connexion");
+  const userId = data?.claims?.sub ? String(data.claims.sub) : null;
+  if (!userId) redirect("/connexion");
+
+  const { data: progressRows } = await supabase
+    .from("learning_module_progress")
+    .select("module_key,status,progress_percent")
+    .eq("user_id", userId);
+
+  const progressByKey = new Map<string, ProgressRow>();
+  for (const row of (progressRows ?? []) as ProgressRow[]) progressByKey.set(row.module_key, row);
+
+  const startedCount = [...progressByKey.values()].filter((row) => row.status === "en_cours").length;
+  const completedCount = [...progressByKey.values()].filter((row) => row.status === "termine").length;
 
   return (
     <main className="courses-shell">
       <section className="courses-hero">
         <div className="courses-eyebrow">Bibliothèque d’apprentissage</div>
         <h1>Cours & Révisions</h1>
-        <p>Étudiez les notions essentielles des sciences infirmières grâce à des modules structurés, indépendants de la banque de questions et des examens.</p>
+        <p>Étudiez les notions essentielles des sciences infirmières grâce à des modules structurés, avec une progression enregistrée automatiquement pendant votre lecture.</p>
         <div className="courses-summary">
           <div><strong>{totalModules}</strong><span>modules disponibles</span></div>
-          <div><strong>{domaines.length}</strong><span>grands domaines</span></div>
-          <div><strong>11</strong><span>mini-évaluations en pharmacologie</span></div>
+          <div><strong>{startedCount}</strong><span>modules en cours</span></div>
+          <div><strong>{completedCount}</strong><span>modules terminés</span></div>
         </div>
       </section>
 
@@ -61,17 +75,22 @@ export default async function Page() {
                 const href = destinations[index]?.[module];
                 const hasQuiz = index === 3;
                 if (!href) return null;
+                const progress = progressByKey.get(href);
+                const percent = progress?.progress_percent ?? 0;
+                const statusLabel = progress?.status === "termine" ? "Terminé" : progress?.status === "en_cours" ? "En cours" : "À commencer";
+                const actionLabel = progress?.status === "termine" ? "Revoir" : progress?.status === "en_cours" ? "Reprendre" : "Commencer";
                 return (
-                  <a className="course-module-card" href={href} key={module}>
+                  <a className={`course-module-card ${progress?.status ?? "a_commencer"}`} href={href} key={module}>
                     <span className="course-module-icon">{index === 3 ? "Rx" : index === 7 ? "+" : "▤"}</span>
                     <span className="course-module-copy">
                       <strong>{module}</strong>
                       <span className="course-module-meta">
-                        <span className="course-status">Disponible</span>
+                        <span className={`course-status course-status-${progress?.status ?? "a_commencer"}`}>{statusLabel}</span>
                         {hasQuiz && <span className="course-quiz">Mini-évaluation</span>}
                       </span>
+                      <span className="course-progress-line"><i style={{ width: `${percent}%` }} /><b>{percent}%</b></span>
                     </span>
-                    <span className="course-module-arrow">→</span>
+                    <span className="course-module-action">{actionLabel} →</span>
                   </a>
                 );
               })}
