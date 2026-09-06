@@ -5,6 +5,7 @@ import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
 import TeacherAccessPanel from './TeacherAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
+import StudentWeightedBulletin from './StudentWeightedBulletin'
 import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
@@ -78,6 +79,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentAccessPanel />
       <TeacherAccessPanel />
       <StudentTrimesterSummary />
+      <StudentWeightedBulletin />
       <RecordsPanel />
       <RecordsWeightedAverageEnhancer />
       <AcademicYearEditor />
