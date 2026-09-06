@@ -17,6 +17,7 @@ import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SchoolRecordBranding from './SchoolRecordBranding'
 import AllSectionsSelectorFix from './AllSectionsSelectorFix'
 import LanguageMenuSelector from './LanguageMenuSelector'
+import SubjectCoefficientEditor from './SubjectCoefficientEditor'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -85,6 +86,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <SchoolRecordBranding />
       <AllSectionsSelectorFix />
       <LanguageMenuSelector />
+      <SubjectCoefficientEditor />
       <OfficialRecordPrintEnhancer />
       <RecordValidationFields />
       <LoginRoleLabelFix />
