@@ -4,6 +4,7 @@ import LoginRoleLabelFix from './LoginRoleLabelFix'
 import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
+import SessionJwtRecovery from './SessionJwtRecovery'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -63,6 +64,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentAccessPanel />
       <StudentTrimesterSummary />
       <LoginRoleLabelFix />
+      <SessionJwtRecovery />
     </>
   )
 }
