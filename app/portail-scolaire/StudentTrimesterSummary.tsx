@@ -28,6 +28,10 @@ function average(rows:Grade[]){
  return rows.length?Math.round(rows.reduce((a,g)=>a+g.score,0)/rows.length):null
 }
 
+function matchesType(term:string,type:AssessmentType){
+ return [1,2,3,4].some(number=>matchesSelection(term,type,number))
+}
+
 export default function StudentTrimesterSummary(){
  const [target,setTarget]=useState<HTMLElement|null>(null)
  const [finalTarget,setFinalTarget]=useState<HTMLElement|null>(null)
@@ -96,10 +100,7 @@ export default function StudentTrimesterSummary(){
 
  const selectedAverage=useMemo(()=>average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))),[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>average(grades),[grades])
- const finalSummaries=useMemo(()=>[1,2,3,4].map(number=>{
-  const rows=grades.filter(g=>matchesSelection(g.term,finalType,number))
-  return {number,avg:average(rows)}
- }),[grades,finalType])
+ const finalAverage=useMemo(()=>average(grades.filter(g=>matchesType(g.term,finalType))),[grades,finalType])
 
  if(!target)return null
  const ht=lang==='ht'
@@ -142,17 +143,17 @@ export default function StudentTrimesterSummary(){
   <button className="menuBtn" type="button" onClick={()=>setShowFinal(v=>!v)}>📑 {ht?'Bilten final':'Bulletin final'}</button>
   {showFinal&&<div className="card" style={{marginTop:12,gridColumn:'1 / -1'}}>
    <h2>{ht?'Bilten final':'Bulletin final'}</h2>
-   <div style={{marginBottom:12}}>
+   <div style={{marginBottom:14}}>
     <label>{ht?'Kalite':'Type'}</label>
     <select value={finalType} onChange={e=>setFinalType(e.target.value as AssessmentType)}>
      <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
      <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
     </select>
    </div>
-   <div style={{display:'grid',gap:8}}>{finalSummaries.map(s=><div key={`${finalType}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid #e5edf5'}}>
-    <span style={{fontWeight:700}}>{finalType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
-    <strong style={{color:'#0f4c81'}}>{s.avg===null?'—':s.avg+'%'}</strong>
-   </div>)}</div>
+   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'12px 0',borderTop:'1px solid #e5edf5'}}>
+    <strong>{finalType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')}</strong>
+    <strong style={{fontSize:24,color:'#0f4c81'}}>{finalAverage===null?'—':finalAverage+'%'}</strong>
+   </div>
    <div style={{marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
     <strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong>
     <strong style={{fontSize:24,color:'#0f4c81'}}>{generalAverage===null?'—':generalAverage+'%'}</strong>
