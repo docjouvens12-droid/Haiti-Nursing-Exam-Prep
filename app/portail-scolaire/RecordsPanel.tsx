@@ -25,7 +25,7 @@ function matchesSelection(term:string,type:AssessmentType,number:number){
 }
 
 function average(rows:Grade[]){return rows.length?Math.round(rows.reduce((a,g)=>a+g.score,0)/rows.length):null}
-function escapeHtml(value:string){return value.replace(/[&<>'"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'"':'&quot;'}[c]||c))}
+function escapeHtml(value:string){return value.replace(/[&<>'\"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","'":"&#39;",'\"':'&quot;'}[c]||c))}
 
 export default function RecordsPanel(){
  const [role,setRole]=useState<Role>('')
@@ -34,6 +34,9 @@ export default function RecordsPanel(){
  const [open,setOpen]=useState(false)
  const [students,setStudents]=useState<Student[]>([])
  const [grades,setGrades]=useState<Grade[]>([])
+ const [year,setYear]=useState('')
+ const [level,setLevel]=useState('')
+ const [section,setSection]=useState('')
  const [studentId,setStudentId]=useState('')
  const [type,setType]=useState<AssessmentType>('trimester')
  const ht=lang==='ht'
@@ -87,6 +90,10 @@ export default function RecordsPanel(){
   attach();const o=new MutationObserver(()=>requestAnimationFrame(attach));o.observe(document.body,{subtree:true,childList:true});return()=>o.disconnect()
  },[role,ht])
 
+ const years=useMemo(()=>[...new Set(students.map(s=>s.year).filter(Boolean))].sort(),[students])
+ const levels=useMemo(()=>[...new Set(students.filter(s=>!year||s.year===year).map(s=>s.level).filter(Boolean))].sort(),[students,year])
+ const sections=useMemo(()=>[...new Set(students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)).map(s=>s.section).filter(Boolean))].sort(),[students,year,level])
+ const filteredStudents=useMemo(()=>students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)&&(!section||s.section===section)),[students,year,level,section])
  const student=students.find(s=>s.id===studentId)||null
  const studentGrades=useMemo(()=>grades.filter(g=>g.studentId===studentId),[grades,studentId])
  const groups=useMemo(()=>{
@@ -95,10 +102,14 @@ export default function RecordsPanel(){
  },[studentGrades,type])
  const generalAverage=useMemo(()=>average(studentGrades),[studentGrades])
 
+ const resetAfterYear=(v:string)=>{setYear(v);setLevel('');setSection('');setStudentId('')}
+ const resetAfterLevel=(v:string)=>{setLevel(v);setSection('');setStudentId('')}
+ const resetAfterSection=(v:string)=>{setSection(v);setStudentId('')}
+
  const html=()=>{
   const typeLabel=type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')
-  const sections=groups.map(g=>`<section><h3>${typeLabel} ${g.number} <span>${g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</span></h3>${g.rows.length?`<table><tbody>${g.rows.map(r=>`<tr><td>${escapeHtml(r.subject)}</td><td>${r.score}%</td></tr>`).join('')}</tbody></table>`:`<p>${ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</p>`}</section>`).join('')
-  return `<!doctype html><html><head><meta charset="utf-8"><title>${ht?'Relve nòt':'Relevé de notes'}</title><style>@page{size:A4;margin:12mm}body{font-family:Arial,sans-serif;color:#182433;font-size:12px}.school{text-align:center;font-weight:700}h1{text-align:center;color:#0f4c81}.student{border:1px solid #ccd7e0;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}h3{background:#eef4f8;padding:8px;border:1px solid #d8e2ea;margin:12px 0 0;display:flex;justify-content:space-between}table{width:100%;border-collapse:collapse}td{border:1px solid #d8e2ea;padding:6px}td:last-child{text-align:right}.general{margin-top:16px;border-top:2px solid #0f4c81;padding-top:10px;display:flex;justify-content:space-between;font-size:16px;font-weight:700}</style></head><body><div class="school">PORTAIL SCOLAIRE HAÏTI</div><h1>${ht?'Relve nòt':'Relevé de notes'} — ${typeLabel}</h1><div class="student"><div><b>${ht?'Elèv':'Élève'}:</b> ${escapeHtml(student?.name||'—')}</div><div><b>${ht?'Ane akademik':'Année scolaire'}:</b> ${escapeHtml(student?.year||'—')}</div><div><b>${ht?'Klas':'Classe'}:</b> ${escapeHtml(student?.level||'—')}</div><div><b>${ht?'Seksyon':'Section'}:</b> ${escapeHtml(student?.section||'—')}</div></div>${sections}<div class="general"><span>${ht?'Mwayèn jeneral':'Moyenne générale'}</span><span>${generalAverage===null?'—':generalAverage+'%'}</span></div></body></html>`
+  const sectionsHtml=groups.map(g=>`<section><h3>${typeLabel} ${g.number} <span>${g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</span></h3>${g.rows.length?`<table><tbody>${g.rows.map(r=>`<tr><td>${escapeHtml(r.subject)}</td><td>${r.score}%</td></tr>`).join('')}</tbody></table>`:`<p>${ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</p>`}</section>`).join('')
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${ht?'Relve nòt':'Relevé de notes'}</title><style>@page{size:A4;margin:12mm}body{font-family:Arial,sans-serif;color:#182433;font-size:12px}.school{text-align:center;font-weight:700}h1{text-align:center;color:#0f4c81}.student{border:1px solid #ccd7e0;padding:10px;display:grid;grid-template-columns:1fr 1fr;gap:6px 18px}h3{background:#eef4f8;padding:8px;border:1px solid #d8e2ea;margin:12px 0 0;display:flex;justify-content:space-between}table{width:100%;border-collapse:collapse}td{border:1px solid #d8e2ea;padding:6px}td:last-child{text-align:right}.general{margin-top:16px;border-top:2px solid #0f4c81;padding-top:10px;display:flex;justify-content:space-between;font-size:16px;font-weight:700}</style></head><body><div class="school">PORTAIL SCOLAIRE HAÏTI</div><h1>${ht?'Relve nòt':'Relevé de notes'} — ${typeLabel}</h1><div class="student"><div><b>${ht?'Elèv':'Élève'}:</b> ${escapeHtml(student?.name||'—')}</div><div><b>${ht?'Ane akademik':'Année scolaire'}:</b> ${escapeHtml(student?.year||'—')}</div><div><b>${ht?'Klas / Nivo':'Classe / Niveau'}:</b> ${escapeHtml(student?.level||'—')}</div><div><b>${ht?'Seksyon':'Section'}:</b> ${escapeHtml(student?.section||'—')}</div></div>${sectionsHtml}<div class="general"><span>${ht?'Mwayèn jeneral':'Moyenne générale'}</span><span>${generalAverage===null?'—':generalAverage+'%'}</span></div></body></html>`
  }
  const download=()=>{if(!student)return;const blob=new Blob(['\ufeff',html()],{type:'application/msword;charset=utf-8'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`Releve-not-${student.name.replace(/[^a-zA-Z0-9À-ÿ_-]+/g,'-')}.doc`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
  const print=()=>{if(!student)return;const w=window.open('','_blank');if(!w)return;w.document.write(html());w.document.close();w.focus();setTimeout(()=>w.print(),300)}
@@ -109,10 +120,13 @@ export default function RecordsPanel(){
   {open&&<div className="card" style={{gridColumn:'1 / -1',marginTop:12}}>
    <h2>{ht?'Relve nòt elèv yo':'Relevés de notes des élèves'}</h2>
    <div className="grid2">
-    <div><label>{ht?'Elèv':'Élève'}</label><select value={studentId} onChange={e=>setStudentId(e.target.value)}><option value="">—</option>{students.map(s=><option key={s.id} value={s.id}>{s.name} — {s.level} {s.section}</option>)}</select></div>
+    <div><label>{ht?'Ane akademik':'Année scolaire'}</label><select value={year} onChange={e=>resetAfterYear(e.target.value)}><option value="">{ht?'Tout ane':'Toutes les années'}</option>{years.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
+    <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label><select value={level} onChange={e=>resetAfterLevel(e.target.value)}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
+    <div><label>{ht?'Seksyon':'Section'}</label><select value={section} onChange={e=>resetAfterSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
+    <div><label>{ht?'Elèv':'Élève'}</label><select value={studentId} onChange={e=>setStudentId(e.target.value)}><option value="">—</option>{filteredStudents.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
     <div><label>{ht?'Kalite':'Type'}</label><select value={type} onChange={e=>setType(e.target.value as AssessmentType)}><option value="trimester">{ht?'Trimès':'Trimestre'}</option><option value="control">{ht?'Kontwòl':'Contrôle'}</option></select></div>
    </div>
-   {student&&<><div style={{display:'grid',gap:12,marginTop:14}}>{groups.map(g=><div key={g.number} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12}}><div style={{display:'flex',justifyContent:'space-between',gap:12}}><strong>{type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')} {g.number}</strong><strong>{g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</strong></div>{g.rows.length?<table style={{marginTop:8}}><tbody>{g.rows.map((r,i)=><tr key={`${g.number}-${i}`}><td>{r.subject}</td><td className="score">{r.score}%</td></tr>)}</tbody></table>:<div className="muted" style={{marginTop:8}}>{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>}</div>)}</div><div style={{display:'flex',justifyContent:'space-between',marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef'}}><strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong><strong>{generalAverage===null?'—':generalAverage+'%'}</strong></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:16}}><button type="button" className="btn secondary" onClick={download}>⬇️ {ht?'Telechaje Word':'Télécharger Word'}</button><button type="button" className="btn" onClick={print}>🖨️ {ht?'Enprime':'Imprimer'}</button></div></>}
+   {student&&<><div style={{marginTop:14,border:'1px solid #dde6ef',borderRadius:12,padding:12,background:'#f8fafc',display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}><div><strong>{ht?'Elèv':'Élève'}:</strong> {student.name}</div><div><strong>{ht?'Ane akademik':'Année scolaire'}:</strong> {student.year}</div><div><strong>{ht?'Klas / Nivo':'Classe / Niveau'}:</strong> {student.level}</div><div><strong>{ht?'Seksyon':'Section'}:</strong> {student.section}</div></div><div style={{display:'grid',gap:12,marginTop:14}}>{groups.map(g=><div key={g.number} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12}}><div style={{display:'flex',justifyContent:'space-between',gap:12}}><strong>{type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')} {g.number}</strong><strong>{g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</strong></div>{g.rows.length?<table style={{marginTop:8}}><tbody>{g.rows.map((r,i)=><tr key={`${g.number}-${i}`}><td>{r.subject}</td><td className="score">{r.score}%</td></tr>)}</tbody></table>:<div className="muted" style={{marginTop:8}}>{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>}</div>)}</div><div style={{display:'flex',justifyContent:'space-between',marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef'}}><strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong><strong>{generalAverage===null?'—':generalAverage+'%'}</strong></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:16}}><button type="button" className="btn secondary" onClick={download}>⬇️ {ht?'Telechaje Word':'Télécharger Word'}</button><button type="button" className="btn" onClick={print}>🖨️ {ht?'Enprime':'Imprimer'}</button></div></>}
   </div>}
  </>,target)
 }
