@@ -16,6 +16,7 @@ import FinalDecisionPanel from './FinalDecisionPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import InlineAcademicYearEdit from './InlineAcademicYearEdit'
 import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
+import RealDocxExportEnhancer from './RealDocxExportEnhancer'
 import RecordValidationFields from './RecordValidationFields'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SchoolRecordBranding from './SchoolRecordBranding'
@@ -95,6 +96,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <AllSectionsSelectorFix />
       <LanguageMenuSelector />
       <SubjectCoefficientEditor />
+      <RealDocxExportEnhancer />
       <OfficialRecordPrintEnhancer />
       <RecordValidationFields />
       <LoginRoleLabelFix />
