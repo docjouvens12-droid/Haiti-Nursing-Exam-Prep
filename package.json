@@ -12,6 +12,7 @@
   "dependencies": {
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+    "docx": "latest",
     "next": "16.3.3",
     "react": "latest",
     "react-dom": "latest"
