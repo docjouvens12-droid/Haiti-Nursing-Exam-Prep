@@ -10,7 +10,6 @@ const SECTION_OPTIONS=['A','B','C','D']
 
 type Student={id:string;name:string;level:string;section:string;year:string}
 type Teacher={id:string;name:string;classes:string;section:string}
-
 type Role='teacher'|'secretary'|''
 
 function normalizeLevel(value:string){
@@ -34,7 +33,6 @@ function nearbyAcademicYears(){
 export default function RoleAcademicFilters(){
  const [host,setHost]=useState<HTMLElement|null>(null)
  const [role,setRole]=useState<Role>('')
- const [teacherId,setTeacherId]=useState<string|null>(null)
  const [lang,setLang]=useState<'ht'|'fr'>('fr')
  const [students,setStudents]=useState<Student[]>([])
  const [teacher,setTeacher]=useState<Teacher|null>(null)
@@ -46,10 +44,10 @@ export default function RoleAcademicFilters(){
 
  const load=async()=>{
   const {data:{user}}=await supabase.auth.getUser()
-  if(!user){setRole('');return}
+  if(!user){setRole('');setTeacher(null);return}
   const pr=await supabase.from('school_profiles').select('role,teacher_id').eq('user_id',user.id).maybeSingle()
   const r=(pr.data?.role==='teacher'||pr.data?.role==='secretary')?pr.data.role as Role:''
-  setRole(r);setTeacherId(pr.data?.teacher_id||null)
+  setRole(r)
   if(!r)return
   const sr=await supabase.from('school_students').select('id,name,level,section,academic_year').order('name')
   if(!sr.error){
@@ -63,20 +61,30 @@ export default function RoleAcademicFilters(){
   }
   if(r==='teacher'&&pr.data?.teacher_id){
    const tr=await supabase.from('school_teachers').select('id,name,classes,section').eq('id',pr.data.teacher_id).maybeSingle()
-   if(tr.data){const t={id:tr.data.id,name:tr.data.name,classes:normalizeLevel(tr.data.classes||''),section:tr.data.section||''};setTeacher(t);setLevel(t.classes);setSection(t.section)}
+   if(tr.data){
+    const t={id:tr.data.id,name:tr.data.name,classes:normalizeLevel(tr.data.classes||''),section:tr.data.section||''}
+    setTeacher(t);setLevel(t.classes);setSection(t.section)
+   }
+  }else{
+   setTeacher(null);setLevel('');setSection('')
   }
  }
 
  useEffect(()=>{
   load()
+  const {data:authListener}=supabase.auth.onAuthStateChange(()=>{
+   setHost(null);setRole('');setTeacher(null);setLevel('');setSection('');setSearch('');setYear('')
+   setTimeout(()=>load(),0)
+  })
   const findHost=()=>{
    const sec=document.querySelector<HTMLElement>('.secretary-dashboard .card')
-   if(sec){setHost(sec);return}
+   if(sec){setRole('secretary');setHost(sec);return}
    const cards=Array.from(document.querySelectorAll<HTMLElement>('.ps-page section.card'))
    const teacherCard=cards.find(c=>{
     const h=(c.querySelector('h2')?.textContent||'').toLowerCase()
     return h.includes('tablo bò pou ansenyan')||h.includes("tableau de bord de l’enseignant")||h.includes("tableau de bord de l'enseignant")
    })||null
+   if(teacherCard)setRole('teacher')
    setHost(teacherCard)
   }
   findHost()
@@ -84,7 +92,7 @@ export default function RoleAcademicFilters(){
   const onLang=(e:Event)=>{const el=e.target as HTMLSelectElement;if(el.closest?.('[data-global-language-menu]'))setLang(el.value==='ht'?'ht':'fr')}
   const selector=document.querySelector<HTMLSelectElement>('[data-global-language-menu] select');if(selector)setLang(selector.value==='ht'?'ht':'fr')
   document.addEventListener('change',onLang,true)
-  return()=>{observer.disconnect();document.removeEventListener('change',onLang,true)}
+  return()=>{observer.disconnect();document.removeEventListener('change',onLang,true);authListener.subscription.unsubscribe()}
  },[])
 
  const years=useMemo(()=>{
@@ -115,11 +123,11 @@ export default function RoleAcademicFilters(){
    .rafStudent{padding:9px 11px;border-bottom:1px solid #eef2f7;font-size:13px}.rafStudent:last-child{border-bottom:0}
    @media(max-width:720px){.rafGrid{grid-template-columns:1fr}}
   `}</style>
-  <h3 style={{margin:'0 0 8px'}}>{teacherMode?(ht?'Elèv klas mwen pa ane akademik':'Élèves de ma classe par année académique'):(ht?'Elèv pa ane, klas ak seksyon':'Élèves par année, classe et section')}</h3>
+  <h3 style={{margin:'0 0 8px'}}>{teacherMode?(ht?'Elèv klas mwen pa ane akademik':'Élèves de ma classe par année académique'):(ht?'Jere elèv pa ane, klas ak seksyon':'Gérer les élèves par année, classe et section')}</h3>
   <div className="rafGrid">
    <div><label>{ht?'Ane akademik':'Année académique'}</label><select value={year} onChange={e=>setYear(e.target.value)}>{years.map(y=><option key={y} value={y}>{y}</option>)}</select></div>
-   <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly aria-readonly="true"/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x}>{x}</option>)}</select>}</div>
-   <div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly aria-readonly="true"/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x}>{x}</option>)}</select>}</div>
+   <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly aria-readonly="true"/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div>
+   <div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly aria-readonly="true"/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div>
   </div>
   {!teacherMode&&<input style={{marginTop:10}} value={search} onChange={e=>setSearch(e.target.value)} placeholder={ht?'Chèche pa non oswa ID elèv':'Rechercher par nom ou identifiant'}/>} 
   <div className="rafBadges"><span className="rafBadge">{year||'—'}</span>{level&&<span className="rafBadge">{level}</span>}{section&&<span className="rafBadge">{ht?'Seksyon':'Section'} {section}</span>}<span className="rafBadge">{filtered.length} {ht?'elèv':'élève(s)'}</span></div>
