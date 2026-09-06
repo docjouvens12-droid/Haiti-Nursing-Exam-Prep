@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import './menu.css'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ht">
+    <html lang="fr">
       <body>{children}</body>
     </html>
   )
