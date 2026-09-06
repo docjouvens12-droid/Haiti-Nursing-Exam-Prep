@@ -5,7 +5,6 @@ import StudentTrimesterSummary from './StudentTrimesterSummary'
 import StudentWeightedBulletin from './StudentWeightedBulletin'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
-import AcademicYearEditor from './AcademicYearEditor'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SubjectCoefficientEditor from './SubjectCoefficientEditor'
 
@@ -121,7 +120,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
       <RecordsPanel />
-      <AcademicYearEditor />
       <SchoolIdentitySettings />
       <SubjectCoefficientEditor />
       <SessionJwtRecovery />
