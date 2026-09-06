@@ -13,7 +13,6 @@ import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import AllSectionsSelectorFix from './AllSectionsSelectorFix'
-import LanguageMenuSelector from './LanguageMenuSelector'
 import SubjectCoefficientEditor from './SubjectCoefficientEditor'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
@@ -132,7 +131,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <DirectionPublishSelector />
       <SchoolIdentitySettings />
       <AllSectionsSelectorFix />
-      <LanguageMenuSelector />
       <SubjectCoefficientEditor />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
