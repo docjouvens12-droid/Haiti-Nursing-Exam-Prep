@@ -10,6 +10,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page) .mobile-student-nav-spacer,
         body:has(.ps-page) .pwa-splash { display:none!important; }
         body:has(.ps-page){padding-bottom:0!important}
+        body:has(.secretary-dashboard) .ps-page{min-height:auto!important}
 
         body:has(.ps-page) .topActions{
           position:fixed!important;
