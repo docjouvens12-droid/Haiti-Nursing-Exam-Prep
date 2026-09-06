@@ -7,6 +7,7 @@ import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import DirectionStudentManager from './DirectionStudentManager'
+import RoleAcademicFilters from './RoleAcademicFilters'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -125,6 +126,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <RecordsPanel />
       <SchoolIdentitySettings />
       <DirectionStudentManager />
+      <RoleAcademicFilters />
       <SessionJwtRecovery />
     </>
   )
