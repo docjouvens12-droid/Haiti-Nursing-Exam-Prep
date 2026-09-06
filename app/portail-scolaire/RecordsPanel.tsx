@@ -81,11 +81,16 @@ export default function RecordsPanel(){
    })
 
    if(!role){setTarget(null);return}
-   const heading=Array.from(document.querySelectorAll('h2')).find(h=>role==='direction'
-    ? ['Tablo bò pou Direksyon an','Tableau de bord de la Direction'].includes((h.textContent||'').trim())
-    : ['Tablo bò pou Sekretarya a','Tableau de bord du Secrétariat'].includes((h.textContent||'').trim()))
-   const card=heading?.closest('.card') as HTMLElement|null
-   const menu=card?.querySelector('.menu') as HTMLElement|null
+   let menu:HTMLElement|null=null
+   if(role==='direction'){
+    const quickHeading=Array.from(document.querySelectorAll('.card h3')).find(h=>['Aksyon rapid','Actions rapides'].includes((h.textContent||'').trim()))
+    menu=(quickHeading?.closest('.card')?.querySelector('.menu') as HTMLElement|null)||null
+    setLang((quickHeading?.textContent||'').includes('Actions')?'fr':'ht')
+   }else{
+    const heading=Array.from(document.querySelectorAll('h2')).find(h=>['Tablo bò pou Sekretarya a','Tableau de bord du Secrétariat'].includes((h.textContent||'').trim()))
+    menu=(heading?.closest('.card')?.querySelector('.menu') as HTMLElement|null)||null
+    setLang((heading?.textContent||'').includes('Tableau')?'fr':'ht')
+   }
    if(!menu){setTarget(null);return}
    let mount=menu.querySelector('[data-records-panel-mount]') as HTMLElement|null
    if(!mount){mount=document.createElement('div');mount.setAttribute('data-records-panel-mount','true');mount.style.display='contents';menu.appendChild(mount)}
