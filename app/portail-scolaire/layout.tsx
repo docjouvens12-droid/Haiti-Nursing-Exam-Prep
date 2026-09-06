@@ -12,7 +12,6 @@ import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
-import SchoolRecordBranding from './SchoolRecordBranding'
 import AllSectionsSelectorFix from './AllSectionsSelectorFix'
 import LanguageMenuSelector from './LanguageMenuSelector'
 import SubjectCoefficientEditor from './SubjectCoefficientEditor'
@@ -132,7 +131,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <TeacherAssessmentSelector />
       <DirectionPublishSelector />
       <SchoolIdentitySettings />
-      <SchoolRecordBranding />
       <AllSectionsSelectorFix />
       <LanguageMenuSelector />
       <SubjectCoefficientEditor />
