@@ -45,12 +45,15 @@ export default function AcademicYearEditor(){
 
  useEffect(()=>{
   const attach=()=>{
-   const heading=Array.from(document.querySelectorAll('h2')).find(h=>['Tablo bò pou Direksyon an','Tableau de bord de la Direction'].includes((h.textContent||'').trim()))
-   const card=heading?.closest('.card') as HTMLElement|null
-   if(!card){setTarget(null);return}
-   setLang((heading?.textContent||'').includes('Tableau')?'fr':'ht')
-   const menu=card.querySelector('.menu') as HTMLElement|null
+   const directionHeading=Array.from(document.querySelectorAll('.ps-page h2')).find(h=>['Tablo bò pou Direksyon an','Tableau de bord de la Direction'].includes((h.textContent||'').trim()))
+   if(!directionHeading){setTarget(null);return}
+   setLang((directionHeading.textContent||'').includes('Tableau')?'fr':'ht')
+
+   const actionHeading=Array.from(document.querySelectorAll('.ps-page h3')).find(h=>['Aksyon rapid','Actions rapides'].includes((h.textContent||'').trim()))
+   const actionCard=actionHeading?.closest('.card') as HTMLElement|null
+   const menu=actionCard?.querySelector('.menu') as HTMLElement|null
    if(!menu){setTarget(null);return}
+
    let mount=menu.querySelector('[data-academic-year-editor]') as HTMLElement|null
    if(!mount){
     mount=document.createElement('div')
