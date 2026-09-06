@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
 import LoginRoleLabelFix from './LoginRoleLabelFix'
-import SecretaryAddStudentFix from './SecretaryAddStudentFix'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -33,7 +32,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       `}</style>
       {children}
       <SecretaryPanel />
-      <SecretaryAddStudentFix />
       <LoginRoleLabelFix />
     </>
   )
