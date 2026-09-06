@@ -7,9 +7,9 @@ import {createClient} from '@supabase/supabase-js'
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 
 type Grade={score:number;term:string}
-type AssessmentType='all'|'trimester'|'control'
+type AssessmentType='trimester'|'control'
 
-function matchesSelection(term:string,type:Exclude<AssessmentType,'all'>,number:number){
+function matchesSelection(term:string,type:AssessmentType,number:number){
  const value=term.trim().toLowerCase()
  if(type==='trimester'){
   const legacy=[
@@ -33,6 +33,7 @@ export default function StudentTrimesterSummary(){
  const [lang,setLang]=useState<'ht'|'fr'>('ht')
  const [assessmentType,setAssessmentType]=useState<AssessmentType>('trimester')
  const [assessmentNumber,setAssessmentNumber]=useState(1)
+ const [showAll,setShowAll]=useState(false)
  const [grades,setGrades]=useState<Grade[]>([])
 
  useEffect(()=>{
@@ -75,17 +76,14 @@ export default function StudentTrimesterSummary(){
   return()=>observer.disconnect()
  },[])
 
- const selectedAverage=useMemo(()=>{
-  if(assessmentType==='all')return null
-  return average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber)))
- },[grades,assessmentType,assessmentNumber])
+ const selectedAverage=useMemo(()=>average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))),[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>average(grades),[grades])
  const summaries=useMemo(()=>{
-  const result:{type:'trimester'|'control';number:number;avg:number|null;count:number}[]=[]
+  const result:{type:AssessmentType;number:number;avg:number|null}[]=[]
   ;(['trimester','control'] as const).forEach(type=>{
    ;[1,2,3,4].forEach(number=>{
     const rows=grades.filter(g=>matchesSelection(g.term,type,number))
-    result.push({type,number,avg:average(rows),count:rows.length})
+    result.push({type,number,avg:average(rows)})
    })
   })
   return result
@@ -101,32 +99,37 @@ export default function StudentTrimesterSummary(){
   <div style={{marginBottom:14}}>
    <div style={{border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#f8fafc'}}>
     <div style={{fontWeight:800,marginBottom:10}}>{ht?'Chwazi rezilta pou wè':'Choisir le résultat à afficher'}</div>
-    <div style={{display:'grid',gridTemplateColumns:assessmentType==='all'?'1fr':'1fr 1fr',gap:10,marginBottom:10}}>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
      <div>
       <label>{ht?'Kalite':'Type'}</label>
-      <select value={assessmentType} onChange={e=>setAssessmentType(e.target.value as AssessmentType)}>
-       <option value="all">{ht?'Tout rezilta':'Tous les résultats'}</option>
+      <select value={assessmentType} onChange={e=>{setAssessmentType(e.target.value as AssessmentType);setShowAll(false)}}>
        <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
        <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
       </select>
      </div>
-     {assessmentType!=='all'&&<div>
+     <div>
       <label>{ht?'Nimewo':'Numéro'}</label>
-      <select value={assessmentNumber} onChange={e=>setAssessmentNumber(Number(e.target.value))}>
+      <select value={assessmentNumber} onChange={e=>{setAssessmentNumber(Number(e.target.value));setShowAll(false)}}>
        {[1,2,3,4].map(n=><option key={n} value={n}>{n}</option>)}
       </select>
-     </div>}
+     </div>
     </div>
 
-    {assessmentType==='all'?<div style={{borderTop:'1px solid #dde6ef',paddingTop:12}}>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,borderTop:'1px solid #dde6ef',paddingTop:12}}>
+     <span style={{fontWeight:700}}>{selectedLabel}</span>
+     <strong style={{fontSize:24,color:'#0f4c81'}}>{selectedAverage===null?'—':selectedAverage+'%'}</strong>
+    </div>
+
+    <button type="button" className="btn secondary" style={{marginTop:14,width:'100%'}} onClick={()=>setShowAll(v=>!v)}>
+     {showAll?(ht?'Kache tout rezilta':'Masquer tous les résultats'):(ht?'Wè tout rezilta':'Voir tous les résultats')}
+    </button>
+
+    {showAll&&<div style={{borderTop:'1px solid #dde6ef',paddingTop:12,marginTop:14}}>
       <div style={{fontWeight:800,marginBottom:10}}>{ht?'Tout mwayèn yo':'Toutes les moyennes'}</div>
       <div style={{display:'grid',gap:8}}>{summaries.map(s=><div key={`${s.type}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid #e5edf5'}}>
         <span style={{fontWeight:700}}>{s.type==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
         <strong style={{color:'#0f4c81'}}>{s.avg===null?'—':s.avg+'%'}</strong>
       </div>)}</div>
-    </div>:<div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,borderTop:'1px solid #dde6ef',paddingTop:12}}>
-     <span style={{fontWeight:700}}>{selectedLabel}</span>
-     <strong style={{fontSize:24,color:'#0f4c81'}}>{selectedAverage===null?'—':selectedAverage+'%'}</strong>
     </div>}
    </div>
    <div style={{marginTop:10,border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
