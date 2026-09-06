@@ -107,7 +107,7 @@ export default function RecordsPanel(){
  }
  const groups=useMemo(()=>{
   const count=type==='trimester'?3:4
-  return Array.from({length:count},(_,i)=>i+1).map(number=>{const rows=studentGrades.filter(g=>matchesSelection(g.term,type,number));const summary=subjectSummary(rows);const c=summary.reduce((a,r)=>a+r.coefficient,0);const weighted=c?summary.reduce((a,r)=>a+r.points,0)/c:null;return {number,rows,summary,weighted}})
+  return Array.from({length:count},(_,i)=>i+1).map(number=>{const rows=studentGrades.filter(g=>matchesSelection(g.term,type,number));const summary=subjectSummary(rows);const c=summary.reduce((a,r)=>a+r.coefficient,0);const weighted=c?summary.reduce((a,r)=>a+r.points,0)/c:null;return {number,rows,weighted}})
  },[studentGrades,type,subjects])
  const overall=useMemo(()=>{const selected=studentGrades.filter(g=>Array.from({length:type==='trimester'?3:4},(_,i)=>matchesSelection(g.term,type,i+1)).some(Boolean));const s=subjectSummary(selected);const c=s.reduce((a,r)=>a+r.coefficient,0);return c?s.reduce((a,r)=>a+r.points,0)/c:null},[studentGrades,type,subjects])
 
@@ -172,6 +172,14 @@ export default function RecordsPanel(){
     <div style={{display:'grid',gap:12,marginTop:14}}>{groups.map(g=><div key={g.number} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12}}><div style={{display:'flex',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}><strong>{typeLabel} {g.number} <span style={{fontSize:12,color:'#637083',marginLeft:6}}>{ht?'Ran':'Rang'}: {rankText(g.number)}</span></strong><strong>{g.weighted===null?'—':`${ht?'Mwayèn pondérée':'Moyenne pondérée'} ${format(g.weighted)}%`}</strong></div>{g.rows.length?<table style={{marginTop:8}}><tbody>{g.rows.map((r,i)=><tr key={`${g.number}-${i}`}><td>{r.subject}</td><td className="score">{format(r.score)}%</td></tr>)}</tbody></table>:<div className="muted" style={{marginTop:8}}>{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>}</div>)}</div>
     <div style={{display:'flex',justifyContent:'space-between',marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef'}}><strong>{ht?'Mwayèn jeneral pondérée':'Moyenne générale pondérée'}</strong><strong>{overall===null?'—':format(overall)+'%'}</strong></div>
     <div style={{marginTop:14,border:'2px solid #d8e2ea',borderRadius:14,padding:14}}>{role==='direction'?<><div style={{fontWeight:800,marginBottom:10}}>{ht?'Desizyon final':'Décision finale'}</div><label>{ht?'Estati':'Statut'}</label><select value={decision} onChange={e=>setDecision(e.target.value as Decision)}><option value="pending">{ht?'An atant':'En attente'}</option><option value="admitted">Admis</option><option value="deferred">{ht?'Ajouné':'Ajourné'}</option></select><label style={{marginTop:10}}>{ht?'Nòt Direksyon (opsyonèl)':'Note de la Direction (facultatif)'}</label><textarea rows={3} value={decisionNote} onChange={e=>setDecisionNote(e.target.value)} style={{width:'100%'}}/><button type="button" className="btn" style={{marginTop:10}} onClick={saveDecision}>{ht?'Anrejistre desizyon':'Enregistrer la décision'}</button>{decisionMessage&&<span style={{marginLeft:10}}>{decisionMessage}</span>}</>:<><div style={{display:'flex',justifyContent:'space-between',gap:12}}><strong>{ht?'Desizyon final':'Décision finale'}</strong><strong style={{color:'#0f4c81'}}>{decisionText}</strong></div>{decisionNote&&<div style={{marginTop:8,color:'#637083'}}>{decisionNote}</div>}</>}</div>
+    <div data-native-validation="true" style={{marginTop:20,padding:16,border:'2px solid #9fb4c8',borderRadius:14,background:'#f8fafc'}}>
+     <div style={{fontSize:16,fontWeight:900,color:'#0f4c81',marginBottom:18}}>{ht?'Validasyon dokiman':'Validation du document'}</div>
+     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:'22px 26px'}}>
+      <div><div style={{height:52}}></div><div style={{borderTop:'1px solid #374151',paddingTop:7,fontWeight:800}}>{ht?'Siyati Direksyon':'Signature de la Direction'}</div></div>
+      <div><div style={{height:52}}></div><div style={{borderTop:'1px solid #374151',paddingTop:7,fontWeight:800}}>{ht?'Kachè lekòl la':'Cachet de l’école'}</div></div>
+      <div style={{gridColumn:'1 / -1'}}><div style={{height:28}}></div><div style={{borderTop:'1px solid #374151',paddingTop:7,fontWeight:800}}>{ht?'Dat':'Date'}</div></div>
+     </div>
+    </div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:16}}><button type="button" className="btn secondary" onClick={download}>⬇️ {ht?'Telechaje Word':'Télécharger Word'}</button><button type="button" className="btn" onClick={print}>🖨️ {ht?'Enprime':'Imprimer'}</button></div>
    </>}
   </div>}
