@@ -3,6 +3,7 @@
 import {useEffect,useMemo,useState} from 'react'
 import {createPortal} from 'react-dom'
 import {createClient} from '@supabase/supabase-js'
+import {downloadStudentListDocx,printStudentList} from './studentListExport'
 
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 const SCHOOL_LEVELS=['7e Année Fondamentale','8e Année Fondamentale','9e Année Fondamentale','NS I','NS II','NS III','NS IV']
@@ -19,11 +20,7 @@ function normalizeLevel(value:string){
  if(v==='9 année fondamentale'||v==='9e année fondamentale')return '9e Année Fondamentale'
  return value
 }
-
-function currentStoredYear(){
- if(typeof window==='undefined')return ''
- return window.localStorage.getItem('ps-academic-year')||''
-}
+function currentStoredYear(){return typeof window==='undefined'?'':window.localStorage.getItem('ps-academic-year')||''}
 
 export default function RoleAcademicFilters(){
  const [host,setHost]=useState<HTMLElement|null>(null)
@@ -42,31 +39,16 @@ export default function RoleAcademicFilters(){
   if(!user){setRole('');setTeacher(null);return}
   const pr=await supabase.from('school_profiles').select('role,teacher_id').eq('user_id',user.id).maybeSingle()
   const r=(pr.data?.role==='teacher'||pr.data?.role==='secretary')?pr.data.role as Role:''
-  setRole(r)
-  if(!r)return
+  setRole(r);if(!r)return
   const sr=await supabase.from('school_students').select('id,name,level,section,academic_year').order('name')
-  if(!sr.error){
-   const mapped=(sr.data||[]).map((x:any)=>({id:x.id,name:x.name,level:normalizeLevel(x.level||''),section:x.section||'',year:x.academic_year||''}))
-   setStudents(mapped)
-   setYear(currentStoredYear()||[...new Set(mapped.map(x=>x.year).filter(Boolean))].sort().reverse()[0]||'2026–2027')
-  }
-  if(r==='teacher'&&pr.data?.teacher_id){
-   const tr=await supabase.from('school_teachers').select('id,name,classes,section').eq('id',pr.data.teacher_id).maybeSingle()
-   if(tr.data){const t={id:tr.data.id,name:tr.data.name,classes:normalizeLevel(tr.data.classes||''),section:tr.data.section||''};setTeacher(t);setLevel(t.classes);setSection(t.section)}
-  }else{setTeacher(null);setLevel('');setSection('')}
+  if(!sr.error){const mapped=(sr.data||[]).map((x:any)=>({id:x.id,name:x.name,level:normalizeLevel(x.level||''),section:x.section||'',year:x.academic_year||''}));setStudents(mapped);setYear(currentStoredYear()||[...new Set(mapped.map(x=>x.year).filter(Boolean))].sort().reverse()[0]||'2026–2027')}
+  if(r==='teacher'&&pr.data?.teacher_id){const tr=await supabase.from('school_teachers').select('id,name,classes,section').eq('id',pr.data.teacher_id).maybeSingle();if(tr.data){const t={id:tr.data.id,name:tr.data.name,classes:normalizeLevel(tr.data.classes||''),section:tr.data.section||''};setTeacher(t);setLevel(t.classes);setSection(t.section)}}else{setTeacher(null);setLevel('');setSection('')}
  }
 
  useEffect(()=>{
   load()
   const {data:authListener}=supabase.auth.onAuthStateChange(()=>{setHost(null);setRole('');setTeacher(null);setLevel('');setSection('');setSearch('');setYear('');setTimeout(()=>load(),0)})
-  const findHost=()=>{
-   const sec=document.querySelector<HTMLElement>('.secretary-dashboard .card')
-   if(sec){setRole('secretary');setHost(sec);return}
-   const cards=Array.from(document.querySelectorAll<HTMLElement>('.ps-page section.card'))
-   const teacherCard=cards.find(c=>{const h=(c.querySelector('h2')?.textContent||'').toLowerCase();return h.includes('tablo bò pou ansenyan')||h.includes("tableau de bord de l’enseignant")||h.includes("tableau de bord de l'enseignant")})||null
-   if(teacherCard)setRole('teacher')
-   setHost(teacherCard)
-  }
+  const findHost=()=>{const sec=document.querySelector<HTMLElement>('.secretary-dashboard .card');if(sec){setRole('secretary');setHost(sec);return}const cards=Array.from(document.querySelectorAll<HTMLElement>('.ps-page section.card'));const teacherCard=cards.find(c=>{const h=(c.querySelector('h2')?.textContent||'').toLowerCase();return h.includes('tablo bò pou ansenyan')||h.includes("tableau de bord de l’enseignant")||h.includes("tableau de bord de l'enseignant")})||null;if(teacherCard)setRole('teacher');setHost(teacherCard)}
   findHost();const observer=new MutationObserver(findHost);observer.observe(document.body,{childList:true,subtree:true})
   const onLang=(e:Event)=>{const el=e.target as HTMLSelectElement;if(el.closest?.('[data-global-language-menu]'))setLang(el.value==='ht'?'ht':'fr')}
   const selector=document.querySelector<HTMLSelectElement>('[data-global-language-menu] select');if(selector)setLang(selector.value==='ht'?'ht':'fr')
@@ -81,17 +63,14 @@ export default function RoleAcademicFilters(){
 
  if(!host||!role)return null
  const teacherMode=role==='teacher'
+ const exportArgs={students:filtered,year,level,section,ht,issuer:'secretary' as const}
  return createPortal(<div className="roleAcademicFilters">
-  <style>{`
-   .roleAcademicFilters{margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb}.rafGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rafGrid label{display:block;font-size:12px;font-weight:800;color:#4b5563;margin-bottom:5px}.rafGrid select,.roleAcademicFilters input{width:100%;box-sizing:border-box}.rafGrid input[readonly]{background:#f5f7fa;color:#4b5563}.rafBadges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.rafBadge{background:#eef6ff;border:1px solid #cfe4fa;border-radius:999px;padding:6px 10px;color:#0f4c81;font-size:12px;font-weight:800}.rafList{margin-top:10px;max-height:220px;overflow:auto;border:1px solid #e5e7eb;border-radius:12px}.rafStudent{padding:9px 11px;border-bottom:1px solid #eef2f7;font-size:13px}.rafStudent:last-child{border-bottom:0}@media(max-width:720px){.rafGrid{grid-template-columns:1fr}}
-  `}</style>
+  <style>{`.roleAcademicFilters{margin-top:16px;padding-top:16px;border-top:1px solid #e5e7eb}.rafGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.rafGrid label{display:block;font-size:12px;font-weight:800;color:#4b5563;margin-bottom:5px}.rafGrid select,.roleAcademicFilters input{width:100%;box-sizing:border-box}.rafGrid input[readonly]{background:#f5f7fa;color:#4b5563}.rafBadges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.rafBadge{background:#eef6ff;border:1px solid #cfe4fa;border-radius:999px;padding:6px 10px;color:#0f4c81;font-size:12px;font-weight:800}.rafList{margin-top:10px;max-height:220px;overflow:auto;border:1px solid #e5e7eb;border-radius:12px}.rafStudent{padding:9px 11px;border-bottom:1px solid #eef2f7;font-size:13px}.rafStudent:last-child{border-bottom:0}.rafActions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}@media(max-width:720px){.rafGrid{grid-template-columns:1fr}.rafActions .btn{flex:1 1 150px}}`}</style>
   <h3 style={{margin:'0 0 8px'}}>{teacherMode?(ht?'Elèv klas mwen':'Élèves de ma classe'):(ht?'Jere elèv pa klas ak seksyon':'Gérer les élèves par classe et section')}</h3>
-  <div className="rafGrid">
-   <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly aria-readonly="true"/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div>
-   <div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly aria-readonly="true"/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div>
-  </div>
+  <div className="rafGrid"><div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly aria-readonly="true"/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div><div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly aria-readonly="true"/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x} value={x}>{x}</option>)}</select>}</div></div>
   {!teacherMode&&<input style={{marginTop:10}} value={search} onChange={e=>setSearch(e.target.value)} placeholder={ht?'Chèche pa non oswa ID elèv':'Rechercher par nom ou identifiant'}/>} 
   <div className="rafBadges"><span className="rafBadge">{year||'—'}</span>{level&&<span className="rafBadge">{level}</span>}{section&&<span className="rafBadge">{ht?'Seksyon':'Section'} {section}</span>}<span className="rafBadge">{filtered.length} {ht?'elèv':'élève(s)'}</span></div>
+  {!teacherMode&&<div className="rafActions"><button type="button" className="btn secondary" disabled={!filtered.length} onClick={()=>printStudentList(exportArgs)}>🖨️ {ht?'Enprime lis elèv yo':'Imprimer la liste'}</button><button type="button" className="btn secondary" disabled={!filtered.length} onClick={()=>downloadStudentListDocx(exportArgs)}>📄 {ht?'Telechaje Word':'Télécharger Word'}</button></div>}
   <div className="rafList">{filtered.length===0?<div className="rafStudent">{ht?'Pa gen elèv pou seleksyon sa a.':'Aucun élève pour cette sélection.'}</div>:filtered.map(s=><div className="rafStudent" key={s.id}><b>{s.name}</b> <span className="muted">— {s.id} · {s.year} · {s.level} · {ht?'Seksyon':'Section'} {s.section}</span></div>)}</div>
  </div>,host)
 }
