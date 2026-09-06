@@ -4,6 +4,7 @@ import {useEffect,useMemo,useState} from 'react'
 import {createPortal} from 'react-dom'
 import {createClient} from '@supabase/supabase-js'
 import {downloadAcademicDocx} from './wordDocx'
+import SchoolInfoCard from './SchoolInfoCard'
 
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 
@@ -13,7 +14,7 @@ type Decision='pending'|'admitted'|'deferred'
 type Student={id:string;name:string;level:string;section:string;year:string}
 type Grade={studentId:string;subject:string;score:number;term:string}
 type Subject={name:string;coefficient:number}
-type School={school_name:string;address:string|null;phone:string|null;email:string|null}|null
+type School={school_name:string;address:string|null;phone:string|null;email:string|null;logo_url:string|null}|null
 type Rank={rank_position:number;cohort_size:number}|null
 
 function norm(v:string){return (v||'').trim().toLowerCase()}
@@ -62,7 +63,7 @@ export default function RecordsPanel(){
    supabase.from('school_students').select('id,name,level,section,academic_year').order('name'),
    supabase.from('school_grades').select('student_id,subject,score,term').eq('status','approved').eq('published',true),
    supabase.from('school_subjects').select('name,coefficient').order('name'),
-   supabase.from('school_settings').select('school_name,address,phone,email').eq('id',1).maybeSingle()
+   supabase.from('school_settings').select('school_name,address,phone,email,logo_url').eq('id',1).maybeSingle()
   ])
   setStudents((sr.data||[]).map(x=>({id:x.id,name:x.name,level:x.level,section:x.section,year:x.academic_year})))
   setGrades((gr.data||[]).map(x=>({studentId:x.student_id,subject:x.subject||'',score:Number(x.score),term:x.term||''})))
@@ -70,7 +71,7 @@ export default function RecordsPanel(){
   setSchool(sc.data||null)
  }
 
- useEffect(()=>{load();const {data:l}=supabase.auth.onAuthStateChange(()=>load());const refresh=()=>load();window.addEventListener('school-subject-coefficients-updated',refresh);return()=>{l.subscription.unsubscribe();window.removeEventListener('school-subject-coefficients-updated',refresh)}},[])
+ useEffect(()=>{load();const {data:l}=supabase.auth.onAuthStateChange(()=>load());const refresh=()=>load();window.addEventListener('school-subject-coefficients-updated',refresh);window.addEventListener('school-settings-updated',refresh);return()=>{l.subscription.unsubscribe();window.removeEventListener('school-subject-coefficients-updated',refresh);window.removeEventListener('school-settings-updated',refresh)}},[])
  useEffect(()=>{const onLang=(e:Event)=>{const s=(e.target as HTMLElement|null)?.closest?.('[data-global-language-menu] select') as HTMLSelectElement|null;if(s)setLang(s.value==='fr'?'fr':'ht')};document.addEventListener('change',onLang,true);return()=>document.removeEventListener('change',onLang,true)},[])
 
  useEffect(()=>{
@@ -156,6 +157,7 @@ export default function RecordsPanel(){
  return createPortal(<>
   <button type="button" className="menuBtn" onClick={()=>setOpen(v=>!v)}>📑 {ht?'Relve nòt elèv yo':'Relevés de notes des élèves'}</button>
   {open&&<div className="card" data-native-records="true" style={{gridColumn:'1 / -1',marginTop:12}}>
+   {role==='secretary'&&<SchoolInfoCard school={school} ht={ht}/>} 
    <h2>{ht?'Relve nòt elèv yo':'Relevés de notes des élèves'}</h2>
    <div className="grid2">
     <div><label>{ht?'Ane akademik':'Année scolaire'}</label><select value={year} onChange={e=>resetAfterYear(e.target.value)}><option value="">{ht?'Tout ane':'Toutes les années'}</option>{years.map(v=><option key={v}>{v}</option>)}</select></div>
