@@ -20,6 +20,10 @@ const SCHOOL_LEVELS=[
  'NS IV'
 ]
 
+function levelKey(value:string){
+ return value.trim().toLowerCase().replace(/\s+/g,' ').replace(/^8\s+année\s+fondamentale$/,'8e année fondamentale')
+}
+
 function nextAcademicYear(){
  const now=new Date()
  const y=now.getFullYear()
@@ -92,10 +96,19 @@ export default function DirectionStudentManager(){
  },[students,year])
  const levels=useMemo(()=>{
   const extras=[...classes.map(c=>c.name),...students.filter(s=>!year||s.year===year).map(s=>s.level)].filter(Boolean)
-  return [...SCHOOL_LEVELS,...[...new Set(extras)].filter(x=>!SCHOOL_LEVELS.includes(x))]
+  const officialKeys=new Set(SCHOOL_LEVELS.map(levelKey))
+  const seen=new Set(officialKeys)
+  const uniqueExtras:string[]=[]
+  for(const x of extras){
+   const key=levelKey(x)
+   if(seen.has(key))continue
+   seen.add(key)
+   uniqueExtras.push(x)
+  }
+  return [...SCHOOL_LEVELS,...uniqueExtras]
  },[classes,students,year])
  const sections=useMemo(()=>[...new Set([...SECTION_OPTIONS,...classes.filter(c=>!level||c.name===level).map(c=>c.section),...students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)).map(s=>s.section)].filter(Boolean))].sort(),[classes,students,year,level])
- const filtered=useMemo(()=>students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)&&(!section||s.section===section)&&(!search||`${s.id} ${s.name}`.toLowerCase().includes(search.toLowerCase()))),[students,year,level,section,search])
+ const filtered=useMemo(()=>students.filter(s=>(!year||s.year===year)&&(!level||levelKey(s.level)===levelKey(level))&&(!section||s.section===section)&&(!search||`${s.id} ${s.name}`.toLowerCase().includes(search.toLowerCase()))),[students,year,level,section,search])
 
  const addStudent=async(fd:FormData)=>{
   setError('');setMessage('')
