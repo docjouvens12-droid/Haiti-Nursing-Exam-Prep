@@ -11,7 +11,6 @@ import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
-import RecordValidationFields from './RecordValidationFields'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SchoolRecordBranding from './SchoolRecordBranding'
 import AllSectionsSelectorFix from './AllSectionsSelectorFix'
@@ -137,7 +136,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <AllSectionsSelectorFix />
       <LanguageMenuSelector />
       <SubjectCoefficientEditor />
-      <RecordValidationFields />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
     </>
