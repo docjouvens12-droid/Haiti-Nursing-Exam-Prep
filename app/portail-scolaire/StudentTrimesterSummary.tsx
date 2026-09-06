@@ -64,6 +64,16 @@ export default function StudentTrimesterSummary(){
  },[])
 
  useEffect(()=>{
+  const onLang=(e:Event)=>{
+   const b=(e.target as HTMLElement|null)?.closest?.('.langChoice') as HTMLButtonElement|null
+   if(!b)return
+   setLang((b.textContent||'').includes('Français')?'fr':'ht')
+  }
+  document.addEventListener('click',onLang,true)
+  return()=>document.removeEventListener('click',onLang,true)
+ },[])
+
+ useEffect(()=>{
   const attach=()=>{
    const headings=Array.from(document.querySelectorAll('.ps-page h2'))
    const h=headings.find(x=>['Tablo bò pou Elèv yo','Tableau de bord de l’Élève'].includes((x.textContent||'').trim()))
@@ -128,7 +138,8 @@ export default function StudentTrimesterSummary(){
     : `<p class="empty">${ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</p>`
    return `<section><div class="section-title"><strong>${typeLabel} ${group.number}</strong><strong>${group.avg===null?'—':`${ht?'Mwayèn':'Moyenne'}: ${group.avg}%`}</strong></div>${rows}</section>`
   }).join('')
-  return `<!doctype html><html><head><meta charset="utf-8"><title>${ht?'Bilten final':'Bulletin final'}</title><style>@page{size:A4;margin:12mm}body{font-family:Arial,sans-serif;color:#182433;margin:0;font-size:12px}h1{text-align:center;color:#0f4c81;margin:0 0 4px;font-size:22px}.school{text-align:center;font-weight:700;margin-bottom:14px}.student{border:1px solid #cfd9e3;padding:9px 12px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:5px 18px}.section-title{display:flex;justify-content:space-between;background:#eef4f8;padding:7px 9px;border:1px solid #d8e2ea;margin-top:9px}table{width:100%;border-collapse:collapse;margin-top:0}th,td{border:1px solid #d8e2ea;padding:5px 7px;text-align:left}th:last-child,td:last-child{text-align:right;width:22%}.empty{border:1px solid #d8e2ea;border-top:0;padding:7px;margin:0;color:#667}.general{margin-top:14px;border-top:2px solid #0f4c81;padding-top:9px;display:flex;justify-content:space-between;font-size:16px;font-weight:700}.footer{text-align:center;margin-top:16px;color:#667;font-size:10px}</style></head><body><div class="school">PORTAIL SCOLAIRE HAÏTI</div><h1>${ht?'Bilten final':'Bulletin final'} — ${typeLabel}</h1><div class="student"><div><strong>${ht?'Elèv':'Élève'}:</strong> ${escapeHtml(student?.name||'—')}</div><div><strong>${ht?'Ane akademik':'Année scolaire'}:</strong> ${escapeHtml(student?.year||'—')}</div><div><strong>${ht?'Klas':'Classe'}:</strong> ${escapeHtml(student?.level||'—')}</div><div><strong>${ht?'Seksyon':'Section'}:</strong> ${escapeHtml(student?.section||'—')}</div></div>${sections}<div class="general"><span>${ht?'Mwayèn jeneral':'Moyenne générale'}</span><span>${generalAverage===null?'—':generalAverage+'%'}</span></div><div class="footer">${ht?'Dokiman pwodwi pa Portail Scolaire Haïti':'Document généré par Portail Scolaire Haïti'}</div></body></html>`
+  const title=ht?'Relve nòt mwen':'Mon relevé de notes'
+  return `<!doctype html><html><head><meta charset="utf-8"><title>${title}</title><style>@page{size:A4;margin:12mm}body{font-family:Arial,sans-serif;color:#182433;margin:0;font-size:12px}h1{text-align:center;color:#0f4c81;margin:0 0 4px;font-size:22px}.school{text-align:center;font-weight:700;margin-bottom:14px}.student{border:1px solid #cfd9e3;padding:9px 12px;margin-bottom:12px;display:grid;grid-template-columns:1fr 1fr;gap:5px 18px}.section-title{display:flex;justify-content:space-between;background:#eef4f8;padding:7px 9px;border:1px solid #d8e2ea;margin-top:9px}table{width:100%;border-collapse:collapse;margin-top:0}th,td{border:1px solid #d8e2ea;padding:5px 7px;text-align:left}th:last-child,td:last-child{text-align:right;width:22%}.empty{border:1px solid #d8e2ea;border-top:0;padding:7px;margin:0;color:#667}.general{margin-top:14px;border-top:2px solid #0f4c81;padding-top:9px;display:flex;justify-content:space-between;font-size:16px;font-weight:700}.footer{text-align:center;margin-top:16px;color:#667;font-size:10px}</style></head><body><div class="school">PORTAIL SCOLAIRE HAÏTI</div><h1>${title} — ${typeLabel}</h1><div class="student"><div><strong>${ht?'Elèv':'Élève'}:</strong> ${escapeHtml(student?.name||'—')}</div><div><strong>${ht?'Ane akademik':'Année scolaire'}:</strong> ${escapeHtml(student?.year||'—')}</div><div><strong>${ht?'Klas':'Classe'}:</strong> ${escapeHtml(student?.level||'—')}</div><div><strong>${ht?'Seksyon':'Section'}:</strong> ${escapeHtml(student?.section||'—')}</div></div>${sections}<div class="general"><span>${ht?'Mwayèn jeneral':'Moyenne générale'}</span><span>${generalAverage===null?'—':generalAverage+'%'}</span></div><div class="footer">${ht?'Dokiman pwodwi pa Portail Scolaire Haïti':'Document généré par Portail Scolaire Haïti'}</div></body></html>`
  }
 
  const downloadWord=()=>{
@@ -138,7 +149,7 @@ export default function StudentTrimesterSummary(){
   const a=document.createElement('a')
   const safeName=(student?.name||'eleve').replace(/[^a-zA-Z0-9À-ÿ_-]+/g,'-')
   a.href=url
-  a.download=`Bilten-final-${safeName}-${finalType==='trimester'?'trimes':'kontwol'}.doc`
+  a.download=`Releve-not-${safeName}-${finalType==='trimester'?'trimes':'kontwol'}.doc`
   document.body.appendChild(a)
   a.click()
   a.remove()
@@ -187,9 +198,9 @@ export default function StudentTrimesterSummary(){
  )
 
  const finalReport=finalTarget?createPortal(<>
-  <button className="menuBtn" type="button" onClick={()=>setShowFinal(v=>!v)}>📑 {ht?'Bilten final':'Bulletin final'}</button>
+  <button className="menuBtn" type="button" onClick={()=>setShowFinal(v=>!v)}>📑 {ht?'Relve nòt mwen':'Mon relevé de notes'}</button>
   {showFinal&&<div className="card" style={{marginTop:12,gridColumn:'1 / -1'}}>
-   <h2>{ht?'Bilten final':'Bulletin final'}</h2>
+   <h2>{ht?'Relve nòt mwen':'Mon relevé de notes'}</h2>
    <div style={{marginBottom:14}}>
     <label>{ht?'Kalite':'Type'}</label>
     <select value={finalType} onChange={e=>setFinalType(e.target.value as AssessmentType)}>
