@@ -7,6 +7,7 @@ import TeacherAccessPanel from './TeacherAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
 import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
+import RecordsPanel from './RecordsPanel'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -66,6 +67,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentAccessPanel />
       <TeacherAccessPanel />
       <StudentTrimesterSummary />
+      <RecordsPanel />
       <TeacherAssessmentSelector />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
