@@ -12,7 +12,7 @@ type Credential={name:string;accessId:string;password:string}|null
 export default function StudentAccessPanel(){
  const [user,setUser]=useState<User|null>(null)
  const [role,setRole]=useState('')
- const [lang,setLang]=useState<'ht'|'fr'>('ht')
+ const [lang,setLang]=useState<'ht'|'fr'>('fr')
  const [students,setStudents]=useState<Student[]>([])
  const [accounts,setAccounts]=useState<StudentAccount[]>([])
  const [credential,setCredential]=useState<Credential>(null)
@@ -42,13 +42,11 @@ export default function StudentAccessPanel(){
  },[])
 
  useEffect(()=>{
-  const sync=(e:Event)=>{
-   const b=(e.target as HTMLElement|null)?.closest?.('.langChoice') as HTMLButtonElement|null
-   if(!b)return
-   setLang(b.textContent?.includes('Français')?'fr':'ht')
-  }
-  document.addEventListener('click',sync,true)
-  return()=>document.removeEventListener('click',sync,true)
+  const selector=document.querySelector('[data-global-language-menu]') as HTMLSelectElement|null
+  const sync=()=>setLang(selector?.value==='ht'?'ht':'fr')
+  sync()
+  selector?.addEventListener('change',sync)
+  return()=>selector?.removeEventListener('change',sync)
  },[])
 
  const createAccess=async(fd:FormData)=>{
