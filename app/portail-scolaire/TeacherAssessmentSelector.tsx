@@ -45,15 +45,22 @@ export default function TeacherAssessmentSelector(){
  },[])
 
  useEffect(()=>{
-  const sync=()=>{
-   const form=target?.closest('form') as HTMLFormElement|null
-   const termSelect=form?.querySelector('select[name="term"]') as HTMLSelectElement|null
-   if(!termSelect)return
-   termSelect.value=assessmentType==='control'
+  const form=target?.closest('form') as HTMLFormElement|null
+  const termSelect=form?.querySelector('select[name="term"]') as HTMLSelectElement|null
+  if(!termSelect)return
+
+  const value=assessmentType==='control'
     ? `Kontwòl ${assessmentNumber}`
     : assessmentNumber===1?'1er trimestre':`${assessmentNumber}e trimestre`
+
+  let option=Array.from(termSelect.options).find(o=>o.value===value)
+  if(!option){
+    option=document.createElement('option')
+    option.value=value
+    option.textContent=value
+    termSelect.appendChild(option)
   }
-  sync()
+  termSelect.value=value
  },[target,assessmentType,assessmentNumber])
 
  if(!target)return null
