@@ -24,9 +24,8 @@ export default function LanguageMenuSelector(){
    if(!wrap){
     wrap=document.createElement('div')
     wrap.setAttribute('data-global-language-menu','true')
-    wrap.style.position='sticky'
-    wrap.style.top='calc(env(safe-area-inset-top, 0px) + 8px)'
-    wrap.style.zIndex='1000'
+    wrap.style.position='relative'
+    wrap.style.zIndex='1'
     wrap.style.width='min(170px, calc(100vw - 32px))'
     wrap.style.margin='10px 16px 18px auto'
     wrap.style.padding='5px'
