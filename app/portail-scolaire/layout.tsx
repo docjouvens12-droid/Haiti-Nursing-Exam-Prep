@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
-import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
 import StudentWeightedBulletin from './StudentWeightedBulletin'
@@ -116,7 +115,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       `}</style>
       {children}
       <SecretaryPanel />
-      <SecretaryClassNavigator />
       <StudentAccessPanel />
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
