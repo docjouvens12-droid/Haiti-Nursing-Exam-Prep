@@ -7,11 +7,28 @@ import {createClient} from '@supabase/supabase-js'
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 
 type Grade={score:number;term:string}
+type AssessmentType='trimester'|'control'
+
+function matchesSelection(term:string,type:AssessmentType,number:number){
+ const value=term.trim().toLowerCase()
+ if(type==='trimester'){
+  const legacy=[
+   ['1er trimestre','1e trimestre','trimestre 1','trimès 1'],
+   ['2e trimestre','trimestre 2','trimès 2'],
+   ['3e trimestre','trimestre 3','trimès 3'],
+   ['4e trimestre','trimestre 4','trimès 4']
+  ][number-1]||[]
+  return legacy.some(x=>value===x)
+ }
+ const controlTerms=[`contrôle ${number}`,`controle ${number}`,`control ${number}`,`kontwòl ${number}`,`kontwol ${number}`]
+ return controlTerms.some(x=>value===x)
+}
 
 export default function StudentTrimesterSummary(){
  const [target,setTarget]=useState<HTMLElement|null>(null)
  const [lang,setLang]=useState<'ht'|'fr'>('ht')
- const [term,setTerm]=useState('1er trimestre')
+ const [assessmentType,setAssessmentType]=useState<AssessmentType>('trimester')
+ const [assessmentNumber,setAssessmentNumber]=useState(1)
  const [grades,setGrades]=useState<Grade[]>([])
 
  useEffect(()=>{
@@ -54,25 +71,40 @@ export default function StudentTrimesterSummary(){
   return()=>observer.disconnect()
  },[])
 
- const termAverage=useMemo(()=>{
-  const rows=grades.filter(g=>g.term===term)
+ const selectedAverage=useMemo(()=>{
+  const rows=grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))
   return rows.length?Math.round(rows.reduce((a,g)=>a+g.score,0)/rows.length):null
- },[grades,term])
+ },[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>grades.length?Math.round(grades.reduce((a,g)=>a+g.score,0)/grades.length):null,[grades])
 
  if(!target)return null
  const ht=lang==='ht'
- const terms=['1er trimestre','2e trimestre','3e trimestre']
+ const selectedLabel=assessmentType==='trimester'
+  ? `${ht?'Trimès':'Trimestre'} ${assessmentNumber}`
+  : `${ht?'Kontwòl':'Contrôle'} ${assessmentNumber}`
+
  return createPortal(
   <div style={{marginBottom:14}}>
    <div style={{border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#f8fafc'}}>
-    <div style={{fontWeight:800,marginBottom:10}}>{ht?'Mwayèn pa trimès':'Moyenne par trimestre'}</div>
-    <div style={{display:'grid',gridTemplateColumns:'repeat(3,1fr)',gap:8,marginBottom:12}}>
-     {terms.map((t,i)=><button key={t} type="button" onClick={()=>setTerm(t)} style={{border:'1px solid #cbd8e6',borderRadius:10,padding:'10px 6px',fontWeight:800,background:term===t?'#0f4c81':'#fff',color:term===t?'#fff':'#14213d',font:'inherit'}}>{i+1}{i===0?'er':'e'} {ht?'trimès':'trim.'}</button>)}
+    <div style={{fontWeight:800,marginBottom:10}}>{ht?'Chwazi rezilta pou wè':'Choisir le résultat à afficher'}</div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
+     <div>
+      <label>{ht?'Kalite':'Type'}</label>
+      <select value={assessmentType} onChange={e=>setAssessmentType(e.target.value as AssessmentType)}>
+       <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
+       <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
+      </select>
+     </div>
+     <div>
+      <label>{ht?'Nimewo':'Numéro'}</label>
+      <select value={assessmentNumber} onChange={e=>setAssessmentNumber(Number(e.target.value))}>
+       {[1,2,3,4].map(n=><option key={n} value={n}>{n}</option>)}
+      </select>
+     </div>
     </div>
-    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
-     <span style={{fontWeight:700}}>{term}</span>
-     <strong style={{fontSize:24,color:'#0f4c81'}}>{termAverage===null?'—':termAverage+'%'}</strong>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,borderTop:'1px solid #dde6ef',paddingTop:12}}>
+     <span style={{fontWeight:700}}>{selectedLabel}</span>
+     <strong style={{fontSize:24,color:'#0f4c81'}}>{selectedAverage===null?'—':selectedAverage+'%'}</strong>
     </div>
    </div>
    <div style={{marginTop:10,border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
