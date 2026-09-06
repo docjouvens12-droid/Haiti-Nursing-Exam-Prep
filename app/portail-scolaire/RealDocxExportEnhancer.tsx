@@ -8,6 +8,8 @@ const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publi
 
 function clean(v:string){return (v||'').replace(/\s+/g,' ').trim()}
 function filenameSafe(v:string){return (v||'eleve').replace(/[^a-zA-Z0-9À-ÿ_-]+/g,'-')}
+function scoreOf(v:string){const n=Number(String(v||'').replace('%','').replace(',','.').trim());return Number.isFinite(n)?n:null}
+function fmt(n:number){return Number.isInteger(n)?`${n}%`:`${n.toFixed(1)}%`}
 
 export default function RealDocxExportEnhancer(){
  useEffect(()=>{
@@ -39,8 +41,19 @@ export default function RealDocxExportEnhancer(){
    const year=findInfo(['Ane akademik','Année scolaire'])
    const level=findInfo(['Klas / Nivo','Classe / Niveau'])
    const section=findInfo(['Seksyon','Section'])
-   const idText=Array.from(card.querySelectorAll('*')).map(x=>clean(x.textContent||'')).find(x=>/^ID (Elèv|Élève):/i.test(x))||''
-   const studentId=idText.split(':').slice(1).join(':').trim()||'—'
+
+   let studentId='—'
+   const visibleId=Array.from(card.querySelectorAll('*')).map(x=>clean(x.textContent||'')).find(x=>/^ID (Elèv|Élève):/i.test(x))||''
+   const parsedId=visibleId.split(':').slice(1).join(':').trim()
+   if(parsedId&&parsedId!=='—')studentId=parsedId
+   if(studentId==='—'&&student!=='—'){
+    let q=supabase.from('school_students').select('id').eq('name',student)
+    if(year!=='—')q=q.eq('academic_year',year)
+    if(level!=='—')q=q.eq('level',level)
+    if(section!=='—')q=q.eq('section',section)
+    const {data:s}=await q.limit(1).maybeSingle()
+    if(s?.id)studentId=s.id
+   }
 
    const info:Array<[string,string]>=[
     [ht?'Elèv':'Élève',student],
@@ -53,7 +66,7 @@ export default function RealDocxExportEnhancer(){
    let headers:string[]=[]
    let rows:string[][]=[]
    let docTitle=''
-   let generalLabel=ht?'Mwayèn jeneral pondérée':'Moyenne générale pondérée'
+   const generalLabel=ht?'Mwayèn jeneral pondérée':'Moyenne générale pondérée'
    let generalValue='—'
 
    if(isBulletin){
@@ -62,6 +75,13 @@ export default function RealDocxExportEnhancer(){
     rows=table?Array.from(table.querySelectorAll('tbody tr')).map(tr=>Array.from(tr.querySelectorAll('td')).map(td=>clean(td.textContent||''))):[]
     const trimester=Array.from(card.querySelectorAll('select')).find(s=>['1','2','3'].includes((s as HTMLSelectElement).value)) as HTMLSelectElement|undefined
     docTitle=`${ht?'BILTEN — TRIMÈS':'BULLETIN — TRIMESTRE'} ${trimester?.value||''}`.trim()
+    let points=0,totalCoeff=0
+    for(const r of rows){
+     const coeff=Number(String(r[1]||'1').replace(',','.'))||1
+     const avg=scoreOf(r[2]||'')
+     if(avg!==null){points+=avg*coeff;totalCoeff+=coeff}
+    }
+    if(totalCoeff)generalValue=fmt(points/totalCoeff)
    }else{
     headers=[ht?'Peryòd':'Période',ht?'Matiyè':'Matière',ht?'Nòt':'Note']
     const periodBlocks=Array.from(card.querySelectorAll('div')).filter(d=>{
@@ -81,14 +101,22 @@ export default function RealDocxExportEnhancer(){
     const typeSelect=Array.from(card.querySelectorAll('select')).find(s=>['trimester','control'].includes((s as HTMLSelectElement).value)) as HTMLSelectElement|undefined
     const type=typeSelect?.value==='control'?(ht?'KONTWÒL':'CONTRÔLE'):(ht?'TRIMÈS':'TRIMESTRE')
     docTitle=`${ht?'RELVE NÒT':'RELEVÉ DE NOTES'} — ${type}`
-   }
 
-   const strongs=Array.from(card.querySelectorAll('strong')).map(s=>clean(s.textContent||''))
-   const weightedIndex=strongs.findIndex(x=>x===generalLabel)
-   if(weightedIndex>=0)generalValue=strongs[weightedIndex+1]||'—'
-   if(generalValue==='—'){
-    const avg=strongs.find(x=>/^\d+(\.\d+)?%$/.test(x))
-    if(avg)generalValue=avg
+    const {data:subjects}=await supabase.from('school_subjects').select('name,coefficient')
+    const coeffMap=new Map((subjects||[]).map(s=>[clean(s.name).toLowerCase(),Math.max(.01,Number(s.coefficient)||1)]))
+    const grouped=new Map<string,number[]>()
+    for(const r of rows){
+     const subject=r[1]||'';const score=scoreOf(r[2]||'')
+     if(!subject||score===null)continue
+     const list=grouped.get(subject)||[];list.push(score);grouped.set(subject,list)
+    }
+    let points=0,totalCoeff=0
+    grouped.forEach((scores,subject)=>{
+     const avg=scores.reduce((a,b)=>a+b,0)/scores.length
+     const coeff=coeffMap.get(clean(subject).toLowerCase())||1
+     points+=avg*coeff;totalCoeff+=coeff
+    })
+    if(totalCoeff)generalValue=fmt(points/totalCoeff)
    }
 
    await downloadAcademicDocx({
