@@ -42,11 +42,11 @@ export default function StudentAccessPanel(){
  },[])
 
  useEffect(()=>{
-  const current=document.querySelector('[data-global-language-menu]') as HTMLSelectElement|null
+  const current=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null
   if(current)setLang(current.value==='ht'?'ht':'fr')
   const sync=(e:Event)=>{
    const target=e.target as HTMLSelectElement|null
-   if(!target?.matches?.('[data-global-language-menu]'))return
+   if(!target?.closest?.('[data-global-language-menu]'))return
    setLang(target.value==='ht'?'ht':'fr')
   }
   document.addEventListener('change',sync,true)
