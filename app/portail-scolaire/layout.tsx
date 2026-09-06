@@ -10,11 +10,9 @@ import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
-import RecordsWeightedAverageEnhancer from './RecordsWeightedAverageEnhancer'
 import StudentIdentityRankEnhancer from './StudentIdentityRankEnhancer'
 import FinalDecisionPanel from './FinalDecisionPanel'
 import AcademicYearEditor from './AcademicYearEditor'
-import InlineAcademicYearEdit from './InlineAcademicYearEdit'
 import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
 import RealDocxExportEnhancer from './RealDocxExportEnhancer'
 import RecordValidationFields from './RecordValidationFields'
@@ -84,11 +82,9 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
       <RecordsPanel />
-      <RecordsWeightedAverageEnhancer />
       <StudentIdentityRankEnhancer />
       <FinalDecisionPanel />
       <AcademicYearEditor />
-      <InlineAcademicYearEdit />
       <TeacherAssessmentSelector />
       <DirectionPublishSelector />
       <SchoolIdentitySettings />
