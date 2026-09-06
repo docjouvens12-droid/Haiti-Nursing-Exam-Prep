@@ -57,10 +57,16 @@ export default function GlobalAcademicYearSelector(){
    const years=[...new Set((data||[]).map((x:any)=>x.academic_year).filter(Boolean))] as string[]
    setSavedYears(years)
    const stored=window.localStorage.getItem(STORAGE_KEY)||''
+   const sessionYear=String(user.user_metadata?.selected_academic_year||'')
    const current=academicYears()[2]
-   const initial=stored||years.sort().reverse()[0]||current
+   const initial=stored||sessionYear||years.sort().reverse()[0]||current
    setYear(initial)
+   window.localStorage.setItem(STORAGE_KEY,initial)
    window.dispatchEvent(new CustomEvent('school-academic-year-change',{detail:{year:initial}}))
+   if(sessionYear!==initial){
+    const {error}=await supabase.auth.updateUser({data:{selected_academic_year:initial}})
+    if(!error&&active)window.location.reload()
+   }
   }
   load()
   const {data:listener}=supabase.auth.onAuthStateChange(()=>setTimeout(load,0))
@@ -76,10 +82,12 @@ export default function GlobalAcademicYearSelector(){
  },[])
 
  const years=useMemo(()=>[...new Set([...academicYears(),...savedYears,year].filter(Boolean))].sort().reverse(),[savedYears,year])
- const change=(value:string)=>{
+ const change=async(value:string)=>{
   setYear(value)
   window.localStorage.setItem(STORAGE_KEY,value)
   window.dispatchEvent(new CustomEvent('school-academic-year-change',{detail:{year:value}}))
+  const {error}=await supabase.auth.updateUser({data:{selected_academic_year:value}})
+  if(!error)window.location.reload()
  }
 
  if(!host||!visible)return null
