@@ -12,6 +12,7 @@ import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import InlineAcademicYearEdit from './InlineAcademicYearEdit'
 import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
+import RecordValidationFields from './RecordValidationFields'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -77,6 +78,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <TeacherAssessmentSelector />
       <DirectionPublishSelector />
       <OfficialRecordPrintEnhancer />
+      <RecordValidationFields />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
     </>
