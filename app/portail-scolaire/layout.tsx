@@ -9,6 +9,7 @@ import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
+import RecordsWeightedAverageEnhancer from './RecordsWeightedAverageEnhancer'
 import AcademicYearEditor from './AcademicYearEditor'
 import InlineAcademicYearEdit from './InlineAcademicYearEdit'
 import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
@@ -78,6 +79,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <TeacherAccessPanel />
       <StudentTrimesterSummary />
       <RecordsPanel />
+      <RecordsWeightedAverageEnhancer />
       <AcademicYearEditor />
       <InlineAcademicYearEdit />
       <TeacherAssessmentSelector />
