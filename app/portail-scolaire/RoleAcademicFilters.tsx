@@ -21,6 +21,16 @@ function normalizeLevel(value:string){
  return value
 }
 
+function nearbyAcademicYears(){
+ const now=new Date()
+ const y=now.getFullYear()
+ const start=now.getMonth()>=6?y:y-1
+ return Array.from({length:5},(_,i)=>{
+  const a=start+2-i
+  return `${a}–${a+1}`
+ })
+}
+
 export default function RoleAcademicFilters(){
  const [host,setHost]=useState<HTMLElement|null>(null)
  const [role,setRole]=useState<Role>('')
@@ -45,7 +55,11 @@ export default function RoleAcademicFilters(){
   if(!sr.error){
    const mapped=(sr.data||[]).map((x:any)=>({id:x.id,name:x.name,level:normalizeLevel(x.level||''),section:x.section||'',year:x.academic_year||''}))
    setStudents(mapped)
-   if(!year){const ys=[...new Set(mapped.map(x=>x.year).filter(Boolean))].sort().reverse();setYear(ys[0]||'2026–2027')}
+   if(!year){
+    const current=nearbyAcademicYears()[2]
+    const ys=[...new Set(mapped.map(x=>x.year).filter(Boolean))]
+    setYear(ys.includes(current)?current:(ys.sort().reverse()[0]||current))
+   }
   }
   if(r==='teacher'&&pr.data?.teacher_id){
    const tr=await supabase.from('school_teachers').select('id,name,classes,section').eq('id',pr.data.teacher_id).maybeSingle()
@@ -73,7 +87,10 @@ export default function RoleAcademicFilters(){
   return()=>{observer.disconnect();document.removeEventListener('change',onLang,true)}
  },[])
 
- const years=useMemo(()=>[...new Set(students.map(s=>s.year).filter(Boolean))].sort().reverse(),[students])
+ const years=useMemo(()=>{
+  const saved=students.map(s=>s.year).filter(Boolean)
+  return [...new Set([...nearbyAcademicYears(),...saved])].sort().reverse()
+ },[students])
  const levels=useMemo(()=>[...SCHOOL_LEVELS,...[...new Set(students.map(s=>normalizeLevel(s.level)).filter(Boolean))].filter(x=>!SCHOOL_LEVELS.includes(x))],[students])
  const sections=useMemo(()=>[...new Set([...SECTION_OPTIONS,...students.filter(s=>!level||s.level===level).map(s=>s.section).filter(Boolean)])].sort(),[students,level])
  const filtered=useMemo(()=>students.filter(s=>
@@ -91,6 +108,7 @@ export default function RoleAcademicFilters(){
    .rafGrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
    .rafGrid label{display:block;font-size:12px;font-weight:800;color:#4b5563;margin-bottom:5px}
    .rafGrid select,.roleAcademicFilters input{width:100%;box-sizing:border-box}
+   .rafGrid input[readonly]{background:#f5f7fa;color:#4b5563}
    .rafBadges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
    .rafBadge{background:#eef6ff;border:1px solid #cfe4fa;border-radius:999px;padding:6px 10px;color:#0f4c81;font-size:12px;font-weight:800}
    .rafList{margin-top:10px;max-height:220px;overflow:auto;border:1px solid #e5e7eb;border-radius:12px}
@@ -99,9 +117,9 @@ export default function RoleAcademicFilters(){
   `}</style>
   <h3 style={{margin:'0 0 8px'}}>{teacherMode?(ht?'Elèv klas mwen pa ane akademik':'Élèves de ma classe par année académique'):(ht?'Elèv pa ane, klas ak seksyon':'Élèves par année, classe et section')}</h3>
   <div className="rafGrid">
-   <div><label>{ht?'Ane akademik':'Année académique'}</label><select value={year} onChange={e=>setYear(e.target.value)}>{years.map(y=><option key={y}>{y}</option>)}</select></div>
-   <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x}>{x}</option>)}</select>}</div>
-   <div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x}>{x}</option>)}</select>}</div>
+   <div><label>{ht?'Ane akademik':'Année académique'}</label><select value={year} onChange={e=>setYear(e.target.value)}>{years.map(y=><option key={y} value={y}>{y}</option>)}</select></div>
+   <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label>{teacherMode?<input value={teacher?.classes||level} readOnly aria-readonly="true"/>:<select value={level} onChange={e=>{setLevel(e.target.value);setSection('')}}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(x=><option key={x}>{x}</option>)}</select>}</div>
+   <div><label>{ht?'Seksyon':'Section'}</label>{teacherMode?<input value={teacher?.section||section} readOnly aria-readonly="true"/>:<select value={section} onChange={e=>setSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(x=><option key={x}>{x}</option>)}</select>}</div>
   </div>
   {!teacherMode&&<input style={{marginTop:10}} value={search} onChange={e=>setSearch(e.target.value)} placeholder={ht?'Chèche pa non oswa ID elèv':'Rechercher par nom ou identifiant'}/>} 
   <div className="rafBadges"><span className="rafBadge">{year||'—'}</span>{level&&<span className="rafBadge">{level}</span>}{section&&<span className="rafBadge">{ht?'Seksyon':'Section'} {section}</span>}<span className="rafBadge">{filtered.length} {ht?'elèv':'élève(s)'}</span></div>
