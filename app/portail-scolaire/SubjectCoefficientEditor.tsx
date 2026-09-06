@@ -39,7 +39,10 @@ export default function SubjectCoefficientEditor(){
    if(!mount){
     mount=document.createElement('div')
     mount.setAttribute('data-subject-coefficient-mount','true')
-    mount.style.marginTop='18px'
+    mount.style.marginTop='34px'
+    mount.style.paddingTop='26px'
+    mount.style.paddingBottom='78px'
+    mount.style.borderTop='2px solid #dde6ef'
     card.appendChild(mount)
    }
    setTarget(mount)
@@ -66,22 +69,22 @@ export default function SubjectCoefficientEditor(){
  if(!target)return null
  const fr=lang==='fr'
  return createPortal(
-  <div style={{borderTop:'1px solid #dde6ef',paddingTop:16}}>
+  <div>
    <div style={{fontWeight:900,fontSize:18,marginBottom:5}}>{fr?'Coefficients des matières':'Koefisyan matyè yo'}</div>
-   <div style={{color:'#617080',fontSize:13,marginBottom:12}}>{fr?'Le coefficient 1 conserve le même poids pour toutes les matières.':'Koefisyan 1 bay tout matyè menm pwa.'}</div>
-   <div style={{display:'grid',gap:9}}>
+   <div style={{color:'#617080',fontSize:13,marginBottom:16}}>{fr?'Le coefficient 1 conserve le même poids pour toutes les matières.':'Koefisyan 1 bay tout matyè menm pwa.'}</div>
+   <div style={{display:'grid',gap:12}}>
     {subjects.map(s=><CoefficientRow key={s.id} subject={s} saving={saving===s.id} fr={fr} onSave={save}/>) }
    </div>
-   {message&&<div style={{marginTop:10,fontWeight:700,color:'#0f4c81'}}>{message}</div>}
+   {message&&<div style={{marginTop:12,fontWeight:700,color:'#0f4c81'}}>{message}</div>}
   </div>,target)
 }
 
 function CoefficientRow({subject,saving,fr,onSave}:{subject:Subject;saving:boolean;fr:boolean;onSave:(s:Subject,v:number)=>void}){
  const [value,setValue]=useState(String(subject.coefficient))
  useEffect(()=>setValue(String(subject.coefficient)),[subject.coefficient])
- return <div style={{display:'grid',gridTemplateColumns:'1fr 84px 92px',gap:8,alignItems:'center'}}>
-  <div style={{fontWeight:700}}>{subject.name}</div>
-  <input aria-label={`${fr?'Coefficient':'Koefisyan'} ${subject.name}`} type="number" min="0.1" step="0.1" value={value} onChange={e=>setValue(e.target.value)} style={{width:'100%'}} />
-  <button type="button" className="btn secondary" disabled={saving} onClick={()=>onSave(subject,Number(value))}>{saving?'…':fr?'Enregistrer':'Anrejistre'}</button>
+ return <div style={{display:'grid',gridTemplateColumns:'minmax(0,1fr) 72px 96px',gap:8,alignItems:'center'}}>
+  <div style={{fontWeight:700,minWidth:0,overflowWrap:'anywhere'}}>{subject.name}</div>
+  <input aria-label={`${fr?'Coefficient':'Koefisyan'} ${subject.name}`} type="number" min="0.1" step="0.1" value={value} onChange={e=>setValue(e.target.value)} style={{width:'100%',minWidth:0}} />
+  <button type="button" className="btn secondary" disabled={saving} onClick={()=>onSave(subject,Number(value))} style={{width:'100%',paddingLeft:8,paddingRight:8}}>{saving?'…':fr?'Enregistrer':'Anrejistre'}</button>
  </div>
 }
