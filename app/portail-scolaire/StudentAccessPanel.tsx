@@ -18,6 +18,7 @@ export default function StudentAccessPanel(){
  const [credential,setCredential]=useState<Credential>(null)
  const [error,setError]=useState('')
  const [busyStudent,setBusyStudent]=useState('')
+ const [accessOpen,setAccessOpen]=useState(false)
  const ht=lang==='ht'
 
  const load=async(u:User)=>{
@@ -53,6 +54,14 @@ export default function StudentAccessPanel(){
   return()=>document.removeEventListener('change',sync,true)
  },[])
 
+ useEffect(()=>{
+  const sync=()=>setAccessOpen(Boolean(document.querySelector('select[name="teacher_id"]')))
+  sync()
+  const observer=new MutationObserver(sync)
+  observer.observe(document.body,{childList:true,subtree:true})
+  return()=>observer.disconnect()
+ },[])
+
  const createAccess=async(fd:FormData)=>{
   if(role!=='direction')return
   setError('');setCredential(null)
@@ -74,7 +83,7 @@ export default function StudentAccessPanel(){
   if(user)await load(user)
  }
 
- if(role!=='direction')return null
+ if(role!=='direction'||!accessOpen)return null
  const usedStudentIds=accounts.map(a=>a.studentId)
  const available=students.filter(s=>!usedStudentIds.includes(s.id))
  return <section className="card" style={{maxWidth:1000,margin:'14px auto'}}>
