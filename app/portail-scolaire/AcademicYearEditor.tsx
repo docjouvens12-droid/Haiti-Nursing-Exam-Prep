@@ -10,7 +10,7 @@ type Student={id:string;name:string;level:string;section:string;year:string}
 
 export default function AcademicYearEditor(){
  const [target,setTarget]=useState<HTMLElement|null>(null)
- const [lang,setLang]=useState<'ht'|'fr'>('ht')
+ const [lang,setLang]=useState<'ht'|'fr'>('fr')
  const [open,setOpen]=useState(false)
  const [students,setStudents]=useState<Student[]>([])
  const [studentId,setStudentId]=useState('')
@@ -35,19 +35,21 @@ export default function AcademicYearEditor(){
  },[])
 
  useEffect(()=>{
+  const current=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null
+  if(current)setLang(current.value==='ht'?'ht':'fr')
   const onLang=(e:Event)=>{
-   const b=(e.target as HTMLElement|null)?.closest?.('.langChoice') as HTMLButtonElement|null
-   if(b)setLang((b.textContent||'').includes('Français')?'fr':'ht')
+   const target=e.target as HTMLSelectElement|null
+   if(!target?.closest?.('[data-global-language-menu]'))return
+   setLang(target.value==='ht'?'ht':'fr')
   }
-  document.addEventListener('click',onLang,true)
-  return()=>document.removeEventListener('click',onLang,true)
+  document.addEventListener('change',onLang,true)
+  return()=>document.removeEventListener('change',onLang,true)
  },[])
 
  useEffect(()=>{
   const attach=()=>{
    const directionHeading=Array.from(document.querySelectorAll('.ps-page h2')).find(h=>['Tablo bò pou Direksyon an','Tableau de bord de la Direction'].includes((h.textContent||'').trim()))
    if(!directionHeading){setTarget(null);return}
-   setLang((directionHeading.textContent||'').includes('Tableau')?'fr':'ht')
 
    const actionHeading=Array.from(document.querySelectorAll('.ps-page h3')).find(h=>['Aksyon rapid','Actions rapides'].includes((h.textContent||'').trim()))
    const actionCard=actionHeading?.closest('.card') as HTMLElement|null
