@@ -10,6 +10,15 @@ type Student={id:string;name:string;level:string;section:string;year:string}
 type SchoolClass={id:number;name:string;section:string}
 
 const SECTION_OPTIONS=['A','B','C','D']
+const SCHOOL_LEVELS=[
+ '7e Année Fondamentale',
+ '8e Année Fondamentale',
+ '9e Année Fondamentale',
+ 'NS I',
+ 'NS II',
+ 'NS III',
+ 'NS IV'
+]
 
 function nextAcademicYear(){
  const now=new Date()
@@ -81,7 +90,10 @@ export default function DirectionStudentManager(){
   if(!vals.includes(nextAcademicYear()))vals.push(nextAcademicYear())
   return vals.sort().reverse()
  },[students,year])
- const levels=useMemo(()=>[...new Set([...classes.map(c=>c.name),...students.filter(s=>!year||s.year===year).map(s=>s.level)].filter(Boolean))].sort(),[classes,students,year])
+ const levels=useMemo(()=>{
+  const extras=[...classes.map(c=>c.name),...students.filter(s=>!year||s.year===year).map(s=>s.level)].filter(Boolean)
+  return [...SCHOOL_LEVELS,...[...new Set(extras)].filter(x=>!SCHOOL_LEVELS.includes(x))]
+ },[classes,students,year])
  const sections=useMemo(()=>[...new Set([...SECTION_OPTIONS,...classes.filter(c=>!level||c.name===level).map(c=>c.section),...students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)).map(s=>s.section)].filter(Boolean))].sort(),[classes,students,year,level])
  const filtered=useMemo(()=>students.filter(s=>(!year||s.year===year)&&(!level||s.level===level)&&(!section||s.section===section)&&(!search||`${s.id} ${s.name}`.toLowerCase().includes(search.toLowerCase()))),[students,year,level,section,search])
 
