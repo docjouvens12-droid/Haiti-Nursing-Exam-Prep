@@ -114,7 +114,14 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           touch-action:manipulation;
         }
         body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{cursor:pointer}
-        body:has(.secretary-dashboard) .ps-page .topActions{pointer-events:auto!important}
+        body:has(.secretary-dashboard) .ps-page .topActions,
+        body:has(.secretary-dashboard) .ps-page [data-global-academic-year-mount="true"],
+        body:has(.secretary-dashboard) .ps-page [data-global-academic-year="true"],
+        body:has(.secretary-dashboard) .ps-page [data-global-academic-year="true"] select{
+          pointer-events:auto!important;
+          position:relative!important;
+          z-index:10001!important;
+        }
 
         body:has(.ps-page) .native-student-access-mount{display:none!important}
         body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
