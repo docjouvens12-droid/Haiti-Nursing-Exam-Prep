@@ -17,29 +17,41 @@ export default function LanguageMenuSelector(){
 
    htButton.style.display='none'
    frButton.style.display='none'
+   panel.style.display='none'
 
-   let wrap=panel.querySelector('[data-language-menu]') as HTMLElement|null
+   let wrap=document.querySelector('[data-global-language-menu]') as HTMLElement|null
    if(!wrap){
     wrap=document.createElement('div')
-    wrap.setAttribute('data-language-menu','true')
-    wrap.style.width='100%'
+    wrap.setAttribute('data-global-language-menu','true')
+    wrap.style.position='fixed'
+    wrap.style.top='calc(env(safe-area-inset-top, 0px) + 10px)'
+    wrap.style.left='14px'
+    wrap.style.zIndex='100000'
+    wrap.style.width='145px'
+    wrap.style.padding='6px'
+    wrap.style.borderRadius='12px'
+    wrap.style.background='rgba(255,255,255,.96)'
+    wrap.style.border='1px solid #d9e3ec'
+    wrap.style.boxShadow='0 8px 24px rgba(20,33,61,.16)'
+    wrap.style.pointerEvents='auto'
 
     const select=document.createElement('select')
     select.setAttribute('aria-label','Langue / Lang')
     select.style.width='100%'
-    select.style.padding='10px 12px'
+    select.style.padding='9px 10px'
     select.style.borderRadius='9px'
-    select.style.border='1px solid rgba(255,255,255,.6)'
+    select.style.border='1px solid #cbd8e4'
     select.style.background='#fff'
     select.style.color='#0f4c81'
     select.style.fontWeight='800'
+    select.style.fontSize='14px'
     select.innerHTML='<option value="fr">Français</option><option value="ht">Kreyòl</option>'
     select.addEventListener('change',()=>{
      if(select.value==='fr') frButton.click()
      else htButton.click()
     })
     wrap.appendChild(select)
-    panel.appendChild(wrap)
+    document.body.appendChild(wrap)
    }
 
    const select=wrap.querySelector('select') as HTMLSelectElement|null
@@ -57,7 +69,10 @@ export default function LanguageMenuSelector(){
   apply()
   const observer=new MutationObserver(()=>requestAnimationFrame(apply))
   observer.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']})
-  return()=>observer.disconnect()
+  return()=>{
+   observer.disconnect()
+   document.querySelector('[data-global-language-menu]')?.remove()
+  }
  },[])
  return null
 }
