@@ -11,6 +11,7 @@ import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import RecordsWeightedAverageEnhancer from './RecordsWeightedAverageEnhancer'
+import StudentIdentityRankEnhancer from './StudentIdentityRankEnhancer'
 import AcademicYearEditor from './AcademicYearEditor'
 import InlineAcademicYearEdit from './InlineAcademicYearEdit'
 import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
@@ -82,6 +83,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentWeightedBulletin />
       <RecordsPanel />
       <RecordsWeightedAverageEnhancer />
+      <StudentIdentityRankEnhancer />
       <AcademicYearEditor />
       <InlineAcademicYearEdit />
       <TeacherAssessmentSelector />
