@@ -6,7 +6,7 @@ import {createClient} from '@supabase/supabase-js'
 
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 
-type Grade={score:number;term:string}
+type Grade={score:number;term:string;subject:string}
 type AssessmentType='trimester'|'control'
 
 function matchesSelection(term:string,type:AssessmentType,number:number){
@@ -15,8 +15,7 @@ function matchesSelection(term:string,type:AssessmentType,number:number){
   const legacy=[
    ['1er trimestre','1e trimestre','trimestre 1','trimès 1'],
    ['2e trimestre','trimestre 2','trimès 2'],
-   ['3e trimestre','trimestre 3','trimès 3'],
-   ['4e trimestre','trimestre 4','trimès 4']
+   ['3e trimestre','trimestre 3','trimès 3']
   ][number-1]||[]
   return legacy.some(x=>value===x)
  }
@@ -26,10 +25,6 @@ function matchesSelection(term:string,type:AssessmentType,number:number){
 
 function average(rows:Grade[]){
  return rows.length?Math.round(rows.reduce((a,g)=>a+g.score,0)/rows.length):null
-}
-
-function matchesType(term:string,type:AssessmentType){
- return [1,2,3,4].some(number=>matchesSelection(term,type,number))
 }
 
 export default function StudentTrimesterSummary(){
@@ -50,8 +45,8 @@ export default function StudentTrimesterSummary(){
    if(!user)return
    const {data:profile}=await supabase.from('school_profiles').select('role,student_id').eq('user_id',user.id).maybeSingle()
    if(cancelled||profile?.role!=='student'||!profile.student_id)return
-   const {data}=await supabase.from('school_grades').select('score,term').eq('student_id',profile.student_id).eq('status','approved').eq('published',true)
-   if(!cancelled)setGrades((data||[]).map(x=>({score:Number(x.score),term:x.term})))
+   const {data}=await supabase.from('school_grades').select('score,term,subject').eq('student_id',profile.student_id).eq('status','approved').eq('published',true)
+   if(!cancelled)setGrades((data||[]).map(x=>({score:Number(x.score),term:x.term,subject:x.subject||''})))
   }
   load()
   return()=>{cancelled=true}
@@ -100,7 +95,13 @@ export default function StudentTrimesterSummary(){
 
  const selectedAverage=useMemo(()=>average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))),[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>average(grades),[grades])
- const finalAverage=useMemo(()=>average(grades.filter(g=>matchesType(g.term,finalType))),[grades,finalType])
+ const finalGroups=useMemo(()=>{
+  const count=finalType==='trimester'?3:4
+  return Array.from({length:count},(_,i)=>i+1).map(number=>{
+   const rows=grades.filter(g=>matchesSelection(g.term,finalType,number))
+   return {number,rows,avg:average(rows)}
+  })
+ },[grades,finalType])
 
  if(!target)return null
  const ht=lang==='ht'
@@ -123,7 +124,7 @@ export default function StudentTrimesterSummary(){
      <div>
       <label>{ht?'Nimewo':'Numéro'}</label>
       <select value={assessmentNumber} onChange={e=>setAssessmentNumber(Number(e.target.value))}>
-       {[1,2,3,4].map(n=><option key={n} value={n}>{n}</option>)}
+       {(assessmentType==='trimester'?[1,2,3]:[1,2,3,4]).map(n=><option key={n} value={n}>{n}</option>)}
       </select>
      </div>
     </div>
@@ -150,10 +151,15 @@ export default function StudentTrimesterSummary(){
      <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
     </select>
    </div>
-   <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'12px 0',borderTop:'1px solid #e5edf5'}}>
-    <strong>{finalType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')}</strong>
-    <strong style={{fontSize:24,color:'#0f4c81'}}>{finalAverage===null?'—':finalAverage+'%'}</strong>
-   </div>
+
+   <div style={{display:'grid',gap:14}}>{finalGroups.map(group=><div key={`${finalType}-${group.number}`} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12,background:'#fff'}}>
+    <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginBottom:10}}>
+     <strong>{finalType==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')} {group.number}</strong>
+     <strong style={{color:'#0f4c81'}}>{group.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${group.avg}%`}</strong>
+    </div>
+    {group.rows.length===0?<div className="muted">{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>:<table><tbody>{group.rows.map((g,index)=><tr key={`${group.number}-${g.subject}-${index}`}><td>{g.subject}</td><td className="score">{g.score}%</td></tr>)}</tbody></table>}
+   </div>)}</div>
+
    <div style={{marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
     <strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong>
     <strong style={{fontSize:24,color:'#0f4c81'}}>{generalAverage===null?'—':generalAverage+'%'}</strong>
