@@ -9,6 +9,10 @@ type Role='direction'|'secretary'|'student'|''
 type Decision='pending'|'admitted'|'deferred'
 
 function clean(v:string){return (v||'').replace(/\s+/g,' ').trim()}
+function escapeHtml(v:string){
+ const map:Record<string,string>={'&':'&amp;','<':'&lt;','>':'&gt;'}
+ return (v||'').replace(/[&<>]/g,(c:string)=>map[c]||c)
+}
 function labels(ht:boolean,d:Decision){
  if(d==='admitted')return ht?'Admis':'Admis'
  if(d==='deferred')return ht?'Ajouné':'Ajourné'
@@ -59,7 +63,7 @@ export default function FinalDecisionPanel(){
    let box=card.querySelector('[data-final-decision-box]') as HTMLElement|null
    if(!box){box=document.createElement('div');box.setAttribute('data-final-decision-box','true');box.style.cssText='margin-top:14px;border:2px solid #d8e2ea;border-radius:14px;padding:14px;background:#fff';card.appendChild(box)}
    if(role==='direction'&&mode==='records'){
-    box.innerHTML=`<div style="font-weight:800;margin-bottom:10px">${ht?'Desizyon final':'Décision finale'}</div><label style="display:block;margin-bottom:6px">${ht?'Estati':'Statut'}</label><select data-final-decision-select style="width:100%;margin-bottom:10px"><option value="pending" ${decision==='pending'?'selected':''}>${ht?'An atant':'En attente'}</option><option value="admitted" ${decision==='admitted'?'selected':''}>Admis</option><option value="deferred" ${decision==='deferred'?'selected':''}>${ht?'Ajouné':'Ajourné'}</option></select><label style="display:block;margin-bottom:6px">${ht?'Nòt Direksyon (opsyonèl)':'Note de la Direction (facultatif)'}</label><textarea data-final-decision-note rows="3" style="width:100%;margin-bottom:10px">${note.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]||c))}</textarea><button type="button" class="btn" data-final-decision-save>${ht?'Anrejistre desizyon':'Enregistrer la décision'}</button><span data-final-decision-msg style="margin-left:10px"></span>`
+    box.innerHTML=`<div style="font-weight:800;margin-bottom:10px">${ht?'Desizyon final':'Décision finale'}</div><label style="display:block;margin-bottom:6px">${ht?'Estati':'Statut'}</label><select data-final-decision-select style="width:100%;margin-bottom:10px"><option value="pending" ${decision==='pending'?'selected':''}>${ht?'An atant':'En attente'}</option><option value="admitted" ${decision==='admitted'?'selected':''}>Admis</option><option value="deferred" ${decision==='deferred'?'selected':''}>${ht?'Ajouné':'Ajourné'}</option></select><label style="display:block;margin-bottom:6px">${ht?'Nòt Direksyon (opsyonèl)':'Note de la Direction (facultatif)'}</label><textarea data-final-decision-note rows="3" style="width:100%;margin-bottom:10px">${escapeHtml(note)}</textarea><button type="button" class="btn" data-final-decision-save>${ht?'Anrejistre desizyon':'Enregistrer la décision'}</button><span data-final-decision-msg style="margin-left:10px"></span>`
     const save=box.querySelector('[data-final-decision-save]') as HTMLButtonElement|null
     save?.addEventListener('click',async()=>{
      const select=box?.querySelector('[data-final-decision-select]') as HTMLSelectElement|null
@@ -71,7 +75,7 @@ export default function FinalDecisionPanel(){
      if(!error)window.dispatchEvent(new CustomEvent('school-final-decision-updated',{detail:{studentId,year}}))
     })
    }else{
-    box.innerHTML=`<div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><strong>${ht?'Desizyon final':'Décision finale'}</strong><strong style="font-size:18px;color:#0f4c81">${labels(ht,decision)}</strong></div>${note?`<div style="margin-top:8px;color:#637083">${note.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]||c))}</div>`:''}`
+    box.innerHTML=`<div style="display:flex;justify-content:space-between;gap:12px;align-items:center"><strong>${ht?'Desizyon final':'Décision finale'}</strong><strong style="font-size:18px;color:#0f4c81">${labels(ht,decision)}</strong></div>${note?`<div style="margin-top:8px;color:#637083">${escapeHtml(note)}</div>`:''}`
    }
   }
 
