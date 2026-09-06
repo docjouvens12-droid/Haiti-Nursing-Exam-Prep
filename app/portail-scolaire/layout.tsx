@@ -10,11 +10,7 @@ import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import DirectionPublishSelector from './DirectionPublishSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
-import StudentIdentityRankEnhancer from './StudentIdentityRankEnhancer'
-import FinalDecisionPanel from './FinalDecisionPanel'
 import AcademicYearEditor from './AcademicYearEditor'
-import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
-import RealDocxExportEnhancer from './RealDocxExportEnhancer'
 import RecordValidationFields from './RecordValidationFields'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SchoolRecordBranding from './SchoolRecordBranding'
@@ -103,12 +99,8 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           pointer-events:auto!important;
           touch-action:manipulation;
         }
-        body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{
-          cursor:pointer;
-        }
-        body:has(.secretary-dashboard) .ps-page .topActions{
-          pointer-events:auto!important;
-        }
+        body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{cursor:pointer}
+        body:has(.secretary-dashboard) .ps-page .topActions{pointer-events:auto!important}
 
         body:has(.ps-page) .topActions{
           position:fixed!important;
@@ -137,8 +129,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
       <RecordsPanel />
-      <StudentIdentityRankEnhancer />
-      <FinalDecisionPanel />
       <AcademicYearEditor />
       <TeacherAssessmentSelector />
       <DirectionPublishSelector />
@@ -147,8 +137,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <AllSectionsSelectorFix />
       <LanguageMenuSelector />
       <SubjectCoefficientEditor />
-      <RealDocxExportEnhancer />
-      <OfficialRecordPrintEnhancer />
       <RecordValidationFields />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
