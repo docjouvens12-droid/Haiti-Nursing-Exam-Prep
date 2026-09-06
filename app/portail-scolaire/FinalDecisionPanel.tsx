@@ -9,20 +9,12 @@ type Role='direction'|'secretary'|'student'|''
 type Decision='pending'|'admitted'|'deferred'
 
 function clean(v:string){return (v||'').replace(/\s+/g,' ').trim()}
-function escapeHtml(v:string){
- const map:Record<string,string>={'&':'&amp;','<':'&lt;','>':'&gt;'}
- return (v||'').replace(/[&<>]/g,(c:string)=>map[c]||c)
-}
-function labels(ht:boolean,d:Decision){
- if(d==='admitted')return 'Admis'
- if(d==='deferred')return ht?'Ajouné':'Ajourné'
- return ht?'An atant':'En attente'
-}
+function escapeHtml(v:string){const map:Record<string,string>={'&':'&amp;','<':'&lt;','>':'&gt;'};return (v||'').replace(/[&<>]/g,(c:string)=>map[c]||c)}
+function labels(ht:boolean,d:Decision){if(d==='admitted')return 'Admis';if(d==='deferred')return ht?'Ajouné':'Ajourné';return ht?'An atant':'En attente'}
 
 export default function FinalDecisionPanel(){
  const [role,setRole]=useState<Role>('')
  const [ownStudentId,setOwnStudentId]=useState('')
- const [,setLang]=useState<'ht'|'fr'>('ht')
 
  useEffect(()=>{
   let active=true
@@ -38,12 +30,7 @@ export default function FinalDecisionPanel(){
  },[])
 
  useEffect(()=>{
-  const language=()=>{
-   const sel=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null
-   if(sel)return sel.value==='fr'?'fr':'ht'
-   const frenchActive=Array.from(document.querySelectorAll('button.langChoice')).some(b=>(b.textContent||'').includes('Français')&&b.classList.contains('active'))
-   return frenchActive?'fr':'ht'
-  }
+  const language=()=>{const sel=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null;return sel?.value==='fr'?'fr':'ht'}
   const findStudentSelect=(card:HTMLElement)=>{
    for(const label of Array.from(card.querySelectorAll('label'))){
     if(!/^(Elèv|Élève)$/i.test(clean(label.textContent||'')))continue
@@ -53,14 +40,12 @@ export default function FinalDecisionPanel(){
    return null
   }
   const mountBox=async(card:HTMLElement,studentId:string,mode:'records'|'student')=>{
-   const ht=language()==='ht';setLang(ht?'ht':'fr')
+   const ht=language()==='ht'
    if(!studentId){card.querySelector('[data-final-decision-box]')?.remove();return}
    const {data:student}=await supabase.from('school_students').select('academic_year').eq('id',studentId).maybeSingle()
-   const year=student?.academic_year||''
-   if(!year)return
+   const year=student?.academic_year||'';if(!year)return
    const {data:existing}=await supabase.from('school_student_decisions').select('decision,note').eq('student_id',studentId).eq('academic_year',year).maybeSingle()
-   const decision=(existing?.decision||'pending') as Decision
-   const note=existing?.note||''
+   const decision=(existing?.decision||'pending') as Decision;const note=existing?.note||''
    let box=card.querySelector('[data-final-decision-box]') as HTMLElement|null
    if(!box){box=document.createElement('div');box.setAttribute('data-final-decision-box','true');box.style.cssText='margin-top:14px;border:2px solid #d8e2ea;border-radius:14px;padding:14px;background:#fff';card.appendChild(box)}
    if(role==='direction'&&mode==='records'){
@@ -91,14 +76,13 @@ export default function FinalDecisionPanel(){
     if(role==='student'&&ownStudentId){
      Array.from(document.querySelectorAll('.card')).forEach(c=>{
       const title=clean(c.querySelector('h2')?.textContent||'')
-      if(['Bilten mwen','Mon bulletin','Relve nòt mwen','Mon relevé de notes'].includes(title))void mountBox(c as HTMLElement,ownStudentId,'student')
+      if(['Relve nòt mwen','Mon relevé de notes'].includes(title))void mountBox(c as HTMLElement,ownStudentId,'student')
      })
     }
    },120)
   }
   render();const o=new MutationObserver(render);o.observe(document.body,{subtree:true,childList:true})
-  document.addEventListener('change',render,true)
-  window.addEventListener('school-final-decision-updated',render)
+  document.addEventListener('change',render,true);window.addEventListener('school-final-decision-updated',render)
   return()=>{window.clearTimeout(timer);o.disconnect();document.removeEventListener('change',render,true);window.removeEventListener('school-final-decision-updated',render)}
  },[role,ownStudentId])
 
