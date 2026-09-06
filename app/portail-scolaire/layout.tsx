@@ -7,7 +7,6 @@ import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
-import AllSectionsSelectorFix from './AllSectionsSelectorFix'
 import SubjectCoefficientEditor from './SubjectCoefficientEditor'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
@@ -124,7 +123,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <RecordsPanel />
       <AcademicYearEditor />
       <SchoolIdentitySettings />
-      <AllSectionsSelectorFix />
       <SubjectCoefficientEditor />
       <SessionJwtRecovery />
     </>
