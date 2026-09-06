@@ -10,16 +10,18 @@ type Student={id:string;name:string;level:string;section:string;academic_year:st
 export default function SecretaryClassNavigator(){
  const [open,setOpen]=useState<{name:string;section:string}|null>(null)
  const [students,setStudents]=useState<Student[]>([])
- const [lang,setLang]=useState<'ht'|'fr'>('ht')
+ const [lang,setLang]=useState<'ht'|'fr'>('fr')
 
  useEffect(()=>{
+  const current=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null
+  if(current)setLang(current.value==='ht'?'ht':'fr')
   const syncLang=(e:Event)=>{
-   const b=(e.target as HTMLElement|null)?.closest?.('.langChoice') as HTMLButtonElement|null
-   if(!b)return
-   setLang(b.textContent?.includes('Français')?'fr':'ht')
+   const target=e.target as HTMLSelectElement|null
+   if(!target?.closest?.('[data-global-language-menu]'))return
+   setLang(target.value==='ht'?'ht':'fr')
   }
-  document.addEventListener('click',syncLang,true)
-  return()=>document.removeEventListener('click',syncLang,true)
+  document.addEventListener('change',syncLang,true)
+  return()=>document.removeEventListener('change',syncLang,true)
  },[])
 
  useEffect(()=>{
