@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
 import LoginRoleLabelFix from './LoginRoleLabelFix'
+import SecretaryClassNavigator from './SecretaryClassNavigator'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -23,9 +24,13 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.secretary-dashboard) .secretary-dashboard button,
         body:has(.secretary-dashboard) .secretary-dashboard input,
         body:has(.secretary-dashboard) .secretary-dashboard select,
-        body:has(.secretary-dashboard) .secretary-dashboard form{
+        body:has(.secretary-dashboard) .secretary-dashboard form,
+        body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{
           pointer-events:auto!important;
           touch-action:manipulation;
+        }
+        body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{
+          cursor:pointer;
         }
         body:has(.secretary-dashboard) .ps-page .topActions{
           pointer-events:auto!important;
@@ -52,6 +57,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       `}</style>
       {children}
       <SecretaryPanel />
+      <SecretaryClassNavigator />
       <LoginRoleLabelFix />
     </>
   )
