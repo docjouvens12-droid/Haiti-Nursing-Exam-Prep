@@ -8,11 +8,13 @@ import { supabase } from '../lib/supabase'
 const TaxiMap = dynamic(() => import('../components/TaxiMap'), { ssr: false })
 
 type Lang = 'fr' | 'ht'
+type Panel = 'home' | 'rides' | 'payment' | 'profile' | 'driver' | 'help'
 type RideOption = { id: 'moto' | 'standard' | 'comfort'; name: string; detailFr: string; detailHt: string; eta: string }
 type Point = { lat: number; lng: number }
 type Quote = { distance_km: number; duration_min: number; fare_htg: number }
 type SearchResult = { id: string; label: string; center: [number, number] }
 type RouteGeometry = { type: 'LineString'; coordinates: number[][] }
+type RideHistory = { id: string; status: string; pickup_address: string; destination_address: string; final_fare_htg: number | null; estimated_fare_htg: number | null; requested_at: string }
 
 const rideOptions: RideOption[] = [
   { id: 'moto', name: 'Moto', detailFr: '1 passager', detailHt: '1 pasaje', eta: '3 min' },
@@ -22,29 +24,23 @@ const rideOptions: RideOption[] = [
 
 const copy = {
   fr: {
-    tagline: 'Déplacez-vous facilement, en toute sécurité', welcome: 'BON RETOUR', createPassenger: 'CRÉER UN COMPTE PASSAGER',
-    signInTitle: 'Connectez-vous pour commander un taxi', signUpTitle: 'Inscrivez-vous comme passager', fullName: 'Nom complet', email: 'E-mail', password: 'Mot de passe',
-    wait: 'Veuillez patienter…', signIn: 'Se connecter', createAccount: 'Créer mon compte', noAccount: 'Pas encore de compte ? Créez-en un', haveAccount: 'Vous avez déjà un compte ? Connectez-vous',
-    accountCreated: 'Compte créé. Vérifiez votre e-mail pour confirmer votre adresse, puis connectez-vous.', hello: 'Bonjour', where: 'Où allez-vous ?', drivers: 'Chauffeurs disponibles',
-    pickup: 'Lieu de prise en charge', current: 'Ma position actuelle', testPosition: 'Port-au-Prince (position de test)', destination: 'Destination', destinationPlaceholder: 'Saisissez une adresse ou un lieu en Haïti',
-    searchingAddress: 'Recherche des adresses…', chooseService: 'Choisissez le service', vehicles: 'Véhicules disponibles', chooseDestination: 'Choisissez une destination', payment: 'Paiement', cash: 'Espèces', change: 'Changer ›',
-    searchingDriver: 'Nous cherchons un chauffeur pour vous…', trip: 'trajet', calculating: 'Calcul du prix…', sending: 'Envoi de la demande…', request: 'Commander', mapNote: 'Carte, recherche et itinéraire : Mapbox. Prix et création du trajet : Supabase.'
+    tagline: 'Déplacez-vous facilement, en toute sécurité', welcome: 'BON RETOUR', createPassenger: 'CRÉER UN COMPTE PASSAGER', signInTitle: 'Connectez-vous pour commander un taxi', signUpTitle: 'Inscrivez-vous comme passager', fullName: 'Nom complet', email: 'E-mail', password: 'Mot de passe', wait: 'Veuillez patienter…', signIn: 'Se connecter', createAccount: 'Créer mon compte', noAccount: 'Pas encore de compte ? Créez-en un', haveAccount: 'Vous avez déjà un compte ? Connectez-vous', accountCreated: 'Compte créé. Vérifiez votre e-mail pour confirmer votre adresse, puis connectez-vous.', hello: 'Bonjour', where: 'Où allez-vous ?', drivers: 'Chauffeurs disponibles', pickup: 'Lieu de prise en charge', current: 'Ma position actuelle', testPosition: 'Port-au-Prince (position de test)', destination: 'Destination', destinationPlaceholder: 'Saisissez une adresse ou un lieu en Haïti', searchingAddress: 'Recherche des adresses…', chooseService: 'Choisissez le service', vehicles: 'Véhicules disponibles', chooseDestination: 'Choisissez une destination', payment: 'Paiement', cash: 'Espèces', change: 'Changer ›', searchingDriver: 'Nous cherchons un chauffeur pour vous…', trip: 'trajet', calculating: 'Calcul du prix…', sending: 'Envoi de la demande…', request: 'Commander', mapNote: 'Carte, recherche et itinéraire : Mapbox. Prix et création du trajet : Supabase.',
+    menu: 'Menu', home: 'Accueil', myRides: 'Mes trajets', profile: 'Profil', becomeDriver: 'Devenir chauffeur', language: 'Langue', help: 'Aide', logout: 'Se déconnecter', recentRides: 'Vos trajets récents', noRides: 'Vous n’avez encore aucun trajet.', loadingRides: 'Chargement de vos trajets…', backHome: 'Retour à l’accueil', paymentTitle: 'Moyens de paiement', currentPayment: 'Moyen de paiement actuel', paymentNote: 'Les paiements par carte et mobile money seront ajoutés dans une prochaine étape.', profileTitle: 'Mon profil', passengerAccount: 'Compte passager', driverTitle: 'Conduisez avec Taxi Platform Haiti', driverText: 'L’inscription chauffeur permettra d’envoyer vos documents, votre permis et les informations de votre véhicule pour validation.', driverCta: 'Commencer l’inscription chauffeur', helpTitle: 'Centre d’aide', helpText: 'Besoin d’aide avec un trajet, un paiement ou votre compte ? Le centre d’assistance sera connecté ici.', helpCta: 'Contacter l’assistance', french: 'Français', creole: 'Kreyòl'
   },
   ht: {
-    tagline: 'Deplase fasil, deplase an sekirite', welcome: 'BYENVINI ANKÒ', createPassenger: 'KREYE KONT PASAJE',
-    signInTitle: 'Konekte pou mande taksi', signUpTitle: 'Enskri kòm pasaje', fullName: 'Non konplè', email: 'Imel', password: 'Modpas',
-    wait: 'Tanpri tann…', signIn: 'Konekte', createAccount: 'Kreye kont mwen', noAccount: 'Ou poko gen kont? Kreye youn', haveAccount: 'Ou deja gen kont? Konekte',
-    accountCreated: 'Kont lan kreye. Tcheke imel ou pou konfime adrès la, epi konekte.', hello: 'Bonjou', where: 'Ki kote ou prale?', drivers: 'Chofè disponib',
-    pickup: 'Kote pou pran ou', current: 'Pozisyon aktyèl mwen', testPosition: 'Port-au-Prince (pozisyon tès)', destination: 'Destinasyon', destinationPlaceholder: 'Ekri yon adrès oswa yon kote an Ayiti',
-    searchingAddress: 'N ap chèche adrès yo…', chooseService: 'Chwazi sèvis la', vehicles: 'Machin ki disponib', chooseDestination: 'Chwazi destinasyon', payment: 'Peman', cash: 'Lajan kach', change: 'Chanje ›',
-    searchingDriver: 'N ap chèche yon chofè pou ou…', trip: 'trajè', calculating: 'N ap kalkile pri…', sending: 'N ap voye demann lan…', request: 'Mande', mapNote: 'Kat, rechèch ak routage: Mapbox. Pri ak kreyasyon trajè: Supabase.'
+    tagline: 'Deplase fasil, deplase an sekirite', welcome: 'BYENVINI ANKÒ', createPassenger: 'KREYE KONT PASAJE', signInTitle: 'Konekte pou mande taksi', signUpTitle: 'Enskri kòm pasaje', fullName: 'Non konplè', email: 'Imel', password: 'Modpas', wait: 'Tanpri tann…', signIn: 'Konekte', createAccount: 'Kreye kont mwen', noAccount: 'Ou poko gen kont? Kreye youn', haveAccount: 'Ou deja gen kont? Konekte', accountCreated: 'Kont lan kreye. Tcheke imel ou pou konfime adrès la, epi konekte.', hello: 'Bonjou', where: 'Ki kote ou prale?', drivers: 'Chofè disponib', pickup: 'Kote pou pran ou', current: 'Pozisyon aktyèl mwen', testPosition: 'Port-au-Prince (pozisyon tès)', destination: 'Destinasyon', destinationPlaceholder: 'Ekri yon adrès oswa yon kote an Ayiti', searchingAddress: 'N ap chèche adrès yo…', chooseService: 'Chwazi sèvis la', vehicles: 'Machin ki disponib', chooseDestination: 'Chwazi destinasyon', payment: 'Peman', cash: 'Lajan kach', change: 'Chanje ›', searchingDriver: 'N ap chèche yon chofè pou ou…', trip: 'trajè', calculating: 'N ap kalkile pri…', sending: 'N ap voye demann lan…', request: 'Mande', mapNote: 'Kat, rechèch ak routage: Mapbox. Pri ak kreyasyon trajè: Supabase.',
+    menu: 'Meni', home: 'Akèy', myRides: 'Trajè mwen yo', profile: 'Pwofil', becomeDriver: 'Vin chofè', language: 'Lang', help: 'Èd', logout: 'Dekonekte', recentRides: 'Dènye trajè ou yo', noRides: 'Ou poko gen okenn trajè.', loadingRides: 'N ap chaje trajè ou yo…', backHome: 'Retounen sou akèy', paymentTitle: 'Metòd peman', currentPayment: 'Metòd peman aktyèl', paymentNote: 'Peman ak kat ak mobile money ap ajoute nan yon pwochen etap.', profileTitle: 'Pwofil mwen', passengerAccount: 'Kont pasaje', driverTitle: 'Kondwi ak Taxi Platform Haiti', driverText: 'Enskripsyon chofè a ap pèmèt ou voye dokiman, lisans ak enfòmasyon machin ou pou verifikasyon.', driverCta: 'Kòmanse enskripsyon chofè', helpTitle: 'Sant èd', helpText: 'Ou bezwen èd ak yon trajè, peman oswa kont ou? Sant asistans lan ap konekte isit la.', helpCta: 'Kontakte asistans', french: 'Français', creole: 'Kreyòl'
   }
 }
 
 function LanguageMenu({ lang, onChange }: { lang: Lang; onChange: (lang: Lang) => void }) {
-  return <div className="language-switch" aria-label="Language selector">
-    <button className={lang === 'fr' ? 'active' : ''} onClick={() => onChange('fr')}>FR</button>
-    <button className={lang === 'ht' ? 'active' : ''} onClick={() => onChange('ht')}>KREYÒL</button>
+  const [open, setOpen] = useState(false)
+  return <div className="language-menu">
+    <button className="language-trigger" onClick={() => setOpen(!open)} aria-expanded={open}>🌐 {lang === 'fr' ? 'Français' : 'Kreyòl'} <span>⌄</span></button>
+    {open && <div className="language-options">
+      <button className={lang === 'fr' ? 'active' : ''} onClick={() => { onChange('fr'); setOpen(false) }}>🇫🇷 Français {lang === 'fr' ? '✓' : ''}</button>
+      <button className={lang === 'ht' ? 'active' : ''} onClick={() => { onChange('ht'); setOpen(false) }}>🇭🇹 Kreyòl {lang === 'ht' ? '✓' : ''}</button>
+    </div>}
   </div>
 }
 
@@ -59,7 +55,7 @@ export default function HomePage() {
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [pickup, setPickup] = useState(t.current)
+  const [pickup, setPickup] = useState(copy.fr.current)
   const [pickupCoords, setPickupCoords] = useState<Point | null>(null)
   const [destination, setDestination] = useState('')
   const [destinationCoords, setDestinationCoords] = useState<Point | null>(null)
@@ -73,12 +69,16 @@ export default function HomePage() {
   const [requestState, setRequestState] = useState<'idle' | 'quoting' | 'requesting' | 'searching'>('idle')
   const [rideId, setRideId] = useState<string | null>(null)
   const [rideError, setRideError] = useState('')
+  const [menuOpen, setMenuOpen] = useState(false)
+  const [panel, setPanel] = useState<Panel>('home')
+  const [rides, setRides] = useState<RideHistory[]>([])
+  const [ridesBusy, setRidesBusy] = useState(false)
 
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
 
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
-    if (saved === 'fr' || saved === 'ht') setLang(saved)
+    if (saved === 'fr' || saved === 'ht') { setLang(saved); setPickup(copy[saved].current) }
     supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null))
     return () => listener.subscription.unsubscribe()
@@ -88,6 +88,19 @@ export default function HomePage() {
     setLang(next)
     window.localStorage.setItem('taxi-language', next)
     setPickup((current) => current === copy.fr.current || current === copy.ht.current ? copy[next].current : current)
+  }
+
+  function openPanel(next: Panel) {
+    setPanel(next)
+    setMenuOpen(false)
+    if (next === 'rides') loadRides()
+  }
+
+  async function loadRides() {
+    setRidesBusy(true)
+    const { data } = await supabase.from('rides').select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at').order('requested_at', { ascending: false }).limit(20)
+    setRides((data ?? []) as RideHistory[])
+    setRidesBusy(false)
   }
 
   useEffect(() => {
@@ -105,15 +118,14 @@ export default function HomePage() {
       setSearchBusy(true)
       try {
         const proximity = pickupCoords ? `&proximity=${pickupCoords.lng},${pickupCoords.lat}` : ''
-        const language = lang === 'fr' ? 'fr' : 'fr'
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=5&language=${language}${proximity}&access_token=${encodeURIComponent(token)}`
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=5&language=fr${proximity}&access_token=${encodeURIComponent(token)}`
         const response = await fetch(url)
         const json = await response.json()
         setSearchResults((json.features ?? []).map((f: any) => ({ id: f.id, label: f.place_name, center: f.center })))
       } catch { setSearchResults([]) } finally { setSearchBusy(false) }
     }, 350)
     return () => window.clearTimeout(timer)
-  }, [destination, destinationCoords, pickupCoords, token, lang])
+  }, [destination, destinationCoords, pickupCoords, token])
 
   useEffect(() => {
     if (!token || !pickupCoords || !destinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
@@ -178,20 +190,47 @@ export default function HomePage() {
     <button className="auth-switch" onClick={() => setAuthMode(authMode === 'signin' ? 'signup' : 'signin')}>{authMode === 'signin' ? t.noAccount : t.haveAccount}</button>
   </section></main>
 
+  const panelContent = panel !== 'home' && <section className="account-panel">
+    <div className="panel-header"><button onClick={() => setPanel('home')}>‹</button><strong>{panel === 'rides' ? t.myRides : panel === 'payment' ? t.paymentTitle : panel === 'profile' ? t.profileTitle : panel === 'driver' ? t.becomeDriver : t.helpTitle}</strong><span /></div>
+    {panel === 'rides' && <div className="panel-body"><h2>{t.recentRides}</h2>{ridesBusy ? <p className="muted">{t.loadingRides}</p> : rides.length === 0 ? <div className="empty-state">🚕<strong>{t.noRides}</strong></div> : <div className="history-list">{rides.map((r) => <div className="history-card" key={r.id}><div><strong>{r.pickup_address}</strong><span>→</span><strong>{r.destination_address}</strong></div><small>{new Date(r.requested_at).toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'fr-HT')} · {r.status}</small><b>{Number(r.final_fare_htg ?? r.estimated_fare_htg ?? 0).toLocaleString('fr-FR')} HTG</b></div>)}</div>}</div>}
+    {panel === 'payment' && <div className="panel-body"><h2>{t.paymentTitle}</h2><div className="feature-card"><span className="feature-icon">💵</span><div><small>{t.currentPayment}</small><strong>{t.cash}</strong></div><span>✓</span></div><p className="muted">{t.paymentNote}</p></div>}
+    {panel === 'profile' && <div className="panel-body"><h2>{t.profileTitle}</h2><div className="profile-avatar">{(user.user_metadata?.full_name?.[0] ?? user.email?.[0] ?? 'U').toUpperCase()}</div><div className="profile-info"><small>{t.passengerAccount}</small><strong>{user.user_metadata?.full_name || '—'}</strong><span>{user.email}</span></div></div>}
+    {panel === 'driver' && <div className="panel-body promo-panel"><div className="promo-icon">🚘</div><h2>{t.driverTitle}</h2><p>{t.driverText}</p><button className="primary-panel-button">{t.driverCta}</button></div>}
+    {panel === 'help' && <div className="panel-body promo-panel"><div className="promo-icon">💬</div><h2>{t.helpTitle}</h2><p>{t.helpText}</p><button className="primary-panel-button">{t.helpCta}</button></div>}
+  </section>
+
   return <main className="shell"><section className="phone-frame">
-    <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={destinationCoords} routeGeometry={routeGeometry} />
-      <div className="topbar"><button className="round-button">☰</button><div className="brand-chip"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.tagline}</small></div></div><div className="top-actions"><LanguageMenu lang={lang} onChange={changeLanguage} /><button className="round-button" onClick={() => supabase.auth.signOut()}>↪</button></div></div>
+    {panelContent}
+    <div className={`app-underlay ${panel !== 'home' ? 'panel-hidden' : ''}`}>
+      <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={destinationCoords} routeGeometry={routeGeometry} />
+        <div className="topbar"><button className="round-button" onClick={() => setMenuOpen(true)}>☰</button><div className="brand-chip"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.tagline}</small></div></div><button className="round-button" onClick={() => openPanel('profile')}>👤</button></div>
+      </div>
+      <section className="booking-sheet"><div className="grabber" />
+        <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
+        <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null) }} placeholder={t.destinationPlaceholder} /></div></div></div>
+        {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
+        <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : quote ? `${quote.distance_km.toFixed(1)} km · ${quote.duration_min} min` : t.chooseDestination}</span></div>
+        <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
+        <div className="payment-row"><div><span className="payment-icon">💵</span><div><small>{t.payment}</small><strong>{t.cash}</strong></div></div><button onClick={() => openPanel('payment')}>{t.change}</button></div>
+        {rideError && <div className="ride-error">{rideError}</div>}
+        {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!quote || requestState === 'quoting' || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'quoting' ? t.calculating : requestState === 'requesting' ? t.sending : `${t.request} ${ride.name}`}</span><strong>{quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
+        <p className="fine-print">{t.mapNote}</p>
+      </section>
     </div>
-    <section className="booking-sheet"><div className="grabber" />
-      <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
-      <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null) }} placeholder={t.destinationPlaceholder} /></div></div></div>
-      {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
-      <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : quote ? `${quote.distance_km.toFixed(1)} km · ${quote.duration_min} min` : t.chooseDestination}</span></div>
-      <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
-      <div className="payment-row"><div><span className="payment-icon">💵</span><div><small>{t.payment}</small><strong>{t.cash}</strong></div></div><button>{t.change}</button></div>
-      {rideError && <div className="ride-error">{rideError}</div>}
-      {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!quote || requestState === 'quoting' || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'quoting' ? t.calculating : requestState === 'requesting' ? t.sending : `${t.request} ${ride.name}`}</span><strong>{quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
-      <p className="fine-print">{t.mapNote}</p>
-    </section>
+
+    {menuOpen && <><button className="drawer-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} /><aside className="nav-drawer">
+      <div className="drawer-head"><div className="drawer-brand"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.menu}</small></div></div><button onClick={() => setMenuOpen(false)}>×</button></div>
+      <div className="drawer-user"><div className="drawer-avatar">{(user.user_metadata?.full_name?.[0] ?? user.email?.[0] ?? 'U').toUpperCase()}</div><div><strong>{user.user_metadata?.full_name || t.passengerAccount}</strong><small>{user.email}</small></div></div>
+      <nav className="drawer-nav">
+        <button className="active" onClick={() => openPanel('home')}><span>🏠</span>{t.home}<b>›</b></button>
+        <button onClick={() => openPanel('rides')}><span>🧾</span>{t.myRides}<b>›</b></button>
+        <button onClick={() => openPanel('payment')}><span>💳</span>{t.payment}<b>›</b></button>
+        <button onClick={() => openPanel('profile')}><span>👤</span>{t.profile}<b>›</b></button>
+        <button onClick={() => openPanel('driver')}><span>🚘</span>{t.becomeDriver}<b>›</b></button>
+        <div className="drawer-language"><span>🌐</span><div><small>{t.language}</small><LanguageMenu lang={lang} onChange={changeLanguage} /></div></div>
+        <button onClick={() => openPanel('help')}><span>❓</span>{t.help}<b>›</b></button>
+      </nav>
+      <button className="drawer-logout" onClick={() => supabase.auth.signOut()}>↪ {t.logout}</button>
+    </aside></>}
   </section></main>
 }
