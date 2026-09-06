@@ -15,6 +15,7 @@ import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
 import RecordValidationFields from './RecordValidationFields'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import SchoolRecordBranding from './SchoolRecordBranding'
+import AllSectionsSelectorFix from './AllSectionsSelectorFix'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -81,6 +82,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <DirectionPublishSelector />
       <SchoolIdentitySettings />
       <SchoolRecordBranding />
+      <AllSectionsSelectorFix />
       <OfficialRecordPrintEnhancer />
       <RecordValidationFields />
       <LoginRoleLabelFix />
