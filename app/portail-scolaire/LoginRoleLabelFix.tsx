@@ -20,8 +20,8 @@ export default function LoginRoleLabelFix(){
         const isFr=(loginTitle.textContent||'').trim()==='Connexion'
         const muted=card.querySelector('p.muted') as HTMLElement|null
         const helper=isFr
-          ? 'Choisissez votre profil. Direction utilise son adresse e-mail ; Enseignant, Secrétariat et Élève utilisent leur identifiant d’accès.'
-          : 'Chwazi wòl ou. Direksyon itilize adrès e-mail li; Ansenyan, Sekretè ak Elèv itilize ID aksè yo.'
+          ? 'Choisissez votre espace, puis utilisez vos informations de connexion.'
+          : 'Chwazi espas ou, epi itilize enfòmasyon koneksyon ou.'
         if(muted && muted.textContent!==helper) muted.textContent=helper
 
         let wrap=card.querySelector('[data-school-role-selector]') as HTMLElement|null
@@ -29,9 +29,6 @@ export default function LoginRoleLabelFix(){
           wrap=document.createElement('div')
           wrap.setAttribute('data-school-role-selector','true')
           wrap.setAttribute('data-selected-role','direction')
-          wrap.style.display='grid'
-          wrap.style.gridTemplateColumns='repeat(2,1fr)'
-          wrap.style.gap='8px'
           wrap.style.margin='14px 0'
           muted?.insertAdjacentElement('afterend',wrap)
         }
@@ -41,40 +38,51 @@ export default function LoginRoleLabelFix(){
           : [['direction','Direksyon'],['teacher','Ansenyan'],['secretary','Sekretè'],['student','Elèv']]
         const validRoles=roles.map(([value])=>value)
         let selected=wrap.getAttribute('data-selected-role')||'direction'
-        if(!validRoles.includes(selected)){
-          selected='direction'
-          wrap.setAttribute('data-selected-role',selected)
+        if(!validRoles.includes(selected))selected='direction'
+        wrap.setAttribute('data-selected-role',selected)
+
+        let label=wrap.querySelector('label') as HTMLLabelElement|null
+        let select=wrap.querySelector('select') as HTMLSelectElement|null
+        if(!label||!select){
+          wrap.replaceChildren()
+          label=document.createElement('label')
+          label.style.display='block'
+          label.style.fontWeight='800'
+          label.style.marginBottom='7px'
+          select=document.createElement('select')
+          select.style.width='100%'
+          select.style.minHeight='48px'
+          select.style.border='1px solid #cbd8e6'
+          select.style.borderRadius='11px'
+          select.style.padding='10px 12px'
+          select.style.background='#fff'
+          select.style.color='#14213d'
+          select.style.fontWeight='700'
+          select.addEventListener('change',()=>{
+            wrap?.setAttribute('data-selected-role',select?.value||'direction')
+            apply()
+          })
+          wrap.append(label,select)
         }
 
-        if(wrap.children.length!==4){
-          wrap.replaceChildren()
-          roles.forEach(([value])=>{
-            const b=document.createElement('button')
-            b.type='button'
-            b.dataset.role=value
-            b.style.border='1px solid #cbd8e6'
-            b.style.borderRadius='11px'
-            b.style.padding='11px 8px'
-            b.style.fontWeight='800'
-            b.addEventListener('click',()=>{
-              wrap?.setAttribute('data-selected-role',value)
-              apply()
-            })
-            wrap?.appendChild(b)
+        const labelText=isFr?'Choisir votre espace':'Chwazi espas ou'
+        if(label.textContent!==labelText)label.textContent=labelText
+
+        const currentOptions=Array.from(select.options).map(o=>`${o.value}:${o.textContent}`).join('|')
+        const wantedOptions=roles.map(([value,text])=>`${value}:${text}`).join('|')
+        if(currentOptions!==wantedOptions){
+          select.replaceChildren()
+          roles.forEach(([value,text])=>{
+            const option=document.createElement('option')
+            option.value=value
+            option.textContent=text
+            select?.appendChild(option)
           })
         }
+        select.value=selected
 
-        Array.from(wrap.querySelectorAll('button')).forEach((node,index)=>{
-          const b=node as HTMLButtonElement
-          const [value,label]=roles[index]
-          if(b.textContent!==label)b.textContent=label
-          b.dataset.role=value
-          const active=value===selected
-          b.style.background=active?'#0f4c81':'#fff'
-          b.style.color=active?'#fff':'#14213d'
-        })
-
-        const firstLabel=card.querySelector('label') as HTMLElement|null
+        const labels=Array.from(card.querySelectorAll('label'))
+        const firstLabel=labels.find(x=>x!==label) as HTMLElement|null
         if(firstLabel){
           const names:any=isFr
             ? {direction:'Adresse e-mail de la Direction',teacher:'Identifiant Enseignant',secretary:'Identifiant Secrétariat',student:'Identifiant Élève'}
