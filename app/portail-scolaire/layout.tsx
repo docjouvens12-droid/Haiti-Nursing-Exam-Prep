@@ -8,6 +8,7 @@ import RecordsPanel from './RecordsPanel'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
 import DirectionStudentManager from './DirectionStudentManager'
 import RoleAcademicFilters from './RoleAcademicFilters'
+import GlobalAcademicYearSelector from './GlobalAcademicYearSelector'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -119,6 +120,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
       `}</style>
       {children}
+      <GlobalAcademicYearSelector />
       <SecretaryPanel />
       <StudentAccessMount />
       <StudentTrimesterSummary />
