@@ -21,11 +21,11 @@ export default function OfficialRecordPrintEnhancer(){
    const card=button.closest('.card') as HTMLElement|null
    if(!card)return
    const title=cleanText(card.querySelector('h2')?.textContent||'')
-   const isRecord=/Relve nòt|relevé de notes/i.test(title)
+   const isRecord=/Relve nòt/i.test(title)||/relev[eé]s? de notes/i.test(title)
    if(!isRecord)return
 
    event.preventDefault();event.stopPropagation();event.stopImmediatePropagation()
-   const ht=!title.toLowerCase().includes('relevé')
+   const ht=!/relev[eé]/i.test(title)
    const typeSelect=Array.from(card.querySelectorAll('select')).find(s=>['trimester','control'].includes((s as HTMLSelectElement).value)) as HTMLSelectElement|undefined
    const type=typeSelect?.value==='control'?(ht?'Kontwòl':'Contrôle'):(ht?'Trimès':'Trimestre')
 
