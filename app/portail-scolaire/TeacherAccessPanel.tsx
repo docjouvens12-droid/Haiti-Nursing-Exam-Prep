@@ -14,6 +14,7 @@ export default function TeacherAccessPanel(){
  const [accounts,setAccounts]=useState<TeacherAccount[]>([])
  const [error,setError]=useState('')
  const [target,setTarget]=useState<HTMLElement|null>(null)
+ const [open,setOpen]=useState(false)
  const ht=lang==='ht'
 
  const load=async(u:User)=>{
@@ -23,9 +24,11 @@ export default function TeacherAccessPanel(){
   if(!profile)return
   setRole(profile.role||'')
   if(profile.role!=='direction')return
-  const {data:profiles,error:pErr}=await supabase.from('school_profiles').select('access_id,teacher_id,must_change_password').eq('role','teacher').order('created_at')
+  const [{data:profiles,error:pErr},{data:teachers,error:tErr}]=await Promise.all([
+   supabase.from('school_profiles').select('access_id,teacher_id,must_change_password').eq('role','teacher').order('created_at'),
+   supabase.from('school_teachers').select('id,name,subject,classes,section')
+  ])
   if(pErr){setError(pErr.message);return}
-  const {data:teachers,error:tErr}=await supabase.from('school_teachers').select('id,name,subject,classes,section')
   if(tErr){setError(tErr.message);return}
   const byId=new Map((teachers||[]).map(t=>[t.id,t]))
   setAccounts((profiles||[]).map(p=>{
@@ -36,7 +39,7 @@ export default function TeacherAccessPanel(){
 
  useEffect(()=>{
   supabase.auth.getSession().then(({data})=>{const u=data.session?.user;if(u)load(u)})
-  const {data:l}=supabase.auth.onAuthStateChange((_e,s)=>{const u=s?.user;setRole('');setTarget(null);if(u)load(u);else setAccounts([])})
+  const {data:l}=supabase.auth.onAuthStateChange((_e,s)=>{const u=s?.user;setRole('');setTarget(null);setOpen(false);if(u)load(u);else setAccounts([])})
   return()=>l.subscription.unsubscribe()
  },[])
 
@@ -52,32 +55,55 @@ export default function TeacherAccessPanel(){
 
  useEffect(()=>{
   if(role!=='direction'){setTarget(null);return}
+  let applying=false
   const attach=()=>{
-   const headings=Array.from(document.querySelectorAll('.ps-page h2'))
-   const h=headings.find(x=>['Kont & aksè','Comptes & accès'].includes((x.textContent||'').trim()))
-   const card=h?.closest('.card') as HTMLElement|null
-   if(!card){setTarget(null);return}
-   let mount=card.querySelector('[data-teacher-access-mount]') as HTMLElement|null
-   if(!mount){
-    mount=document.createElement('div')
-    mount.setAttribute('data-teacher-access-mount','true')
-    const existingTitle=Array.from(card.querySelectorAll('h3')).find(x=>['Kont ki egziste','Comptes existants'].includes((x.textContent||'').trim()))
-    if(existingTitle) card.insertBefore(mount,existingTitle)
-    else card.appendChild(mount)
-   }
-   setTarget(mount)
+   if(applying)return
+   applying=true
+   try{
+    const headings=Array.from(document.querySelectorAll('.ps-page h2'))
+    const h=headings.find(x=>['Tablo bò pou Direksyon an','Tableau de bord de la Direction'].includes((x.textContent||'').trim()))
+    const dashCard=h?.closest('.card') as HTMLElement|null
+    if(!dashCard)return
+    const cards=Array.from(document.querySelectorAll('.ps-page .card')) as HTMLElement[]
+    const actionCard=cards.find(c=>Array.from(c.querySelectorAll('h3')).some(x=>['Aksyon rapid','Actions rapides'].includes((x.textContent||'').trim())))
+    const menu=actionCard?.querySelector('.menu') as HTMLElement|null
+    if(!menu)return
+
+    let button=menu.querySelector('[data-teacher-account-button]') as HTMLButtonElement|null
+    if(!button){
+      button=document.createElement('button')
+      button.type='button'
+      button.className='menuBtn'
+      button.setAttribute('data-teacher-account-button','true')
+      button.addEventListener('click',()=>setOpen(true))
+      menu.appendChild(button)
+    }
+    const wanted=ht?'👩🏽‍🏫 Kont Ansenyan':'👩🏽‍🏫 Comptes Enseignants'
+    if(button.textContent!==wanted)button.textContent=wanted
+
+    let mount=document.querySelector('[data-teacher-account-panel-mount]') as HTMLElement|null
+    if(!mount){
+      mount=document.createElement('div')
+      mount.setAttribute('data-teacher-account-panel-mount','true')
+      actionCard?.insertAdjacentElement('afterend',mount)
+    }
+    setTarget(mount)
+   } finally {applying=false}
   }
   attach()
   const observer=new MutationObserver(()=>requestAnimationFrame(attach))
   observer.observe(document.body,{subtree:true,childList:true})
   return()=>observer.disconnect()
- },[role])
+ },[role,ht])
 
- if(role!=='direction'||!target)return null
- return createPortal(<div style={{marginTop:24,marginBottom:18,borderTop:'1px solid #dde6ef',paddingTop:18}}>
-  <h3>{ht?'Kont Ansenyan':'Comptes Enseignants'}</h3>
+ if(role!=='direction'||!target||!open)return null
+ return createPortal(<section className="card">
+  <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
+   <h2 style={{margin:0}}>{ht?'Kont Ansenyan':'Comptes Enseignants'}</h2>
+   <button type="button" className="btn secondary" onClick={()=>setOpen(false)}>{ht?'Fèmen':'Fermer'}</button>
+  </div>
   <p className="muted">{ht?'Men ansenyan ki deja gen yon kont aksè nan pòtal la.':'Voici les enseignants qui disposent déjà d’un compte d’accès au portail.'}</p>
   {error&&<div className="notice">⚠️ {error}</div>}
   {accounts.length===0?<div className="notice">{ht?'Pa gen kont Ansenyan ki kreye pou kounye a.':'Aucun compte Enseignant n’a encore été créé.'}</div>:<div className="teacherList">{accounts.map(a=><div className="teacherCard" key={a.accessId||a.teacherId}><div className="teacherName">{a.name}</div><div className="muted"><b>{ht?'ID aksè':'Identifiant'}:</b> {a.accessId||'—'}</div><div className="muted">{a.subject||'—'} • {a.classes||'—'}{a.section?` • ${ht?'Seksyon':'Section'} ${a.section}`:''}</div><div style={{marginTop:8}}><span className="badge">{a.mustChange?(ht?'Modpas tanporè':'Mot de passe temporaire'):(ht?'Kont aktif':'Compte actif')}</span></div></div>)}</div>}
- </div>,target)
+ </section>,target)
 }
