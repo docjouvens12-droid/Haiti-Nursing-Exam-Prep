@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import SecretaryPanel from './SecretaryPanel'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -28,6 +29,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         }
       `}</style>
       {children}
+      <SecretaryPanel />
     </>
   )
 }
