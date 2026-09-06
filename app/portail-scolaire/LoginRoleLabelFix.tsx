@@ -20,28 +20,33 @@ export default function LoginRoleLabelFix(){
         const isFr=(loginTitle.textContent||'').trim()==='Connexion'
         const muted=card.querySelector('p.muted') as HTMLElement|null
         const helper=isFr
-          ? 'Choisissez votre profil, puis utilisez votre identifiant d’accès et votre mot de passe. Direction : utilisez votre adresse e-mail.'
-          : 'Chwazi pwofil ou, epi itilize ID aksè ou ak modpas ou. Direksyon: itilize adrès e-mail ou.'
+          ? 'Choisissez votre profil. Direction utilise son adresse e-mail ; Enseignant, Secrétariat et Élève utilisent leur identifiant d’accès.'
+          : 'Chwazi wòl ou. Direksyon itilize adrès e-mail li; Ansenyan, Sekretè ak Elèv itilize ID aksè yo.'
         if(muted && muted.textContent!==helper) muted.textContent=helper
 
         let wrap=card.querySelector('[data-school-role-selector]') as HTMLElement|null
         if(!wrap){
           wrap=document.createElement('div')
           wrap.setAttribute('data-school-role-selector','true')
-          wrap.setAttribute('data-selected-role','teacher')
+          wrap.setAttribute('data-selected-role','direction')
           wrap.style.display='grid'
-          wrap.style.gridTemplateColumns='repeat(3,1fr)'
+          wrap.style.gridTemplateColumns='repeat(2,1fr)'
           wrap.style.gap='8px'
           wrap.style.margin='14px 0'
           muted?.insertAdjacentElement('afterend',wrap)
         }
 
-        const selected=wrap.getAttribute('data-selected-role')||'teacher'
         const roles=isFr
-          ? [['teacher','Enseignant'],['secretary','Secrétariat'],['student','Élève']]
-          : [['teacher','Ansenyan'],['secretary','Sekretè'],['student','Elèv']]
+          ? [['direction','Direction'],['teacher','Enseignant'],['secretary','Secrétariat'],['student','Élève']]
+          : [['direction','Direksyon'],['teacher','Ansenyan'],['secretary','Sekretè'],['student','Elèv']]
+        const validRoles=roles.map(([value])=>value)
+        let selected=wrap.getAttribute('data-selected-role')||'direction'
+        if(!validRoles.includes(selected)){
+          selected='direction'
+          wrap.setAttribute('data-selected-role',selected)
+        }
 
-        if(wrap.children.length!==3){
+        if(wrap.children.length!==4){
           wrap.replaceChildren()
           roles.forEach(([value])=>{
             const b=document.createElement('button')
@@ -72,8 +77,8 @@ export default function LoginRoleLabelFix(){
         const firstLabel=card.querySelector('label') as HTMLElement|null
         if(firstLabel){
           const names:any=isFr
-            ? {teacher:'Identifiant Enseignant',secretary:'Identifiant Secrétariat',student:'Identifiant Élève'}
-            : {teacher:'ID aksè Ansenyan',secretary:'ID aksè Sekretè',student:'ID aksè Elèv'}
+            ? {direction:'Adresse e-mail de la Direction',teacher:'Identifiant Enseignant',secretary:'Identifiant Secrétariat',student:'Identifiant Élève'}
+            : {direction:'Adrès e-mail Direksyon',teacher:'ID aksè Ansenyan',secretary:'ID aksè Sekretè',student:'ID aksè Elèv'}
           const wanted=names[selected]
           if(firstLabel.textContent!==wanted)firstLabel.textContent=wanted
         }
