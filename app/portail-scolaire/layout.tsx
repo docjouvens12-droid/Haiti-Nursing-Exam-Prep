@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
-import StudentAccessPanel from './StudentAccessPanel'
+import StudentAccessMount from './StudentAccessMount'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
 import StudentWeightedBulletin from './StudentWeightedBulletin'
 import SessionJwtRecovery from './SessionJwtRecovery'
@@ -94,6 +94,9 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.secretary-dashboard) .secretary-dashboard .teacherCard{cursor:pointer}
         body:has(.secretary-dashboard) .ps-page .topActions{pointer-events:auto!important}
 
+        body:has(.ps-page) .native-student-access-mount{display:none!important}
+        body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
+
         body:has(.ps-page) .topActions{
           position:fixed!important;
           right:16px!important;
@@ -115,7 +118,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       `}</style>
       {children}
       <SecretaryPanel />
-      <StudentAccessPanel />
+      <StudentAccessMount />
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
       <RecordsPanel />
