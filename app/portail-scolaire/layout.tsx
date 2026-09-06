@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
-import LoginRoleSelector from './LoginRoleSelector'
 import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
@@ -126,7 +125,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <SchoolIdentitySettings />
       <AllSectionsSelectorFix />
       <SubjectCoefficientEditor />
-      <LoginRoleSelector />
       <SessionJwtRecovery />
     </>
   )
