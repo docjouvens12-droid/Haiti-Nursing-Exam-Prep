@@ -9,7 +9,6 @@ type Student={id:string;name:string;level:string;section:string;year:string}
 type Teacher={id:string;name:string;subject:string;classes:string;section:string}
 type Grade={id:string;studentId:string|null;student:string;subject:string;score:number;term:string;teacherId:string|null;teacher:string}
 type View='home'|'students'|'grades'|'pending'|'classes'
-type Credential={name:string;accessId:string;password:string}|null
 
 export default function SecretaryPanel(){
  const [user,setUser]=useState<User|null>(null)
@@ -23,10 +22,7 @@ export default function SecretaryPanel(){
  const [grades,setGrades]=useState<Grade[]>([])
  const [classes,setClasses]=useState<{id:number;name:string;section:string}[]>([])
  const [subjects,setSubjects]=useState<{id:number;name:string}[]>([])
- const [secretaries,setSecretaries]=useState<any[]>([])
- const [credential,setCredential]=useState<Credential>(null)
  const [error,setError]=useState('')
- const [accessOpen,setAccessOpen]=useState(false)
  const [openClass,setOpenClass]=useState<{name:string;section:string}|null>(null)
  const ht=lang==='ht'
 
@@ -35,25 +31,20 @@ export default function SecretaryPanel(){
   const pr=await supabase.from('school_profiles').select('*').eq('user_id',u.id).maybeSingle()
   if(pr.error||!pr.data){if(pr.error)setError(pr.error.message);return}
   setRole(pr.data.role);setDisplayName(pr.data.display_name||'');setMustChange(Boolean(pr.data.must_change_password))
-  if(pr.data.role==='secretary'){
-   const [sr,tr,gr,cr,mr]=await Promise.all([
-    supabase.from('school_students').select('*').order('id'),
-    supabase.from('school_teachers').select('*').order('id'),
-    supabase.from('school_grades').select('*').eq('status','pending').order('created_at'),
-    supabase.from('school_classes').select('*').order('id'),
-    supabase.from('school_subjects').select('*').order('id')
-   ])
-   const e=sr.error||tr.error||gr.error||cr.error||mr.error;if(e){setError(e.message);return}
-   setStudents((sr.data||[]).map(x=>({id:x.id,name:x.name,level:x.level,section:x.section,year:x.academic_year})))
-   setTeachers((tr.data||[]).map(x=>({id:x.id,name:x.name,subject:x.subject,classes:x.classes,section:x.section||''})))
-   setGrades((gr.data||[]).map(x=>({id:x.id,studentId:x.student_id,student:x.student_name,subject:x.subject,score:Number(x.score),term:x.term,teacherId:x.teacher_id,teacher:x.teacher_name})))
-   setClasses((cr.data||[]).map(x=>({id:x.id,name:x.name,section:x.section})))
-   setSubjects((mr.data||[]).map(x=>({id:x.id,name:x.name})))
-  }
-  if(pr.data.role==='direction'){
-   const r=await supabase.from('school_profiles').select('*').eq('role','secretary').order('created_at')
-   if(!r.error)setSecretaries(r.data||[])
-  }
+  if(pr.data.role!=='secretary')return
+  const [sr,tr,gr,cr,mr]=await Promise.all([
+   supabase.from('school_students').select('*').order('id'),
+   supabase.from('school_teachers').select('*').order('id'),
+   supabase.from('school_grades').select('*').eq('status','pending').order('created_at'),
+   supabase.from('school_classes').select('*').order('id'),
+   supabase.from('school_subjects').select('*').order('id')
+  ])
+  const e=sr.error||tr.error||gr.error||cr.error||mr.error;if(e){setError(e.message);return}
+  setStudents((sr.data||[]).map(x=>({id:x.id,name:x.name,level:x.level,section:x.section,year:x.academic_year})))
+  setTeachers((tr.data||[]).map(x=>({id:x.id,name:x.name,subject:x.subject,classes:x.classes,section:x.section||''})))
+  setGrades((gr.data||[]).map(x=>({id:x.id,studentId:x.student_id,student:x.student_name,subject:x.subject,score:Number(x.score),term:x.term,teacherId:x.teacher_id,teacher:x.teacher_name})))
+  setClasses((cr.data||[]).map(x=>({id:x.id,name:x.name,section:x.section})))
+  setSubjects((mr.data||[]).map(x=>({id:x.id,name:x.name})))
  }
 
  useEffect(()=>{
@@ -75,24 +66,6 @@ export default function SecretaryPanel(){
   document.addEventListener('change',onChange,true)
   return()=>document.removeEventListener('change',onChange,true)
  },[])
-
- useEffect(()=>{
-  const sync=()=>setAccessOpen(Boolean(document.querySelector('select[name="teacher_id"]')))
-  sync()
-  const observer=new MutationObserver(sync)
-  observer.observe(document.body,{childList:true,subtree:true})
-  return()=>observer.disconnect()
- },[])
-
- const createSecretary=async(fd:FormData)=>{
-  if(role!=='direction')return
-  setError('');setCredential(null)
-  const name=String(fd.get('name')||'').trim(),accessId=String(fd.get('access_id')||'').trim()
-  const {data,error}=await supabase.functions.invoke('create-secretary-access',{body:{name,access_id:accessId}})
-  if(error||data?.error){setError(data?.error||error?.message||'Erreur');return}
-  setCredential({name:data.name,accessId:data.access_id,password:data.temporary_password})
-  if(user)await load(user)
- }
 
  const nextStudentId=()=>{
   const max=students.reduce((m,s)=>Math.max(m,Number(s.id.match(/^ELV-(\d+)$/)?.[1]||0)),0)
@@ -137,11 +110,6 @@ export default function SecretaryPanel(){
   const {error}=await supabase.from('school_grades').update({score}).eq('id',g.id)
   if(error){setError(error.message);return}
   if(user)await load(user)
- }
-
- if(role==='direction'){
-  if(!accessOpen)return null
-  return <section className="card" style={{maxWidth:1000,margin:'14px auto'}}><h2>{ht?'Kont Sekretè':'Compte Secrétariat'}</h2><p className="muted">{ht?'Direksyon ka kreye ID aksè ak modpas tanporè pou sekretè a.':'La Direction peut créer un identifiant d’accès et un mot de passe temporaire pour le secrétariat.'}</p>{error&&<div className="notice">⚠️ {error}</div>}<form action={createSecretary}><div className="grid2"><div><label>{ht?'Non sekretè':'Nom du secrétaire'}</label><input name="name" required/></div><div><label>{ht?'Nimewo badge / ID aksè':'Numéro de badge / Identifiant d’accès'}</label><input name="access_id" placeholder="SEC-001"/></div></div><button className="btn" style={{marginTop:12}}>{ht?'Kreye kont Sekretè':'Créer le compte Secrétariat'}</button></form>{credential&&<div className="credential"><b>{credential.name}</b><p>{ht?'Remèt enfòmasyon sa yo dirèkteman bay sekretè a.':'Remettez ces informations directement au secrétaire.'}</p><small>ID</small><code>{credential.accessId}</code><small>{ht?'Modpas tanporè':'Mot de passe temporaire'}</small><code>{credential.password}</code><button type="button" className="btn secondary" onClick={()=>setCredential(null)}>{ht?'Mwen note yo':'Je les ai notés'}</button></div>}{secretaries.length>0&&<div className="teacherList"><h3>{ht?'Kont Sekretè ki egziste':'Comptes Secrétariat existants'}</h3>{secretaries.map(s=><div className="teacherCard" key={s.user_id}><b>{s.display_name||'Secrétariat'}</b><div className="muted">ID aksè: {s.access_id}</div></div>)}</div>}</section>
  }
 
  if(role!=='secretary'||mustChange)return null
