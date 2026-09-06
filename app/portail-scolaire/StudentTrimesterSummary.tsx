@@ -80,8 +80,8 @@ export default function StudentTrimesterSummary(){
  if(!target)return null
  const ht=lang==='ht'
  const selectedLabel=assessmentType==='trimester'
-  ? `${ht?'Trimès':'Trimestre'} ${assessmentNumber}`
-  : `${ht?'Kontwòl':'Contrôle'} ${assessmentNumber}`
+  ? `${ht?'Mwayèn Trimès':'Moyenne Trimestre'} ${assessmentNumber}`
+  : `${ht?'Mwayèn Kontwòl':'Moyenne Contrôle'} ${assessmentNumber}`
 
  return createPortal(
   <div style={{marginBottom:14}}>
