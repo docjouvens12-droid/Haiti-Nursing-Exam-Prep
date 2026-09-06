@@ -8,7 +8,8 @@ export default function LanguageMenuSelector(){
 
   const apply=()=>{
    const panel=document.querySelector('.langPanel') as HTMLElement|null
-   if(!panel)return
+   const page=document.querySelector('.ps-page') as HTMLElement|null
+   if(!panel||!page)return
 
    const buttons=Array.from(panel.querySelectorAll('button.langChoice')) as HTMLButtonElement[]
    const htButton=buttons.find(b=>(b.textContent||'').includes('Kreyòl'))
@@ -23,22 +24,22 @@ export default function LanguageMenuSelector(){
    if(!wrap){
     wrap=document.createElement('div')
     wrap.setAttribute('data-global-language-menu','true')
-    wrap.style.position='fixed'
-    wrap.style.top='calc(env(safe-area-inset-top, 0px) + 10px)'
-    wrap.style.left='14px'
-    wrap.style.zIndex='100000'
-    wrap.style.width='145px'
-    wrap.style.padding='6px'
+    wrap.style.position='sticky'
+    wrap.style.top='calc(env(safe-area-inset-top, 0px) + 8px)'
+    wrap.style.zIndex='1000'
+    wrap.style.width='min(170px, calc(100vw - 32px))'
+    wrap.style.margin='10px 16px 18px auto'
+    wrap.style.padding='5px'
     wrap.style.borderRadius='12px'
-    wrap.style.background='rgba(255,255,255,.96)'
+    wrap.style.background='rgba(255,255,255,.97)'
     wrap.style.border='1px solid #d9e3ec'
-    wrap.style.boxShadow='0 8px 24px rgba(20,33,61,.16)'
+    wrap.style.boxShadow='0 5px 16px rgba(20,33,61,.12)'
     wrap.style.pointerEvents='auto'
 
     const select=document.createElement('select')
     select.setAttribute('aria-label','Langue / Lang')
     select.style.width='100%'
-    select.style.padding='9px 10px'
+    select.style.padding='8px 10px'
     select.style.borderRadius='9px'
     select.style.border='1px solid #cbd8e4'
     select.style.background='#fff'
@@ -51,8 +52,9 @@ export default function LanguageMenuSelector(){
      else htButton.click()
     })
     wrap.appendChild(select)
-    document.body.appendChild(wrap)
    }
+
+   if(wrap.parentElement!==page)page.insertBefore(wrap,page.firstChild)
 
    const select=wrap.querySelector('select') as HTMLSelectElement|null
    if(!select)return
