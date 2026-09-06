@@ -4,6 +4,7 @@ import {FormEvent,useEffect,useState} from 'react'
 import {createClient,type User} from '@supabase/supabase-js'
 
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
+const SECTION_OPTIONS=['A','B','C','D'] as const
 
 type Student={id:string;name:string;level:string;section:string;year:string}
 type Teacher={id:string;name:string;subject:string;classes:string;section:string}
@@ -87,9 +88,10 @@ export default function SecretaryPanel(){
   if(role!=='secretary')return
   const name=prompt(ht?'Non elèv':'Nom de l’élève',s.name);if(!name)return
   const level=prompt(ht?'Klas / nivo':'Classe / niveau',s.level);if(!level)return
-  const section=prompt(ht?'Seksyon':'Section',s.section);if(!section)return
+  const section=prompt(ht?'Seksyon (A, B, C oswa D)':'Section (A, B, C ou D)',s.section)?.trim().toUpperCase();if(!section)return
+  if(!SECTION_OPTIONS.includes(section as typeof SECTION_OPTIONS[number])){setError(ht?'Seksyon an dwe A, B, C oswa D.':'La section doit être A, B, C ou D.');return}
   const year=prompt(ht?'Ane akademik':'Année académique',s.year);if(!year)return
-  const {error}=await supabase.from('school_students').update({name:name.trim(),level:level.trim(),section:section.trim(),academic_year:year.trim()}).eq('id',s.id)
+  const {error}=await supabase.from('school_students').update({name:name.trim(),level:level.trim(),section,academic_year:year.trim()}).eq('id',s.id)
   if(error){setError(error.message);return}
   if(user)await load(user)
  }
@@ -118,7 +120,7 @@ export default function SecretaryPanel(){
   {error&&<div className="notice">⚠️ {error}</div>}
   <div className="card"><h2>{ht?'Tablo bò pou Sekretarya a':'Tableau de bord du Secrétariat'}</h2><div className="studentHead"><div className="name">{displayName||'Secrétariat'}</div><div className="muted">{ht?'Aksè limite — Direksyon valide epi pibliye nòt yo.':'Accès limité — la Direction valide et publie les notes.'}</div></div>{view==='home'&&<div className="menu"><button type="button" className="menuBtn" onClick={()=>setView('students')}>👥 {ht?'Jere elèv':'Gérer les élèves'}</button><button type="button" className="menuBtn" onClick={()=>setView('grades')}>📝 {ht?'Antre nòt':'Saisir les notes'}</button><button type="button" className="menuBtn" onClick={()=>setView('pending')}>✏️ {ht?'Korije nòt an atant':'Corriger les notes en attente'} ({grades.length})</button><button type="button" className="menuBtn" onClick={()=>setView('classes')}>🏫 {ht?'Klas & seksyon':'Classes & sections'}</button></div>}{view!=='home'&&<button type="button" className="btn secondary" onClick={()=>{setOpenClass(null);setView('home')}}>← {ht?'Retounen':'Retour'}</button>}</div>
 
-  {view==='students'&&<div className="card"><h3>{ht?'Jere elèv':'Gérer les élèves'}</h3><form onSubmit={addStudent}><div className="grid2"><input name="name" placeholder={ht?'Non elèv':'Nom de l’élève'} required/><input name="level" placeholder={ht?'Klas / nivo':'Classe / niveau'} required/><input name="section" placeholder={ht?'Seksyon':'Section'} required/><input name="year" defaultValue="2026–2027" required/></div><button type="submit" className="btn" style={{marginTop:12}}>➕ {ht?'Ajoute elèv':'Ajouter l’élève'}</button></form><table style={{marginTop:14}}><tbody>{students.map(s=><tr key={s.id}><td>{s.id}</td><td>{s.name}</td><td>{s.level}</td><td>{s.section}</td><td>{s.year}</td><td><button type="button" className="btn" onClick={()=>editStudent(s)}>{ht?'Modifye':'Modifier'}</button></td></tr>)}</tbody></table></div>}
+  {view==='students'&&<div className="card"><h3>{ht?'Jere elèv':'Gérer les élèves'}</h3><form onSubmit={addStudent}><div className="grid2"><input name="name" placeholder={ht?'Non elèv':'Nom de l’élève'} required/><input name="level" placeholder={ht?'Klas / nivo':'Classe / niveau'} required/><div><label>{ht?'Seksyon':'Section'}</label><select name="section" defaultValue="A" required>{SECTION_OPTIONS.map(section=><option key={section} value={section}>{section}</option>)}</select></div><input name="year" defaultValue="2026–2027" required/></div><button type="submit" className="btn" style={{marginTop:12}}>➕ {ht?'Ajoute elèv':'Ajouter l’élève'}</button></form><table style={{marginTop:14}}><tbody>{students.map(s=><tr key={s.id}><td>{s.id}</td><td>{s.name}</td><td>{s.level}</td><td>{s.section}</td><td>{s.year}</td><td><button type="button" className="btn" onClick={()=>editStudent(s)}>{ht?'Modifye':'Modifier'}</button></td></tr>)}</tbody></table></div>}
 
   {view==='grades'&&<div className="card"><h3>{ht?'Antre nòt':'Saisir les notes'}</h3><form onSubmit={submitGrade}><div className="grid2"><div><label>{ht?'Elèv':'Élève'}</label><select name="student" required><option value="">—</option>{students.map(s=><option value={s.id} key={s.id}>{s.name} — {s.level} {s.section}</option>)}</select></div><div><label>{ht?'Matiyè':'Matière'}</label><select name="subject" required><option value="">—</option>{subjects.map(s=><option key={s.id}>{s.name}</option>)}</select></div><div><label>{ht?'Pèsòn konsène':'Personne concernée'}</label><select name="teacher"><option value="">{ht?'Sekretarya':'Secrétariat'}</option>{teachers.map(t=><option value={t.id} key={t.id}>{t.name}</option>)}</select></div><div><label>{ht?'Nòt':'Note'}</label><input name="score" inputMode="decimal" placeholder="0–100" required/></div><div><label>{ht?'Trimès':'Trimestre'}</label><select name="term"><option>1er trimestre</option><option>2e trimestre</option><option>3e trimestre</option></select></div></div><button type="submit" className="btn" style={{marginTop:12}}>{ht?'Voye pou validasyon Direksyon':'Envoyer pour validation'}</button></form></div>}
 
