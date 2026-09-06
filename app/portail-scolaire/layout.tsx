@@ -3,7 +3,6 @@ import SecretaryPanel from './SecretaryPanel'
 import LoginRoleLabelFix from './LoginRoleLabelFix'
 import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
-import TeacherAccessPanel from './TeacherAccessPanel'
 import StudentTrimesterSummary from './StudentTrimesterSummary'
 import StudentWeightedBulletin from './StudentWeightedBulletin'
 import SessionJwtRecovery from './SessionJwtRecovery'
@@ -120,7 +119,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <SecretaryPanel />
       <SecretaryClassNavigator />
       <StudentAccessPanel />
-      <TeacherAccessPanel />
       <StudentTrimesterSummary />
       <StudentWeightedBulletin />
       <RecordsPanel />
