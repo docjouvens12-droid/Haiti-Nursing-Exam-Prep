@@ -45,11 +45,15 @@ export default function TeacherAccessPanel(){
  },[])
 
  useEffect(()=>{
-  const select=document.querySelector('[data-global-language-menu]') as HTMLSelectElement|null
-  const sync=()=>setLang(select?.value==='ht'?'ht':'fr')
-  sync()
-  select?.addEventListener('change',sync)
-  return()=>select?.removeEventListener('change',sync)
+  const current=document.querySelector('[data-global-language-menu]') as HTMLSelectElement|null
+  if(current)setLang(current.value==='ht'?'ht':'fr')
+  const sync=(e:Event)=>{
+   const target=e.target as HTMLSelectElement|null
+   if(!target?.matches?.('[data-global-language-menu]'))return
+   setLang(target.value==='ht'?'ht':'fr')
+  }
+  document.addEventListener('change',sync,true)
+  return()=>document.removeEventListener('change',sync,true)
  },[])
 
  const createAccess=async(fd:FormData)=>{
