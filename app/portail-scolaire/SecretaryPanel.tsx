@@ -16,7 +16,7 @@ export default function SecretaryPanel(){
  const [role,setRole]=useState('')
  const [displayName,setDisplayName]=useState('')
  const [mustChange,setMustChange]=useState(false)
- const [lang,setLang]=useState<'ht'|'fr'>('ht')
+ const [lang,setLang]=useState<'ht'|'fr'>('fr')
  const [view,setView]=useState<View>('home')
  const [students,setStudents]=useState<Student[]>([])
  const [teachers,setTeachers]=useState<Teacher[]>([])
@@ -61,13 +61,17 @@ export default function SecretaryPanel(){
  },[])
 
  useEffect(()=>{
-  const sync=(e:Event)=>{
-   const b=(e.target as HTMLElement|null)?.closest?.('.langChoice') as HTMLButtonElement|null
-   if(!b)return
-   setLang(b.textContent?.includes('Français')?'fr':'ht')
+  const sync=()=>{
+   const select=document.querySelector<HTMLSelectElement>('[data-global-language-menu] select')
+   setLang(select?.value==='ht'?'ht':'fr')
   }
-  document.addEventListener('click',sync,true)
-  return()=>document.removeEventListener('click',sync,true)
+  sync()
+  const onChange=(e:Event)=>{
+   const select=(e.target as HTMLElement|null)?.closest?.('[data-global-language-menu] select') as HTMLSelectElement|null
+   if(select)setLang(select.value==='ht'?'ht':'fr')
+  }
+  document.addEventListener('change',onChange,true)
+  return()=>document.removeEventListener('change',onChange,true)
  },[])
 
  const createSecretary=async(fd:FormData)=>{
