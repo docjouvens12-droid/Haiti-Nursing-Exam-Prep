@@ -34,6 +34,7 @@ export default function StudentTrimesterSummary(){
  const [assessmentType,setAssessmentType]=useState<AssessmentType>('trimester')
  const [assessmentNumber,setAssessmentNumber]=useState(1)
  const [showAll,setShowAll]=useState(false)
+ const [allType,setAllType]=useState<AssessmentType>('trimester')
  const [grades,setGrades]=useState<Grade[]>([])
 
  useEffect(()=>{
@@ -78,16 +79,10 @@ export default function StudentTrimesterSummary(){
 
  const selectedAverage=useMemo(()=>average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))),[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>average(grades),[grades])
- const summaries=useMemo(()=>{
-  const result:{type:AssessmentType;number:number;avg:number|null}[]=[]
-  ;(['trimester','control'] as const).forEach(type=>{
-   ;[1,2,3,4].forEach(number=>{
-    const rows=grades.filter(g=>matchesSelection(g.term,type,number))
-    result.push({type,number,avg:average(rows)})
-   })
-  })
-  return result
- },[grades])
+ const summaries=useMemo(()=>[1,2,3,4].map(number=>{
+  const rows=grades.filter(g=>matchesSelection(g.term,allType,number))
+  return {number,avg:average(rows)}
+ }),[grades,allType])
 
  if(!target)return null
  const ht=lang==='ht'
@@ -120,14 +115,21 @@ export default function StudentTrimesterSummary(){
      <strong style={{fontSize:24,color:'#0f4c81'}}>{selectedAverage===null?'—':selectedAverage+'%'}</strong>
     </div>
 
-    <button type="button" className="btn secondary" style={{marginTop:14,width:'100%'}} onClick={()=>setShowAll(v=>!v)}>
+    <button type="button" className="btn secondary" style={{marginTop:14,width:'100%'}} onClick={()=>{setShowAll(v=>!v);setAllType(assessmentType)}}>
      {showAll?(ht?'Kache tout rezilta':'Masquer tous les résultats'):(ht?'Wè tout rezilta':'Voir tous les résultats')}
     </button>
 
     {showAll&&<div style={{borderTop:'1px solid #dde6ef',paddingTop:12,marginTop:14}}>
-      <div style={{fontWeight:800,marginBottom:10}}>{ht?'Tout mwayèn yo':'Toutes les moyennes'}</div>
-      <div style={{display:'grid',gap:8}}>{summaries.map(s=><div key={`${s.type}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid #e5edf5'}}>
-        <span style={{fontWeight:700}}>{s.type==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
+      <div style={{fontWeight:800,marginBottom:10}}>{ht?'Tout rezilta':'Tous les résultats'}</div>
+      <div style={{marginBottom:12}}>
+       <label>{ht?'Kalite rezilta':'Type de résultats'}</label>
+       <select value={allType} onChange={e=>setAllType(e.target.value as AssessmentType)}>
+        <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
+        <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
+       </select>
+      </div>
+      <div style={{display:'grid',gap:8}}>{summaries.map(s=><div key={`${allType}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid #e5edf5'}}>
+        <span style={{fontWeight:700}}>{allType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
         <strong style={{color:'#0f4c81'}}>{s.avg===null?'—':s.avg+'%'}</strong>
       </div>)}</div>
     </div>}
