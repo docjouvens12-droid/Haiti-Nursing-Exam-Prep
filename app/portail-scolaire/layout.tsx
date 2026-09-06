@@ -65,9 +65,31 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           white-space:normal!important;
           overflow:visible!important;
         }
+        body:has(.ps-page) .topActions{
+          position:static!important;
+          margin-left:auto!important;
+          z-index:auto!important;
+          flex:0 0 auto!important;
+        }
+        body:has(.ps-page) .topActions button{
+          background:transparent!important;
+          color:#fff!important;
+          border:1px solid rgba(255,255,255,.55)!important;
+          border-radius:10px!important;
+          padding:8px 10px!important;
+          box-shadow:none!important;
+          font-weight:800!important;
+          min-height:40px!important;
+          pointer-events:auto!important;
+        }
         @media(max-width:720px){
+          body:has(.ps-page) .nativeLangMenu{
+            margin-top:calc(env(safe-area-inset-top, 0px) + 18px)!important;
+            margin-bottom:14px!important;
+          }
           body:has(.ps-page) header.top{padding:14px 16px!important}
-          body:has(.ps-page) header.top > .bar > .brand{font-size:17px!important}
+          body:has(.ps-page) header.top > .bar > .brand{font-size:16px!important}
+          body:has(.ps-page) .topActions button{font-size:12px!important;padding:7px 9px!important;min-height:38px!important}
         }
 
         body:has(.secretary-dashboard) .ps-page{
@@ -93,25 +115,6 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
 
         body:has(.ps-page) .native-student-access-mount{display:none!important}
         body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
-
-        body:has(.ps-page) .topActions{
-          position:fixed!important;
-          right:16px!important;
-          bottom:calc(env(safe-area-inset-bottom, 0px) + 18px)!important;
-          margin:0!important;
-          z-index:99999!important;
-        }
-        body:has(.ps-page) .topActions button{
-          background:#fff!important;
-          color:#a52a2a!important;
-          border:1px solid #efcaca!important;
-          border-radius:999px!important;
-          padding:12px 16px!important;
-          box-shadow:0 8px 24px rgba(20,33,61,.18)!important;
-          font-weight:800!important;
-          min-height:46px!important;
-          pointer-events:auto!important;
-        }
       `}</style>
       {children}
       <SecretaryPanel />
