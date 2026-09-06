@@ -11,6 +11,7 @@ import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import AcademicYearEditor from './AcademicYearEditor'
 import InlineAcademicYearEdit from './InlineAcademicYearEdit'
+import OfficialRecordPrintEnhancer from './OfficialRecordPrintEnhancer'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -75,6 +76,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <InlineAcademicYearEdit />
       <TeacherAssessmentSelector />
       <DirectionPublishSelector />
+      <OfficialRecordPrintEnhancer />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
     </>
