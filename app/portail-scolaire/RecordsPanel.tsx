@@ -64,14 +64,13 @@ export default function RecordsPanel(){
 
  useEffect(()=>{
   const attach=()=>{
-   // Rename student option already rendered by StudentTrimesterSummary.
    document.querySelectorAll('button.menuBtn').forEach(b=>{
     const text=(b.textContent||'').trim()
-    if(text.includes('Bilten final')||text.includes('Bulletin final')) b.textContent=`📑 ${ht?'Relve nòt mwen':'Mes relevés de notes'}`
+    if(text.includes('Bilten final')||text.includes('Bulletin final')||text.includes('Mes relevés de notes')) b.textContent=`📑 ${ht?'Relve nòt mwen':'Mon relevé de notes'}`
    })
    document.querySelectorAll('.card h2').forEach(h=>{
     const text=(h.textContent||'').trim()
-    if(text==='Bilten final'||text==='Bulletin final') h.textContent=ht?'Relve nòt mwen':'Mes relevés de notes'
+    if(text==='Bilten final'||text==='Bulletin final'||text==='Mes relevés de notes') h.textContent=ht?'Relve nòt mwen':'Mon relevé de notes'
    })
 
    if(!role){setTarget(null);return}
