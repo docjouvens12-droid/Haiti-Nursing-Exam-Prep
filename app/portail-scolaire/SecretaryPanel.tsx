@@ -27,6 +27,7 @@ export default function SecretaryPanel(){
  const [credential,setCredential]=useState<Credential>(null)
  const [error,setError]=useState('')
  const [accessOpen,setAccessOpen]=useState(false)
+ const [openClass,setOpenClass]=useState<{name:string;section:string}|null>(null)
  const ht=lang==='ht'
 
  const load=async(u:User)=>{
@@ -144,9 +145,10 @@ export default function SecretaryPanel(){
  }
 
  if(role!=='secretary'||mustChange)return null
+ const classStudents=openClass?students.filter(s=>s.level===openClass.name&&s.section===openClass.section):[]
  return <section className="secretary-dashboard" style={{maxWidth:1000,margin:'14px auto',padding:'0 12px'}}>
   {error&&<div className="notice">⚠️ {error}</div>}
-  <div className="card"><h2>{ht?'Tablo bò pou Sekretarya a':'Tableau de bord du Secrétariat'}</h2><div className="studentHead"><div className="name">{displayName||'Secrétariat'}</div><div className="muted">{ht?'Aksè limite — Direksyon valide epi pibliye nòt yo.':'Accès limité — la Direction valide et publie les notes.'}</div></div>{view==='home'&&<div className="menu"><button type="button" className="menuBtn" onClick={()=>setView('students')}>👥 {ht?'Jere elèv':'Gérer les élèves'}</button><button type="button" className="menuBtn" onClick={()=>setView('grades')}>📝 {ht?'Antre nòt':'Saisir les notes'}</button><button type="button" className="menuBtn" onClick={()=>setView('pending')}>✏️ {ht?'Korije nòt an atant':'Corriger les notes en attente'} ({grades.length})</button><button type="button" className="menuBtn" onClick={()=>setView('classes')}>🏫 {ht?'Klas & seksyon':'Classes & sections'}</button></div>}{view!=='home'&&<button type="button" className="btn secondary" onClick={()=>setView('home')}>← {ht?'Retounen':'Retour'}</button>}</div>
+  <div className="card"><h2>{ht?'Tablo bò pou Sekretarya a':'Tableau de bord du Secrétariat'}</h2><div className="studentHead"><div className="name">{displayName||'Secrétariat'}</div><div className="muted">{ht?'Aksè limite — Direksyon valide epi pibliye nòt yo.':'Accès limité — la Direction valide et publie les notes.'}</div></div>{view==='home'&&<div className="menu"><button type="button" className="menuBtn" onClick={()=>setView('students')}>👥 {ht?'Jere elèv':'Gérer les élèves'}</button><button type="button" className="menuBtn" onClick={()=>setView('grades')}>📝 {ht?'Antre nòt':'Saisir les notes'}</button><button type="button" className="menuBtn" onClick={()=>setView('pending')}>✏️ {ht?'Korije nòt an atant':'Corriger les notes en attente'} ({grades.length})</button><button type="button" className="menuBtn" onClick={()=>setView('classes')}>🏫 {ht?'Klas & seksyon':'Classes & sections'}</button></div>}{view!=='home'&&<button type="button" className="btn secondary" onClick={()=>{setOpenClass(null);setView('home')}}>← {ht?'Retounen':'Retour'}</button>}</div>
 
   {view==='students'&&<div className="card"><h3>{ht?'Jere elèv':'Gérer les élèves'}</h3><form onSubmit={addStudent}><div className="grid2"><input name="name" placeholder={ht?'Non elèv':'Nom de l’élève'} required/><input name="level" placeholder={ht?'Klas / nivo':'Classe / niveau'} required/><input name="section" placeholder={ht?'Seksyon':'Section'} required/><input name="year" defaultValue="2026–2027" required/></div><button type="submit" className="btn" style={{marginTop:12}}>➕ {ht?'Ajoute elèv':'Ajouter l’élève'}</button></form><table style={{marginTop:14}}><tbody>{students.map(s=><tr key={s.id}><td>{s.id}</td><td>{s.name}</td><td>{s.level}</td><td>{s.section}</td><td>{s.year}</td><td><button type="button" className="btn" onClick={()=>editStudent(s)}>{ht?'Modifye':'Modifier'}</button></td></tr>)}</tbody></table></div>}
 
@@ -154,6 +156,16 @@ export default function SecretaryPanel(){
 
   {view==='pending'&&<div className="card"><h3>{ht?'Nòt an atant':'Notes en attente'}</h3><p className="muted">{ht?'Sekretarya ka korije nòt sa yo sèlman anvan Direksyon valide yo.':'Le Secrétariat peut modifier ces notes uniquement avant leur validation par la Direction.'}</p>{grades.length===0?<div className="notice">{ht?'Pa gen nòt an atant.':'Aucune note en attente.'}</div>:<table><tbody>{grades.map(g=><tr key={g.id}><td>{g.student}</td><td>{g.subject}</td><td>{g.term}</td><td className="score">{g.score}%</td><td><button type="button" className="btn" onClick={()=>editGrade(g)}>{ht?'Korije':'Corriger'}</button></td></tr>)}</tbody></table>}</div>}
 
-  {view==='classes'&&<div className="card"><h3>{ht?'Klas & seksyon':'Classes & sections'}</h3><div className="teacherList">{classes.map(c=><div className="teacherCard" key={c.id}><b>{c.name}</b><div className="muted">{ht?'Seksyon':'Section'} {c.section}</div></div>)}</div></div>}
+  {view==='classes'&&<div className="card"><h3>{ht?'Klas & seksyon':'Classes & sections'}</h3><div className="teacherList">{classes.map(c=><button type="button" className="teacherCard" key={c.id} style={{textAlign:'left',width:'100%',cursor:'pointer'}} onClick={()=>setOpenClass({name:c.name,section:c.section})}><b>{c.name}</b><div className="muted">{ht?'Seksyon':'Section'} {c.section}</div></button>)}</div></div>}
+
+  {openClass&&<div role="dialog" aria-modal="true" style={{position:'fixed',inset:0,zIndex:10000,background:'rgba(15,23,42,.45)',display:'flex',alignItems:'flex-end',justifyContent:'center',padding:12}} onClick={()=>setOpenClass(null)}>
+   <section className="card" style={{width:'100%',maxWidth:700,maxHeight:'78vh',overflow:'auto',margin:0}} onClick={e=>e.stopPropagation()}>
+    <div className="row" style={{justifyContent:'space-between',alignItems:'center'}}>
+     <div><h3 style={{margin:'0 0 4px'}}>{openClass.name}</h3><div className="muted">{ht?'Seksyon':'Section'} {openClass.section}</div></div>
+     <button type="button" className="btn secondary" onClick={()=>setOpenClass(null)}>✕ {ht?'Fèmen':'Fermer'}</button>
+    </div>
+    <div style={{marginTop:14}}>{classStudents.length===0?<div className="notice">{ht?'Pa gen elèv nan klas sa a pou kounye a.':'Aucun élève dans cette classe pour le moment.'}</div>:<table><tbody>{classStudents.map(s=><tr key={s.id}><td>{s.id}</td><td><b>{s.name}</b></td><td>{s.year}</td></tr>)}</tbody></table>}</div>
+   </section>
+  </div>}
  </section>
 }
