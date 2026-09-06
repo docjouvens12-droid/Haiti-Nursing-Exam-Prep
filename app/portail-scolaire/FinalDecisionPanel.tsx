@@ -14,7 +14,7 @@ function escapeHtml(v:string){
  return (v||'').replace(/[&<>]/g,(c:string)=>map[c]||c)
 }
 function labels(ht:boolean,d:Decision){
- if(d==='admitted')return ht?'Admis':'Admis'
+ if(d==='admitted')return 'Admis'
  if(d==='deferred')return ht?'Ajouné':'Ajourné'
  return ht?'An atant':'En attente'
 }
@@ -22,7 +22,7 @@ function labels(ht:boolean,d:Decision){
 export default function FinalDecisionPanel(){
  const [role,setRole]=useState<Role>('')
  const [ownStudentId,setOwnStudentId]=useState('')
- const [lang,setLang]=useState<'ht'|'fr'>('ht')
+ const [,setLang]=useState<'ht'|'fr'>('ht')
 
  useEffect(()=>{
   let active=true
@@ -39,8 +39,10 @@ export default function FinalDecisionPanel(){
 
  useEffect(()=>{
   const language=()=>{
-   const sel=document.querySelector('[data-language-menu-selector] select') as HTMLSelectElement|null
-   return sel?.value==='fr'?'fr':'ht'
+   const sel=document.querySelector('[data-global-language-menu] select') as HTMLSelectElement|null
+   if(sel)return sel.value==='fr'?'fr':'ht'
+   const frenchActive=Array.from(document.querySelectorAll('button.langChoice')).some(b=>(b.textContent||'').includes('Français')&&b.classList.contains('active'))
+   return frenchActive?'fr':'ht'
   }
   const findStudentSelect=(card:HTMLElement)=>{
    for(const label of Array.from(card.querySelectorAll('label'))){
@@ -53,9 +55,8 @@ export default function FinalDecisionPanel(){
   const mountBox=async(card:HTMLElement,studentId:string,mode:'records'|'student')=>{
    const ht=language()==='ht';setLang(ht?'ht':'fr')
    if(!studentId){card.querySelector('[data-final-decision-box]')?.remove();return}
-   let year=''
    const {data:student}=await supabase.from('school_students').select('academic_year').eq('id',studentId).maybeSingle()
-   year=student?.academic_year||''
+   const year=student?.academic_year||''
    if(!year)return
    const {data:existing}=await supabase.from('school_student_decisions').select('decision,note').eq('student_id',studentId).eq('academic_year',year).maybeSingle()
    const decision=(existing?.decision||'pending') as Decision
