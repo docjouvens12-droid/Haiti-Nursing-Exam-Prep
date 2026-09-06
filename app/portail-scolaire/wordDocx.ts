@@ -21,7 +21,6 @@ export async function downloadAcademicDocx(opts:ExportOptions){
   Document,Packer,Paragraph,TextRun,Table,TableRow,TableCell,WidthType,AlignmentType,HeadingLevel,BorderStyle,TableLayoutType
  }=await import('docx')
 
- // A4 printable width with 0.5 in margins, expressed in twips (DXA).
  const pageWidth=10000
  const border={style:BorderStyle.SINGLE,size:1,color:'B7C6D4'}
  const tableBorders={top:border,bottom:border,left:border,right:border,insideHorizontal:border,insideVertical:border}
@@ -51,13 +50,7 @@ export async function downloadAcademicDocx(opts:ExportOptions){
    new TableCell({width:{size:infoWidths[1],type:WidthType.DXA},children:[new Paragraph({children:b?[new TextRun({text:`${b[0]}: `,bold:true,size:20}),new TextRun({text:b[1]||'—',size:20})]:[new TextRun({text:'',size:20})]})]})
   ]}))
  }
- body.push(new Table({
-  width:{size:pageWidth,type:WidthType.DXA},
-  columnWidths:infoWidths,
-  layout:TableLayoutType.FIXED,
-  borders:tableBorders,
-  rows:infoRows
- }))
+ body.push(new Table({width:{size:pageWidth,type:WidthType.DXA},columnWidths:infoWidths,layout:TableLayoutType.FIXED,borders:tableBorders,rows:infoRows}))
  body.push(new Paragraph({text:'',spacing:{after:120}}))
 
  const mainWidths=widthsFor(opts.headers.length||2)
@@ -76,31 +69,37 @@ export async function downloadAcademicDocx(opts:ExportOptions){
   ]}))
  }
 
- body.push(new Paragraph({text:opts.validationTitle,heading:HeadingLevel.HEADING_2,spacing:{before:380,after:320}}))
- const validationWidths=[5000,5000]
+ body.push(new Paragraph({text:opts.validationTitle,heading:HeadingLevel.HEADING_2,spacing:{before:380,after:240}}))
+ const validationWidths=[4800,4800]
+ const noBorder={style:BorderStyle.NONE,size:0,color:'FFFFFF'}
+ const validationBorders={top:noBorder,bottom:noBorder,left:noBorder,right:noBorder,insideHorizontal:noBorder,insideVertical:noBorder}
  body.push(new Table({
   width:{size:pageWidth,type:WidthType.DXA},
-  columnWidths:validationWidths,
+  columnWidths:[5000,5000],
   layout:TableLayoutType.FIXED,
-  borders:{top:{style:BorderStyle.NONE,size:0,color:'FFFFFF'},bottom:{style:BorderStyle.NONE,size:0,color:'FFFFFF'},left:{style:BorderStyle.NONE,size:0,color:'FFFFFF'},right:{style:BorderStyle.NONE,size:0,color:'FFFFFF'},insideHorizontal:{style:BorderStyle.NONE,size:0,color:'FFFFFF'},insideVertical:{style:BorderStyle.NONE,size:0,color:'FFFFFF'}},
+  borders:validationBorders,
   rows:[
    new TableRow({children:[
-    new TableCell({width:{size:validationWidths[0],type:WidthType.DXA},children:[new Paragraph({text:'\n\n'}),new Paragraph({text:opts.signatureLabel,border:{top:{style:BorderStyle.SINGLE,size:6,color:'333333'}}})]}),
-    new TableCell({width:{size:validationWidths[1],type:WidthType.DXA},children:[new Paragraph({text:'\n\n'}),new Paragraph({text:opts.stampLabel,border:{top:{style:BorderStyle.SINGLE,size:6,color:'333333'}}})]})
+    new TableCell({width:{size:5000,type:WidthType.DXA},margins:{right:260},children:[
+     new Paragraph({spacing:{before:420,after:20},children:[new TextRun({text:'____________________________',size:20})]}),
+     new Paragraph({spacing:{after:160},children:[new TextRun({text:opts.signatureLabel,bold:true,size:20})]})
+    ]}),
+    new TableCell({width:{size:5000,type:WidthType.DXA},margins:{left:260},children:[
+     new Paragraph({spacing:{before:420,after:20},children:[new TextRun({text:'____________________________',size:20})]}),
+     new Paragraph({spacing:{after:160},children:[new TextRun({text:opts.stampLabel,bold:true,size:20})]})
+    ]})
    ]}),
    new TableRow({children:[
-    new TableCell({columnSpan:2,width:{size:pageWidth,type:WidthType.DXA},children:[new Paragraph({text:'\n'}),new Paragraph({text:opts.dateLabel,border:{top:{style:BorderStyle.SINGLE,size:6,color:'333333'}}})]})
+    new TableCell({columnSpan:2,width:{size:pageWidth,type:WidthType.DXA},children:[
+     new Paragraph({spacing:{before:260,after:20},children:[new TextRun({text:'____________________________________________',size:20})]}),
+     new Paragraph({children:[new TextRun({text:opts.dateLabel,bold:true,size:20})]})
+    ]})
    ]})
   ]
  }))
 
  const doc=new Document({sections:[{
-  properties:{
-   page:{
-    size:{width:11906,height:16838},
-    margin:{top:720,right:720,bottom:720,left:720}
-   }
-  },
+  properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:720,bottom:720,left:720}}},
   children:body
  }]})
  const blob=await Packer.toBlob(doc)
