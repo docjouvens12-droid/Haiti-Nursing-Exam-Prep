@@ -30,11 +30,12 @@ function average(rows:Grade[]){
 
 export default function StudentTrimesterSummary(){
  const [target,setTarget]=useState<HTMLElement|null>(null)
+ const [finalTarget,setFinalTarget]=useState<HTMLElement|null>(null)
  const [lang,setLang]=useState<'ht'|'fr'>('ht')
  const [assessmentType,setAssessmentType]=useState<AssessmentType>('trimester')
  const [assessmentNumber,setAssessmentNumber]=useState(1)
- const [showAll,setShowAll]=useState(false)
- const [allType,setAllType]=useState<AssessmentType>('trimester')
+ const [showFinal,setShowFinal]=useState(false)
+ const [finalType,setFinalType]=useState<AssessmentType>('trimester')
  const [grades,setGrades]=useState<Grade[]>([])
 
  useEffect(()=>{
@@ -57,19 +58,35 @@ export default function StudentTrimesterSummary(){
    const headings=Array.from(document.querySelectorAll('.ps-page h2'))
    const h=headings.find(x=>['Tablo bò pou Elèv yo','Tableau de bord de l’Élève'].includes((x.textContent||'').trim()))
    const card=h?.closest('.card') as HTMLElement|null
-   if(!card)return
+   if(!card){setTarget(null);setFinalTarget(null);return}
    setLang((h?.textContent||'').includes('Tableau')?'fr':'ht')
-   const old=card.querySelector('[data-student-term-mount]') as HTMLElement|null
-   if(old){setTarget(old);return}
-   const mount=document.createElement('div')
-   mount.setAttribute('data-student-term-mount','true')
-   const stats=card.querySelector('.stats')
-   if(stats){
-    const first=stats.querySelector('.stat:first-child') as HTMLElement|null
-    if(first)first.style.display='none'
-    stats.parentElement?.insertBefore(mount,stats)
-   }else card.appendChild(mount)
+
+   let mount=card.querySelector('[data-student-term-mount]') as HTMLElement|null
+   if(!mount){
+    mount=document.createElement('div')
+    mount.setAttribute('data-student-term-mount','true')
+    const stats=card.querySelector('.stats')
+    if(stats){
+     const first=stats.querySelector('.stat:first-child') as HTMLElement|null
+     if(first)first.style.display='none'
+     stats.parentElement?.insertBefore(mount,stats)
+    }else card.appendChild(mount)
+   }
    setTarget(mount)
+
+   const menu=card.querySelector('.menu') as HTMLElement|null
+   const buttons=menu?Array.from(menu.querySelectorAll('button')):[]
+   const bulletin=buttons.find(b=>['Bilten mwen','Mon bulletin'].some(t=>(b.textContent||'').includes(t))) as HTMLButtonElement|undefined
+   if(bulletin){
+    let finalMount=menu?.querySelector('[data-student-final-report-mount]') as HTMLElement|null
+    if(!finalMount){
+     finalMount=document.createElement('div')
+     finalMount.setAttribute('data-student-final-report-mount','true')
+     finalMount.style.display='contents'
+     bulletin.insertAdjacentElement('afterend',finalMount)
+    }
+    setFinalTarget(finalMount)
+   }
   }
   attach()
   const observer=new MutationObserver(()=>requestAnimationFrame(attach))
@@ -79,10 +96,10 @@ export default function StudentTrimesterSummary(){
 
  const selectedAverage=useMemo(()=>average(grades.filter(g=>matchesSelection(g.term,assessmentType,assessmentNumber))),[grades,assessmentType,assessmentNumber])
  const generalAverage=useMemo(()=>average(grades),[grades])
- const summaries=useMemo(()=>[1,2,3,4].map(number=>{
-  const rows=grades.filter(g=>matchesSelection(g.term,allType,number))
+ const finalSummaries=useMemo(()=>[1,2,3,4].map(number=>{
+  const rows=grades.filter(g=>matchesSelection(g.term,finalType,number))
   return {number,avg:average(rows)}
- }),[grades,allType])
+ }),[grades,finalType])
 
  if(!target)return null
  const ht=lang==='ht'
@@ -90,49 +107,29 @@ export default function StudentTrimesterSummary(){
   ? `${ht?'Mwayèn Trimès':'Moyenne Trimestre'} ${assessmentNumber}`
   : `${ht?'Mwayèn Kontwòl':'Moyenne Contrôle'} ${assessmentNumber}`
 
- return createPortal(
+ const summary=createPortal(
   <div style={{marginBottom:14}}>
    <div style={{border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#f8fafc'}}>
     <div style={{fontWeight:800,marginBottom:10}}>{ht?'Chwazi rezilta pou wè':'Choisir le résultat à afficher'}</div>
     <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginBottom:10}}>
      <div>
       <label>{ht?'Kalite':'Type'}</label>
-      <select value={assessmentType} onChange={e=>{setAssessmentType(e.target.value as AssessmentType);setShowAll(false)}}>
+      <select value={assessmentType} onChange={e=>setAssessmentType(e.target.value as AssessmentType)}>
        <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
        <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
       </select>
      </div>
      <div>
       <label>{ht?'Nimewo':'Numéro'}</label>
-      <select value={assessmentNumber} onChange={e=>{setAssessmentNumber(Number(e.target.value));setShowAll(false)}}>
+      <select value={assessmentNumber} onChange={e=>setAssessmentNumber(Number(e.target.value))}>
        {[1,2,3,4].map(n=><option key={n} value={n}>{n}</option>)}
       </select>
      </div>
     </div>
-
     <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,borderTop:'1px solid #dde6ef',paddingTop:12}}>
      <span style={{fontWeight:700}}>{selectedLabel}</span>
      <strong style={{fontSize:24,color:'#0f4c81'}}>{selectedAverage===null?'—':selectedAverage+'%'}</strong>
     </div>
-
-    <button type="button" className="btn secondary" style={{marginTop:14,width:'100%'}} onClick={()=>{setShowAll(v=>!v);setAllType(assessmentType)}}>
-     {showAll?(ht?'Kache tout rezilta':'Masquer tous les résultats'):(ht?'Wè tout rezilta':'Voir tous les résultats')}
-    </button>
-
-    {showAll&&<div style={{borderTop:'1px solid #dde6ef',paddingTop:12,marginTop:14}}>
-      <div style={{fontWeight:800,marginBottom:10}}>{ht?'Tout rezilta':'Tous les résultats'}</div>
-      <div style={{marginBottom:12}}>
-       <label>{ht?'Kalite rezilta':'Type de résultats'}</label>
-       <select value={allType} onChange={e=>setAllType(e.target.value as AssessmentType)}>
-        <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
-        <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
-       </select>
-      </div>
-      <div style={{display:'grid',gap:8}}>{summaries.map(s=><div key={`${allType}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'9px 0',borderBottom:'1px solid #e5edf5'}}>
-        <span style={{fontWeight:700}}>{allType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
-        <strong style={{color:'#0f4c81'}}>{s.avg===null?'—':s.avg+'%'}</strong>
-      </div>)}</div>
-    </div>}
    </div>
    <div style={{marginTop:10,border:'1px solid #dde6ef',borderRadius:14,padding:14,background:'#fff',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
     <strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong>
@@ -140,4 +137,28 @@ export default function StudentTrimesterSummary(){
    </div>
   </div>,target
  )
+
+ const finalReport=finalTarget?createPortal(<>
+  <button className="menuBtn" type="button" onClick={()=>setShowFinal(v=>!v)}>📑 {ht?'Bilten final':'Bulletin final'}</button>
+  {showFinal&&<div className="card" style={{marginTop:12,gridColumn:'1 / -1'}}>
+   <h2>{ht?'Bilten final':'Bulletin final'}</h2>
+   <div style={{marginBottom:12}}>
+    <label>{ht?'Kalite':'Type'}</label>
+    <select value={finalType} onChange={e=>setFinalType(e.target.value as AssessmentType)}>
+     <option value="trimester">{ht?'Trimès':'Trimestre'}</option>
+     <option value="control">{ht?'Kontwòl':'Contrôle'}</option>
+    </select>
+   </div>
+   <div style={{display:'grid',gap:8}}>{finalSummaries.map(s=><div key={`${finalType}-${s.number}`} style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,padding:'10px 0',borderBottom:'1px solid #e5edf5'}}>
+    <span style={{fontWeight:700}}>{finalType==='trimester'?(ht?'Mwayèn Trimès':'Moyenne Trimestre'):(ht?'Mwayèn Kontwòl':'Moyenne Contrôle')} {s.number}</span>
+    <strong style={{color:'#0f4c81'}}>{s.avg===null?'—':s.avg+'%'}</strong>
+   </div>)}</div>
+   <div style={{marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef',display:'flex',justifyContent:'space-between',alignItems:'center',gap:12}}>
+    <strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong>
+    <strong style={{fontSize:24,color:'#0f4c81'}}>{generalAverage===null?'—':generalAverage+'%'}</strong>
+   </div>
+  </div>}
+ </>,finalTarget):null
+
+ return <>{summary}{finalReport}</>
 }
