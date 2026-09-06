@@ -11,6 +11,16 @@ function safe(value:any){return String(value||'—').replace(/[&<>"']/g,c=>({"&"
 export default function SchoolRecordBranding(){
  useEffect(()=>{
   let settings:any=null
+
+  const currentFrench=()=>{
+   const menu=document.querySelector('[data-language-menu] select') as HTMLSelectElement|null
+   if(menu)return menu.value==='fr'
+   const frButton=Array.from(document.querySelectorAll('button.langChoice')).find(b=>(b.textContent||'').includes('Français')) as HTMLButtonElement|undefined
+   if(frButton)return frButton.classList.contains('active')
+   const frenchHeading=Array.from(document.querySelectorAll('.card h2')).some(h=>/Relevé|Relevés|Tableau de bord|Mes notes|Mon bulletin/i.test(clean(h.textContent||'')))
+   return frenchHeading
+  }
+
   const load=async()=>{
    const {data}=await supabase.from('school_settings').select('school_name,address,phone,email,logo_url').eq('id',1).maybeSingle()
    settings=data
@@ -38,6 +48,8 @@ export default function SchoolRecordBranding(){
 
   const apply=()=>{
    if(!settings)return
+   const fr=currentFrench()
+
    document.querySelectorAll('[data-school-branding]').forEach(node=>{
     const parent=(node as HTMLElement).closest('.card') as HTMLElement|null
     const heading=clean(parent?.querySelector('h2')?.textContent||'')
@@ -51,7 +63,6 @@ export default function SchoolRecordBranding(){
     const heading=clean(headingElement?.textContent||'')
     const isRecordTitle=['Relve nòt elèv yo','Relevés de notes des élèves','Relve nòt mwen','Mon relevé de notes'].includes(heading)
     if(!isRecordTitle||!headingElement)return
-    const fr=heading.includes('Relevé')||heading.includes('Relevés')
 
     let box=card.querySelector('[data-school-branding="record"]') as HTMLElement|null
     if(!box){
@@ -66,10 +77,21 @@ export default function SchoolRecordBranding(){
 
   load()
   const onUpdated=()=>load()
+  const onLanguageChange=(e:Event)=>{
+   const target=e.target as HTMLElement|null
+   if(target?.matches?.('[data-language-menu] select')||target?.closest?.('.langChoice')) requestAnimationFrame(apply)
+  }
   window.addEventListener('school-settings-updated',onUpdated)
+  document.addEventListener('change',onLanguageChange,true)
+  document.addEventListener('click',onLanguageChange,true)
   const o=new MutationObserver(()=>requestAnimationFrame(apply))
-  o.observe(document.body,{subtree:true,childList:true})
-  return()=>{window.removeEventListener('school-settings-updated',onUpdated);o.disconnect()}
+  o.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['class']})
+  return()=>{
+   window.removeEventListener('school-settings-updated',onUpdated)
+   document.removeEventListener('change',onLanguageChange,true)
+   document.removeEventListener('click',onLanguageChange,true)
+   o.disconnect()
+  }
  },[])
  return null
 }
