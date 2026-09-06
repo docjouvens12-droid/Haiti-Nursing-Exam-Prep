@@ -10,14 +10,33 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page) .mobile-student-nav-spacer,
         body:has(.ps-page) .pwa-splash { display:none!important; }
         body:has(.ps-page){padding-bottom:0!important}
-        body:has(.secretary-dashboard) .ps-page{min-height:auto!important}
+        body:has(.secretary-dashboard) .ps-page{
+          min-height:auto!important;
+          pointer-events:none!important;
+        }
+        body:has(.secretary-dashboard) .secretary-dashboard{
+          position:relative!important;
+          z-index:10000!important;
+          pointer-events:auto!important;
+          touch-action:manipulation;
+        }
+        body:has(.secretary-dashboard) .secretary-dashboard button,
+        body:has(.secretary-dashboard) .secretary-dashboard input,
+        body:has(.secretary-dashboard) .secretary-dashboard select,
+        body:has(.secretary-dashboard) .secretary-dashboard form{
+          pointer-events:auto!important;
+          touch-action:manipulation;
+        }
+        body:has(.secretary-dashboard) .ps-page .topActions{
+          pointer-events:auto!important;
+        }
 
         body:has(.ps-page) .topActions{
           position:fixed!important;
           right:16px!important;
           bottom:calc(env(safe-area-inset-bottom, 0px) + 18px)!important;
           margin:0!important;
-          z-index:9999!important;
+          z-index:99999!important;
         }
         body:has(.ps-page) .topActions button{
           background:#fff!important;
@@ -28,6 +47,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
           box-shadow:0 8px 24px rgba(20,33,61,.18)!important;
           font-weight:800!important;
           min-height:46px!important;
+          pointer-events:auto!important;
         }
       `}</style>
       {children}
