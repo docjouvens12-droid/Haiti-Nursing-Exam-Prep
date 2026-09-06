@@ -3,6 +3,7 @@ import SecretaryPanel from './SecretaryPanel'
 import LoginRoleLabelFix from './LoginRoleLabelFix'
 import SecretaryClassNavigator from './SecretaryClassNavigator'
 import StudentAccessPanel from './StudentAccessPanel'
+import StudentTrimesterSummary from './StudentTrimesterSummary'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -60,6 +61,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <SecretaryPanel />
       <SecretaryClassNavigator />
       <StudentAccessPanel />
+      <StudentTrimesterSummary />
       <LoginRoleLabelFix />
     </>
   )
