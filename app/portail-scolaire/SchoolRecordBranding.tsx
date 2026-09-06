@@ -6,6 +6,7 @@ import {createClient} from '@supabase/supabase-js'
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
 
 function clean(value:string){return value.replace(/\s+/g,' ').trim()}
+function safe(value:any){return String(value||'—').replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':'&quot;',"'":'&#39;'}[c]||c))}
 
 export default function SchoolRecordBranding(){
  useEffect(()=>{
@@ -16,25 +17,31 @@ export default function SchoolRecordBranding(){
    apply()
   }
 
-  const renderHeader=(header:HTMLElement)=>{
-   const logo=settings?.logo_url?`<img src="${settings.logo_url}" alt="Logo" style="max-width:82px;max-height:82px;object-fit:contain;margin-bottom:8px"/>`:''
-   const contact=[settings?.address,settings?.phone,settings?.email].filter(Boolean).join(' • ')
-   header.innerHTML=`${logo}<div style="font-size:22px;font-weight:900;color:#0f4c81">${settings?.school_name||'Portail Scolaire Haïti'}</div>${contact?`<div style="margin-top:5px;color:#617080;font-size:13px;line-height:1.45">${contact}</div>`:''}`
+  const renderCard=(box:HTMLElement,fr:boolean)=>{
+   const title=fr?'Informations de l’école':'Enfòmasyon lekòl'
+   const labels=fr
+    ?{name:'Nom de l’école',phone:'Téléphone',address:'Adresse',email:'E-mail',logo:'Logo de l’école'}
+    :{name:'Non lekòl la',phone:'Telefòn',address:'Adrès',email:'E-mail',logo:'Logo lekòl la'}
+   const logo=settings?.logo_url
+    ?`<img src="${safe(settings.logo_url)}" alt="Logo" style="max-width:120px;max-height:100px;object-fit:contain;display:block;margin-top:8px"/>`
+    :'<div style="color:#6b7280;margin-top:8px">—</div>'
+   box.innerHTML=`
+    <div style="font-size:30px;font-weight:900;color:#14213d;margin-bottom:20px">${title}</div>
+    <div style="display:grid;gap:14px">
+      <div><div style="font-weight:800;margin-bottom:6px">${labels.name}</div><div style="border:1px solid #d9e3ec;border-radius:12px;padding:13px 14px;background:#fff;font-size:17px">${safe(settings?.school_name||'Portail Scolaire Haïti')}</div></div>
+      <div><div style="font-weight:800;margin-bottom:6px">${labels.phone}</div><div style="border:1px solid #d9e3ec;border-radius:12px;padding:13px 14px;background:#fff;font-size:17px">${safe(settings?.phone)}</div></div>
+      <div><div style="font-weight:800;margin-bottom:6px">${labels.address}</div><div style="border:1px solid #d9e3ec;border-radius:12px;padding:13px 14px;background:#fff;font-size:17px">${safe(settings?.address)}</div></div>
+      <div><div style="font-weight:800;margin-bottom:6px">${labels.email}</div><div style="border:1px solid #d9e3ec;border-radius:12px;padding:13px 14px;background:#fff;font-size:17px">${safe(settings?.email)}</div></div>
+      <div><div style="font-weight:800;margin-bottom:6px">${labels.logo}</div><div style="border:1px solid #d9e3ec;border-radius:12px;padding:13px 14px;background:#fff">${logo}</div></div>
+    </div>`
   }
 
   const apply=()=>{
    if(!settings)return
-
-   // Remove branding that may have been added previously outside record cards.
    document.querySelectorAll('[data-school-branding]').forEach(node=>{
     const parent=(node as HTMLElement).closest('.card') as HTMLElement|null
     const heading=clean(parent?.querySelector('h2')?.textContent||'')
-    const isRecordTitle=[
-     'Relve nòt elèv yo',
-     'Relevés de notes des élèves',
-     'Relve nòt mwen',
-     'Mon relevé de notes'
-    ].includes(heading)
+    const isRecordTitle=['Relve nòt elèv yo','Relevés de notes des élèves','Relve nòt mwen','Mon relevé de notes'].includes(heading)
     if(!isRecordTitle)node.remove()
    })
 
@@ -42,22 +49,18 @@ export default function SchoolRecordBranding(){
     const card=node as HTMLElement
     const headingElement=card.querySelector('h2')
     const heading=clean(headingElement?.textContent||'')
-    const isRecordTitle=[
-     'Relve nòt elèv yo',
-     'Relevés de notes des élèves',
-     'Relve nòt mwen',
-     'Mon relevé de notes'
-    ].includes(heading)
+    const isRecordTitle=['Relve nòt elèv yo','Relevés de notes des élèves','Relve nòt mwen','Mon relevé de notes'].includes(heading)
     if(!isRecordTitle||!headingElement)return
+    const fr=heading.includes('Relevé')||heading.includes('Relevés')
 
-    let header=card.querySelector('[data-school-branding="record"]') as HTMLElement|null
-    if(!header){
-     header=document.createElement('div')
-     header.setAttribute('data-school-branding','record')
-     header.style.cssText='text-align:center;border-bottom:2px solid #d5e0ea;padding:4px 8px 16px;margin-bottom:18px'
-     headingElement.insertAdjacentElement('beforebegin',header)
+    let box=card.querySelector('[data-school-branding="record"]') as HTMLElement|null
+    if(!box){
+     box=document.createElement('div')
+     box.setAttribute('data-school-branding','record')
+     box.style.cssText='border:1px solid #dde6ef;border-radius:18px;padding:22px;margin-bottom:24px;background:#fff;box-shadow:0 8px 24px rgba(20,33,61,.05)'
+     headingElement.insertAdjacentElement('beforebegin',box)
     }
-    renderHeader(header)
+    renderCard(box,fr)
    })
   }
 
