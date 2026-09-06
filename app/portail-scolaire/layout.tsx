@@ -8,6 +8,7 @@ import StudentTrimesterSummary from './StudentTrimesterSummary'
 import TeacherAssessmentSelector from './TeacherAssessmentSelector'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
+import AcademicYearEditor from './AcademicYearEditor'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -68,6 +69,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <TeacherAccessPanel />
       <StudentTrimesterSummary />
       <RecordsPanel />
+      <AcademicYearEditor />
       <TeacherAssessmentSelector />
       <LoginRoleLabelFix />
       <SessionJwtRecovery />
