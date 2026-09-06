@@ -39,22 +39,26 @@ export default function RecordsPanel(){
  const [section,setSection]=useState('')
  const [studentId,setStudentId]=useState('')
  const [type,setType]=useState<AssessmentType>('trimester')
+ const [editYearOpen,setEditYearOpen]=useState(false)
+ const [editYear,setEditYear]=useState('')
+ const [saveMessage,setSaveMessage]=useState('')
  const ht=lang==='ht'
 
+ const load=async()=>{
+  const {data:{session}}=await supabase.auth.getSession();const user=session?.user;if(!user)return
+  const {data:p}=await supabase.from('school_profiles').select('role').eq('user_id',user.id).maybeSingle()
+  const r=(p?.role==='direction'||p?.role==='secretary')?p.role:''
+  setRole(r)
+  if(!r)return
+  const [sr,gr]=await Promise.all([
+   supabase.from('school_students').select('id,name,level,section,academic_year').order('name'),
+   supabase.from('school_grades').select('student_id,subject,score,term').eq('status','approved').eq('published',true)
+  ])
+  setStudents((sr.data||[]).map(x=>({id:x.id,name:x.name,level:x.level,section:x.section,year:x.academic_year})))
+  setGrades((gr.data||[]).map(x=>({studentId:x.student_id,subject:x.subject||'',score:Number(x.score),term:x.term||''})))
+ }
+
  useEffect(()=>{
-  const load=async()=>{
-   const {data:{session}}=await supabase.auth.getSession();const user=session?.user;if(!user)return
-   const {data:p}=await supabase.from('school_profiles').select('role').eq('user_id',user.id).maybeSingle()
-   const r=(p?.role==='direction'||p?.role==='secretary')?p.role:''
-   setRole(r)
-   if(!r)return
-   const [sr,gr]=await Promise.all([
-    supabase.from('school_students').select('id,name,level,section,academic_year').order('name'),
-    supabase.from('school_grades').select('student_id,subject,score,term').eq('status','approved').eq('published',true)
-   ])
-   setStudents((sr.data||[]).map(x=>({id:x.id,name:x.name,level:x.level,section:x.section,year:x.academic_year})))
-   setGrades((gr.data||[]).map(x=>({studentId:x.student_id,subject:x.subject||'',score:Number(x.score),term:x.term||''})))
-  }
   load()
   const {data:l}=supabase.auth.onAuthStateChange(()=>load())
   return()=>l.subscription.unsubscribe()
@@ -102,9 +106,23 @@ export default function RecordsPanel(){
  },[studentGrades,type])
  const generalAverage=useMemo(()=>average(studentGrades),[studentGrades])
 
- const resetAfterYear=(v:string)=>{setYear(v);setLevel('');setSection('');setStudentId('')}
- const resetAfterLevel=(v:string)=>{setLevel(v);setSection('');setStudentId('')}
- const resetAfterSection=(v:string)=>{setSection(v);setStudentId('')}
+ const resetAfterYear=(v:string)=>{setYear(v);setLevel('');setSection('');setStudentId('');setEditYearOpen(false);setSaveMessage('')}
+ const resetAfterLevel=(v:string)=>{setLevel(v);setSection('');setStudentId('');setEditYearOpen(false);setSaveMessage('')}
+ const resetAfterSection=(v:string)=>{setSection(v);setStudentId('');setEditYearOpen(false);setSaveMessage('')}
+ const chooseStudent=(id:string)=>{setStudentId(id);const s=students.find(x=>x.id===id);setEditYear(s?.year||'');setEditYearOpen(false);setSaveMessage('')}
+ const saveAcademicYear=async()=>{
+  if(!student||!editYear.trim())return
+  setSaveMessage('')
+  const newValue=editYear.trim()
+  const {error}=await supabase.from('school_students').update({academic_year:newValue}).eq('id',student.id)
+  if(error){setSaveMessage(error.message);return}
+  setStudents(list=>list.map(s=>s.id===student.id?{...s,year:newValue}:s))
+  setYear(newValue)
+  setLevel(student.level)
+  setSection(student.section)
+  setSaveMessage(ht?'Ane akademik la modifye avèk siksè.':'Année scolaire modifiée avec succès.')
+  setEditYearOpen(false)
+ }
 
  const html=()=>{
   const typeLabel=type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')
@@ -123,10 +141,26 @@ export default function RecordsPanel(){
     <div><label>{ht?'Ane akademik':'Année scolaire'}</label><select value={year} onChange={e=>resetAfterYear(e.target.value)}><option value="">{ht?'Tout ane':'Toutes les années'}</option>{years.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
     <div><label>{ht?'Klas / Nivo':'Classe / Niveau'}</label><select value={level} onChange={e=>resetAfterLevel(e.target.value)}><option value="">{ht?'Tout klas':'Toutes les classes'}</option>{levels.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
     <div><label>{ht?'Seksyon':'Section'}</label><select value={section} onChange={e=>resetAfterSection(e.target.value)}><option value="">{ht?'Tout seksyon':'Toutes les sections'}</option>{sections.map(v=><option key={v} value={v}>{v}</option>)}</select></div>
-    <div><label>{ht?'Elèv':'Élève'}</label><select value={studentId} onChange={e=>setStudentId(e.target.value)}><option value="">—</option>{filteredStudents.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
+    <div><label>{ht?'Elèv':'Élève'}</label><select value={studentId} onChange={e=>chooseStudent(e.target.value)}><option value="">—</option>{filteredStudents.map(s=><option key={s.id} value={s.id}>{s.name}</option>)}</select></div>
     <div><label>{ht?'Kalite':'Type'}</label><select value={type} onChange={e=>setType(e.target.value as AssessmentType)}><option value="trimester">{ht?'Trimès':'Trimestre'}</option><option value="control">{ht?'Kontwòl':'Contrôle'}</option></select></div>
    </div>
-   {student&&<><div style={{marginTop:14,border:'1px solid #dde6ef',borderRadius:12,padding:12,background:'#f8fafc',display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}><div><strong>{ht?'Elèv':'Élève'}:</strong> {student.name}</div><div><strong>{ht?'Ane akademik':'Année scolaire'}:</strong> {student.year}</div><div><strong>{ht?'Klas / Nivo':'Classe / Niveau'}:</strong> {student.level}</div><div><strong>{ht?'Seksyon':'Section'}:</strong> {student.section}</div></div><div style={{display:'grid',gap:12,marginTop:14}}>{groups.map(g=><div key={g.number} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12}}><div style={{display:'flex',justifyContent:'space-between',gap:12}}><strong>{type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')} {g.number}</strong><strong>{g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</strong></div>{g.rows.length?<table style={{marginTop:8}}><tbody>{g.rows.map((r,i)=><tr key={`${g.number}-${i}`}><td>{r.subject}</td><td className="score">{r.score}%</td></tr>)}</tbody></table>:<div className="muted" style={{marginTop:8}}>{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>}</div>)}</div><div style={{display:'flex',justifyContent:'space-between',marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef'}}><strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong><strong>{generalAverage===null?'—':generalAverage+'%'}</strong></div><div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:16}}><button type="button" className="btn secondary" onClick={download}>⬇️ {ht?'Telechaje Word':'Télécharger Word'}</button><button type="button" className="btn" onClick={print}>🖨️ {ht?'Enprime':'Imprimer'}</button></div></>}
+
+   {student&&<>
+    <div style={{marginTop:14,border:'1px solid #dde6ef',borderRadius:12,padding:12,background:'#f8fafc',display:'grid',gridTemplateColumns:'1fr 1fr',gap:8}}>
+     <div><strong>{ht?'Elèv':'Élève'}:</strong> {student.name}</div><div><strong>{ht?'Ane akademik':'Année scolaire'}:</strong> {student.year}</div><div><strong>{ht?'Klas / Nivo':'Classe / Niveau'}:</strong> {student.level}</div><div><strong>{ht?'Seksyon':'Section'}:</strong> {student.section}</div>
+    </div>
+    <button type="button" className="btn secondary" style={{marginTop:10}} onClick={()=>{setEditYear(student.year);setEditYearOpen(v=>!v);setSaveMessage('')}}>✏️ {ht?'Modifye ane akademik':'Modifier l’année scolaire'}</button>
+    {editYearOpen&&<div style={{marginTop:10,border:'1px solid #dde6ef',borderRadius:12,padding:12}}>
+     <label>{ht?'Nouvo ane akademik':'Nouvelle année scolaire'}</label>
+     <input value={editYear} onChange={e=>setEditYear(e.target.value)} placeholder="2027–2028"/>
+     <div className="row" style={{marginTop:10}}><button type="button" className="btn" onClick={saveAcademicYear}>{ht?'Anrejistre':'Enregistrer'}</button><button type="button" className="btn secondary" onClick={()=>setEditYearOpen(false)}>{ht?'Anile':'Annuler'}</button></div>
+    </div>}
+    {saveMessage&&<div className="notice" style={{marginTop:10}}>{saveMessage}</div>}
+
+    <div style={{display:'grid',gap:12,marginTop:14}}>{groups.map(g=><div key={g.number} style={{border:'1px solid #dde6ef',borderRadius:12,padding:12}}><div style={{display:'flex',justifyContent:'space-between',gap:12}}><strong>{type==='trimester'?(ht?'Trimès':'Trimestre'):(ht?'Kontwòl':'Contrôle')} {g.number}</strong><strong>{g.avg===null?'—':`${ht?'Mwayèn':'Moyenne'} ${g.avg}%`}</strong></div>{g.rows.length?<table style={{marginTop:8}}><tbody>{g.rows.map((r,i)=><tr key={`${g.number}-${i}`}><td>{r.subject}</td><td className="score">{r.score}%</td></tr>)}</tbody></table>:<div className="muted" style={{marginTop:8}}>{ht?'Pa gen nòt pibliye.':'Aucune note publiée.'}</div>}</div>)}</div>
+    <div style={{display:'flex',justifyContent:'space-between',marginTop:14,paddingTop:12,borderTop:'2px solid #dde6ef'}}><strong>{ht?'Mwayèn jeneral':'Moyenne générale'}</strong><strong>{generalAverage===null?'—':generalAverage+'%'}</strong></div>
+    <div style={{display:'grid',gridTemplateColumns:'1fr 1fr',gap:10,marginTop:16}}><button type="button" className="btn secondary" onClick={download}>⬇️ {ht?'Telechaje Word':'Télécharger Word'}</button><button type="button" className="btn" onClick={print}>🖨️ {ht?'Enprime':'Imprimer'}</button></div>
+   </>}
   </div>}
  </>,target)
 }
