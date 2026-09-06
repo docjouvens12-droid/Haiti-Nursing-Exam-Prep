@@ -26,6 +26,7 @@ export default function SecretaryPanel(){
  const [secretaries,setSecretaries]=useState<any[]>([])
  const [credential,setCredential]=useState<Credential>(null)
  const [error,setError]=useState('')
+ const [accessOpen,setAccessOpen]=useState(false)
  const ht=lang==='ht'
 
  const load=async(u:User)=>{
@@ -72,6 +73,14 @@ export default function SecretaryPanel(){
   }
   document.addEventListener('change',onChange,true)
   return()=>document.removeEventListener('change',onChange,true)
+ },[])
+
+ useEffect(()=>{
+  const sync=()=>setAccessOpen(Boolean(document.querySelector('select[name="teacher_id"]')))
+  sync()
+  const observer=new MutationObserver(sync)
+  observer.observe(document.body,{childList:true,subtree:true})
+  return()=>observer.disconnect()
  },[])
 
  const createSecretary=async(fd:FormData)=>{
@@ -129,7 +138,10 @@ export default function SecretaryPanel(){
   if(user)await load(user)
  }
 
- if(role==='direction')return <section className="card" style={{maxWidth:1000,margin:'14px auto'}}><h2>{ht?'Kont Sekretè':'Compte Secrétariat'}</h2><p className="muted">{ht?'Direksyon ka kreye ID aksè ak modpas tanporè pou sekretè a.':'La Direction peut créer un identifiant d’accès et un mot de passe temporaire pour le secrétariat.'}</p>{error&&<div className="notice">⚠️ {error}</div>}<form action={createSecretary}><div className="grid2"><div><label>{ht?'Non sekretè':'Nom du secrétaire'}</label><input name="name" required/></div><div><label>{ht?'Nimewo badge / ID aksè':'Numéro de badge / Identifiant d’accès'}</label><input name="access_id" placeholder="SEC-001"/></div></div><button className="btn" style={{marginTop:12}}>{ht?'Kreye kont Sekretè':'Créer le compte Secrétariat'}</button></form>{credential&&<div className="credential"><b>{credential.name}</b><p>{ht?'Remèt enfòmasyon sa yo dirèkteman bay sekretè a.':'Remettez ces informations directement au secrétaire.'}</p><small>ID</small><code>{credential.accessId}</code><small>{ht?'Modpas tanporè':'Mot de passe temporaire'}</small><code>{credential.password}</code><button type="button" className="btn secondary" onClick={()=>setCredential(null)}>{ht?'Mwen note yo':'Je les ai notés'}</button></div>}{secretaries.length>0&&<div className="teacherList"><h3>{ht?'Kont Sekretè ki egziste':'Comptes Secrétariat existants'}</h3>{secretaries.map(s=><div className="teacherCard" key={s.user_id}><b>{s.display_name||'Secrétariat'}</b><div className="muted">ID aksè: {s.access_id}</div></div>)}</div>}</section>
+ if(role==='direction'){
+  if(!accessOpen)return null
+  return <section className="card" style={{maxWidth:1000,margin:'14px auto'}}><h2>{ht?'Kont Sekretè':'Compte Secrétariat'}</h2><p className="muted">{ht?'Direksyon ka kreye ID aksè ak modpas tanporè pou sekretè a.':'La Direction peut créer un identifiant d’accès et un mot de passe temporaire pour le secrétariat.'}</p>{error&&<div className="notice">⚠️ {error}</div>}<form action={createSecretary}><div className="grid2"><div><label>{ht?'Non sekretè':'Nom du secrétaire'}</label><input name="name" required/></div><div><label>{ht?'Nimewo badge / ID aksè':'Numéro de badge / Identifiant d’accès'}</label><input name="access_id" placeholder="SEC-001"/></div></div><button className="btn" style={{marginTop:12}}>{ht?'Kreye kont Sekretè':'Créer le compte Secrétariat'}</button></form>{credential&&<div className="credential"><b>{credential.name}</b><p>{ht?'Remèt enfòmasyon sa yo dirèkteman bay sekretè a.':'Remettez ces informations directement au secrétaire.'}</p><small>ID</small><code>{credential.accessId}</code><small>{ht?'Modpas tanporè':'Mot de passe temporaire'}</small><code>{credential.password}</code><button type="button" className="btn secondary" onClick={()=>setCredential(null)}>{ht?'Mwen note yo':'Je les ai notés'}</button></div>}{secretaries.length>0&&<div className="teacherList"><h3>{ht?'Kont Sekretè ki egziste':'Comptes Secrétariat existants'}</h3>{secretaries.map(s=><div className="teacherCard" key={s.user_id}><b>{s.display_name||'Secrétariat'}</b><div className="muted">ID aksè: {s.access_id}</div></div>)}</div>}</section>
+ }
 
  if(role!=='secretary'||mustChange)return null
  return <section className="secretary-dashboard" style={{maxWidth:1000,margin:'14px auto',padding:'0 12px'}}>
