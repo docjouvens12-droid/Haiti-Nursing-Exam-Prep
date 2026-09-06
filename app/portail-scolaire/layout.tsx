@@ -6,6 +6,7 @@ import StudentWeightedBulletin from './StudentWeightedBulletin'
 import SessionJwtRecovery from './SessionJwtRecovery'
 import RecordsPanel from './RecordsPanel'
 import SchoolIdentitySettings from './SchoolIdentitySettings'
+import DirectionStudentManager from './DirectionStudentManager'
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -123,6 +124,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       <StudentWeightedBulletin />
       <RecordsPanel />
       <SchoolIdentitySettings />
+      <DirectionStudentManager />
       <SessionJwtRecovery />
     </>
   )
