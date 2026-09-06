@@ -1,6 +1,7 @@
 'use client'
 
 import {useEffect,useMemo,useState} from 'react'
+import {createPortal} from 'react-dom'
 import {createClient} from '@supabase/supabase-js'
 
 const supabase=createClient('https://vncrujkndfpatwvxtchk.supabase.co','sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2')
@@ -17,11 +18,30 @@ function academicYears(){
 }
 
 export default function GlobalAcademicYearSelector(){
+ const [host,setHost]=useState<HTMLElement|null>(null)
  const [visible,setVisible]=useState(false)
  const [lang,setLang]=useState<'ht'|'fr'>('fr')
  const [savedYears,setSavedYears]=useState<string[]>([])
  const [year,setYear]=useState('')
  const ht=lang==='ht'
+
+ useEffect(()=>{
+  const attach=()=>{
+   const langMenu=document.querySelector<HTMLElement>('[data-global-language-menu="true"]')
+   if(!langMenu){setHost(null);return}
+   let mount=document.querySelector<HTMLElement>('[data-global-academic-year-mount="true"]')
+   if(!mount){
+    mount=document.createElement('div')
+    mount.setAttribute('data-global-academic-year-mount','true')
+    langMenu.insertAdjacentElement('afterend',mount)
+   }
+   setHost(mount)
+  }
+  attach()
+  const observer=new MutationObserver(()=>requestAnimationFrame(attach))
+  observer.observe(document.body,{childList:true,subtree:true})
+  return()=>observer.disconnect()
+ },[])
 
  useEffect(()=>{
   let active=true
@@ -30,7 +50,7 @@ export default function GlobalAcademicYearSelector(){
    if(!active||!user){setVisible(false);return}
    const {data:profile}=await supabase.from('school_profiles').select('role,must_change_password').eq('user_id',user.id).maybeSingle()
    const ok=['direction','teacher','secretary','student'].includes(profile?.role||'')&&!profile?.must_change_password
-   if(!active){return}
+   if(!active)return
    setVisible(ok)
    if(!ok)return
    const {data}=await supabase.from('school_students').select('academic_year')
@@ -62,8 +82,8 @@ export default function GlobalAcademicYearSelector(){
   window.dispatchEvent(new CustomEvent('school-academic-year-change',{detail:{year:value}}))
  }
 
- if(!visible)return null
- return <div className="globalAcademicYear" data-global-academic-year="true">
+ if(!host||!visible)return null
+ return createPortal(<div className="globalAcademicYear" data-global-academic-year="true">
   <label htmlFor="globalAcademicYearSelect">{ht?'Ane akademik':'Année académique'}</label>
   <select id="globalAcademicYearSelect" value={year} onChange={e=>change(e.target.value)}>
    {years.map(y=><option key={y} value={y}>{y}</option>)}
@@ -74,5 +94,5 @@ export default function GlobalAcademicYearSelector(){
    .globalAcademicYear select{width:auto;min-width:150px;max-width:210px;padding:8px 34px 8px 10px;border:1px solid #d7e0e8;border-radius:10px;background:#fff;font-weight:700;color:#13213a}
    @media(max-width:720px){.globalAcademicYear{justify-content:space-between;padding:0 16px;margin-bottom:12px}.globalAcademicYear select{min-width:155px}}
   `}</style>
- </div>
+ </div>,host)
 }
