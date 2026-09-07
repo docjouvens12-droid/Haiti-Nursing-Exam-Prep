@@ -10,6 +10,11 @@ export default function PWARegister() {
   const [offline, setOffline] = useState(false);
 
   useEffect(() => {
+    if (window.location.pathname.startsWith("/portail-scolaire")) {
+      setShowSplash(false);
+      return;
+    }
+
     let timer: number | undefined;
     let reloadOnControllerChange = true;
     let checkingVersion = false;
