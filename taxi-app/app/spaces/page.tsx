@@ -14,6 +14,7 @@ const copy = {
     passengerText: 'Commander un taxi et suivre vos trajets.',
     driver: 'Espace chauffeur',
     driverText: 'Passer en ligne, recevoir et gérer les courses.',
+    driverLoginText: 'Connectez-vous avec votre compte chauffeur pour accéder à cet espace.',
     admin: 'Administration',
     adminText: 'Valider les chauffeurs et gérer la plateforme.',
     login: 'Se connecter',
@@ -29,6 +30,7 @@ const copy = {
     passengerText: 'Mande taksi epi swiv trajè ou yo.',
     driver: 'Espas chofè',
     driverText: 'Mete tèt ou sou liy, resevwa epi jere trajè.',
+    driverLoginText: 'Konekte ak kont chofè ou pou antre nan espas sa a.',
     admin: 'Administrasyon',
     adminText: 'Apwouve chofè epi jere platfòm lan.',
     login: 'Konekte',
@@ -84,7 +86,7 @@ export default function SpacesPage() {
         .maybeSingle()
       setDriverHref(activeRide ? '/driver/navigation' : '/driver/dashboard')
     } else {
-      setDriverHref('/driver/dashboard')
+      setDriverHref('/driver/login')
     }
 
     setLoading(false)
@@ -100,6 +102,8 @@ export default function SpacesPage() {
     localStorage.setItem('taxi-language', next)
   }
 
+  const driverReady = role === 'driver' || driverApproved
+
   return <main className="page"><section className="card">
     <div className="topbar">
       <div className="brand"><span>T</span><div><strong>Taxi Platform Haiti</strong><small>{t.subtitle}</small></div></div>
@@ -113,11 +117,11 @@ export default function SpacesPage() {
     <div className="spaces">
       <a className="space passenger" href="/"><div className="icon">👤</div><div><strong>{t.passenger}</strong><span>{t.passengerText}</span></div><b>›</b></a>
 
-      {(role === 'driver' || driverApproved) && <a className="space driver" href={driverHref}><div className="icon">🚕</div><div><strong>{t.driver}</strong><span>{t.driverText}</span></div><b>›</b></a>}
+      <a className="space driver" href={driverReady ? driverHref : '/driver/login'}><div className="icon">🚕</div><div><strong>{t.driver}</strong><span>{driverReady ? t.driverText : t.driverLoginText}</span></div><b>›</b></a>
 
       {role === 'admin' && <a className="space admin" href="/admin/drivers"><div className="icon">🛡️</div><div><strong>{t.admin}</strong><span>{t.adminText}</span></div><b>›</b></a>}
 
-      {!email && <><a className="space driver" href="/driver/login"><div className="icon">🚕</div><div><strong>{t.driver}</strong><span>{t.login}</span></div><b>›</b></a><a className="space admin" href="/admin/login"><div className="icon">🛡️</div><div><strong>{t.admin}</strong><span>{t.login}</span></div><b>›</b></a></>}
+      {!email && <a className="space admin" href="/admin/login"><div className="icon">🛡️</div><div><strong>{t.admin}</strong><span>{t.login}</span></div><b>›</b></a>}
     </div>
   </section>
   <style jsx>{`
