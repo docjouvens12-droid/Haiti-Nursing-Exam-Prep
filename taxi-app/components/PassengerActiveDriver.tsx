@@ -162,6 +162,11 @@ export default function PassengerActiveDriver() {
       </div>
     </div>
 
+    {miniMapUrl && <div className="miniMap">
+      <img src={miniMapUrl} alt={lang === 'ht' ? 'Trajektwa chofè a an dirèk' : 'Trajet en direct du chauffeur'} />
+      <div className="mapBadge">{distance} · {eta}</div>
+    </div>}
+
     <button className="detailsButton" type="button" onClick={() => setExpanded((v) => !v)}>
       {expanded
         ? (lang === 'ht' ? 'Fèmen detay yo ▲' : 'Masquer les détails ▲')
@@ -169,11 +174,6 @@ export default function PassengerActiveDriver() {
     </button>
 
     {expanded && <div className="details">
-      {miniMapUrl && <div className="miniMap">
-        <img src={miniMapUrl} alt={lang === 'ht' ? 'Trajektwa chofè a an dirèk' : 'Trajet en direct du chauffeur'} />
-        <div className="mapBadge">{distance} · {eta}</div>
-      </div>}
-
       <div className="detailGrid">
         <div><small>{lang === 'ht' ? 'Plak' : 'Plaque'}</small><strong>{bundle.plate_number || '—'}</strong></div>
         <div><small>{lang === 'ht' ? 'Sèvis' : 'Service'}</small><strong>{bundle.service_type || 'Standard'}</strong></div>
@@ -184,14 +184,13 @@ export default function PassengerActiveDriver() {
     </div>}
 
     <style jsx>{`
-      .activeRideCard{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 18px),560px);background:#fff;border:1px solid #dce8e3;border-radius:20px;padding:11px;box-shadow:0 14px 38px rgba(16,32,51,.24);font-family:Inter,system-ui,sans-serif;color:#102033}
-      .activeRideCard.expanded{max-height:72vh;overflow:auto}
+      .activeRideCard{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 18px),560px);max-height:72vh;overflow:auto;background:#fff;border:1px solid #dce8e3;border-radius:20px;padding:11px;box-shadow:0 14px 38px rgba(16,32,51,.24);font-family:Inter,system-ui,sans-serif;color:#102033}
       .compactRow{display:flex;align-items:center;gap:10px}.avatar{width:42px;height:42px;border-radius:50%;overflow:hidden;background:#e7f6f0;color:#0f7b61;display:grid;place-items:center;font-weight:900;flex:0 0 auto}.avatar img{width:100%;height:100%;object-fit:cover}
       .mainCopy{min-width:0;flex:1}.mainCopy strong,.mainCopy span{display:block}.mainCopy strong{font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mainCopy span{font-size:11px;color:#6f7f8f;margin-top:2px;font-weight:700}.status{font-size:9px;font-weight:900;color:#0f7b61;text-transform:uppercase;letter-spacing:.06em;margin-bottom:2px}
       .arrival{text-align:right;flex:0 0 auto}.arrival strong,.arrival span{display:block}.arrival strong{font-size:15px;color:#0f7b61}.arrival span{font-size:11px;font-weight:800;margin-top:2px}
+      .miniMap{position:relative;border-radius:16px;overflow:hidden;background:#e8eef1;min-height:145px;margin-top:10px}.miniMap img{display:block;width:100%;height:170px;object-fit:cover}.mapBadge{position:absolute;left:10px;bottom:10px;background:#102033;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.18)}
       .detailsButton{width:100%;margin-top:8px;border:0;border-top:1px solid #edf2f0;background:transparent;color:#0f7b61;padding:8px 4px 1px;font-weight:900;font-size:11px;cursor:pointer}
-      .details{margin-top:9px}.miniMap{position:relative;border-radius:16px;overflow:hidden;background:#e8eef1;min-height:145px}.miniMap img{display:block;width:100%;height:170px;object-fit:cover}.mapBadge{position:absolute;left:10px;bottom:10px;background:#102033;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-      .detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.detailGrid>div{background:#f5f8f7;border-radius:12px;padding:9px}.detailGrid .wide{grid-column:1/-1}.detailGrid small,.detailGrid strong{display:block}.detailGrid small{font-size:9px;color:#84919d}.detailGrid strong{font-size:12px;margin-top:2px}.fare strong{color:#0f7b61;font-size:14px}
+      .details{margin-top:9px}.detailGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:9px}.detailGrid>div{background:#f5f8f7;border-radius:12px;padding:9px}.detailGrid .wide{grid-column:1/-1}.detailGrid small,.detailGrid strong{display:block}.detailGrid small{font-size:9px;color:#84919d}.detailGrid strong{font-size:12px;margin-top:2px}.fare strong{color:#0f7b61;font-size:14px}
       @media(max-width:600px){.activeRideCard{bottom:80px}.miniMap img{height:155px}.arrival strong{font-size:14px}}
     `}</style>
   </aside>
