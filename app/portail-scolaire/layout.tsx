@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import SecretaryPanel from './SecretaryPanel'
 import StudentAccessMount from './StudentAccessMount'
@@ -9,6 +10,22 @@ import SchoolIdentitySettings from './SchoolIdentitySettings'
 import DirectionStudentManager from './DirectionStudentManager'
 import RoleAcademicFilters from './RoleAcademicFilters'
 import GlobalAcademicYearSelector from './GlobalAcademicYearSelector'
+import PortailPWARegister from './PortailPWARegister'
+
+export const metadata: Metadata = {
+  title: 'Portail Scolaire Haïti',
+  description: 'Portail scolaire pour la direction, les enseignants et les élèves en Haïti.',
+  manifest: '/portail-scolaire/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Portail Scolaire Haïti',
+  },
+  icons: {
+    icon: '/portail-scolaire-icon.svg',
+    apple: '/portail-scolaire-icon.svg',
+  },
+}
 
 export default function PortailScolaireLayout({ children }: { children: ReactNode }) {
   return (
@@ -126,6 +143,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page) .native-student-access-mount{display:none!important}
         body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
       `}</style>
+      <PortailPWARegister />
       {children}
       <GlobalAcademicYearSelector />
       <SecretaryPanel />
