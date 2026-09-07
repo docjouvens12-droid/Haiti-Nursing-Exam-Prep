@@ -56,19 +56,38 @@ export default function PassengerRideCompletion() {
     const currentUser = user
     let active = true
 
+    async function getLatestCompleted(): Promise<CompletedRide | null> {
+      const { data: rpcData, error: rpcError } = await supabase.rpc('get_my_latest_completed_ride')
+      if (!rpcError) {
+        const rpcRow = Array.isArray(rpcData) ? rpcData[0] : rpcData
+        if (rpcRow) return rpcRow as CompletedRide
+      }
+
+      const { data: fallbackData } = await supabase
+        .from('rides')
+        .select('id,driver_id,pickup_address,destination_address,estimated_fare_htg,final_fare_htg,completed_at')
+        .eq('passenger_id', currentUser.id)
+        .eq('status', 'completed')
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      return (fallbackData as CompletedRide | null) ?? null
+    }
+
     async function loadLatestCompleted() {
-      const { data, error } = await supabase.rpc('get_my_latest_completed_ride')
-      if (!active || error) return
-      const row = Array.isArray(data) ? data[0] : data
+      const row = await getLatestCompleted()
+      if (!active) return
       if (!row) {
         setRide(null)
         return
       }
       if (row.id === hiddenRideId) return
       if (window.localStorage.getItem(dismissedKey(currentUser.id, row.id)) === '1') {
-        if (ride?.id === row.id) setRide(null)
+        setRide((current) => current?.id === row.id ? null : current)
         return
       }
+
       const { data: existingRating } = await supabase
         .from('ratings')
         .select('id,stars')
@@ -81,17 +100,20 @@ export default function PassengerRideCompletion() {
         setRide(null)
         return
       }
-      if (ride?.id !== row.id) {
-        setRated(false)
-        setStars(0)
-        setComment('')
-        setMessage('')
-      }
-      setRide(row as CompletedRide)
+
+      setRide((current) => {
+        if (current?.id !== row.id) {
+          setRated(false)
+          setStars(0)
+          setComment('')
+          setMessage('')
+        }
+        return row
+      })
     }
 
     void loadLatestCompleted()
-    const pollTimer = window.setInterval(() => void loadLatestCompleted(), 3000)
+    const pollTimer = window.setInterval(() => void loadLatestCompleted(), 2500)
     const channel = supabase
       .channel(`passenger-completed-${currentUser.id}`)
       .on('postgres_changes', {
@@ -103,12 +125,13 @@ export default function PassengerRideCompletion() {
         if ((payload.new as any)?.status === 'completed') void loadLatestCompleted()
       })
       .subscribe()
+
     return () => {
       active = false
       window.clearInterval(pollTimer)
       supabase.removeChannel(channel)
     }
-  }, [user, hiddenRideId, ride?.id])
+  }, [user, hiddenRideId])
 
   async function submitRating() {
     if (!user || !ride || !ride.driver_id || stars < 1 || stars > 5 || rated) return
