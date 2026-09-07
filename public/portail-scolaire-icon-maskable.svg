@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#0f4c81"/>
+  <circle cx="256" cy="235" r="150" fill="#ffffff"/>
+  <path d="M154 206l102-52 102 52-102 52-102-52zm34 40v72c0 30 31 54 68 54s68-24 68-54v-72l-68 34-68-34z" fill="#0f4c81"/>
+  <text x="256" y="445" text-anchor="middle" font-family="Arial, sans-serif" font-size="58" font-weight="800" fill="#ffffff">PS</text>
+</svg>
