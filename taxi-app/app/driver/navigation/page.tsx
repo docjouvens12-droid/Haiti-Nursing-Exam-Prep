@@ -96,7 +96,7 @@ export default function DriverNavigationPage() {
   }
 
   if (loading || !ride) {
-    return <main style={{minHeight:'100vh',display:'grid',placeItems:'center',background:'#eef3f6',fontFamily:'Inter,system-ui,sans-serif',color:'#102033'}}><strong>{lang === 'fr' ? 'Ouverture du GPS…' : 'GPS ap louvri…'}</strong></main>
+    return <main className="loading"><strong>{lang === 'fr' ? 'Ouverture du GPS…' : 'GPS ap louvri…'}</strong><style jsx>{`.loading{min-height:100vh;display:grid;place-items:center;background:#eef3f6;font-family:Inter,system-ui,sans-serif;color:#102033}`}</style></main>
   }
 
   const goingToPassenger = ride.status !== 'in_progress'
@@ -115,33 +115,60 @@ export default function DriverNavigationPage() {
     : `${liveDistanceKm.toFixed(1)} km`
   const etaLabel = liveEtaMin == null
     ? (lang === 'fr' ? 'ETA en direct…' : 'ETA an dirèk…')
-    : `⏱ ${liveEtaMin} min`
+    : `${liveEtaMin} min`
 
-  return <main style={{minHeight:'100vh',background:'#eef3f6',padding:'16px 12px 110px',fontFamily:'Inter,system-ui,sans-serif',color:'#102033'}}>
-    <section style={{maxWidth:760,margin:'0 auto'}}>
-      <div style={{background:'#102033',color:'#fff',borderRadius:20,padding:'16px',marginBottom:12}}>
-        <small style={{display:'block',opacity:.72,fontWeight:800,letterSpacing:'.06em'}}>{heading}</small>
-        <h1 style={{margin:'6px 0 2px',fontSize:24}}>{address}</h1>
-        <div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:10}}>
-          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{distanceLabel}</span>
-          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{etaLabel}</span>
+  return <main className="page">
+    <section className="shell">
+      <div className="tripHeader">
+        <small>{heading}</small>
+        <h1>{address}</h1>
+        <div className="metrics">
+          <span><b>{distanceLabel}</b><em>{lang === 'fr' ? 'Distance' : 'Distans'}</em></span>
+          <span><b>{etaLabel}</b><em>ETA</em></span>
         </div>
       </div>
 
-      <DriverMobileNavigationMap
-        ride={ride}
-        lang={lang}
-        onMetricsChange={({ distanceKm, etaMin }) => {
-          setLiveDistanceKm(distanceKm)
-          setLiveEtaMin(etaMin)
-        }}
-      />
+      <div className="mapWrap">
+        <DriverMobileNavigationMap
+          ride={ride}
+          lang={lang}
+          onMetricsChange={({ distanceKm, etaMin }) => {
+            setLiveDistanceKm(distanceKm)
+            setLiveEtaMin(etaMin)
+          }}
+        />
+      </div>
 
-      {message && <div style={{background:'#fff1f1',color:'#a12626',borderRadius:14,padding:12,marginTop:12,fontWeight:700}}>{message}</div>}
+      {message && <div className="message">{message}</div>}
 
-      <button onClick={() => void advanceRide()} disabled={busy} style={{width:'100%',marginTop:14,border:0,borderRadius:16,padding:'16px',background:'#0d7b61',color:'#fff',fontSize:17,fontWeight:900}}>
+      <button className="actionButton" onClick={() => void advanceRide()} disabled={busy}>
         {busy ? (lang === 'fr' ? 'Mise à jour…' : 'N ap mete ajou…') : actionLabel}
       </button>
     </section>
+
+    <style jsx>{`
+      .page{min-height:100vh;background:#eef3f6;padding:12px 12px 104px;font-family:Inter,system-ui,sans-serif;color:#102033;overflow-x:hidden}
+      .shell{max-width:760px;margin:0 auto;width:100%}
+      .tripHeader{background:#102033;color:#fff;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 10px 28px rgba(16,32,51,.12)}
+      .tripHeader small{display:block;opacity:.72;font-weight:900;letter-spacing:.06em;font-size:10px}
+      .tripHeader h1{margin:5px 0 0;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
+      .metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
+      .metrics span{display:flex;flex-direction:column;background:#1c3148;border-radius:13px;padding:9px 10px;min-width:0}
+      .metrics b{font-size:15px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+      .metrics em{font-style:normal;font-size:10px;opacity:.68;margin-top:3px;font-weight:700}
+      .mapWrap{width:100%;min-width:0;overflow:hidden;border-radius:18px}
+      .message{background:#fff1f1;color:#a12626;border-radius:13px;padding:11px 12px;margin-top:10px;font-weight:750;font-size:13px}
+      .actionButton{width:100%;margin-top:12px;border:0;border-radius:15px;padding:15px 16px;background:#0d7b61;color:#fff;font-size:16px;font-weight:900;box-shadow:0 8px 20px rgba(13,123,97,.2)}
+      .actionButton:disabled{opacity:.62}
+      @media(max-width:600px){
+        .page{padding:10px 10px 92px}
+        .tripHeader{border-radius:16px;padding:12px;margin-bottom:8px}
+        .tripHeader h1{font-size:18px;line-height:1.18}
+        .metrics{gap:7px;margin-top:9px}
+        .metrics span{padding:8px 9px;border-radius:12px}
+        .metrics b{font-size:14px}
+        .actionButton{margin-top:10px;border-radius:14px;padding:14px 15px;font-size:15px;position:sticky;bottom:10px;z-index:20}
+      }
+    `}</style>
   </main>
 }
