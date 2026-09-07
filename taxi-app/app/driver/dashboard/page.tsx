@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
+import DriverNavigationMap from '../../../components/DriverNavigationMap'
 
 type Lang = 'fr' | 'ht'
 type RideStatus = 'requested' | 'accepted' | 'driver_arriving' | 'in_progress' | 'completed' | 'cancelled'
@@ -11,6 +12,10 @@ type Ride = {
   status: RideStatus
   pickup_address: string
   destination_address: string
+  pickup_latitude: number | null
+  pickup_longitude: number | null
+  destination_latitude: number | null
+  destination_longitude: number | null
   estimated_distance_km: number | null
   estimated_duration_min: number | null
   estimated_fare_htg: number | null
@@ -251,7 +256,7 @@ export default function DriverDashboardPage() {
     {vehicle && <div className="vehicle"><span>{vehicle.vehicle_type === 'moto' ? '🏍️' : '🚕'}</span><div><small>{t.vehicle}</small><strong>{vehicle.make} {vehicle.model} · {vehicle.plate_number}</strong></div></div>}
     {message && <div className="message">{message}</div>}
 
-    {activeRide && <section className="section"><div className="section-title"><h2>{t.activeRide}</h2><span className="pill">{activeRide.status}</span></div><RideCard ride={activeRide} t={t} />{statusAction && <button className="primary action" disabled={busy} onClick={()=>void rideAction(statusAction.key, activeRide)}>{statusAction.label}</button>}</section>}
+    {activeRide && <section className="section"><div className="section-title"><h2>{t.activeRide}</h2><span className="pill">{activeRide.status}</span></div><DriverNavigationMap ride={activeRide} lang={lang} /><RideCard ride={activeRide} t={t} />{statusAction && <button className="primary action" disabled={busy} onClick={()=>void rideAction(statusAction.key, activeRide)}>{statusAction.label}</button>}</section>}
 
     {!activeRide && <section className="section"><div className="section-title"><h2>{t.available}</h2><button className="refresh" onClick={()=>void loadRides()} disabled={busy}>↻ {t.refresh}</button></div>{!online ? <div className="empty">{t.waitingOnline}</div> : available.length === 0 ? <div className="empty">{t.noRequests}</div> : <div className="rides">{available.map(r => <div className="ride-wrap" key={r.id}><RideCard ride={r} t={t}/><button className="primary" disabled={busy || !vehicle} onClick={()=>void rideAction('accept', r)}>{t.accept}</button></div>)}</div>}</section>}
   </section>
