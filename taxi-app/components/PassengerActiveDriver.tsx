@@ -34,7 +34,7 @@ export default function PassengerActiveDriver() {
     let active = true
 
     async function updateLiveMetrics(row: ActiveRideBundle | null) {
-      if (!row || row.driver_latitude == null || row.driver_longitude == null) {
+      if (!row || row.ride_status === 'driver_arriving' || row.driver_latitude == null || row.driver_longitude == null) {
         if (active) {
           setLiveDistanceKm(null)
           setLiveEtaMin(null)
@@ -43,7 +43,7 @@ export default function PassengerActiveDriver() {
         return
       }
 
-      const goingToPassenger = row.ride_status !== 'in_progress'
+      const goingToPassenger = row.ride_status === 'accepted'
       const targetLat = goingToPassenger ? row.pickup_latitude : row.destination_latitude
       const targetLng = goingToPassenger ? row.pickup_longitude : row.destination_longitude
       const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
@@ -108,10 +108,10 @@ export default function PassengerActiveDriver() {
   }, [pathname])
 
   const miniMapUrl = useMemo(() => {
-    if (!bundle || !routeGeometry) return null
+    if (!bundle || bundle.ride_status === 'driver_arriving' || !routeGeometry) return null
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || bundle.driver_latitude == null || bundle.driver_longitude == null) return null
-    const goingToPassenger = bundle.ride_status !== 'in_progress'
+    const goingToPassenger = bundle.ride_status === 'accepted'
     const targetLat = goingToPassenger ? bundle.pickup_latitude : bundle.destination_latitude
     const targetLng = goingToPassenger ? bundle.pickup_longitude : bundle.destination_longitude
     if (targetLat == null || targetLng == null) return null
@@ -123,6 +123,21 @@ export default function PassengerActiveDriver() {
   }, [bundle, routeGeometry])
 
   if (pathname !== '/' || !bundle) return null
+
+  if (bundle.ride_status === 'driver_arriving') {
+    return <aside className="arrivalMessage" aria-live="polite">
+      <div className="arrivalIcon">✓</div>
+      <div>
+        <strong>{lang === 'ht' ? 'Chofè ou rive' : 'Votre chauffeur est arrivé'}</strong>
+        <span>{lang === 'ht' ? 'Chofè a ap tann ou nan pwen pickup la.' : 'Votre chauffeur vous attend au point de prise en charge.'}</span>
+      </div>
+      <style jsx>{`
+        .arrivalMessage{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 18px),560px);display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #cfe8df;border-radius:18px;padding:13px 14px;box-shadow:0 14px 38px rgba(16,32,51,.22);font-family:Inter,system-ui,sans-serif;color:#102033}
+        .arrivalIcon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#e7f6f0;color:#0f7b61;font-size:22px;font-weight:900;flex:0 0 auto}.arrivalMessage strong,.arrivalMessage span{display:block}.arrivalMessage strong{font-size:16px;color:#0f7b61}.arrivalMessage span{font-size:11px;color:#6f7f8f;margin-top:3px}
+        @media(max-width:600px){.arrivalMessage{bottom:80px}}
+      `}</style>
+    </aside>
+  }
 
   const name = bundle.driver_name?.trim() || (lang === 'ht' ? 'Chofè ou' : 'Votre chauffeur')
   const initial = name.charAt(0).toUpperCase()
