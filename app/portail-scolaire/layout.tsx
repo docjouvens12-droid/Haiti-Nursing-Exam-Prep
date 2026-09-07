@@ -12,6 +12,7 @@ import RoleAcademicFilters from './RoleAcademicFilters'
 import GlobalAcademicYearSelector from './GlobalAcademicYearSelector'
 import PortailPWARegister from './PortailPWARegister'
 import LoginPersonnelSimplifier from './LoginPersonnelSimplifier'
+import SafariAuthRecovery from './SafariAuthRecovery'
 
 export const metadata: Metadata = {
   title: 'Portail Scolaire Haïti',
@@ -146,6 +147,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
       `}</style>
       <PortailPWARegister />
       <LoginPersonnelSimplifier />
+      <SafariAuthRecovery />
       {children}
       <GlobalAcademicYearSelector />
       <SecretaryPanel />
