@@ -4,6 +4,7 @@ import './menu.css'
 import DriverCtaBridge from '../components/DriverCtaBridge'
 import GlobalSpacesButton from '../components/GlobalSpacesButton'
 import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
+import PassengerRideCompletion from '../components/PassengerRideCompletion'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton />{children}</body>
+      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><PassengerRideCompletion />{children}</body>
     </html>
   )
 }
