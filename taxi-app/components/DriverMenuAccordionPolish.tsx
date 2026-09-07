@@ -23,6 +23,8 @@ export default function DriverMenuAccordionPolish() {
       const drawer = document.querySelector('.drawer') as HTMLElement | null
       if (!drawer || drawer.dataset.accordionPolished === 'true') return
       drawer.dataset.accordionPolished = 'true'
+      drawer.style.width = 'min(76vw, 320px)'
+      drawer.style.boxSizing = 'border-box'
 
       const head = drawer.querySelector('.drawerHead') as HTMLElement | null
       const headTitle = head?.querySelector('strong') as HTMLElement | null
