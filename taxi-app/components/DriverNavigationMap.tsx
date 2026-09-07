@@ -27,7 +27,7 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   const driverMarkerRef = useRef<MapboxMarker | null>(null)
   const targetMarkerRef = useRef<MapboxMarker | null>(null)
   const watchRef = useRef<number | null>(null)
-  const [opened, setOpened] = useState(false)
+  const [opened, setOpened] = useState(true)
   const [position, setPosition] = useState<Point | null>(null)
   const [distanceKm, setDistanceKm] = useState<number | null>(null)
   const [etaMin, setEtaMin] = useState<number | null>(null)
@@ -38,6 +38,11 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   const targetLat = goingToDestination ? ride.destination_latitude : ride.pickup_latitude
   const targetLng = goingToDestination ? ride.destination_longitude : ride.pickup_longitude
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
+
+  useEffect(() => {
+    setOpened(true)
+    setMapFailed(false)
+  }, [ride.status])
 
   useEffect(() => {
     if (!opened) return
@@ -157,7 +162,7 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   if (!opened) {
     return <div className="driver-nav-launch">
       <div><small>{goingToDestination ? (lang === 'fr' ? 'DESTINATION' : 'DESTINASYON') : (lang === 'fr' ? 'ALLER VERS LE PASSAGER' : 'ALE KOTE PASAJE A')}</small><strong>{targetAddress}</strong></div>
-      <button type="button" onClick={() => { setMapFailed(false); setOpened(true) }}>{lang === 'fr' ? '🧭 Ouvrir le GPS' : '🧭 Louvri GPS'}</button>
+      <button type="button" onClick={() => { setMapFailed(false); setOpened(true) }}>{lang === 'fr' ? '🧭 Réouvrir le GPS' : '🧭 Relouvri GPS'}</button>
       <style jsx>{`
         .driver-nav-launch{display:flex;justify-content:space-between;gap:12px;align-items:center;border-radius:18px;border:1px solid #dfe6ed;background:#f7fafc;padding:14px;margin:12px 0 14px}.driver-nav-launch div{min-width:0}.driver-nav-launch small,.driver-nav-launch strong{display:block}.driver-nav-launch small{font-size:10px;color:#728397;font-weight:900;letter-spacing:.05em}.driver-nav-launch strong{margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.driver-nav-launch button{border:0;border-radius:14px;background:#1479ff;color:#fff;font-weight:900;padding:12px 14px;white-space:nowrap}@media(max-width:600px){.driver-nav-launch{align-items:stretch;flex-direction:column}.driver-nav-launch button{width:100%}}
       `}</style>
@@ -170,8 +175,8 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       <b>{distanceKm == null ? (mapFailed ? (lang === 'fr' ? 'Carte indisponible' : 'Kat pa disponib') : 'GPS') : `${distanceKm.toFixed(1)} km${etaMin == null ? '' : ` · ${etaMin} min`}`}</b>
     </div>
     <div ref={containerRef} className="driver-nav-map" />
-    {!mapReady && !mapFailed && <div className="driver-nav-loading">{lang === 'fr' ? 'Chargement du GPS…' : 'GPS ap chaje…'}</div>}
-    {mapFailed && <div className="driver-nav-loading"><span>{lang === 'fr' ? 'La carte n’a pas pu charger.' : 'Kat la pa t ka chaje.'}</span><button type="button" onClick={() => setOpened(false)}>{lang === 'fr' ? 'Fermer le GPS' : 'Fèmen GPS'}</button></div>}
+    {!mapReady && !mapFailed && <div className="driver-nav-loading">{lang === 'fr' ? 'Chargement automatique du GPS…' : 'GPS ap louvri otomatikman…'}</div>}
+    {mapFailed && <div className="driver-nav-loading"><span>{lang === 'fr' ? 'La carte n’a pas pu charger.' : 'Kat la pa t ka chaje.'}</span><button type="button" onClick={() => setOpened(false)}>{lang === 'fr' ? 'Réessayer' : 'Eseye ankò'}</button></div>}
     <style jsx global>{`
       .driver-nav-shell{overflow:hidden;border-radius:20px;border:1px solid #dfe6ed;background:#fff;margin:12px 0 14px;box-shadow:0 10px 28px rgba(16,32,51,.09)}
       .driver-nav-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;background:#102033;color:#fff}
