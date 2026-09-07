@@ -33,10 +33,10 @@ type Vehicle = {
 
 const copy = {
   fr: {
-    title: 'Espace chauffeur', subtitle: 'Gérez votre disponibilité et vos trajets', online: 'En ligne', offline: 'Hors ligne', goOnline: 'Passer en ligne', goOffline: 'Passer hors ligne', available: 'Demandes disponibles', activeRide: 'Trajet en cours', noRequests: 'Aucune demande disponible pour le moment.', waitingOnline: 'Passez en ligne pour recevoir les demandes.', pickup: 'Prise en charge', destination: 'Destination', fare: 'Prix estimé', distance: 'Distance', duration: 'Durée', accept: 'Accepter', arriving: 'Je suis arrivé', start: 'Commencer le trajet', complete: 'Terminer le trajet', refresh: 'Actualiser', logout: 'Se déconnecter', notDriver: 'Ce compte n’est pas un chauffeur approuvé.', loading: 'Chargement…', vehicle: 'Véhicule', gpsOn: 'Position GPS active', gpsOff: 'Position GPS indisponible', error: 'Une erreur est survenue.', completed: 'Trajet terminé.', accepted: 'Trajet accepté.', arrivingMsg: 'Statut mis à jour : chauffeur arrivé.', started: 'Trajet démarré.'
+    title: 'Espace chauffeur', subtitle: 'Gérez votre disponibilité et vos trajets', online: 'En ligne', offline: 'Hors ligne', goOnline: 'Passer en ligne', goOffline: 'Passer hors ligne', available: 'Demandes disponibles', activeRide: 'Trajet en cours', noRequests: 'Aucune demande disponible pour le moment.', waitingOnline: 'Passez en ligne pour recevoir les demandes.', pickup: 'Prise en charge', destination: 'Destination', fare: 'Prix estimé', distance: 'Distance', duration: 'Durée', accept: 'Accepter', arriving: 'Je suis arrivé', start: 'Commencer le trajet', complete: 'Terminer le trajet', refresh: 'Actualiser', logout: 'Se déconnecter', notDriver: 'Ce compte n’est pas un chauffeur approuvé.', loading: 'Chargement…', vehicle: 'Véhicule', gpsOn: 'Position GPS active', gpsOff: 'Position GPS indisponible', error: 'Une erreur est survenue.', completed: 'Trajet terminé.', accepted: 'Trajet accepté.', arrivingMsg: 'Statut mis à jour : chauffeur arrivé.', started: 'Trajet démarré.', onlineConfirmed: 'Vous êtes maintenant en ligne.', offlineConfirmed: 'Vous êtes maintenant hors ligne.', gpsPermission: 'Autorisez la localisation sur votre iPhone pour partager votre position.'
   },
   ht: {
-    title: 'Espas chofè', subtitle: 'Jere disponiblite ou ak trajè ou yo', online: 'Sou liy', offline: 'Pa sou liy', goOnline: 'Mete m sou liy', goOffline: 'Retire m sou liy', available: 'Demann trajè ki disponib', activeRide: 'Trajè aktyèl', noRequests: 'Pa gen demann trajè pou kounye a.', waitingOnline: 'Mete tèt ou sou liy pou resevwa demann.', pickup: 'Kote pou pran pasaje a', destination: 'Destinasyon', fare: 'Pri estime', distance: 'Distans', duration: 'Dire', accept: 'Aksepte', arriving: 'Mwen rive', start: 'Kòmanse trajè a', complete: 'Fini trajè a', refresh: 'Rafrechi', logout: 'Dekonekte', notDriver: 'Kont sa a pa yon chofè ki apwouve.', loading: 'N ap chaje…', vehicle: 'Veyikil', gpsOn: 'Pozisyon GPS aktif', gpsOff: 'Pozisyon GPS pa disponib', error: 'Gen yon erè ki fèt.', completed: 'Trajè a fini.', accepted: 'Trajè a aksepte.', arrivingMsg: 'Estati a chanje: chofè a rive.', started: 'Trajè a kòmanse.'
+    title: 'Espas chofè', subtitle: 'Jere disponiblite ou ak trajè ou yo', online: 'Sou liy', offline: 'Pa sou liy', goOnline: 'Mete m sou liy', goOffline: 'Retire m sou liy', available: 'Demann trajè ki disponib', activeRide: 'Trajè aktyèl', noRequests: 'Pa gen demann trajè pou kounye a.', waitingOnline: 'Mete tèt ou sou liy pou resevwa demann.', pickup: 'Kote pou pran pasaje a', destination: 'Destinasyon', fare: 'Pri estime', distance: 'Distans', duration: 'Dire', accept: 'Aksepte', arriving: 'Mwen rive', start: 'Kòmanse trajè a', complete: 'Fini trajè a', refresh: 'Rafrechi', logout: 'Dekonekte', notDriver: 'Kont sa a pa yon chofè ki apwouve.', loading: 'N ap chaje…', vehicle: 'Veyikil', gpsOn: 'Pozisyon GPS aktif', gpsOff: 'Pozisyon GPS pa disponib', error: 'Gen yon erè ki fèt.', completed: 'Trajè a fini.', accepted: 'Trajè a aksepte.', arrivingMsg: 'Estati a chanje: chofè a rive.', started: 'Trajè a kòmanse.', onlineConfirmed: 'Ou sou liy kounye a.', offlineConfirmed: 'Ou pa sou liy kounye a.', gpsPermission: 'Bay aplikasyon an pèmisyon Location sou iPhone pou pataje pozisyon ou.'
   }
 }
 
@@ -81,10 +81,11 @@ export default function DriverDashboardPage() {
 
     const { data: v } = await supabase.from('vehicles').select('id,vehicle_type,make,model,plate_number,is_active').eq('driver_id', auth.user.id).eq('is_active', true).order('created_at', { ascending: true }).limit(1).maybeSingle()
     setVehicle((v ?? null) as Vehicle | null)
-    setOnline(Boolean(driver.is_online))
+    const currentOnline = Boolean(driver.is_online)
+    setOnline(currentOnline)
     setAuthorized(true)
-    if (driver.is_online) startGpsWatch()
-    await loadRides(auth.user.id, Boolean(driver.is_online))
+    if (currentOnline) startGpsWatch()
+    await loadRides(auth.user.id, currentOnline)
     setBusy(false)
   }
 
@@ -103,7 +104,12 @@ export default function DriverDashboardPage() {
   }
 
   function startGpsWatch() {
-    if (!navigator.geolocation || watchIdRef.current !== null) return
+    if (!navigator.geolocation) {
+      setGpsActive(false)
+      setMessage(t.gpsPermission)
+      return
+    }
+    if (watchIdRef.current !== null) return
     watchIdRef.current = navigator.geolocation.watchPosition(
       (pos) => {
         setGpsActive(true)
@@ -114,7 +120,10 @@ export default function DriverDashboardPage() {
           p_speed_kph: pos.coords.speed == null ? null : pos.coords.speed * 3.6,
         })
       },
-      () => setGpsActive(false),
+      () => {
+        setGpsActive(false)
+        setMessage(t.gpsPermission)
+      },
       { enableHighAccuracy: true, maximumAge: 10000, timeout: 15000 }
     )
   }
@@ -126,15 +135,44 @@ export default function DriverDashboardPage() {
   }
 
   async function toggleOnline() {
-    setBusy(true); setMessage('')
-    const next = !online
-    const { error } = await supabase.rpc('set_driver_online', { p_online: next })
-    if (error) setMessage(error.message)
-    else {
-      setOnline(next)
-      if (next) startGpsWatch(); else stopGpsWatch()
-      await loadRides(userIdRef.current, next)
+    if (busy) return
+    const previous = online
+    const requested = !previous
+    setBusy(true)
+    setMessage('')
+
+    // Optimistic UI so iPhone gives immediate visual feedback.
+    setOnline(requested)
+    if (requested) startGpsWatch()
+    else stopGpsWatch()
+
+    const { error } = await supabase.rpc('set_driver_online', { p_online: requested })
+    if (error) {
+      setOnline(previous)
+      if (previous) startGpsWatch()
+      else stopGpsWatch()
+      setMessage(error.message)
+      setBusy(false)
+      return
     }
+
+    // Re-read the backend state so the screen always matches Supabase.
+    const userId = userIdRef.current
+    let confirmed = requested
+    if (userId) {
+      const { data: driver, error: refreshError } = await supabase
+        .from('driver_profiles')
+        .select('is_online')
+        .eq('user_id', userId)
+        .maybeSingle()
+      if (!refreshError && driver) confirmed = Boolean(driver.is_online)
+    }
+
+    setOnline(confirmed)
+    if (confirmed) startGpsWatch()
+    else stopGpsWatch()
+    setMessage(confirmed ? t.onlineConfirmed : t.offlineConfirmed)
+    await loadRides(userIdRef.current, confirmed)
     setBusy(false)
   }
 
