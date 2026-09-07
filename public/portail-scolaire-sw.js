@@ -1,6 +1,5 @@
-const CACHE_NAME = 'portail-scolaire-v1'
-const APP_SHELL = [
-  '/portail-scolaire',
+const CACHE_NAME = 'portail-scolaire-v2'
+const STATIC_ASSETS = [
   '/portail-scolaire/manifest.webmanifest',
   '/portail-scolaire-icon.svg',
   '/portail-scolaire-icon-maskable.svg',
@@ -8,13 +7,21 @@ const APP_SHELL = [
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting())
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(STATIC_ASSETS))
+      .then(() => self.skipWaiting())
   )
 })
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME && key.startsWith('portail-scolaire-')).map((key) => caches.delete(key)))).then(() => self.clients.claim())
+    caches.keys()
+      .then((keys) => Promise.all(
+        keys
+          .filter((key) => key.startsWith('portail-scolaire-') && key !== CACHE_NAME)
+          .map((key) => caches.delete(key))
+      ))
+      .then(() => self.clients.claim())
   )
 })
 
@@ -24,28 +31,24 @@ self.addEventListener('fetch', (event) => {
 
   const url = new URL(request.url)
   if (url.origin !== self.location.origin) return
-  if (!url.pathname.startsWith('/portail-scolaire')) return
+  if (!url.pathname.startsWith('/portail-scolaire') && !STATIC_ASSETS.includes(url.pathname)) return
 
-  if (request.mode === 'navigate') {
-    event.respondWith(
-      fetch(request)
-        .then((response) => {
-          const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put('/portail-scolaire', copy))
-          return response
-        })
-        .catch(() => caches.match('/portail-scolaire'))
-    )
+  // Always use the network for page navigations and Next.js data/chunks.
+  // This prevents Safari from reopening an old app shell that can stay on "Chargement...".
+  if (request.mode === 'navigate' || url.pathname.startsWith('/_next/')) {
+    event.respondWith(fetch(request, { cache: 'no-store' }))
     return
   }
 
   event.respondWith(
-    caches.match(request).then((cached) => cached || fetch(request).then((response) => {
-      if (response.ok) {
-        const copy = response.clone()
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy))
-      }
-      return response
-    }))
+    fetch(request)
+      .then((response) => {
+        if (response.ok && STATIC_ASSETS.includes(url.pathname)) {
+          const copy = response.clone()
+          caches.open(CACHE_NAME).then((cache) => cache.put(request, copy))
+        }
+        return response
+      })
+      .catch(() => caches.match(request))
   )
 })
