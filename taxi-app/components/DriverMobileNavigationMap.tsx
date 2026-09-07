@@ -27,7 +27,9 @@ const HAITI_TEST_POSITION: Point = {
 
 export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const watchRef = useRef<number | null>(null)
+  const heartbeatRef = useRef<number | null>(null)
   const requestSeq = useRef(0)
+  const latestPositionRef = useRef<Point | null>(null)
   const [position, setPosition] = useState<Point | null>(null)
   const [distanceKm, setDistanceKm] = useState<number | null>(null)
   const [etaMin, setEtaMin] = useState<number | null>(null)
@@ -40,22 +42,47 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const targetLng = goingToDestination ? ride.destination_longitude : ride.pickup_longitude
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
 
+  async function syncDriverLocation(point: Point) {
+    const { error: syncError } = await supabase.rpc('update_driver_location', {
+      p_latitude: point.lat,
+      p_longitude: point.lng,
+      p_heading: point.heading,
+      p_speed_kph: point.speedKph,
+    })
+
+    if (syncError) {
+      setError(lang === 'fr'
+        ? `Impossible de partager votre position: ${syncError.message}`
+        : `Nou pa ka pataje pozisyon ou: ${syncError.message}`)
+      return false
+    }
+
+    setError('')
+    return true
+  }
+
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const queryTestMode = params.get('test') === 'haiti'
     if (queryTestMode) localStorage.setItem('taxi_haiti_test_mode', '1')
     const testMode = queryTestMode || localStorage.getItem('taxi_haiti_test_mode') === '1'
 
+    const publish = (point: Point) => {
+      latestPositionRef.current = point
+      setPosition(point)
+      void syncDriverLocation(point)
+    }
+
     if (testMode) {
-      setPosition(HAITI_TEST_POSITION)
-      setError('')
-      void supabase.rpc('update_driver_location', {
-        p_latitude: HAITI_TEST_POSITION.lat,
-        p_longitude: HAITI_TEST_POSITION.lng,
-        p_heading: null,
-        p_speed_kph: 0,
-      })
-      return
+      publish(HAITI_TEST_POSITION)
+      heartbeatRef.current = window.setInterval(() => {
+        void syncDriverLocation(HAITI_TEST_POSITION)
+      }, 3000)
+
+      return () => {
+        if (heartbeatRef.current !== null) window.clearInterval(heartbeatRef.current)
+        heartbeatRef.current = null
+      }
     }
 
     if (!navigator.geolocation) {
@@ -71,22 +98,21 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
           heading: p.coords.heading ?? null,
           speedKph: p.coords.speed == null ? null : p.coords.speed * 3.6,
         }
-        setPosition(next)
-        setError('')
-        void supabase.rpc('update_driver_location', {
-          p_latitude: next.lat,
-          p_longitude: next.lng,
-          p_heading: next.heading,
-          p_speed_kph: next.speedKph,
-        })
+        publish(next)
       },
       () => setError(lang === 'fr' ? 'Autorisez la localisation pour utiliser le GPS.' : 'Bay pèmisyon Location pou itilize GPS la.'),
       { enableHighAccuracy: true, maximumAge: 3000, timeout: 15000 }
     )
 
+    heartbeatRef.current = window.setInterval(() => {
+      if (latestPositionRef.current) void syncDriverLocation(latestPositionRef.current)
+    }, 3000)
+
     return () => {
       if (watchRef.current !== null) navigator.geolocation.clearWatch(watchRef.current)
+      if (heartbeatRef.current !== null) window.clearInterval(heartbeatRef.current)
       watchRef.current = null
+      heartbeatRef.current = null
     }
   }, [lang])
 
