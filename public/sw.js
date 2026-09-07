@@ -10,7 +10,7 @@ self.addEventListener("install", (event) => {
 self.addEventListener("activate", (event) => {
   event.waitUntil(
     Promise.all([
-      caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key)))),
+      caches.keys().then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME && !key.startsWith("portail-scolaire-")).map((key) => caches.delete(key)))),
       self.clients.claim(),
     ])
   );
@@ -26,6 +26,10 @@ self.addEventListener("fetch", (event) => {
 
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
+
+  // Portail Scolaire is a separate PWA with its own service worker.
+  // Never intercept its pages, manifest, icons, or Next.js requests initiated by those pages.
+  if (url.pathname.startsWith("/portail-scolaire")) return;
 
   if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) return;
 
