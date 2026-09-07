@@ -18,6 +18,13 @@ type Ride = {
 type Props = { ride: Ride; lang: 'fr' | 'ht' }
 type Point = { lat: number; lng: number; heading: number | null; speedKph: number | null }
 
+const HAITI_TEST_POSITION: Point = {
+  lat: 18.5944,
+  lng: -72.3074,
+  heading: null,
+  speedKph: 0,
+}
+
 export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const watchRef = useRef<number | null>(null)
   const requestSeq = useRef(0)
@@ -26,6 +33,7 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const [etaMin, setEtaMin] = useState<number | null>(null)
   const [routePolyline, setRoutePolyline] = useState<string | null>(null)
   const [error, setError] = useState('')
+  const [mapFailed, setMapFailed] = useState(false)
 
   const goingToDestination = ride.status === 'in_progress'
   const targetLat = goingToDestination ? ride.destination_latitude : ride.pickup_latitude
@@ -33,6 +41,20 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
 
   useEffect(() => {
+    const testMode = localStorage.getItem('taxi_haiti_test_mode') === '1'
+
+    if (testMode) {
+      setPosition(HAITI_TEST_POSITION)
+      setError('')
+      void supabase.rpc('update_driver_location', {
+        p_latitude: HAITI_TEST_POSITION.lat,
+        p_longitude: HAITI_TEST_POSITION.lng,
+        p_heading: null,
+        p_speed_kph: 0,
+      })
+      return
+    }
+
     if (!navigator.geolocation) {
       setError(lang === 'fr' ? 'GPS indisponible sur cet appareil.' : 'GPS pa disponib sou aparèy sa a.')
       return
@@ -77,12 +99,18 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
         const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=polyline&steps=false&access_token=${encodeURIComponent(token)}`, { signal: controller.signal })
         const json = await response.json()
         const route = json.routes?.[0]
-        if (!route || seq !== requestSeq.current) return
+        if (!route || seq !== requestSeq.current) {
+          setRoutePolyline(null)
+          setDistanceKm(null)
+          setEtaMin(null)
+          return
+        }
         setDistanceKm(route.distance / 1000)
         setEtaMin(Math.max(1, Math.round(route.duration / 60)))
         setRoutePolyline(route.geometry ?? null)
       } catch {
         if (!controller.signal.aborted && seq === requestSeq.current) {
+          setRoutePolyline(null)
           setDistanceKm(null)
           setEtaMin(null)
         }
@@ -98,13 +126,19 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const mapUrl = useMemo(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || !position || targetLat == null || targetLng == null) return ''
+
     const overlays = [
-      routePolyline ? `path-6+1479ff-0.95(${encodeURIComponent(routePolyline)})` : null,
-      `pin-s-car+1479ff(${position.lng},${position.lat})`,
-      `pin-s-${goingToDestination ? 'flag' : 'marker'}+0d7b61(${targetLng},${targetLat})`,
+      routePolyline ? `path-5+1479ff-0.9(${encodeURIComponent(routePolyline)})` : null,
+      `pin-s-a+1479ff(${position.lng},${position.lat})`,
+      `pin-s-b+0d7b61(${targetLng},${targetLat})`,
     ].filter(Boolean).join(',')
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=60&access_token=${encodeURIComponent(token)}`
-  }, [position, targetLat, targetLng, routePolyline, goingToDestination])
+
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/800x600?padding=50&access_token=${encodeURIComponent(token)}`
+  }, [position, targetLat, targetLng, routePolyline])
+
+  useEffect(() => {
+    setMapFailed(false)
+  }, [mapUrl])
 
   return <section className="nav">
     <div className="head">
@@ -115,15 +149,23 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
       <b>{distanceKm == null ? 'GPS' : `${distanceKm.toFixed(1)} km${etaMin == null ? '' : ` · ${etaMin} min`}`}</b>
     </div>
 
-    {mapUrl ? <img className="map" src={mapUrl} alt={lang === 'fr' ? 'Itinéraire GPS' : 'Wout GPS'} /> : <div className="loading">{lang === 'fr' ? 'Recherche de votre position GPS…' : 'N ap chèche pozisyon GPS ou…'}</div>}
+    {mapUrl && !mapFailed ? (
+      <img className="map" src={mapUrl} alt={lang === 'fr' ? 'Itinéraire GPS' : 'Wout GPS'} onError={() => setMapFailed(true)} />
+    ) : (
+      <div className="loading">
+        {mapFailed
+          ? (lang === 'fr' ? 'La carte ne peut pas être affichée pour le moment. Le GPS continue de calculer la distance et le temps.' : 'Kat la pa ka parèt pou kounye a. GPS la kontinye kalkile distans ak tan.')
+          : (lang === 'fr' ? 'Recherche de votre position GPS…' : 'N ap chèche pozisyon GPS ou…')}
+      </div>
+    )}
     {error && <div className="error">{error}</div>}
 
     <style jsx>{`
       .nav{overflow:hidden;border-radius:20px;border:1px solid #dfe6ed;background:#fff;box-shadow:0 10px 28px rgba(16,32,51,.09)}
       .head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;background:#102033;color:#fff}
       .head div{min-width:0}.head small,.head strong{display:block}.head small{font-size:10px;color:#a9bdd0;font-weight:850;letter-spacing:.04em}.head strong{font-size:14px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.head b{white-space:nowrap;font-size:13px;background:#1c3148;border-radius:999px;padding:8px 10px}
-      .map{display:block;width:100%;height:auto;aspect-ratio:9/6.5;object-fit:cover;background:#eaf0f4}.loading,.error{padding:18px;text-align:center;font-weight:750}.loading{color:#66778a}.error{background:#fff1f1;color:#a12626}
-      @media(max-width:600px){.head{align-items:flex-start;flex-direction:column}.head b{align-self:flex-start}.map{aspect-ratio:4/3}}
+      .map{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;background:#eaf0f4}.loading,.error{padding:24px 18px;text-align:center;font-weight:750}.loading{min-height:180px;display:grid;place-items:center;color:#66778a;background:#eaf0f4}.error{background:#fff1f1;color:#a12626}
+      @media(max-width:600px){.head{align-items:flex-start;flex-direction:column}.head b{align-self:flex-start}}
     `}</style>
   </section>
 }
