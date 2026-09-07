@@ -66,6 +66,19 @@ export default function DriverDashboardTitleCleanup() {
           main.page .ride-card .metrics small { font-size: 10px !important; }
           main.page .ride-card .metrics strong { font-size: 12px !important; overflow-wrap: anywhere; }
           main.page .ride-wrap > .primary { margin-top: 10px !important; padding: 11px 13px !important; border-radius: 12px !important; font-size: 14px !important; }
+
+          .drawer { width: min(330px, 88vw) !important; padding: 18px 14px 20px !important; background: #f7f9fb !important; }
+          .drawer .drawerHead { margin-bottom: 8px !important; padding-bottom: 8px !important; border-bottom: 1px solid #e6ebf0 !important; }
+          .drawer .drawerHead button { width: 36px !important; height: 36px !important; border-radius: 12px !important; }
+          .drawer .profileBlock { padding: 10px 0 14px !important; margin: 0 !important; background: transparent !important; }
+          .drawer .avatar { width: 72px !important; height: 72px !important; border-radius: 50% !important; box-shadow: 0 8px 24px rgba(16,32,51,.12) !important; }
+          .drawer .menuSection { background: #fff !important; border: 1px solid #e4e9ee !important; border-radius: 16px !important; padding: 13px 14px !important; margin: 0 0 10px !important; box-shadow: 0 4px 14px rgba(16,32,51,.04) !important; }
+          .drawer .menuSection h3 { margin: 0 0 10px !important; font-size: 12px !important; text-transform: uppercase !important; letter-spacing: .04em !important; color: #66778a !important; }
+          .drawer .menuSection p { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 14px !important; margin: 8px 0 !important; font-size: 13px !important; }
+          .drawer .menuSection p span { color: #7b8998 !important; flex: 0 0 auto !important; }
+          .drawer .menuSection p b { color: #102033 !important; text-align: right !important; overflow-wrap: anywhere !important; }
+          .drawer select { width: 100% !important; min-height: 44px !important; border-radius: 12px !important; border: 1px solid #dce3e9 !important; background: #fff !important; padding: 0 12px !important; font-size: 14px !important; }
+          .drawer .logout, .drawer button.logout { width: 100% !important; min-height: 46px !important; margin-top: 14px !important; border-radius: 13px !important; font-size: 14px !important; font-weight: 850 !important; }
         }
       `
       document.head.appendChild(style)
