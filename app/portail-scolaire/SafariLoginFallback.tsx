@@ -19,13 +19,16 @@ export default function SafariLoginFallback(){
 
   useEffect(()=>{
     const timer=window.setTimeout(()=>{
-      const loading=[...document.querySelectorAll('.notice')].find(el=>el.textContent?.trim()==='Chargement...' || el.textContent?.trim()==='Chajman...')
-      const login=document.querySelector('.loginWrap')
-      if(loading && !login){
-        ;(loading as HTMLElement).style.display='none'
+      const nativeLogin=document.querySelector('.loginWrap') as HTMLElement|null
+      const nativeLoginVisible=Boolean(nativeLogin && nativeLogin.offsetParent!==null)
+      if(!nativeLoginVisible){
+        document.querySelectorAll('.notice').forEach(el=>{
+          const text=el.textContent?.trim()
+          if(text==='Chargement...' || text==='Chajman...') (el as HTMLElement).style.display='none'
+        })
         setShow(true)
       }
-    },3500)
+    },3000)
     return()=>window.clearTimeout(timer)
   },[])
 
@@ -37,10 +40,18 @@ export default function SafariLoginFallback(){
     const identifier=String(fd.get('identifier')||'').trim()
     const password=String(fd.get('password')||'')
     if(!identifier||!password){setBusy(false);return}
-    const email=identifier.includes('@')?identifier:await accessEmail(identifier)
-    const {error}=await supabase.auth.signInWithPassword({email,password})
-    if(error){setError("Identifiant d’accès ou mot de passe incorrect.");setBusy(false);return}
-    window.location.reload()
+    try{
+      const email=identifier.includes('@')?identifier:await accessEmail(identifier)
+      const result=await Promise.race([
+        supabase.auth.signInWithPassword({email,password}),
+        new Promise<{error:{message:string}}>(resolve=>window.setTimeout(()=>resolve({error:{message:'timeout'}}),10000))
+      ])
+      if(result.error){setError("Identifiant d’accès ou mot de passe incorrect.");setBusy(false);return}
+      window.location.reload()
+    }catch{
+      setError("Connexion impossible pour le moment. Réessayez.")
+      setBusy(false)
+    }
   }
 
   return <div style={{maxWidth:460,margin:'28px auto',padding:'0 12px'}}>
