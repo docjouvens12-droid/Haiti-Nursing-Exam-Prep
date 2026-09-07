@@ -4,45 +4,39 @@ import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 
-type RideSummary = {
-  id: string
-  status: 'accepted' | 'driver_arriving' | 'in_progress'
-  pickup_address: string
-  destination_address: string
-  estimated_fare_htg: number | string | null
-}
-
-type DriverSummary = {
+type ActiveRideBundle = {
   ride_id: string
   ride_status: 'accepted' | 'driver_arriving' | 'in_progress'
+  pickup_address: string
+  destination_address: string
+  pickup_latitude: number | null
+  pickup_longitude: number | null
+  destination_latitude: number | null
+  destination_longitude: number | null
+  estimated_distance_km: number | string | null
+  estimated_duration_min: number | null
+  estimated_fare_htg: number | string | null
+  service_type: string | null
   driver_id: string
   driver_name: string | null
   avatar_url: string | null
-  average_rating: number | null
+  average_rating: number | string | null
   total_rides: number | null
-  vehicle_id: string | null
   vehicle_type: string | null
   vehicle_make: string | null
   vehicle_model: string | null
   vehicle_color: string | null
   plate_number: string | null
-}
-
-type TrackingSummary = {
-  ride_id: string
-  ride_status: 'accepted' | 'driver_arriving' | 'in_progress'
   driver_latitude: number | null
   driver_longitude: number | null
-  pickup_latitude: number | null
-  pickup_longitude: number | null
-  destination_latitude: number | null
-  destination_longitude: number | null
+  driver_heading: number | null
+  driver_speed_kph: number | null
+  location_updated_at: string | null
 }
 
 export default function PassengerActiveDriver() {
   const pathname = usePathname()
-  const [ride, setRide] = useState<RideSummary | null>(null)
-  const [driver, setDriver] = useState<DriverSummary | null>(null)
+  const [bundle, setBundle] = useState<ActiveRideBundle | null>(null)
   const [email, setEmail] = useState('')
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
   const [liveDistanceKm, setLiveDistanceKm] = useState<number | null>(null)
@@ -55,8 +49,8 @@ export default function PassengerActiveDriver() {
 
     let active = true
 
-    async function updateLiveMetrics(tracking: TrackingSummary | null) {
-      if (!tracking || tracking.driver_latitude == null || tracking.driver_longitude == null) {
+    async function updateLiveMetrics(row: ActiveRideBundle | null) {
+      if (!row || row.driver_latitude == null || row.driver_longitude == null) {
         if (active) {
           setLiveDistanceKm(null)
           setLiveEtaMin(null)
@@ -64,14 +58,14 @@ export default function PassengerActiveDriver() {
         return
       }
 
-      const goingToPassenger = tracking.ride_status !== 'in_progress'
-      const targetLat = goingToPassenger ? tracking.pickup_latitude : tracking.destination_latitude
-      const targetLng = goingToPassenger ? tracking.pickup_longitude : tracking.destination_longitude
+      const goingToPassenger = row.ride_status !== 'in_progress'
+      const targetLat = goingToPassenger ? row.pickup_latitude : row.destination_latitude
+      const targetLng = goingToPassenger ? row.pickup_longitude : row.destination_longitude
       const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
       if (!token || targetLat == null || targetLng == null) return
 
       try {
-        const coords = `${tracking.driver_longitude},${tracking.driver_latitude};${targetLng},${targetLat}`
+        const coords = `${row.driver_longitude},${row.driver_latitude};${targetLng},${targetLat}`
         const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=false&steps=false&access_token=${encodeURIComponent(token)}`)
         const json = await response.json()
         const route = json.routes?.[0]
@@ -97,50 +91,30 @@ export default function PassengerActiveDriver() {
       if (!active) return
       if (!user) {
         setEmail('')
-        setRide(null)
-        setDriver(null)
+        setBundle(null)
         setLiveDistanceKm(null)
         setLiveEtaMin(null)
         return
       }
 
       setEmail(user.email ?? '')
-
-      const { data: rideData, error: rideError } = await supabase
-        .from('rides')
-        .select('id,status,pickup_address,destination_address,estimated_fare_htg')
-        .eq('passenger_id', user.id)
-        .in('status', ['accepted', 'driver_arriving', 'in_progress'])
-        .order('requested_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
-
+      const { data, error } = await supabase.rpc('get_passenger_active_ride_bundle')
       if (!active) return
-      if (rideError || !rideData) {
-        setRide(null)
-        setDriver(null)
+      if (error) {
+        setBundle(null)
         setLiveDistanceKm(null)
         setLiveEtaMin(null)
         return
       }
 
-      setRide(rideData as RideSummary)
-
-      const [{ data: driverData }, { data: trackingData }] = await Promise.all([
-        supabase.rpc('get_passenger_active_driver'),
-        supabase.rpc('get_passenger_live_driver_tracking'),
-      ])
-      if (!active) return
-
-      const driverRow = Array.isArray(driverData) ? driverData[0] : driverData
-      setDriver((driverRow ?? null) as DriverSummary | null)
-
-      const trackingRow = Array.isArray(trackingData) ? trackingData[0] : trackingData
-      await updateLiveMetrics((trackingRow ?? null) as TrackingSummary | null)
+      const row = (Array.isArray(data) ? data[0] : data) as ActiveRideBundle | undefined
+      const next = row ?? null
+      setBundle(next)
+      await updateLiveMetrics(next)
     }
 
     void load()
-    const timer = window.setInterval(() => void load(), 3000)
+    const timer = window.setInterval(() => void load(), 2500)
     const { data: authListener } = supabase.auth.onAuthStateChange(() => {
       window.setTimeout(() => void load(), 80)
     })
@@ -158,22 +132,22 @@ export default function PassengerActiveDriver() {
     }
   }, [pathname])
 
-  if (pathname !== '/' || !ride) return null
+  if (pathname !== '/' || !bundle) return null
 
-  const status = ride.status === 'accepted'
+  const status = bundle.ride_status === 'accepted'
     ? (lang === 'ht' ? 'Chofè a aksepte trajè a' : 'Votre chauffeur a accepté')
-    : ride.status === 'driver_arriving'
+    : bundle.ride_status === 'driver_arriving'
       ? (lang === 'ht' ? 'Chofè a rive' : 'Votre chauffeur est arrivé')
       : (lang === 'ht' ? 'Trajè a ankou' : 'Trajet en cours')
 
-  const name = driver?.driver_name?.trim() || (lang === 'ht' ? 'Chofè ou' : 'Votre chauffeur')
+  const name = bundle.driver_name?.trim() || (lang === 'ht' ? 'Chofè ou' : 'Votre chauffeur')
   const initial = name.charAt(0).toUpperCase()
-  const rating = Number(driver?.average_rating ?? 0).toFixed(1)
-  const vehicle = [driver?.vehicle_make, driver?.vehicle_model].filter(Boolean).join(' ') || (lang === 'ht' ? 'Veyikil' : 'Véhicule')
-  const fare = ride.estimated_fare_htg == null ? '—' : `${Number(ride.estimated_fare_htg).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} HTG`
+  const rating = Number(bundle.average_rating ?? 0).toFixed(1)
+  const vehicle = [bundle.vehicle_make, bundle.vehicle_model].filter(Boolean).join(' ') || (lang === 'ht' ? 'Veyikil' : 'Véhicule')
+  const fare = bundle.estimated_fare_htg == null ? '—' : `${Number(bundle.estimated_fare_htg).toLocaleString('fr-FR', { maximumFractionDigits: 2 })} HTG`
   const liveDistance = liveDistanceKm == null ? 'GPS…' : `${liveDistanceKm.toFixed(1)} km`
   const liveEta = liveEtaMin == null ? 'ETA…' : `${liveEtaMin} min`
-  const liveLabel = ride.status === 'in_progress'
+  const liveLabel = bundle.ride_status === 'in_progress'
     ? (lang === 'ht' ? 'Rès wout pou destinasyon' : 'Distance restante')
     : (lang === 'ht' ? 'Chofè a ap rive nan' : 'Votre chauffeur arrive dans')
 
@@ -183,18 +157,18 @@ export default function PassengerActiveDriver() {
 
     <div className="driver-main">
       <div className="avatar">
-        {driver?.avatar_url ? <img src={driver.avatar_url} alt="" /> : <span>{initial}</span>}
+        {bundle.avatar_url ? <img src={bundle.avatar_url} alt="" /> : <span>{initial}</span>}
       </div>
       <div className="driver-copy">
         <strong>{name}</strong>
-        <span>{driver ? `⭐ ${rating} / 5 · ${driver.total_rides ?? 0} ${lang === 'ht' ? 'trajè' : 'trajet'}` : (lang === 'ht' ? 'N ap chaje enfòmasyon chofè a…' : 'Chargement des informations du chauffeur…')}</span>
+        <span>⭐ {rating} / 5 · {bundle.total_rides ?? 0} {lang === 'ht' ? 'trajè' : 'trajet'}</span>
       </div>
-      <div className="vehicle-icon">{driver?.vehicle_type === 'moto' ? '🏍️' : '🚕'}</div>
+      <div className="vehicle-icon">{bundle.vehicle_type === 'moto' ? '🏍️' : '🚕'}</div>
     </div>
 
     <div className="vehicle-line">
       <div><small>{lang === 'ht' ? 'Veyikil' : 'Véhicule'}</small><strong>{vehicle}</strong></div>
-      <div className="plate"><small>{lang === 'ht' ? 'Plak' : 'Plaque'}</small><strong>{driver?.plate_number || '—'}</strong></div>
+      <div className="plate"><small>{lang === 'ht' ? 'Plak' : 'Plaque'}</small><strong>{bundle.plate_number || '—'}</strong></div>
     </div>
 
     <div className="live-arrival">
@@ -203,9 +177,9 @@ export default function PassengerActiveDriver() {
     </div>
 
     <div className="ride-box">
-      <div><small>{lang === 'ht' ? 'Pran kliyan' : 'Prise en charge'}</small><strong>{ride.pickup_address}</strong></div>
-      <div><small>{lang === 'ht' ? 'Destinasyon' : 'Destination'}</small><strong>{ride.destination_address}</strong></div>
-      <div className="metrics"><span>💵 {fare}</span></div>
+      <div><small>{lang === 'ht' ? 'Pran kliyan' : 'Prise en charge'}</small><strong>{bundle.pickup_address}</strong></div>
+      <div><small>{lang === 'ht' ? 'Destinasyon' : 'Destination'}</small><strong>{bundle.destination_address}</strong></div>
+      <div className="metrics"><span>{bundle.service_type || 'Standard'}</span><span>💵 {fare}</span></div>
     </div>
 
     <style jsx>{`
