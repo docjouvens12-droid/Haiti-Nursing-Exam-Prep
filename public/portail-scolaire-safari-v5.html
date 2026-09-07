@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f4c81">
+<title>Portail Scolaire Haïti — Élève</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#14213d}.top{background:#0f4c81;color:#fff;padding:28px 22px;font-size:25px;font-weight:800}.wrap{max-width:680px;margin:32px auto;padding:0 16px}.card{background:#fff;border:1px solid #d8e3ec;border-radius:20px;padding:24px;box-shadow:0 10px 28px rgba(20,33,61,.07);margin-bottom:18px}h1{font-size:34px;margin:0 0 12px}h2{margin:0 0 14px;font-size:25px}.sub,.muted{color:#68798a}.label{display:block;font-weight:800;margin:17px 0 7px}input,select{width:100%;font-size:18px;padding:15px;border:1px solid #cbd7e3;border-radius:12px;background:#fff;color:#14213d}button{margin-top:16px;background:#0f5c91;color:#fff;border:0;border-radius:12px;padding:14px 20px;font-size:18px;font-weight:800}button:disabled{opacity:.6}.secondary{background:#eef5fa;color:#0f4c81}.msg{margin-top:18px;padding:14px;border-radius:12px;display:none}.ok{display:block;background:#e9f8ef;color:#176b3a}.err{display:block;background:#fff0f0;color:#9b1c1c}.info{display:block;background:#eef6fb;color:#174f73}.dash{display:none}.student{font-size:26px;font-weight:900;margin:0 0 8px}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.stat{background:#f7fafc;border:1px solid #dbe5ef;border-radius:14px;padding:16px}.value{font-size:30px;font-weight:900;color:#0f5c91;margin-top:4px}.toolbar{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:end}.grade{display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;padding:15px 0;border-top:1px solid #e4edf4}.grade:first-child{border-top:0}.grade-name{font-weight:800;font-size:18px}.grade-score{font-weight:900;color:#0f5c91;font-size:20px;white-space:nowrap}.badge{display:inline-block;margin-top:5px;padding:4px 8px;border-radius:999px;background:#eef5fa;color:#315a78;font-size:13px;font-weight:700}.bulletin{display:none}.bulletin.show{display:block}.bulletin-head{text-align:center;border-bottom:2px solid #0f4c81;padding-bottom:16px;margin-bottom:16px}.bulletin-title{font-size:26px;font-weight:900}.identity{display:grid;grid-template-columns:1fr 1fr;gap:8px 18px;margin-bottom:18px}.identity div{padding:7px 0}.table{border:1px solid #dbe5ef;border-radius:12px;overflow:hidden}.tr{display:grid;grid-template-columns:1.5fr .55fr .7fr;border-top:1px solid #e4edf4}.tr:first-child{border-top:0}.th{background:#f3f7fa;font-weight:900}.cell{padding:12px 10px}.num{text-align:right}.general{margin-top:16px;border:2px solid #0f4c81;padding:14px;border-radius:12px;display:flex;justify-content:space-between;gap:12px;font-weight:900}.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}.actions button{width:100%}.logout{width:100%}.print-only{display:none}
+@media(max-width:430px){.stats,.toolbar,.actions,.identity{grid-template-columns:1fr}.wrap{padding:0 12px}.card{padding:20px}h1{font-size:31px}.tr{grid-template-columns:1.25fr .55fr .7fr}.cell{padding:10px 7px;font-size:14px}}
+@media print{body{background:#fff}.top,#login,#dash>.card:not(#bulletin),#bulletinBtn,#printBtn,#logout{display:none!important}.wrap{max-width:none;margin:0;padding:0}#dash{display:block!important}#bulletin{display:block!important;box-shadow:none;border:0;padding:0;margin:0}.bulletin-head{margin-top:0}.print-only{display:block}.table{break-inside:avoid}.general{break-inside:avoid}@page{size:A4;margin:14mm}}
+</style>
+</head>
+<body>
+<div class="top">Portail Scolaire Haïti</div>
+<main class="wrap">
+<section id="login" class="card">
+<h1>Connexion</h1>
+<p class="sub">Utilisez vos informations de connexion.</p>
+<form id="form">
+<label class="label" for="id">Identifiant du personnel</label>
+<input id="id" autocomplete="username" required>
+<label class="label" for="pw">Mot de passe</label>
+<input id="pw" type="password" autocomplete="current-password" required>
+<button id="btn" type="submit">Se connecter</button>
+</form>
+<div id="msg" class="msg"></div>
+</section>
+
+<section id="dash" class="dash">
+<div class="card">
+<h1>Tableau de bord de l’Élève</h1>
+<p id="studentName" class="student">Élève</p>
+<div id="studentClass" class="muted"></div>
+<div id="studentYear" class="muted"></div>
+<div class="stats">
+<div class="stat"><div class="muted">Moyenne du trimestre</div><div id="trimAvg" class="value">—</div></div>
+<div class="stat"><div class="muted">Moyenne générale</div><div id="generalAvg" class="value">—</div></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Résultats</h2>
+<div class="toolbar">
+<div><label class="label" for="trimester">Trimestre</label><select id="trimester"><option value="1">Trimestre 1</option><option value="2">Trimestre 2</option><option value="3">Trimestre 3</option></select></div>
+<div><button id="bulletinBtn" class="secondary" type="button">Voir mon bulletin</button></div>
+</div>
+</div>
+
+<div class="card">
+<h2>Notes publiées</h2>
+<div id="gradesList" class="muted">Chargement...</div>
+</div>
+
+<div id="bulletin" class="card bulletin">
+<div class="bulletin-head">
+<div class="bulletin-title">BULLETIN SCOLAIRE</div>
+<div>Portail Scolaire Haïti</div>
+<div class="muted">Trimestre <span id="bulletinTrim">1</span></div>
+</div>
+<div class="identity">
+<div><strong>Élève :</strong> <span id="bName"></span></div>
+<div><strong>Année :</strong> <span id="bYear"></span></div>
+<div><strong>Classe :</strong> <span id="bLevel"></span></div>
+<div><strong>Section :</strong> <span id="bSection"></span></div>
+</div>
+<div class="table">
+<div class="tr th"><div class="cell">Matière</div><div class="cell num">Coeff.</div><div class="cell num">Moyenne</div></div>
+<div id="bulletinRows"></div>
+</div>
+<div class="general"><span>Moyenne générale pondérée</span><span id="weightedAvg">—</span></div>
+<div class="actions">
+<button id="printBtn" type="button">Imprimer / Enregistrer PDF</button>
+<button id="hideBulletinBtn" class="secondary" type="button">Fermer le bulletin</button>
+</div>
+<div class="print-only" style="margin-top:28px;text-align:right">Signature / Cachet : ____________________</div>
+</div>
+
+<div class="card"><button id="logout" class="logout" type="button">Déconnexion</button></div>
+</section>
+</main>
+<script>
+var SUPABASE_URL='https://vncrujkndfpatwvxtchk.supabase.co';
+var SUPABASE_KEY='sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2';
+var grades=[];var subjects=[];var student=null;
+function show(text,type){var m=document.getElementById('msg');m.textContent=text;m.className='msg '+type;}
+function norm(v){return String(v||'').trim().toLowerCase();}
+function trimNo(term){var v=norm(term);if(['1er trimestre','1e trimestre','trimestre 1','trimès 1'].indexOf(v)>=0)return 1;if(['2e trimestre','trimestre 2','trimès 2'].indexOf(v)>=0)return 2;if(['3e trimestre','trimestre 3','trimès 3'].indexOf(v)>=0)return 3;var m=v.match(/[123]/);return m?Number(m[0]):0;}
+function fmt(n){return Number.isFinite(n)?(Math.round(n*10)/10).toFixed(1)+'%':'—';}
+function esc(v){return String(v||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+async function makeEmail(accessId){var raw=new TextEncoder().encode(accessId.trim().toLowerCase());var digest=await crypto.subtle.digest('SHA-256',raw);var bytes=new Uint8Array(digest);var hex='';for(var i=0;i<bytes.length;i++){hex+=bytes[i].toString(16).padStart(2,'0');}return 'u-'+hex.slice(0,32)+'@access.portailscolaire.local';}
+async function rest(path,token){var r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+token}});var t=await r.text();if(!r.ok)throw new Error('Erreur données ('+r.status+')');return t?JSON.parse(t):[];}
+function coeffFor(name){for(var i=0;i<subjects.length;i++){if(norm(subjects[i].name)===norm(name))return Math.max(.01,Number(subjects[i].coefficient)||1);}return 1;}
+function periodRows(n){var pg=grades.filter(function(g){return trimNo(g.term)===n});var names=[];pg.forEach(function(g){if(g.subject&&names.indexOf(g.subject)<0)names.push(g.subject)});return names.sort().map(function(name){var items=pg.filter(function(g){return g.subject===name});var avg=items.reduce(function(s,g){return s+Number(g.score||0)},0)/items.length;var c=coeffFor(name);return {name:name,avg:avg,coefficient:c,points:avg*c};});}
+function simpleAverage(items){if(!items.length)return null;return items.reduce(function(s,g){return s+Number(g.score||0)},0)/items.length;}
+function render(){var n=Number(document.getElementById('trimester').value)||1;var pg=grades.filter(function(g){return trimNo(g.term)===n});document.getElementById('trimAvg').textContent=pg.length?fmt(simpleAverage(pg)):'—';document.getElementById('generalAvg').textContent=grades.length?fmt(simpleAverage(grades)):'—';var list=document.getElementById('gradesList');if(!pg.length){list.innerHTML='<div class="muted">Aucune note publiée pour ce trimestre.</div>';}else{list.innerHTML=pg.slice().sort(function(a,b){return String(a.subject||'').localeCompare(String(b.subject||''))}).map(function(g){return '<div class="grade"><div><div class="grade-name">'+esc(g.subject||'Matière')+'</div><span class="badge">Trimestre '+n+'</span></div><div class="grade-score">'+fmt(Number(g.score||0))+'</div></div>';}).join('');}
+var rows=periodRows(n);document.getElementById('bulletinTrim').textContent=String(n);document.getElementById('bName').textContent=student?student.name:'';document.getElementById('bYear').textContent=student?student.academic_year:'';document.getElementById('bLevel').textContent=student?student.level:'';document.getElementById('bSection').textContent=student&&student.section?student.section:'—';var br=document.getElementById('bulletinRows');if(!rows.length){br.innerHTML='<div class="cell muted">Aucun résultat publié pour ce trimestre.</div>';document.getElementById('weightedAvg').textContent='—';}else{br.innerHTML=rows.map(function(r){return '<div class="tr"><div class="cell"><strong>'+esc(r.name)+'</strong></div><div class="cell num">'+String(r.coefficient)+'</div><div class="cell num"><strong>'+fmt(r.avg)+'</strong></div></div>';}).join('');var tc=rows.reduce(function(s,r){return s+r.coefficient},0);var w=tc?rows.reduce(function(s,r){return s+r.points},0)/tc:null;document.getElementById('weightedAvg').textContent=w===null?'—':fmt(w);}}
+async function loadStudent(auth){var token=auth.access_token;var userId=auth.user&&auth.user.id;if(!token||!userId)throw new Error('Session invalide.');var profiles=await rest('school_profiles?user_id=eq.'+encodeURIComponent(userId)+'&select=role,student_id',token);if(!profiles.length)throw new Error('Aucun profil scolaire lié à ce compte.');var p=profiles[0];if(p.role!=='student'||!p.student_id)throw new Error('Ce compte n’est pas lié à un élève.');var students=await rest('school_students?id=eq.'+encodeURIComponent(p.student_id)+'&select=id,name,level,section,academic_year',token);if(!students.length)throw new Error('Profil élève introuvable.');student=students[0];grades=await rest('school_grades?student_id=eq.'+encodeURIComponent(p.student_id)+'&status=eq.approved&published=eq.true&select=score,term,subject',token);try{subjects=await rest('school_subjects?select=name,coefficient&order=name.asc',token);}catch(e){subjects=[];}document.getElementById('studentName').textContent=student.name||student.id;document.getElementById('studentClass').textContent=(student.level||'')+(student.section?' – Section '+student.section:'');document.getElementById('studentYear').textContent=student.academic_year||'';render();document.getElementById('login').style.display='none';document.getElementById('dash').style.display='block';}
+document.getElementById('form').addEventListener('submit',async function(e){e.preventDefault();var id=document.getElementById('id').value.trim();var pw=document.getElementById('pw').value;var btn=document.getElementById('btn');btn.disabled=true;btn.textContent='Connexion...';show('Vérification...','info');try{var email=id.indexOf('@')>=0?id:await makeEmail(id);var r=await fetch(SUPABASE_URL+'/auth/v1/token?grant_type=password',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPABASE_KEY,Authorization:'Bearer '+SUPABASE_KEY},body:JSON.stringify({email:email,password:pw})});var data=await r.json();if(!r.ok||!data.access_token)throw new Error('Identifiant d’accès ou mot de passe incorrect.');show('Connexion réussie. Chargement du tableau de bord...','ok');await loadStudent(data);}catch(err){show(err&&err.message?err.message:'Erreur de connexion.','err');}finally{btn.disabled=false;btn.textContent='Se connecter';}});
+document.getElementById('trimester').addEventListener('change',render);
+document.getElementById('bulletinBtn').addEventListener('click',function(){document.getElementById('bulletin').classList.add('show');document.getElementById('bulletin').scrollIntoView({behavior:'smooth',block:'start'});});
+document.getElementById('hideBulletinBtn').addEventListener('click',function(){document.getElementById('bulletin').classList.remove('show');});
+document.getElementById('printBtn').addEventListener('click',function(){window.print();});
+document.getElementById('logout').addEventListener('click',function(){grades=[];subjects=[];student=null;document.getElementById('dash').style.display='none';document.getElementById('login').style.display='block';document.getElementById('pw').value='';document.getElementById('msg').className='msg';document.getElementById('bulletin').classList.remove('show');window.scrollTo({top:0,behavior:'smooth'});});
+</script>
+</body>
+</html>
