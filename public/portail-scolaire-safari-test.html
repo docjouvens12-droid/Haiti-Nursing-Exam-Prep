@@ -4,15 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#0f4c81" />
-  <title>Portail Scolaire Haïti — Connexion Safari</title>
+  <title>Portail Scolaire Haïti</title>
   <style>
-    *{box-sizing:border-box}body{margin:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#14213d}.top{background:#0f4c81;color:white;padding:26px 22px;font-size:24px;font-weight:800}.wrap{max-width:520px;margin:36px auto;padding:0 18px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;padding:24px;box-shadow:0 10px 28px rgba(20,33,61,.07)}h1{font-size:34px;margin:0 0 10px}.sub{margin:0 0 24px;color:#66788a}.field{display:block;margin:16px 0 7px;font-weight:800}input{width:100%;padding:14px;border:1px solid #cbd7e3;border-radius:12px;font-size:17px;background:#fff}button{margin-top:18px;border:0;border-radius:12px;padding:14px 20px;background:#0f4c81;color:#fff;font-size:17px;font-weight:800}button:disabled{opacity:.6}.msg{margin-top:18px;padding:12px 14px;border-radius:10px;display:none}.msg.ok{display:block;background:#eaf8ef;color:#176b3a}.msg.err{display:block;background:#fff0f0;color:#9b1c1c}
+    *{box-sizing:border-box}body{margin:0;background:#f4f7fb;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#14213d}.top{background:#0f4c81;color:white;padding:26px 22px;font-size:24px;font-weight:800}.wrap{max-width:620px;margin:36px auto;padding:0 18px}.card{background:#fff;border:1px solid #dbe5ef;border-radius:20px;padding:24px;box-shadow:0 10px 28px rgba(20,33,61,.07);margin-bottom:18px}h1{font-size:34px;margin:0 0 10px}.sub{margin:0 0 24px;color:#66788a}.field{display:block;margin:16px 0 7px;font-weight:800}input{width:100%;padding:14px;border:1px solid #cbd7e3;border-radius:12px;font-size:17px;background:#fff}button{margin-top:18px;border:0;border-radius:12px;padding:14px 20px;background:#0f4c81;color:#fff;font-size:17px;font-weight:800}button:disabled{opacity:.6}.msg{margin-top:18px;padding:12px 14px;border-radius:10px;display:none}.msg.ok{display:block;background:#eaf8ef;color:#176b3a}.msg.err{display:block;background:#fff0f0;color:#9b1c1c}.hidden{display:none}.student{font-size:24px;font-weight:800;margin:0 0 6px}.muted{color:#66788a}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.stat{background:#f7fafc;border:1px solid #dbe5ef;border-radius:14px;padding:16px}.value{font-size:28px;font-weight:900;color:#0f5c91}.grade{display:flex;justify-content:space-between;gap:16px;padding:14px 0;border-top:1px solid #e4edf4}.grade:first-child{border-top:0}.logout{float:right;background:#fff;color:#0f4c81;border:1px solid rgba(255,255,255,.7);margin:0;padding:10px 14px}.topbar{display:flex;align-items:center;justify-content:space-between;gap:12px}.topbar .title{font-weight:800}
   </style>
 </head>
 <body>
-  <div class="top">Portail Scolaire Haïti</div>
+  <div class="top topbar"><span class="title">Portail Scolaire Haïti</span><button id="logoutBtn" class="logout hidden" type="button">Déconnexion</button></div>
   <main class="wrap">
-    <section class="card">
+    <section id="loginCard" class="card">
       <h1>Connexion</h1>
       <p class="sub">Utilisez vos informations de connexion.</p>
       <form id="loginForm">
@@ -24,10 +24,28 @@
       </form>
       <div id="message" class="msg"></div>
     </section>
+
+    <section id="dashboard" class="hidden">
+      <div class="card">
+        <h1>Tableau de bord de l’Élève</h1>
+        <p id="studentName" class="student"></p>
+        <div id="studentClass" class="muted"></div>
+        <div id="studentYear" class="muted"></div>
+        <div class="stats">
+          <div class="stat"><div class="muted">Moyenne générale</div><div id="average" class="value">—</div></div>
+          <div class="stat"><div class="muted">Notes publiées</div><div id="gradeCount" class="value">0</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Résultats publiés</h2>
+        <div id="gradesList" class="muted">Chargement...</div>
+      </div>
+    </section>
   </main>
 <script>
 const SUPABASE_URL='https://vncrujkndfpatwvxtchk.supabase.co';
 const SUPABASE_KEY='sb_publishable_jfsR5S6Sqcf-9h16Mw3zvA_zZPUlfe2';
+const STORAGE_KEY='sb-vncrujkndfpatwvxtchk-auth-token';
 async function accessEmail(accessId){
   const data=new TextEncoder().encode(accessId.trim().toLowerCase());
   const digest=await crypto.subtle.digest('SHA-256',data);
@@ -37,28 +55,60 @@ async function accessEmail(accessId){
 const form=document.getElementById('loginForm');
 const button=document.getElementById('submitBtn');
 const message=document.getElementById('message');
+const loginCard=document.getElementById('loginCard');
+const dashboard=document.getElementById('dashboard');
+const logoutBtn=document.getElementById('logoutBtn');
 function show(text,type){message.textContent=text;message.className='msg '+type;}
+async function rest(path,token){
+  const r=await fetch(`${SUPABASE_URL}/rest/v1/${path}`,{headers:{apikey:SUPABASE_KEY,Authorization:'Bearer '+token}});
+  if(!r.ok)throw new Error('Erreur de chargement');
+  return r.json();
+}
+async function openDashboard(auth){
+  const token=auth.access_token;
+  const userId=auth.user&&auth.user.id;
+  if(!token||!userId)throw new Error('Session invalide');
+  const profiles=await rest(`school_profiles?user_id=eq.${encodeURIComponent(userId)}&select=role,student_id`,token);
+  const profile=profiles[0];
+  if(!profile||profile.role!=='student'||!profile.student_id)throw new Error('Ce compte n’est pas lié à un profil élève.');
+  const students=await rest(`school_students?id=eq.${encodeURIComponent(profile.student_id)}&select=id,name,level,section,academic_year`,token);
+  const student=students[0];
+  if(!student)throw new Error('Profil élève introuvable.');
+  const grades=await rest(`school_grades?student_id=eq.${encodeURIComponent(profile.student_id)}&status=eq.approved&published=eq.true&select=subject,score,term&order=term.asc`,token);
+  document.getElementById('studentName').textContent=student.name||student.id;
+  document.getElementById('studentClass').textContent=`${student.level||''}${student.section?' – Section '+student.section:''}`;
+  document.getElementById('studentYear').textContent=student.academic_year||'';
+  document.getElementById('gradeCount').textContent=String(grades.length);
+  const avg=grades.length?grades.reduce((s,g)=>s+Number(g.score||0),0)/grades.length:null;
+  document.getElementById('average').textContent=avg===null?'—':avg.toFixed(1)+'%';
+  const list=document.getElementById('gradesList');
+  if(!grades.length){list.textContent='Aucun résultat publié pour le moment.';}else{
+    list.innerHTML=grades.map(g=>`<div class="grade"><div><strong>${escapeHtml(g.subject||'Matière')}</strong><div class="muted">${escapeHtml(g.term||'')}</div></div><strong>${Number(g.score||0).toFixed(1)}%</strong></div>`).join('');
+  }
+  loginCard.classList.add('hidden');
+  dashboard.classList.remove('hidden');
+  logoutBtn.classList.remove('hidden');
+}
+function escapeHtml(v){return String(v).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
 form.addEventListener('submit',async(e)=>{
   e.preventDefault();
   const identifier=document.getElementById('identifier').value.trim();
   const password=document.getElementById('password').value;
   if(!identifier||!password)return;
-  button.disabled=true; button.textContent='Connexion...'; message.className='msg';
+  button.disabled=true;button.textContent='Connexion...';message.className='msg';
   try{
     const email=identifier.includes('@')?identifier:await accessEmail(identifier);
-    const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{
-      method:'POST',
-      headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},
-      body:JSON.stringify({email,password})
-    });
+    const r=await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`,{method:'POST',headers:{'Content-Type':'application/json','apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY},body:JSON.stringify({email,password})});
     const data=await r.json();
     if(!r.ok||!data.access_token){show("Identifiant d’accès ou mot de passe incorrect.",'err');return;}
-    try{localStorage.setItem('sb-vncrujkndfpatwvxtchk-auth-token',JSON.stringify(data));}catch(_e){}
-    show('Connexion réussie. Ouverture de votre espace...','ok');
-    setTimeout(()=>{window.location.assign('/portail-scolaire');},700);
-  }catch(err){show('Impossible de joindre le service de connexion. Réessayez.','err');}
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(data));}catch(_e){}
+    show('Connexion réussie. Chargement de votre espace...','ok');
+    await openDashboard(data);
+  }catch(err){show(err&&err.message?err.message:'Impossible de charger votre espace.','err');}
   finally{button.disabled=false;button.textContent='Se connecter';}
 });
+logoutBtn.addEventListener('click',()=>{try{localStorage.removeItem(STORAGE_KEY)}catch(_e){};dashboard.classList.add('hidden');loginCard.classList.remove('hidden');logoutBtn.classList.add('hidden');document.getElementById('password').value='';message.className='msg';});
+(async()=>{try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const auth=JSON.parse(raw);await openDashboard(auth)}}catch(_e){try{localStorage.removeItem(STORAGE_KEY)}catch(__e){}}})();
 </script>
 </body>
 </html>
