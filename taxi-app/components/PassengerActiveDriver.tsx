@@ -73,6 +73,29 @@ export default function PassengerActiveDriver() {
       }
     }
 
+    async function loadFallback(): Promise<ActiveRideBundle | null> {
+      const [driverResp, trackingResp] = await Promise.all([
+        supabase.rpc('get_passenger_active_driver'),
+        supabase.rpc('get_passenger_live_driver_tracking'),
+      ])
+      const driver = Array.isArray(driverResp.data) ? driverResp.data[0] : driverResp.data
+      const tracking = Array.isArray(trackingResp.data) ? trackingResp.data[0] : trackingResp.data
+      if (!driver || !tracking || driver.ride_id !== tracking.ride_id) return null
+      return {
+        ride_id: tracking.ride_id,
+        ride_status: tracking.ride_status,
+        pickup_latitude: tracking.pickup_latitude,
+        pickup_longitude: tracking.pickup_longitude,
+        destination_latitude: tracking.destination_latitude,
+        destination_longitude: tracking.destination_longitude,
+        driver_name: driver.driver_name,
+        avatar_url: driver.avatar_url,
+        vehicle_color: driver.vehicle_color,
+        driver_latitude: tracking.driver_latitude,
+        driver_longitude: tracking.driver_longitude,
+      } as ActiveRideBundle
+    }
+
     async function load() {
       const { data: userData } = await supabase.auth.getUser()
       if (!active) return
@@ -83,19 +106,17 @@ export default function PassengerActiveDriver() {
 
       const { data, error } = await supabase.rpc('get_passenger_active_ride_bundle')
       if (!active) return
-      if (error) {
-        setBundle(null)
-        return
-      }
 
-      const row = (Array.isArray(data) ? data[0] : data) as ActiveRideBundle | undefined
-      const next = row ?? null
+      let next = (!error ? (Array.isArray(data) ? data[0] : data) : null) as ActiveRideBundle | null
+      if (!next) next = await loadFallback()
+      if (!active) return
+
       setBundle(next)
       await updateLiveMetrics(next)
     }
 
     void load()
-    const timer = window.setInterval(() => void load(), 2500)
+    const timer = window.setInterval(() => void load(), 2000)
     const { data: authListener } = supabase.auth.onAuthStateChange(() => {
       window.setTimeout(() => void load(), 80)
     })
