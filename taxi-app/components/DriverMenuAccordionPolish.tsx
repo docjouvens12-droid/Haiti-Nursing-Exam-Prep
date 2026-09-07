@@ -13,7 +13,7 @@ export default function DriverMenuAccordionPolish() {
       const row = document.createElement('p')
       const left = document.createElement('span')
       const right = document.createElement('b')
-      left.textContent = label
+      left.textContent = `${label}: `
       right.textContent = value || '—'
       row.append(left, right)
       return row
@@ -29,7 +29,6 @@ export default function DriverMenuAccordionPolish() {
       if (headTitle) headTitle.style.display = 'none'
       if (head) head.style.justifyContent = 'flex-end'
 
-      // Keep only the avatar/photo in the compact profile area.
       const profile = drawer.querySelector('.profileBlock') as HTMLElement | null
       const profileText = profile?.querySelector('div:last-child') as HTMLElement | null
       const visibleName = profileText?.querySelector('strong')?.textContent?.trim() || ''
@@ -81,8 +80,15 @@ export default function DriverMenuAccordionPolish() {
             makeRow(lang === 'ht' ? 'Imèl' : 'E-mail', email),
           )
 
+          const downloadRow = document.createElement('div')
+          Object.assign(downloadRow.style, { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px' })
+          const downloadLabel = document.createElement('span')
+          downloadLabel.textContent = `${lang === 'ht' ? 'Download lisans' : 'Télécharger le permis'}: `
+          downloadLabel.style.color = '#7a8998'
+          downloadLabel.style.fontSize = '13px'
+
           const download = document.createElement(licenseUrl ? 'a' : 'button')
-          download.textContent = lang === 'ht' ? '⬇ Download lisans' : '⬇ Télécharger le permis'
+          download.textContent = licenseUrl ? (lang === 'ht' ? 'Telechaje' : 'Télécharger') : '—'
           download.className = 'driverLicenseDownload'
           if (licenseUrl && download instanceof HTMLAnchorElement) {
             download.href = licenseUrl
@@ -95,12 +101,12 @@ export default function DriverMenuAccordionPolish() {
             download.title = lang === 'ht' ? 'Dokiman lisans lan poko disponib' : 'Document du permis non disponible'
           }
           Object.assign((download as HTMLElement).style, {
-            width: '100%', marginTop: '10px', padding: '11px 12px', borderRadius: '12px',
-            border: '1px solid #dce4eb', background: licenseUrl ? '#eef8f4' : '#f4f6f8',
-            color: licenseUrl ? '#0f6f59' : '#8a96a3', fontWeight: '800', textAlign: 'center',
-            textDecoration: 'none', boxSizing: 'border-box', display: 'block'
+            padding: '7px 10px', borderRadius: '10px', border: '1px solid #dce4eb',
+            background: licenseUrl ? '#eef8f4' : '#f4f6f8', color: licenseUrl ? '#0f6f59' : '#8a96a3',
+            fontWeight: '800', textDecoration: 'none'
           })
-          section.append(download)
+          downloadRow.append(downloadLabel, download)
+          section.append(downloadRow)
         }
 
         const rows = Array.from(section.children).filter((el) => el !== title) as HTMLElement[]
