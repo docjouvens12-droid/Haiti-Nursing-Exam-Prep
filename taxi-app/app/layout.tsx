@@ -13,6 +13,7 @@ import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel
 import RideRealtimeNotifications from '../components/RideRealtimeNotifications'
 import PassengerHomePolish from '../components/PassengerHomePolish'
 import PassengerMenuPolish from '../components/PassengerMenuPolish'
+import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 import LoginTitlePolish from '../components/LoginTitlePolish'
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerMenuPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerMenuPolish /><DriverMenuAccordionPolish />{children}</body>
     </html>
   )
 }
