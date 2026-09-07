@@ -9,6 +9,41 @@ export default function DriverDashboardTitleCleanup() {
   useEffect(() => {
     if (pathname !== '/driver/dashboard') return
 
+    const styleId = 'driver-dashboard-iphone-fix'
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style')
+      style.id = styleId
+      style.textContent = `
+        html, body { max-width: 100%; overflow-x: hidden !important; }
+        main.page, main.page > .card { width: 100% !important; max-width: 100% !important; box-sizing: border-box !important; overflow-x: hidden !important; }
+        main.page .topbar { width: 100%; min-width: 0; box-sizing: border-box; }
+        main.page .brand { min-width: 0; flex: 1 1 auto; overflow: hidden; }
+        main.page .brand > div { min-width: 0; overflow: hidden; }
+        main.page .brand strong, main.page .brand small { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        main.page .driver-rating-card, main.page .status-card, main.page .section, main.page .empty { width: 100%; max-width: 100%; box-sizing: border-box; }
+        main.page .section-title { min-width: 0; flex-wrap: wrap; }
+        main.page .section-title h2 { min-width: 0; max-width: 100%; overflow-wrap: anywhere; }
+        main.page .refresh { flex: 0 0 auto; max-width: 100%; }
+        main.page .empty { overflow-wrap: anywhere; }
+        .drawer { box-sizing: border-box !important; max-width: 88vw !important; overflow-x: hidden !important; }
+        .drawer .profileBlock { justify-content: center !important; }
+        .drawer [data-driver-name-row='true'] { display: flex !important; justify-content: space-between !important; align-items: baseline !important; gap: 18px !important; }
+        .drawer [data-driver-name-row='true'] span { flex: 0 0 auto; }
+        .drawer [data-driver-name-row='true'] b { flex: 1 1 auto; text-align: right !important; overflow-wrap: anywhere; }
+        @media (max-width: 600px) {
+          main.page .card { padding-left: 16px !important; padding-right: 16px !important; }
+          main.page .brand strong { font-size: 16px; }
+          main.page .brand small { font-size: 10px !important; }
+          main.page .driver-rating-card { gap: 8px; }
+          main.page .driver-rating-card > div { min-width: 0; }
+          main.page .ride-count { flex: 0 0 auto; }
+          main.page .section-title { align-items: center; }
+          main.page .section-title h2 { font-size: 20px; margin-right: 4px; }
+        }
+      `
+      document.head.appendChild(style)
+    }
+
     const apply = () => {
       const pageTitle = document.querySelector('main .card > h1') as HTMLElement | null
       if (pageTitle) pageTitle.style.display = 'none'
@@ -18,7 +53,10 @@ export default function DriverDashboardTitleCleanup() {
 
       const profileBlock = drawer.querySelector('.profileBlock') as HTMLElement | null
       const avatar = profileBlock?.querySelector('.avatar') as HTMLElement | null
-      const currentName = profileBlock?.querySelector('strong')?.textContent?.trim() || ''
+      const sourceName = profileBlock?.querySelector('strong')?.textContent?.trim() || ''
+      const existingRow = drawer.querySelector('[data-driver-name-row="true"]') as HTMLElement | null
+      const existingName = existingRow?.querySelector('b')?.textContent?.trim() || ''
+      const currentName = sourceName || existingName
 
       const drawerTitle = drawer.querySelector('.drawerHead strong') as HTMLElement | null
       if (drawerTitle) drawerTitle.style.display = 'none'
@@ -31,24 +69,32 @@ export default function DriverDashboardTitleCleanup() {
       }
 
       const personalSection = drawer.querySelector('.menuSection') as HTMLElement | null
-      if (personalSection && currentName && !personalSection.querySelector('[data-driver-name-row="true"]')) {
-        const row = document.createElement('p')
-        row.setAttribute('data-driver-name-row', 'true')
-        const label = document.createElement('span')
-        label.textContent = localStorage.getItem('taxi-language') === 'ht' ? 'Non' : 'Nom'
-        const value = document.createElement('b')
-        value.textContent = currentName
-        row.append(label, value)
-        const heading = personalSection.querySelector('h3')
-        if (heading?.nextSibling) personalSection.insertBefore(row, heading.nextSibling)
-        else personalSection.appendChild(row)
+      if (personalSection && currentName) {
+        let row = personalSection.querySelector('[data-driver-name-row="true"]') as HTMLElement | null
+        if (!row) {
+          row = document.createElement('p')
+          row.setAttribute('data-driver-name-row', 'true')
+          const label = document.createElement('span')
+          const value = document.createElement('b')
+          row.append(label, value)
+          const heading = personalSection.querySelector('h3')
+          if (heading?.nextSibling) personalSection.insertBefore(row, heading.nextSibling)
+          else personalSection.appendChild(row)
+        }
+        const label = row.querySelector('span')
+        const value = row.querySelector('b')
+        if (label) label.textContent = localStorage.getItem('taxi-language') === 'ht' ? 'Non' : 'Nom'
+        if (value) value.textContent = currentName
       }
     }
 
     apply()
     const observer = new MutationObserver(apply)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      document.getElementById(styleId)?.remove()
+    }
   }, [pathname])
 
   return null
