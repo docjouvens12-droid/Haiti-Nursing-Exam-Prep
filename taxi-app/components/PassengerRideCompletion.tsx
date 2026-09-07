@@ -17,6 +17,7 @@ type CompletedRide = {
 export default function PassengerRideCompletion() {
   const [user, setUser] = useState<User | null>(null)
   const [ride, setRide] = useState<CompletedRide | null>(null)
+  const [hiddenRideId, setHiddenRideId] = useState<string | null>(null)
   const [stars, setStars] = useState(0)
   const [comment, setComment] = useState('')
   const [busy, setBusy] = useState(false)
@@ -36,7 +37,7 @@ export default function PassengerRideCompletion() {
     let active = true
 
     async function loadLatestCompleted() {
-      const { data } = await supabase
+      const { data, error } = await supabase
         .from('rides')
         .select('id,driver_id,pickup_address,destination_address,estimated_fare_htg,final_fare_htg,completed_at')
         .eq('passenger_id', user!.id)
@@ -45,9 +46,7 @@ export default function PassengerRideCompletion() {
         .limit(1)
         .maybeSingle()
 
-      if (!active || !data) return
-      const dismissed = window.localStorage.getItem('taxi-dismissed-completed-ride')
-      if (dismissed === data.id) return
+      if (!active || error || !data || data.id === hiddenRideId) return
 
       const { data: existingRating } = await supabase
         .from('ratings')
@@ -58,7 +57,9 @@ export default function PassengerRideCompletion() {
 
       if (!active) return
       setRated(Boolean(existingRating))
-      if (existingRating?.stars) setStars(Number(existingRating.stars))
+      setStars(existingRating?.stars ? Number(existingRating.stars) : 0)
+      setComment('')
+      setMessage('')
       setRide(data as CompletedRide)
     }
 
@@ -80,7 +81,7 @@ export default function PassengerRideCompletion() {
       active = false
       supabase.removeChannel(channel)
     }
-  }, [user])
+  }, [user, hiddenRideId])
 
   async function submitRating() {
     if (!user || !ride || !ride.driver_id || stars < 1 || stars > 5 || rated) return
@@ -103,7 +104,7 @@ export default function PassengerRideCompletion() {
 
   function closeReceipt() {
     if (!ride) return
-    window.localStorage.setItem('taxi-dismissed-completed-ride', ride.id)
+    setHiddenRideId(ride.id)
     setRide(null)
   }
 
