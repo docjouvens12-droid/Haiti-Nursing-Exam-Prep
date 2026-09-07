@@ -38,25 +38,25 @@ export default function DriverMenuAccordionPolish() {
       const { data: auth } = await supabase.auth.getUser()
       const user = auth.user
       let licenseNumber = ''
+      let licenseDocumentPath = ''
       let fullName = visibleName
       let phone = ''
-      let email = user?.email ?? ''
+      const email = user?.email ?? ''
       let birthDate = ''
       let sex = ''
-      let licenseUrl = ''
 
       if (user) {
         const [{ data: driver }, { data: person }] = await Promise.all([
-          supabase.from('driver_profiles').select('license_number').eq('user_id', user.id).maybeSingle(),
+          supabase.from('driver_profiles').select('license_number,license_document_path').eq('user_id', user.id).maybeSingle(),
           supabase.from('profiles').select('full_name,phone').eq('id', user.id).maybeSingle(),
         ])
         licenseNumber = driver?.license_number ?? ''
+        licenseDocumentPath = driver?.license_document_path ?? ''
         fullName = person?.full_name ?? fullName
         phone = person?.phone ?? ''
         const meta = user.user_metadata || {}
         birthDate = meta.birth_date || meta.date_of_birth || ''
         sex = meta.sex || meta.gender || ''
-        licenseUrl = meta.driver_license_url || meta.license_document_url || ''
       }
 
       const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
@@ -80,33 +80,109 @@ export default function DriverMenuAccordionPolish() {
             makeRow(lang === 'ht' ? 'Imèl' : 'E-mail', email),
           )
 
-          const downloadRow = document.createElement('div')
-          Object.assign(downloadRow.style, { display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px' })
-          const downloadLabel = document.createElement('span')
-          downloadLabel.textContent = `${lang === 'ht' ? 'Download lisans' : 'Télécharger le permis'}: `
-          downloadLabel.style.color = '#7a8998'
-          downloadLabel.style.fontSize = '13px'
+          const uploadRow = document.createElement('div')
+          Object.assign(uploadRow.style, { display: 'flex', alignItems: 'center', gap: '8px', marginTop: '10px', flexWrap: 'wrap' })
 
-          const download = document.createElement(licenseUrl ? 'a' : 'button')
-          download.textContent = licenseUrl ? (lang === 'ht' ? 'Telechaje' : 'Télécharger') : '—'
-          download.className = 'driverLicenseDownload'
-          if (licenseUrl && download instanceof HTMLAnchorElement) {
-            download.href = licenseUrl
-            download.target = '_blank'
-            download.rel = 'noopener noreferrer'
-            download.download = ''
-          } else if (download instanceof HTMLButtonElement) {
-            download.type = 'button'
-            download.disabled = true
-            download.title = lang === 'ht' ? 'Dokiman lisans lan poko disponib' : 'Document du permis non disponible'
-          }
-          Object.assign((download as HTMLElement).style, {
-            padding: '7px 10px', borderRadius: '10px', border: '1px solid #dce4eb',
-            background: licenseUrl ? '#eef8f4' : '#f4f6f8', color: licenseUrl ? '#0f6f59' : '#8a96a3',
-            fontWeight: '800', textDecoration: 'none'
+          const uploadLabel = document.createElement('span')
+          uploadLabel.textContent = `${lang === 'ht' ? 'Telechaje lisans' : 'Téléverser le permis'}: `
+          uploadLabel.style.color = '#7a8998'
+          uploadLabel.style.fontSize = '13px'
+
+          const fileInput = document.createElement('input')
+          fileInput.type = 'file'
+          fileInput.accept = 'image/*,application/pdf'
+          fileInput.style.display = 'none'
+
+          const uploadButton = document.createElement('button')
+          uploadButton.type = 'button'
+          uploadButton.textContent = licenseDocumentPath
+            ? (lang === 'ht' ? 'Ranplase' : 'Remplacer')
+            : (lang === 'ht' ? 'Pran foto / Upload' : 'Photo / Fichier')
+          Object.assign(uploadButton.style, {
+            padding: '8px 11px', borderRadius: '10px', border: '1px solid #b8d8ce',
+            background: '#eef8f4', color: '#0f6f59', fontWeight: '800', cursor: 'pointer'
           })
-          downloadRow.append(downloadLabel, download)
-          section.append(downloadRow)
+
+          const status = document.createElement('small')
+          status.textContent = licenseDocumentPath ? (lang === 'ht' ? '✓ Dokiman an anrejistre' : '✓ Document enregistré') : ''
+          Object.assign(status.style, { width: '100%', color: '#688074', marginLeft: '0', fontSize: '11px' })
+
+          const openPicker = () => fileInput.click()
+          uploadButton.addEventListener('click', openPicker)
+          cleanups.push(() => uploadButton.removeEventListener('click', openPicker))
+
+          const onFile = async () => {
+            const file = fileInput.files?.[0]
+            if (!file || !user) return
+
+            uploadButton.disabled = true
+            uploadButton.textContent = lang === 'ht' ? 'N ap voye…' : 'Envoi…'
+            status.textContent = ''
+
+            if (file.size > 10 * 1024 * 1024) {
+              status.textContent = lang === 'ht' ? 'Fichye a depase 10 MB.' : 'Le fichier dépasse 10 Mo.'
+              status.style.color = '#9a3030'
+              uploadButton.disabled = false
+              uploadButton.textContent = lang === 'ht' ? 'Pran foto / Upload' : 'Photo / Fichier'
+              return
+            }
+
+            const mime = file.type || ''
+            const allowed = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf']
+            if (!allowed.includes(mime)) {
+              status.textContent = lang === 'ht' ? 'Chwazi yon foto JPG/PNG/WEBP oswa PDF.' : 'Choisissez une image JPG/PNG/WEBP ou un PDF.'
+              status.style.color = '#9a3030'
+              uploadButton.disabled = false
+              uploadButton.textContent = lang === 'ht' ? 'Pran foto / Upload' : 'Photo / Fichier'
+              return
+            }
+
+            const ext = mime === 'application/pdf' ? 'pdf' : mime === 'image/png' ? 'png' : mime === 'image/webp' ? 'webp' : 'jpg'
+            const path = `${user.id}/driver-license.${ext}`
+
+            if (licenseDocumentPath && licenseDocumentPath !== path) {
+              await supabase.storage.from('driver-documents').remove([licenseDocumentPath])
+            }
+
+            const { error: uploadError } = await supabase.storage
+              .from('driver-documents')
+              .upload(path, file, { upsert: true, contentType: mime })
+
+            if (uploadError) {
+              status.textContent = uploadError.message
+              status.style.color = '#9a3030'
+              uploadButton.disabled = false
+              uploadButton.textContent = licenseDocumentPath
+                ? (lang === 'ht' ? 'Ranplase' : 'Remplacer')
+                : (lang === 'ht' ? 'Pran foto / Upload' : 'Photo / Fichier')
+              return
+            }
+
+            const { error: saveError } = await supabase
+              .from('driver_profiles')
+              .update({ license_document_path: path })
+              .eq('user_id', user.id)
+
+            if (saveError) {
+              status.textContent = saveError.message
+              status.style.color = '#9a3030'
+              uploadButton.disabled = false
+              return
+            }
+
+            licenseDocumentPath = path
+            status.textContent = lang === 'ht' ? '✓ Lisans lan anrejistre' : '✓ Permis enregistré'
+            status.style.color = '#0f6f59'
+            uploadButton.textContent = lang === 'ht' ? 'Ranplase' : 'Remplacer'
+            uploadButton.disabled = false
+            fileInput.value = ''
+          }
+
+          fileInput.addEventListener('change', onFile)
+          cleanups.push(() => fileInput.removeEventListener('change', onFile))
+
+          uploadRow.append(uploadLabel, uploadButton, fileInput, status)
+          section.append(uploadRow)
         }
 
         const rows = Array.from(section.children).filter((el) => el !== title) as HTMLElement[]
