@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 import './menu.css'
 import DriverCtaBridge from '../components/DriverCtaBridge'
+import GlobalSpacesButton from '../components/GlobalSpacesButton'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -11,7 +12,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><DriverCtaBridge />{children}</body>
+      <body><DriverCtaBridge /><GlobalSpacesButton />{children}</body>
     </html>
   )
 }
