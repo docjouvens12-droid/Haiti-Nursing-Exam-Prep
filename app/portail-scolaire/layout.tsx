@@ -11,6 +11,7 @@ import DirectionStudentManager from './DirectionStudentManager'
 import RoleAcademicFilters from './RoleAcademicFilters'
 import GlobalAcademicYearSelector from './GlobalAcademicYearSelector'
 import PortailPWARegister from './PortailPWARegister'
+import LoginPersonnelSimplifier from './LoginPersonnelSimplifier'
 
 export const metadata: Metadata = {
   title: 'Portail Scolaire Haïti',
@@ -144,6 +145,7 @@ export default function PortailScolaireLayout({ children }: { children: ReactNod
         body:has(.ps-page select[name="teacher_id"]) .native-student-access-mount{display:block!important}
       `}</style>
       <PortailPWARegister />
+      <LoginPersonnelSimplifier />
       {children}
       <GlobalAcademicYearSelector />
       <SecretaryPanel />
