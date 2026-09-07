@@ -174,7 +174,7 @@ export default function PassengerRideCompletion() {
       </div>
 
       <div className="summary">
-        <div><small>Montant final</small><strong>{fare.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} HTG</strong></div>
+        <div className="fareBlock"><small>Montant final</small><strong>{fare.toLocaleString('fr-FR', { maximumFractionDigits: 2 })} HTG</strong></div>
         <div><small>Paiement</small><strong>💵 Espèces</strong></div>
       </div>
 
@@ -192,19 +192,20 @@ export default function PassengerRideCompletion() {
     </section>
 
     <style jsx>{`
-      .receiptBackdrop{position:fixed;inset:0;z-index:2147483000;background:rgba(10,22,34,.55);display:flex;align-items:flex-end;justify-content:center;padding:18px;padding-bottom:calc(18px + env(safe-area-inset-bottom));backdrop-filter:blur(4px)}
-      .receiptCard{width:min(100%,520px);max-height:88vh;overflow:auto;background:#fff;border-radius:28px;padding:22px;color:#102033;box-shadow:0 30px 90px rgba(0,0,0,.28);font-family:Inter,system-ui,sans-serif}
-      .check{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;background:#e7f7f1;color:#0f7a62;font-size:30px;font-weight:900;margin:0 auto 10px}
-      .eyebrow{text-align:center;margin:0;color:#0f7a62;font-size:12px;font-weight:900;letter-spacing:.12em}
-      h2{text-align:center;margin:8px 0 18px;font-size:22px;line-height:1.16}
-      .route{display:grid;gap:10px;border:1px solid #e2e8ee;border-radius:18px;padding:14px;background:#f9fbfc}
-      .route div{display:grid;grid-template-columns:auto 1fr;column-gap:9px}.route span{grid-row:1/3;font-size:22px}.route small{color:#7b8998;font-size:11px}.route strong{font-size:14px;margin-top:2px}
-      .summary{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.summary div{background:#102033;color:#fff;border-radius:16px;padding:13px}.summary small,.summary strong{display:block}.summary small{font-size:10px;color:#b9c7d4}.summary strong{margin-top:4px;font-size:15px}
-      .ratingBox{margin-top:14px;border-radius:18px;background:#f5f8f7;padding:14px}.ratingBox h3{margin:0 0 10px;font-size:16px}.stars{display:flex;gap:5px}.stars button{border:0;background:transparent;color:#cbd3dc;font-size:34px;line-height:1;padding:2px;cursor:pointer}.stars button.selected{color:#f5b301}.stars button:disabled{cursor:default}
-      textarea{width:100%;min-height:82px;resize:vertical;margin-top:10px;border:1px solid #dbe3e8;border-radius:13px;padding:11px;font:inherit;color:#102033;background:#fff}
-      .submit,.close{width:100%;border:0;border-radius:14px;padding:13px 14px;font-weight:900;cursor:pointer}.submit{margin-top:10px;background:#0f7a62;color:#fff}.submit:disabled{opacity:.45;cursor:not-allowed}.close{margin-top:10px;background:#eef2f5;color:#304357}
-      .success{color:#0c7659;font-weight:800}.error{color:#a22d2d;font-weight:800}
-      @media(min-width:700px){.receiptBackdrop{align-items:center}.receiptCard{border-radius:30px}}
+      .receiptBackdrop{position:fixed;inset:0;z-index:2147483000;background:rgba(10,22,34,.58);display:flex;align-items:flex-end;justify-content:center;padding:10px;padding-bottom:calc(10px + env(safe-area-inset-bottom));backdrop-filter:blur(5px)}
+      .receiptCard{width:min(100%,520px);max-height:92vh;overflow:auto;background:#fff;border-radius:26px 26px 22px 22px;padding:18px;color:#102033;box-shadow:0 28px 80px rgba(0,0,0,.3);font-family:Inter,system-ui,sans-serif;box-sizing:border-box;-webkit-overflow-scrolling:touch}
+      .check{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;background:#e7f7f1;color:#0f7a62;font-size:27px;font-weight:900;margin:0 auto 8px}
+      .eyebrow{text-align:center;margin:0;color:#0f7a62;font-size:10px;font-weight:900;letter-spacing:.13em}
+      h2{text-align:center;margin:6px auto 14px;font-size:20px;line-height:1.18;max-width:390px}
+      .route{display:grid;gap:9px;border:1px solid #e2e8ee;border-radius:16px;padding:12px;background:#f9fbfc}
+      .route div{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:8px;align-items:start}.route span{grid-row:1/3;font-size:20px;line-height:1.2}.route small{color:#7b8998;font-size:10px;font-weight:700}.route strong{font-size:13px;line-height:1.3;margin-top:2px;overflow-wrap:anywhere}
+      .summary{display:grid;grid-template-columns:1.2fr .8fr;gap:9px;margin-top:10px}.summary div{background:#102033;color:#fff;border-radius:15px;padding:12px;min-width:0}.summary small,.summary strong{display:block}.summary small{font-size:9px;color:#b9c7d4;font-weight:800;text-transform:uppercase;letter-spacing:.04em}.summary strong{margin-top:4px;font-size:14px;line-height:1.15;overflow-wrap:anywhere}.summary .fareBlock{background:#0f7a62}.summary .fareBlock strong{font-size:18px}
+      .ratingBox{margin-top:11px;border-radius:16px;background:#f5f8f7;padding:12px}.ratingBox h3{margin:0 0 8px;font-size:15px;line-height:1.2}.stars{display:flex;justify-content:space-between;gap:4px}.stars button{flex:1;min-width:0;height:46px;border:0;border-radius:12px;background:#fff;color:#cbd3dc;font-size:30px;line-height:1;padding:0;cursor:pointer;box-shadow:inset 0 0 0 1px #e1e7eb}.stars button.selected{color:#f5b301;background:#fff9e8;box-shadow:inset 0 0 0 1px #f3d36e}.stars button:disabled{cursor:default}
+      textarea{box-sizing:border-box;width:100%;min-height:74px;resize:vertical;margin-top:9px;border:1px solid #dbe3e8;border-radius:12px;padding:10px 11px;font:inherit;font-size:13px;line-height:1.35;color:#102033;background:#fff;outline:none}textarea:focus{border-color:#7eb7a7;box-shadow:0 0 0 3px rgba(15,122,98,.08)}
+      .submit,.close{width:100%;border:0;border-radius:13px;padding:13px 14px;font-size:14px;font-weight:900;cursor:pointer}.submit{margin-top:9px;background:#0f7a62;color:#fff}.submit:disabled{opacity:.45;cursor:not-allowed}.close{margin-top:8px;background:#eef2f5;color:#304357}
+      .success,.error{margin:8px 0 0;font-size:12px;line-height:1.35}.success{color:#0c7659;font-weight:800}.error{color:#a22d2d;font-weight:800}
+      @media(max-width:390px){.receiptBackdrop{padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}.receiptCard{padding:15px;border-radius:22px 22px 18px 18px}.summary{grid-template-columns:1fr}.stars button{height:43px;font-size:27px}h2{font-size:18px}}
+      @media(min-width:700px){.receiptBackdrop{align-items:center;padding:18px}.receiptCard{border-radius:30px;padding:22px}}
     `}</style>
   </div>
 }
