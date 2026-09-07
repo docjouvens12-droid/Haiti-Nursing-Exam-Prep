@@ -54,7 +54,8 @@ form.addEventListener('submit',async(e)=>{
     const data=await r.json();
     if(!r.ok||!data.access_token){show("Identifiant d’accès ou mot de passe incorrect.",'err');return;}
     try{localStorage.setItem('sb-vncrujkndfpatwvxtchk-auth-token',JSON.stringify(data));}catch(_e){}
-    show('Connexion réussie. Vos identifiants sont valides.','ok');
+    show('Connexion réussie. Ouverture de votre espace...','ok');
+    setTimeout(()=>{window.location.assign('/portail-scolaire');},700);
   }catch(err){show('Impossible de joindre le service de connexion. Réessayez.','err');}
   finally{button.disabled=false;button.textContent='Se connecter';}
 });
