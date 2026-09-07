@@ -32,13 +32,18 @@ export default function DriverDashboardTitleCleanup() {
         .drawer [data-driver-name-row='true'] b { flex: 1 1 auto; text-align: right !important; overflow-wrap: anywhere; }
         @media (max-width: 600px) {
           main.page .card { padding-left: 16px !important; padding-right: 16px !important; }
-          main.page .brand strong { font-size: 16px; }
-          main.page .brand small { font-size: 10px !important; }
-          main.page .driver-rating-card { gap: 8px; }
+          main.page .topbar { gap: 10px !important; align-items: center !important; padding: 2px 0 8px !important; }
+          main.page .menuButton { width: 42px !important; height: 42px !important; border-radius: 13px !important; font-size: 21px !important; }
+          main.page .brand { gap: 8px !important; }
+          main.page .brand > span { width: 38px !important; height: 38px !important; border-radius: 12px !important; font-size: 17px !important; }
+          main.page .brand strong { font-size: 17px !important; line-height: 1.1 !important; white-space: nowrap !important; }
+          main.page .brand small { display: none !important; }
+          main.page .driver-rating-card { gap: 8px; margin-top: 8px !important; }
           main.page .driver-rating-card > div { min-width: 0; }
           main.page .ride-count { flex: 0 0 auto; }
-          main.page .section-title { align-items: center; }
+          main.page .section-title { align-items: center; gap: 8px !important; }
           main.page .section-title h2 { font-size: 20px; margin-right: 4px; }
+          main.page .refresh { padding: 10px 12px !important; font-size: 14px !important; }
         }
       `
       document.head.appendChild(style)
