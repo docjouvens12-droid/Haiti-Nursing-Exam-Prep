@@ -27,7 +27,7 @@ export default function GlobalLogoutButton() {
     }
   }, [])
 
-  if (!visible || pathname.startsWith('/driver/navigation')) return null
+  if (!visible || pathname.startsWith('/driver')) return null
 
   async function logout() {
     if (busy) return
