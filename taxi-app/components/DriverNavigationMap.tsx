@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import mapboxgl, { Map } from 'mapbox-gl'
 import 'mapbox-gl/dist/mapbox-gl.css'
 
-type RideStatus = 'accepted' | 'driver_arriving' | 'in_progress'
+type RideStatus = 'requested' | 'accepted' | 'driver_arriving' | 'in_progress' | 'completed' | 'cancelled'
 
 type Ride = {
   status: RideStatus
