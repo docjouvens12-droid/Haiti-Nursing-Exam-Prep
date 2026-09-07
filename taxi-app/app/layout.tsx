@@ -4,6 +4,7 @@ import './menu.css'
 import './completion.css'
 import DriverCtaBridge from '../components/DriverCtaBridge'
 import GlobalSpacesButton from '../components/GlobalSpacesButton'
+import GlobalLogoutButton from '../components/GlobalLogoutButton'
 import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications />{children}</body>
+      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications />{children}</body>
     </html>
   )
 }
