@@ -36,6 +36,7 @@ export default function PassengerRideCompletion() {
 
   useEffect(() => {
     if (!user) { setRide(null); return }
+    const currentUser = user
     let active = true
 
     async function loadLatestCompleted() {
@@ -43,7 +44,7 @@ export default function PassengerRideCompletion() {
       const row = Array.isArray(data) ? data[0] : data
 
       if (!active || error || !row || row.id === hiddenRideId) return
-      if (window.localStorage.getItem(dismissedKey(user.id, row.id)) === '1') {
+      if (window.localStorage.getItem(dismissedKey(currentUser.id, row.id)) === '1') {
         setRide(null)
         return
       }
@@ -52,12 +53,12 @@ export default function PassengerRideCompletion() {
         .from('ratings')
         .select('id,stars')
         .eq('ride_id', row.id)
-        .eq('rater_id', user.id)
+        .eq('rater_id', currentUser.id)
         .maybeSingle()
 
       if (!active) return
       if (existingRating) {
-        window.localStorage.setItem(dismissedKey(user.id, row.id), '1')
+        window.localStorage.setItem(dismissedKey(currentUser.id, row.id), '1')
         setRide(null)
         return
       }
@@ -72,12 +73,12 @@ export default function PassengerRideCompletion() {
     loadLatestCompleted()
 
     const channel = supabase
-      .channel(`passenger-completed-${user.id}`)
+      .channel(`passenger-completed-${currentUser.id}`)
       .on('postgres_changes', {
         event: 'UPDATE',
         schema: 'public',
         table: 'rides',
-        filter: `passenger_id=eq.${user.id}`,
+        filter: `passenger_id=eq.${currentUser.id}`,
       }, (payload) => {
         if ((payload.new as any)?.status === 'completed') loadLatestCompleted()
       })
