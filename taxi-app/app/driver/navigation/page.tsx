@@ -26,6 +26,8 @@ export default function DriverNavigationPage() {
   const [busy, setBusy] = useState(false)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
   const [message, setMessage] = useState('')
+  const [liveDistanceKm, setLiveDistanceKm] = useState<number | null>(null)
+  const [liveEtaMin, setLiveEtaMin] = useState<number | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem('taxi-language')
@@ -55,6 +57,8 @@ export default function DriverNavigationPage() {
     }
 
     setRide(data as Ride)
+    setLiveDistanceKm(null)
+    setLiveEtaMin(null)
     setLoading(false)
   }
 
@@ -106,18 +110,32 @@ export default function DriverNavigationPage() {
       ? (lang === 'fr' ? 'Commencer le trajet' : 'Kòmanse trajè a')
       : (lang === 'fr' ? 'Terminer le trajet' : 'Fini trajè a')
 
+  const distanceLabel = liveDistanceKm == null
+    ? (lang === 'fr' ? 'Distance GPS…' : 'Distans GPS…')
+    : `${liveDistanceKm.toFixed(1)} km`
+  const etaLabel = liveEtaMin == null
+    ? (lang === 'fr' ? 'ETA en direct…' : 'ETA an dirèk…')
+    : `⏱ ${liveEtaMin} min`
+
   return <main style={{minHeight:'100vh',background:'#eef3f6',padding:'16px 12px 110px',fontFamily:'Inter,system-ui,sans-serif',color:'#102033'}}>
     <section style={{maxWidth:760,margin:'0 auto'}}>
       <div style={{background:'#102033',color:'#fff',borderRadius:20,padding:'16px',marginBottom:12}}>
         <small style={{display:'block',opacity:.72,fontWeight:800,letterSpacing:'.06em'}}>{heading}</small>
         <h1 style={{margin:'6px 0 2px',fontSize:24}}>{address}</h1>
         <div style={{display:'flex',gap:10,flexWrap:'wrap',marginTop:10}}>
-          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{goingToPassenger ? (lang === 'fr' ? 'GPS vers le client' : 'GPS pou kliyan an') : (ride.estimated_distance_km == null ? '—' : `${Number(ride.estimated_distance_km).toFixed(1)} km`)}</span>
-          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{goingToPassenger ? (lang === 'fr' ? 'Distance et ETA en direct' : 'Distans ak ETA an dirèk') : `⏱ ${ride.estimated_duration_min == null ? '—' : `${Math.round(Number(ride.estimated_duration_min))} min`}`}</span>
+          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{distanceLabel}</span>
+          <span style={{background:'#1c3148',borderRadius:999,padding:'8px 10px',fontWeight:800}}>{etaLabel}</span>
         </div>
       </div>
 
-      <DriverMobileNavigationMap ride={ride} lang={lang} />
+      <DriverMobileNavigationMap
+        ride={ride}
+        lang={lang}
+        onMetricsChange={({ distanceKm, etaMin }) => {
+          setLiveDistanceKm(distanceKm)
+          setLiveEtaMin(etaMin)
+        }}
+      />
 
       {message && <div style={{background:'#fff1f1',color:'#a12626',borderRadius:14,padding:12,marginTop:12,fontWeight:700}}>{message}</div>}
 
