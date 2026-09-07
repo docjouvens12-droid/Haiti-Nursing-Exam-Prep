@@ -29,23 +29,52 @@ export default function PassengerRideCompletion() {
   const fare = useMemo(() => Number(ride?.final_fare_htg ?? ride?.estimated_fare_htg ?? 0), [ride])
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null))
-    return () => authListener.subscription.unsubscribe()
+    let active = true
+
+    async function syncUser() {
+      const { data } = await supabase.auth.getUser()
+      if (active) setUser(data.user ?? null)
+    }
+
+    void syncUser()
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      setRide(null)
+      setHiddenRideId(null)
+    })
+
+    const authTimer = window.setInterval(() => void syncUser(), 5000)
+
+    return () => {
+      active = false
+      window.clearInterval(authTimer)
+      authListener.subscription.unsubscribe()
+    }
   }, [])
 
   useEffect(() => {
-    if (!user) { setRide(null); return }
+    if (!user) {
+      setRide(null)
+      return
+    }
+
     const currentUser = user
     let active = true
 
     async function loadLatestCompleted() {
       const { data, error } = await supabase.rpc('get_my_latest_completed_ride')
-      const row = Array.isArray(data) ? data[0] : data
+      if (!active || error) return
 
-      if (!active || error || !row || row.id === hiddenRideId) return
-      if (window.localStorage.getItem(dismissedKey(currentUser.id, row.id)) === '1') {
+      const row = Array.isArray(data) ? data[0] : data
+      if (!row) {
         setRide(null)
+        return
+      }
+
+      if (row.id === hiddenRideId) return
+
+      if (window.localStorage.getItem(dismissedKey(currentUser.id, row.id)) === '1') {
+        if (ride?.id === row.id) setRide(null)
         return
       }
 
@@ -63,14 +92,17 @@ export default function PassengerRideCompletion() {
         return
       }
 
-      setRated(false)
-      setStars(0)
-      setComment('')
-      setMessage('')
+      if (ride?.id !== row.id) {
+        setRated(false)
+        setStars(0)
+        setComment('')
+        setMessage('')
+      }
       setRide(row as CompletedRide)
     }
 
-    loadLatestCompleted()
+    void loadLatestCompleted()
+    const pollTimer = window.setInterval(() => void loadLatestCompleted(), 3000)
 
     const channel = supabase
       .channel(`passenger-completed-${currentUser.id}`)
@@ -80,15 +112,16 @@ export default function PassengerRideCompletion() {
         table: 'rides',
         filter: `passenger_id=eq.${currentUser.id}`,
       }, (payload) => {
-        if ((payload.new as any)?.status === 'completed') loadLatestCompleted()
+        if ((payload.new as any)?.status === 'completed') void loadLatestCompleted()
       })
       .subscribe()
 
     return () => {
       active = false
+      window.clearInterval(pollTimer)
       supabase.removeChannel(channel)
     }
-  }, [user, hiddenRideId])
+  }, [user, hiddenRideId, ride?.id])
 
   async function submitRating() {
     if (!user || !ride || !ride.driver_id || stars < 1 || stars > 5 || rated) return
