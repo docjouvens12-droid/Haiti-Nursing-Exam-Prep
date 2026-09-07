@@ -9,7 +9,7 @@ type DriverStatus = 'pending' | 'approved' | 'suspended' | 'rejected' | null
 
 const copy = {
   fr: {
-    title: 'Devenir chauffeur', subtitle: 'Envoyez vos informations pour vérification', back: 'Retour',
+    title: 'Devenir chauffeur', subtitle: 'Envoyez vos informations pour vérification', back: 'Retour', logout: 'Se déconnecter',
     license: 'Numéro de permis de conduire', nationalId: 'Numéro d’identification nationale',
     vehicleType: 'Type de véhicule', car: 'Voiture', moto: 'Moto', vehicleInfo: 'Informations du véhicule',
     make: 'Marque', model: 'Modèle', color: 'Couleur', year: 'Année', plate: 'Plaque d’immatriculation', seats: 'Nombre de places',
@@ -19,7 +19,7 @@ const copy = {
     success: 'Demande envoyée avec succès.', auth: 'Vous devez être connecté pour envoyer une demande chauffeur.'
   },
   ht: {
-    title: 'Vin chofè', subtitle: 'Voye enfòmasyon ou pou verifikasyon', back: 'Retounen',
+    title: 'Vin chofè', subtitle: 'Voye enfòmasyon ou pou verifikasyon', back: 'Retounen', logout: 'Dekonekte',
     license: 'Nimewo lisans kondwi', nationalId: 'Nimewo idantifikasyon nasyonal',
     vehicleType: 'Kalite veyikil', car: 'Machin', moto: 'Moto', vehicleInfo: 'Enfòmasyon machin oswa moto',
     make: 'Mak', model: 'Modèl', color: 'Koulè', year: 'Ane', plate: 'Nimewo plak', seats: 'Kantite plas',
@@ -58,6 +58,11 @@ export default function DriverApplicationPage() {
     setForm((f) => ({ ...f, vehicleType, seats: vehicleType === 'moto' ? '2' : (Number(f.seats) > 2 ? f.seats : '4') }))
   }
 
+  async function logout() {
+    await supabase.auth.signOut()
+    window.location.href = '/'
+  }
+
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true); setMessage('')
     const { data: auth } = await supabase.auth.getUser()
@@ -82,7 +87,7 @@ export default function DriverApplicationPage() {
   const locked = status === 'approved' || status === 'suspended'
 
   return <main className="driver-page"><section className="driver-card">
-    <div className="driver-top"><button onClick={() => history.back()}>‹ {t.back}</button><select value={lang} onChange={(e) => { const next = e.target.value as Lang; setLang(next); localStorage.setItem('taxi-language', next) }}><option value="fr">Français</option><option value="ht">Kreyòl</option></select></div>
+    <div className="driver-top"><button onClick={() => history.back()}>‹ {t.back}</button><div className="driver-actions"><select value={lang} onChange={(e) => { const next = e.target.value as Lang; setLang(next); localStorage.setItem('taxi-language', next) }}><option value="fr">Français</option><option value="ht">Kreyòl</option></select><button className="logout" onClick={() => void logout()}>↪ {t.logout}</button></div></div>
     <div className="driver-brand"><span>T</span><div><strong>Taxi Platform Haiti</strong><small>{t.subtitle}</small></div></div>
     <h1>{t.title}</h1>{statusText && <div className={`driver-status ${status}`}>{statusText}</div>}
     <form onSubmit={submit} className="driver-form">
@@ -96,6 +101,6 @@ export default function DriverApplicationPage() {
       {message && <div className="driver-message">{message}</div>}{!locked && <button className="submit-driver" disabled={busy}>{busy ? t.sending : t.submit}</button>}
     </form>
   </section><style jsx>{`
-    .driver-page{min-height:100vh;background:linear-gradient(160deg,#e5f1ed,#eef2f7 45%,#e7edf3);padding:24px;display:grid;place-items:center;color:#102033;font-family:Inter,system-ui,sans-serif}.driver-card{width:min(100%,520px);background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.15)}.driver-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.driver-top button{border:0;background:none;font-weight:800;color:#0f5f4d}.driver-top select,.driver-form input{border:1px solid #dbe3eb;border-radius:12px;background:#fff;padding:10px 12px}.driver-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}.driver-brand>span{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#0f5f4d;color:#fff;font-weight:900}.driver-brand strong,.driver-brand small{display:block}.driver-brand small{color:#758596}.driver-card h1{font-size:30px;margin:0 0 16px}.driver-card h2{font-size:16px;margin:4px 0 0}.driver-status,.driver-message{padding:12px 14px;border-radius:14px;margin-bottom:14px;font-size:13px;font-weight:750}.driver-status.pending{background:#fff7df;color:#795d00}.driver-status.approved,.driver-message{background:#e8f7ef;color:#0b704f}.driver-status.suspended,.driver-status.rejected{background:#fff0f0;color:#9d2d2d}.driver-form{display:grid;gap:13px}.driver-form label{display:grid;gap:6px;font-size:12px;font-weight:800;color:#4f6072}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.vehicle-type{border:0;padding:0;margin:2px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}.vehicle-type legend{grid-column:1/-1;font-size:12px;font-weight:800;color:#4f6072;margin-bottom:7px}.vehicle-type button{border:1px solid #dbe3eb;background:#fff;border-radius:15px;padding:14px;font-weight:850;color:#405365}.vehicle-type button.selected{border:2px solid #0f7a62;background:#eff9f5;color:#0f5f4d}.submit-driver{border:0;border-radius:15px;background:#0f5f4d;color:#fff;padding:14px;font-weight:900;margin-top:4px}@media(max-width:560px){.driver-page{padding:0}.driver-card{min-height:100vh;border-radius:0;padding:22px 18px}.grid2{grid-template-columns:1fr}}
+    .driver-page{min-height:100vh;background:linear-gradient(160deg,#e5f1ed,#eef2f7 45%,#e7edf3);padding:24px;display:grid;place-items:center;color:#102033;font-family:Inter,system-ui,sans-serif}.driver-card{width:min(100%,520px);background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.15)}.driver-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:22px}.driver-top>button{border:0;background:none;font-weight:800;color:#0f5f4d}.driver-actions{display:flex;align-items:center;gap:8px}.driver-actions select,.driver-form input{border:1px solid #dbe3eb;border-radius:12px;background:#fff;padding:10px 12px}.logout{border:0;border-radius:12px;background:#fff1f1;color:#a83232;padding:10px 12px;font-weight:850}.driver-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}.driver-brand>span{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;background:#0f5f4d;color:#fff;font-weight:900}.driver-brand strong,.driver-brand small{display:block}.driver-brand small{color:#758596}.driver-card h1{font-size:30px;margin:0 0 16px}.driver-card h2{font-size:16px;margin:4px 0 0}.driver-status,.driver-message{padding:12px 14px;border-radius:14px;margin-bottom:14px;font-size:13px;font-weight:750}.driver-status.pending{background:#fff7df;color:#795d00}.driver-status.approved,.driver-message{background:#e8f7ef;color:#0b704f}.driver-status.suspended,.driver-status.rejected{background:#fff0f0;color:#9d2d2d}.driver-form{display:grid;gap:13px}.driver-form label{display:grid;gap:6px;font-size:12px;font-weight:800;color:#4f6072}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.vehicle-type{border:0;padding:0;margin:2px 0;display:grid;grid-template-columns:1fr 1fr;gap:10px}.vehicle-type legend{grid-column:1/-1;font-size:12px;font-weight:800;color:#4f6072;margin-bottom:7px}.vehicle-type button{border:1px solid #dbe3eb;background:#fff;border-radius:15px;padding:14px;font-weight:850;color:#405365}.vehicle-type button.selected{border:2px solid #0f7a62;background:#eff9f5;color:#0f5f4d}.submit-driver{border:0;border-radius:15px;background:#0f5f4d;color:#fff;padding:14px;font-weight:900;margin-top:4px}@media(max-width:560px){.driver-page{padding:0}.driver-card{min-height:100vh;border-radius:0;padding:22px 18px}.grid2{grid-template-columns:1fr}.driver-top{align-items:flex-start}.driver-actions{flex-direction:column;align-items:flex-end}.logout{font-size:11px;padding:8px 10px}}
   `}</style></main>
 }
