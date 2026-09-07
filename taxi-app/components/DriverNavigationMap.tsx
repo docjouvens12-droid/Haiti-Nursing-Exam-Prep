@@ -27,6 +27,7 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   const driverMarkerRef = useRef<MapboxMarker | null>(null)
   const targetMarkerRef = useRef<MapboxMarker | null>(null)
   const watchRef = useRef<number | null>(null)
+  const [opened, setOpened] = useState(false)
   const [position, setPosition] = useState<Point | null>(null)
   const [distanceKm, setDistanceKm] = useState<number | null>(null)
   const [etaMin, setEtaMin] = useState<number | null>(null)
@@ -39,6 +40,7 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
 
   useEffect(() => {
+    if (!opened) return
     let cancelled = false
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || !containerRef.current || mapRef.current) return
@@ -74,11 +76,12 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       mapRef.current?.remove()
       mapRef.current = null
       mapboxRef.current = null
+      setMapReady(false)
     }
-  }, [])
+  }, [opened])
 
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!opened || !navigator.geolocation) return
     watchRef.current = navigator.geolocation.watchPosition(
       (p) => setPosition({ lat: p.coords.latitude, lng: p.coords.longitude, heading: p.coords.heading ?? null }),
       () => {},
@@ -88,7 +91,7 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       if (watchRef.current !== null) navigator.geolocation.clearWatch(watchRef.current)
       watchRef.current = null
     }
-  }, [])
+  }, [opened])
 
   useEffect(() => {
     const map = mapRef.current
@@ -151,6 +154,16 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
     return () => { cancelled = true }
   }, [position?.lat, position?.lng, targetLat, targetLng, mapReady])
 
+  if (!opened) {
+    return <div className="driver-nav-launch">
+      <div><small>{goingToDestination ? (lang === 'fr' ? 'DESTINATION' : 'DESTINASYON') : (lang === 'fr' ? 'ALLER VERS LE PASSAGER' : 'ALE KOTE PASAJE A')}</small><strong>{targetAddress}</strong></div>
+      <button type="button" onClick={() => { setMapFailed(false); setOpened(true) }}>{lang === 'fr' ? '🧭 Ouvrir le GPS' : '🧭 Louvri GPS'}</button>
+      <style jsx>{`
+        .driver-nav-launch{display:flex;justify-content:space-between;gap:12px;align-items:center;border-radius:18px;border:1px solid #dfe6ed;background:#f7fafc;padding:14px;margin:12px 0 14px}.driver-nav-launch div{min-width:0}.driver-nav-launch small,.driver-nav-launch strong{display:block}.driver-nav-launch small{font-size:10px;color:#728397;font-weight:900;letter-spacing:.05em}.driver-nav-launch strong{margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.driver-nav-launch button{border:0;border-radius:14px;background:#1479ff;color:#fff;font-weight:900;padding:12px 14px;white-space:nowrap}@media(max-width:600px){.driver-nav-launch{align-items:stretch;flex-direction:column}.driver-nav-launch button{width:100%}}
+      `}</style>
+    </div>
+  }
+
   return <div className="driver-nav-shell">
     <div className="driver-nav-head">
       <div><small>{goingToDestination ? (lang === 'fr' ? 'NAVIGATION VERS LA DESTINATION' : 'NAVIGASYON POU DESTINASYON') : (lang === 'fr' ? 'NAVIGATION VERS LE PASSAGER' : 'NAVIGASYON POU PASAJE A')}</small><strong>{targetAddress}</strong></div>
@@ -158,13 +171,13 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
     </div>
     <div ref={containerRef} className="driver-nav-map" />
     {!mapReady && !mapFailed && <div className="driver-nav-loading">{lang === 'fr' ? 'Chargement du GPS…' : 'GPS ap chaje…'}</div>}
-    {mapFailed && <div className="driver-nav-loading">{lang === 'fr' ? 'Le tableau de bord reste utilisable. Réessayez la carte plus tard.' : 'Dashboard la toujou mache. Eseye kat la ankò pita.'}</div>}
+    {mapFailed && <div className="driver-nav-loading"><span>{lang === 'fr' ? 'La carte n’a pas pu charger.' : 'Kat la pa t ka chaje.'}</span><button type="button" onClick={() => setOpened(false)}>{lang === 'fr' ? 'Fermer le GPS' : 'Fèmen GPS'}</button></div>}
     <style jsx global>{`
       .driver-nav-shell{overflow:hidden;border-radius:20px;border:1px solid #dfe6ed;background:#fff;margin:12px 0 14px;box-shadow:0 10px 28px rgba(16,32,51,.09)}
       .driver-nav-head{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;background:#102033;color:#fff}
       .driver-nav-head div{min-width:0}.driver-nav-head small,.driver-nav-head strong{display:block}.driver-nav-head small{font-size:10px;color:#a9bdd0;font-weight:850;letter-spacing:.04em}.driver-nav-head strong{font-size:14px;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.driver-nav-head b{white-space:nowrap;font-size:13px;background:#1c3148;border-radius:999px;padding:8px 10px}
-      .driver-nav-map{height:340px;width:100%}.driver-nav-loading{padding:12px 14px;color:#66778a;font-size:13px;background:#f6f8fa}.driver-nav-car{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #1479ff;box-shadow:0 8px 20px rgba(16,32,51,.3);font-size:22px}.driver-nav-target{font-size:29px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
-      @media(max-width:600px){.driver-nav-map{height:300px}.driver-nav-head{align-items:flex-start;flex-direction:column}.driver-nav-head b{align-self:flex-start}}
+      .driver-nav-map{height:340px;width:100%}.driver-nav-loading{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:12px 14px;color:#66778a;font-size:13px;background:#f6f8fa}.driver-nav-loading button{border:0;border-radius:10px;padding:8px 10px;background:#102033;color:#fff;font-weight:800}.driver-nav-car{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #1479ff;box-shadow:0 8px 20px rgba(16,32,51,.3);font-size:22px}.driver-nav-target{font-size:29px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
+      @media(max-width:600px){.driver-nav-map{height:300px}.driver-nav-head{align-items:flex-start;flex-direction:column}.driver-nav-head b{align-self:flex-start}.driver-nav-loading{align-items:flex-start;flex-direction:column}}
     `}</style>
   </div>
 }
