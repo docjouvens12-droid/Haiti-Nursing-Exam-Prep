@@ -148,14 +148,14 @@ export default function PassengerActiveDriver() {
   if (bundle.ride_status === 'driver_arriving') {
     return <aside className="arrivalMessage" aria-live="polite">
       <div className="arrivalIcon">✓</div>
-      <div>
+      <div className="arrivalCopy">
         <strong>{lang === 'ht' ? 'Chofè ou rive' : 'Votre chauffeur est arrivé'}</strong>
         <span>{lang === 'ht' ? 'Chofè a ap tann ou nan pwen pickup la.' : 'Votre chauffeur vous attend au point de prise en charge.'}</span>
       </div>
       <style jsx>{`
-        .arrivalMessage{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 18px),560px);display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #cfe8df;border-radius:18px;padding:13px 14px;box-shadow:0 14px 38px rgba(16,32,51,.22);font-family:Inter,system-ui,sans-serif;color:#102033}
-        .arrivalIcon{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#e7f6f0;color:#0f7b61;font-size:22px;font-weight:900;flex:0 0 auto}.arrivalMessage strong,.arrivalMessage span{display:block}.arrivalMessage strong{font-size:16px;color:#0f7b61}.arrivalMessage span{font-size:11px;color:#6f7f8f;margin-top:3px}
-        @media(max-width:600px){.arrivalMessage{bottom:80px}}
+        .arrivalMessage{position:fixed;left:50%;bottom:max(82px,calc(env(safe-area-inset-bottom) + 66px));transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 24px),520px);display:flex;align-items:center;gap:11px;background:#fff;border:1px solid #cfe8df;border-radius:18px;padding:12px 13px;box-shadow:0 14px 34px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;color:#102033;box-sizing:border-box}
+        .arrivalIcon{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#e7f6f0;color:#0f7b61;font-size:21px;font-weight:900;flex:0 0 auto}.arrivalCopy{min-width:0;flex:1}.arrivalMessage strong,.arrivalMessage span{display:block}.arrivalMessage strong{font-size:15px;color:#0f7b61;line-height:1.2}.arrivalMessage span{font-size:11px;line-height:1.35;color:#6f7f8f;margin-top:3px}
+        @media(max-width:600px){.arrivalMessage{width:calc(100vw - 20px);padding:11px 12px;border-radius:17px}.arrivalIcon{width:38px;height:38px;font-size:20px}.arrivalMessage strong{font-size:14px}}
       `}</style>
     </aside>
   }
@@ -165,8 +165,12 @@ export default function PassengerActiveDriver() {
   const color = bundle.vehicle_color?.trim() || '—'
   const distance = liveDistanceKm == null ? 'GPS…' : `${liveDistanceKm.toFixed(1)} km`
   const eta = liveEtaMin == null ? 'ETA…' : `${liveEtaMin} min`
+  const statusLabel = bundle.ride_status === 'accepted'
+    ? (lang === 'ht' ? 'Chofè a ap vini' : 'Chauffeur en route')
+    : (lang === 'ht' ? 'Trajè ap fèt' : 'Trajet en cours')
 
   return <aside className="activeRideCard" aria-live="polite">
+    <div className="statusRow"><span>{statusLabel}</span><div><b>{distance}</b><b>⏱ {eta}</b></div></div>
     <div className="identityRow">
       <div className="avatar">{bundle.avatar_url ? <img src={bundle.avatar_url} alt="" /> : <span>{initial}</span>}</div>
       <div className="identityCopy">
@@ -177,15 +181,15 @@ export default function PassengerActiveDriver() {
 
     {miniMapUrl && <div className="miniMap">
       <img src={miniMapUrl} alt={lang === 'ht' ? 'Trajektwa chofè a an dirèk' : 'Trajet en direct du chauffeur'} />
-      <div className="mapBadge"><strong>{distance}</strong><span>⏱ {eta}</span></div>
     </div>}
 
     <style jsx>{`
-      .activeRideCard{position:fixed;left:50%;bottom:88px;transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 18px),560px);background:#fff;border:1px solid #dce8e3;border-radius:20px;padding:11px;box-shadow:0 14px 38px rgba(16,32,51,.24);font-family:Inter,system-ui,sans-serif;color:#102033}
-      .identityRow{display:flex;align-items:center;gap:11px}.avatar{width:46px;height:46px;border-radius:50%;overflow:hidden;background:#e7f6f0;color:#0f7b61;display:grid;place-items:center;font-size:19px;font-weight:900;flex:0 0 auto}.avatar img{width:100%;height:100%;object-fit:cover}
-      .identityCopy{min-width:0;flex:1}.identityCopy strong,.identityCopy span{display:block}.identityCopy strong{font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.identityCopy span{font-size:11px;color:#6f7f8f;margin-top:3px}.identityCopy b{color:#102033}
-      .miniMap{position:relative;border-radius:16px;overflow:hidden;background:#e8eef1;min-height:145px;margin-top:10px}.miniMap img{display:block;width:100%;height:170px;object-fit:cover}.mapBadge{position:absolute;left:10px;bottom:10px;display:flex;gap:8px;align-items:center;background:#102033;color:#fff;padding:7px 10px;border-radius:999px;font-size:11px;font-weight:900;box-shadow:0 4px 14px rgba(0,0,0,.18)}
-      @media(max-width:600px){.activeRideCard{bottom:80px}.miniMap img{height:155px}}
+      .activeRideCard{position:fixed;left:50%;bottom:max(82px,calc(env(safe-area-inset-bottom) + 66px));transform:translateX(-50%);z-index:12050;width:min(calc(100vw - 24px),520px);background:#fff;border:1px solid #dce8e3;border-radius:20px;padding:10px;box-shadow:0 14px 36px rgba(16,32,51,.22);font-family:Inter,system-ui,sans-serif;color:#102033;box-sizing:border-box;overflow:hidden}
+      .statusRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:1px 2px 9px}.statusRow>span{font-size:10px;font-weight:900;letter-spacing:.055em;text-transform:uppercase;color:#0f7b61}.statusRow>div{display:flex;gap:5px;min-width:0}.statusRow b{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;background:#eef4f2;color:#102033;padding:5px 8px;font-size:10px}
+      .identityRow{display:flex;align-items:center;gap:10px;padding:0 2px 9px}.avatar{width:44px;height:44px;border-radius:50%;overflow:hidden;background:#e7f6f0;color:#0f7b61;display:grid;place-items:center;font-size:18px;font-weight:900;flex:0 0 auto}.avatar img{width:100%;height:100%;object-fit:cover}
+      .identityCopy{min-width:0;flex:1}.identityCopy strong,.identityCopy span{display:block}.identityCopy strong{font-size:15px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.identityCopy span{font-size:11px;color:#6f7f8f;margin-top:3px}.identityCopy b{color:#102033}
+      .miniMap{position:relative;border-radius:15px;overflow:hidden;background:#e8eef1;min-height:138px;border:1px solid #e3e9ec}.miniMap img{display:block;width:100%;height:160px;object-fit:cover}
+      @media(max-width:600px){.activeRideCard{width:calc(100vw - 20px);padding:9px;border-radius:18px}.statusRow{padding-bottom:8px}.statusRow>span{font-size:9px}.statusRow b{padding:5px 7px;font-size:9px}.avatar{width:42px;height:42px}.identityCopy strong{font-size:14px}.miniMap img{height:145px}}
     `}</style>
   </aside>
 }
