@@ -15,7 +15,11 @@ type Ride = {
   destination_address: string
 }
 
-type Props = { ride: Ride; lang: 'fr' | 'ht' }
+type Props = {
+  ride: Ride
+  lang: 'fr' | 'ht'
+  onMetricsChange?: (metrics: { distanceKm: number | null; etaMin: number | null }) => void
+}
 type Point = { lat: number; lng: number; heading: number | null; speedKph: number | null }
 
 const HAITI_TEST_POSITION: Point = {
@@ -25,7 +29,7 @@ const HAITI_TEST_POSITION: Point = {
   speedKph: 0,
 }
 
-export default function DriverMobileNavigationMap({ ride, lang }: Props) {
+export default function DriverMobileNavigationMap({ ride, lang, onMetricsChange }: Props) {
   const watchRef = useRef<number | null>(null)
   const heartbeatRef = useRef<number | null>(null)
   const requestSeq = useRef(0)
@@ -41,6 +45,10 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const targetLat = goingToDestination ? ride.destination_latitude : ride.pickup_latitude
   const targetLng = goingToDestination ? ride.destination_longitude : ride.pickup_longitude
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
+
+  useEffect(() => {
+    onMetricsChange?.({ distanceKm, etaMin })
+  }, [distanceKm, etaMin, onMetricsChange])
 
   async function syncDriverLocation(point: Point) {
     const { error: syncError } = await supabase.rpc('update_driver_location', {
