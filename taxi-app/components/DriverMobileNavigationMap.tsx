@@ -41,7 +41,10 @@ export default function DriverMobileNavigationMap({ ride, lang }: Props) {
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
 
   useEffect(() => {
-    const testMode = localStorage.getItem('taxi_haiti_test_mode') === '1'
+    const params = new URLSearchParams(window.location.search)
+    const queryTestMode = params.get('test') === 'haiti'
+    if (queryTestMode) localStorage.setItem('taxi_haiti_test_mode', '1')
+    const testMode = queryTestMode || localStorage.getItem('taxi_haiti_test_mode') === '1'
 
     if (testMode) {
       setPosition(HAITI_TEST_POSITION)
