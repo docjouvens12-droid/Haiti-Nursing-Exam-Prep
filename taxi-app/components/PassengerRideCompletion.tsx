@@ -14,6 +14,8 @@ type CompletedRide = {
   completed_at: string | null
 }
 
+const dismissedKey = (userId: string, rideId: string) => `taxi-dismissed-receipt:${userId}:${rideId}`
+
 export default function PassengerRideCompletion() {
   const [user, setUser] = useState<User | null>(null)
   const [ride, setRide] = useState<CompletedRide | null>(null)
@@ -41,17 +43,27 @@ export default function PassengerRideCompletion() {
       const row = Array.isArray(data) ? data[0] : data
 
       if (!active || error || !row || row.id === hiddenRideId) return
+      if (window.localStorage.getItem(dismissedKey(user.id, row.id)) === '1') {
+        setRide(null)
+        return
+      }
 
       const { data: existingRating } = await supabase
         .from('ratings')
         .select('id,stars')
         .eq('ride_id', row.id)
-        .eq('rater_id', user!.id)
+        .eq('rater_id', user.id)
         .maybeSingle()
 
       if (!active) return
-      setRated(Boolean(existingRating))
-      setStars(existingRating?.stars ? Number(existingRating.stars) : 0)
+      if (existingRating) {
+        window.localStorage.setItem(dismissedKey(user.id, row.id), '1')
+        setRide(null)
+        return
+      }
+
+      setRated(false)
+      setStars(0)
       setComment('')
       setMessage('')
       setRide(row as CompletedRide)
@@ -91,13 +103,15 @@ export default function PassengerRideCompletion() {
     if (error) setMessage(error.message)
     else {
       setRated(true)
+      window.localStorage.setItem(dismissedKey(user.id, ride.id), '1')
       setMessage('Merci ! Votre évaluation a été enregistrée.')
     }
     setBusy(false)
   }
 
   function closeReceipt() {
-    if (!ride) return
+    if (!ride || !user) return
+    window.localStorage.setItem(dismissedKey(user.id, ride.id), '1')
     setHiddenRideId(ride.id)
     setRide(null)
   }
