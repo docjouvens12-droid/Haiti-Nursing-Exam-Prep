@@ -11,6 +11,7 @@ import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import RideRealtimeNotifications from '../components/RideRealtimeNotifications'
 import DriverDashboardTitleCleanup from '../components/DriverDashboardTitleCleanup'
+import DriverMenuPersonalInfoCleanup from '../components/DriverMenuPersonalInfoCleanup'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><DriverDashboardTitleCleanup />{children}</body>
+      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><DriverDashboardTitleCleanup /><DriverMenuPersonalInfoCleanup />{children}</body>
     </html>
   )
 }
