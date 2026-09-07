@@ -8,6 +8,7 @@ import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
+import RideRealtimeNotifications from '../components/RideRealtimeNotifications'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel />{children}</body>
+      <body><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications />{children}</body>
     </html>
   )
 }
