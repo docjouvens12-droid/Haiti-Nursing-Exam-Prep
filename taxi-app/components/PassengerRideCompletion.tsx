@@ -37,21 +37,15 @@ export default function PassengerRideCompletion() {
     let active = true
 
     async function loadLatestCompleted() {
-      const { data, error } = await supabase
-        .from('rides')
-        .select('id,driver_id,pickup_address,destination_address,estimated_fare_htg,final_fare_htg,completed_at')
-        .eq('passenger_id', user!.id)
-        .eq('status', 'completed')
-        .order('completed_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+      const { data, error } = await supabase.rpc('get_my_latest_completed_ride')
+      const row = Array.isArray(data) ? data[0] : data
 
-      if (!active || error || !data || data.id === hiddenRideId) return
+      if (!active || error || !row || row.id === hiddenRideId) return
 
       const { data: existingRating } = await supabase
         .from('ratings')
         .select('id,stars')
-        .eq('ride_id', data.id)
+        .eq('ride_id', row.id)
         .eq('rater_id', user!.id)
         .maybeSingle()
 
@@ -60,7 +54,7 @@ export default function PassengerRideCompletion() {
       setStars(existingRating?.stars ? Number(existingRating.stars) : 0)
       setComment('')
       setMessage('')
-      setRide(data as CompletedRide)
+      setRide(row as CompletedRide)
     }
 
     loadLatestCompleted()
