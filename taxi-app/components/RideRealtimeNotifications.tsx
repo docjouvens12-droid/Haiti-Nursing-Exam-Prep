@@ -37,13 +37,31 @@ export default function RideRealtimeNotifications() {
       const isDriverDashboard = window.location.pathname.startsWith('/driver/dashboard')
 
       if (isDriverDashboard) {
+        const { data: currentRide } = await supabase
+          .from('rides')
+          .select('id,status')
+          .eq('driver_id', user.id)
+          .eq('status', 'in_progress')
+          .order('requested_at', { ascending: false })
+          .limit(1)
+          .maybeSingle()
+
+        if (currentRide?.id) {
+          window.location.replace('/driver/navigation')
+          return
+        }
+
         driverChannel = supabase
-          .channel(`driver-new-rides-${user.id}`)
+          .channel(`driver-live-${user.id}`)
           .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rides' }, (payload) => {
             const row = payload.new as any
             if (row?.status !== 'requested' || row?.passenger_id === user.id) return
             show({ icon: '🔔', title: 'Nouvelle demande', body: `${row.pickup_address ?? 'Prise en charge'} → ${row.destination_address ?? 'Destination'}` })
             window.setTimeout(() => window.location.reload(), 900)
+          })
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rides', filter: `driver_id=eq.${user.id}` }, (payload) => {
+            const row = payload.new as any
+            if (row?.status === 'in_progress') window.location.replace('/driver/navigation')
           })
           .subscribe()
         return
