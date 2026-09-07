@@ -1,5 +1,7 @@
 # Déploiement GitHub → Vercel
 
-Ce dépôt est connecté au projet Vercel `haiti-nursing-exam-prep`.
+Branche dédiée : `taxi-platform-haiti`.
 
-Ce fichier marque le premier commit effectué après la connexion GitHub/Vercel afin de déclencher et vérifier le déploiement automatique de la nouvelle interface.
+Ce fichier sert uniquement à déclencher et vérifier un déploiement Vercel de Taxi Platform Haiti sans modifier le code fonctionnel de l’application.
+
+Déploiement de vérification déclenché le 7 septembre 2026.
