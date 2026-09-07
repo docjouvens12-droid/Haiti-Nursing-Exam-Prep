@@ -44,6 +44,7 @@ export default function SpacesPage() {
   const [role, setRole] = useState<Role>(null)
   const [email, setEmail] = useState('')
   const [driverApproved, setDriverApproved] = useState(false)
+  const [driverHref, setDriverHref] = useState('/driver/dashboard')
   const [loading, setLoading] = useState(true)
   const t = copy[lang]
 
@@ -61,6 +62,7 @@ export default function SpacesPage() {
       setRole(null)
       setEmail('')
       setDriverApproved(false)
+      setDriverHref('/driver/dashboard')
       setLoading(false)
       return
     }
@@ -68,7 +70,23 @@ export default function SpacesPage() {
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', user.id).maybeSingle()
     setRole((profile?.role ?? 'passenger') as Role)
     const { data: driver } = await supabase.from('driver_profiles').select('status').eq('user_id', user.id).maybeSingle()
-    setDriverApproved(driver?.status === 'approved')
+    const approved = driver?.status === 'approved'
+    setDriverApproved(approved)
+
+    if (approved || profile?.role === 'driver') {
+      const { data: activeRide } = await supabase
+        .from('rides')
+        .select('id')
+        .eq('driver_id', user.id)
+        .in('status', ['accepted', 'driver_arriving', 'in_progress'])
+        .order('requested_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+      setDriverHref(activeRide ? '/driver/navigation' : '/driver/dashboard')
+    } else {
+      setDriverHref('/driver/dashboard')
+    }
+
     setLoading(false)
   }
 
@@ -95,7 +113,7 @@ export default function SpacesPage() {
     <div className="spaces">
       <a className="space passenger" href="/"><div className="icon">👤</div><div><strong>{t.passenger}</strong><span>{t.passengerText}</span></div><b>›</b></a>
 
-      {(role === 'driver' || driverApproved) && <a className="space driver" href="/driver/dashboard"><div className="icon">🚕</div><div><strong>{t.driver}</strong><span>{t.driverText}</span></div><b>›</b></a>}
+      {(role === 'driver' || driverApproved) && <a className="space driver" href={driverHref}><div className="icon">🚕</div><div><strong>{t.driver}</strong><span>{t.driverText}</span></div><b>›</b></a>}
 
       {role === 'admin' && <a className="space admin" href="/admin/drivers"><div className="icon">🛡️</div><div><strong>{t.admin}</strong><span>{t.adminText}</span></div><b>›</b></a>}
 
