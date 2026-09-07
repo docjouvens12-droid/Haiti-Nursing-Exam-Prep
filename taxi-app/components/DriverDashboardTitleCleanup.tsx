@@ -54,6 +54,18 @@ export default function DriverDashboardTitleCleanup() {
           main.page .section-title h2 { font-size: 19px !important; margin: 0 !important; }
           main.page .refresh { padding: 9px 11px !important; font-size: 13px !important; border-radius: 12px !important; }
           main.page .empty { padding: 22px 18px !important; border-radius: 15px !important; font-size: 14px !important; }
+          main.page .rides { gap: 10px !important; }
+          main.page .ride-wrap { padding: 12px !important; border-radius: 16px !important; }
+          main.page .ride-card { gap: 10px !important; }
+          main.page .ride-card .row { gap: 8px !important; }
+          main.page .ride-card .row > span { font-size: 18px !important; }
+          main.page .ride-card .row small { font-size: 10px !important; }
+          main.page .ride-card .row strong { font-size: 14px !important; line-height: 1.25 !important; overflow-wrap: anywhere; }
+          main.page .ride-card .metrics { gap: 6px !important; }
+          main.page .ride-card .metrics > div { padding: 9px !important; border-radius: 11px !important; min-width: 0; }
+          main.page .ride-card .metrics small { font-size: 10px !important; }
+          main.page .ride-card .metrics strong { font-size: 12px !important; overflow-wrap: anywhere; }
+          main.page .ride-wrap > .primary { margin-top: 10px !important; padding: 11px 13px !important; border-radius: 12px !important; font-size: 14px !important; }
         }
       `
       document.head.appendChild(style)
