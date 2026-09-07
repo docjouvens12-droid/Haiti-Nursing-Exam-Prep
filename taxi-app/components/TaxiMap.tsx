@@ -1,8 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import mapboxgl, { LngLatBoundsLike, Map } from 'mapbox-gl'
-import 'mapbox-gl/dist/mapbox-gl.css'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { supabase } from '../lib/supabase'
 
 type Point = { lat: number; lng: number }
@@ -29,105 +27,13 @@ type LiveTracking = {
   destination_longitude: number | null
 }
 
-export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
-  const containerRef = useRef<HTMLDivElement | null>(null)
-  const mapRef = useRef<Map | null>(null)
-  const pickupMarkerRef = useRef<mapboxgl.Marker | null>(null)
-  const destinationMarkerRef = useRef<mapboxgl.Marker | null>(null)
-  const driverMarkerRef = useRef<mapboxgl.Marker | null>(null)
-  const trackingRequestRef = useRef(0)
+export default function TaxiMap({ pickup, destination }: Props) {
+  const requestRef = useRef(0)
   const [tracking, setTracking] = useState<LiveTracking | null>(null)
   const [driverDistanceKm, setDriverDistanceKm] = useState<number | null>(null)
   const [driverEtaMin, setDriverEtaMin] = useState<number | null>(null)
-  const [driverRouteGeometry, setDriverRouteGeometry] = useState<RouteGeometry | null>(null)
-
-  useEffect(() => {
-    const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-    if (!token || !containerRef.current || mapRef.current) return
-
-    mapboxgl.accessToken = token
-    const center: [number, number] = pickup ? [pickup.lng, pickup.lat] : [-72.3364, 18.5392]
-
-    mapRef.current = new mapboxgl.Map({
-      container: containerRef.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center,
-      zoom: 12.5,
-      attributionControl: true,
-    })
-
-    mapRef.current.addControl(new mapboxgl.NavigationControl({ showCompass: false }), 'bottom-right')
-
-    return () => {
-      pickupMarkerRef.current?.remove()
-      destinationMarkerRef.current?.remove()
-      driverMarkerRef.current?.remove()
-      mapRef.current?.remove()
-      mapRef.current = null
-    }
-  }, [])
-
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map || !pickup) return
-    pickupMarkerRef.current?.remove()
-    const el = document.createElement('div')
-    el.className = 'mapbox-pickup-marker'
-    pickupMarkerRef.current = new mapboxgl.Marker({ element: el })
-      .setLngLat([pickup.lng, pickup.lat])
-      .addTo(map)
-  }, [pickup])
-
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-    destinationMarkerRef.current?.remove()
-    if (!destination) return
-    const el = document.createElement('div')
-    el.className = 'mapbox-destination-marker'
-    destinationMarkerRef.current = new mapboxgl.Marker({ element: el })
-      .setLngLat([destination.lng, destination.lat])
-      .addTo(map)
-  }, [destination])
-
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-
-    const render = () => {
-      if (map.getLayer('taxi-route')) map.removeLayer('taxi-route')
-      if (map.getSource('taxi-route')) map.removeSource('taxi-route')
-
-      if (!routeGeometry) return
-
-      map.addSource('taxi-route', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: routeGeometry,
-        },
-      })
-      map.addLayer({
-        id: 'taxi-route',
-        type: 'line',
-        source: 'taxi-route',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#0f7a62', 'line-width': 5, 'line-opacity': 0.55 },
-      })
-
-      if (pickup && destination && !tracking) {
-        const bounds = new mapboxgl.LngLatBounds()
-          .extend([pickup.lng, pickup.lat])
-          .extend([destination.lng, destination.lat])
-        for (const coord of routeGeometry.coordinates) bounds.extend(coord as [number, number])
-        map.fitBounds(bounds as LngLatBoundsLike, { padding: 58, duration: 650, maxZoom: 15 })
-      }
-    }
-
-    if (map.isStyleLoaded()) render()
-    else map.once('load', render)
-  }, [routeGeometry, pickup, destination, tracking])
+  const [driverRoutePolyline, setDriverRoutePolyline] = useState<string | null>(null)
+  const [mapFailed, setMapFailed] = useState(false)
 
   useEffect(() => {
     let active = true
@@ -145,121 +51,107 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
 
     void loadTracking()
     const timer = window.setInterval(() => void loadTracking(), 2500)
+    const { data: authListener } = supabase.auth.onAuthStateChange(() => void loadTracking())
+
     return () => {
       active = false
       window.clearInterval(timer)
+      authListener.subscription.unsubscribe()
     }
   }, [])
 
   useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
-
     const lat = tracking?.driver_latitude
     const lng = tracking?.driver_longitude
-    if (lat == null || lng == null) {
-      driverMarkerRef.current?.remove()
-      driverMarkerRef.current = null
-      setDriverDistanceKm(null)
-      setDriverEtaMin(null)
-      setDriverRouteGeometry(null)
-      return
-    }
-
-    if (!driverMarkerRef.current) {
-      const el = document.createElement('div')
-      el.className = 'mapbox-driver-marker'
-      el.innerHTML = '<span>🚕</span>'
-      driverMarkerRef.current = new mapboxgl.Marker({ element: el, rotationAlignment: 'map' }).addTo(map)
-    }
-    driverMarkerRef.current.setLngLat([lng, lat])
-    if (tracking?.driver_heading != null) driverMarkerRef.current.setRotation(tracking.driver_heading)
-
     const targetLat = tracking?.ride_status === 'in_progress' ? tracking.destination_latitude : tracking?.pickup_latitude
     const targetLng = tracking?.ride_status === 'in_progress' ? tracking.destination_longitude : tracking?.pickup_longitude
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
-    if (targetLat == null || targetLng == null || !token) return
 
-    const requestId = ++trackingRequestRef.current
+    if (lat == null || lng == null || targetLat == null || targetLng == null || !token) {
+      setDriverDistanceKm(null)
+      setDriverEtaMin(null)
+      setDriverRoutePolyline(null)
+      return
+    }
+
+    const requestId = ++requestRef.current
+    const controller = new AbortController()
+
     ;(async () => {
       try {
         const coords = `${lng},${lat};${targetLng},${targetLat}`
-        const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token)}`)
+        const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=polyline&steps=false&access_token=${encodeURIComponent(token)}`, { signal: controller.signal })
         const json = await response.json()
         const route = json.routes?.[0]
-        if (!route || requestId !== trackingRequestRef.current) return
+        if (!route || requestId !== requestRef.current) return
         setDriverDistanceKm(route.distance / 1000)
         setDriverEtaMin(Math.max(1, Math.round(route.duration / 60)))
-        setDriverRouteGeometry(route.geometry as RouteGeometry)
+        setDriverRoutePolyline(route.geometry ?? null)
       } catch {
-        if (requestId !== trackingRequestRef.current) return
-        setDriverDistanceKm(null)
-        setDriverEtaMin(null)
-        setDriverRouteGeometry(null)
+        if (!controller.signal.aborted && requestId === requestRef.current) {
+          setDriverDistanceKm(null)
+          setDriverEtaMin(null)
+          setDriverRoutePolyline(null)
+        }
       }
     })()
+
+    return () => controller.abort()
   }, [tracking])
 
-  useEffect(() => {
-    const map = mapRef.current
-    if (!map) return
+  const mapUrl = useMemo(() => {
+    const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    if (!token) return ''
 
-    const render = () => {
-      if (map.getLayer('driver-live-route')) map.removeLayer('driver-live-route')
-      if (map.getSource('driver-live-route')) map.removeSource('driver-live-route')
-      if (!driverRouteGeometry || !tracking || tracking.driver_latitude == null || tracking.driver_longitude == null) return
+    const driverLat = tracking?.driver_latitude
+    const driverLng = tracking?.driver_longitude
+    const targetLat = tracking?.ride_status === 'in_progress' ? tracking.destination_latitude : tracking?.pickup_latitude
+    const targetLng = tracking?.ride_status === 'in_progress' ? tracking.destination_longitude : tracking?.pickup_longitude
 
-      map.addSource('driver-live-route', {
-        type: 'geojson',
-        data: {
-          type: 'Feature',
-          properties: {},
-          geometry: driverRouteGeometry,
-        },
-      })
-      map.addLayer({
-        id: 'driver-live-route',
-        type: 'line',
-        source: 'driver-live-route',
-        layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#1479ff', 'line-width': 6, 'line-opacity': 0.95 },
-      })
-
-      const targetLat = tracking.ride_status === 'in_progress' ? tracking.destination_latitude : tracking.pickup_latitude
-      const targetLng = tracking.ride_status === 'in_progress' ? tracking.destination_longitude : tracking.pickup_longitude
-      if (targetLat == null || targetLng == null) return
-
-      const bounds = new mapboxgl.LngLatBounds()
-        .extend([tracking.driver_longitude, tracking.driver_latitude])
-        .extend([targetLng, targetLat])
-      for (const coord of driverRouteGeometry.coordinates) bounds.extend(coord as [number, number])
-      map.fitBounds(bounds as LngLatBoundsLike, { padding: 72, duration: 500, maxZoom: 15.5 })
+    if (driverLat != null && driverLng != null && targetLat != null && targetLng != null) {
+      const overlays = [
+        driverRoutePolyline ? `path-5+1479ff-0.9(${encodeURIComponent(driverRoutePolyline)})` : null,
+        `pin-s-a+1479ff(${driverLng},${driverLat})`,
+        `pin-s-b+0d7b61(${targetLng},${targetLat})`,
+      ].filter(Boolean).join(',')
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/800x600?padding=55&access_token=${encodeURIComponent(token)}`
     }
 
-    if (map.isStyleLoaded()) render()
-    else map.once('load', render)
-  }, [driverRouteGeometry, tracking])
+    if (pickup && destination) {
+      const overlays = [
+        `pin-s-a+1479ff(${pickup.lng},${pickup.lat})`,
+        `pin-s-b+0d7b61(${destination.lng},${destination.lat})`,
+      ].join(',')
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/800x600?padding=55&access_token=${encodeURIComponent(token)}`
+    }
 
-  const tokenReady = Boolean(process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
+    const center = pickup ?? { lat: 18.5392, lng: -72.3364 }
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${center.lng},${center.lat},12/800x600?access_token=${encodeURIComponent(token)}`
+  }, [pickup, destination, tracking, driverRoutePolyline])
+
+  useEffect(() => setMapFailed(false), [mapUrl])
+
   const trackingLabel = tracking?.ride_status === 'in_progress' ? 'Vers la destination' : 'Chauffeur en route'
 
   return (
-    <div className="mapbox-wrap">
-      <div ref={containerRef} className="mapbox-map" />
+    <div className="safe-map-wrap">
+      {mapUrl && !mapFailed ? (
+        <img className="safe-map" src={mapUrl} alt="Carte du trajet" onError={() => setMapFailed(true)} />
+      ) : (
+        <div className="safe-map-placeholder">Carte temporairement indisponible</div>
+      )}
       {tracking && tracking.driver_latitude != null && tracking.driver_longitude != null && (
         <div className="live-tracking-badge">
           <strong>🚕 {trackingLabel}</strong>
           <span>{driverDistanceKm == null ? 'Position en direct' : `${driverDistanceKm.toFixed(1)} km`}{driverEtaMin == null ? '' : ` · ${driverEtaMin} min`}</span>
         </div>
       )}
-      {!tokenReady && (
-        <div className="mapbox-placeholder">
-          <strong>Kat reyèl la pare pou aktive</strong>
-          <small>Ajoute NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN sou Vercel.</small>
-        </div>
-      )}
-      <style jsx global>{`
-        .mapbox-driver-marker{width:42px;height:42px;border-radius:50%;background:#fff;border:3px solid #0f7a62;display:grid;place-items:center;box-shadow:0 8px 22px rgba(16,32,51,.28);font-size:22px}.mapbox-driver-marker span{display:block;line-height:1}.live-tracking-badge{position:absolute;left:14px;top:14px;z-index:8;background:rgba(16,32,51,.92);color:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 8px 22px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;pointer-events:none}.live-tracking-badge strong,.live-tracking-badge span{display:block}.live-tracking-badge strong{font-size:13px}.live-tracking-badge span{font-size:12px;margin-top:2px;color:#dce7ef}
+      <style jsx>{`
+        .safe-map-wrap{position:relative;width:100%;height:100%;min-height:300px;background:#eaf0f4;overflow:hidden}
+        .safe-map{display:block;width:100%;height:100%;min-height:300px;object-fit:cover}
+        .safe-map-placeholder{min-height:300px;display:grid;place-items:center;color:#66778a;font-weight:750;padding:20px;text-align:center}
+        .live-tracking-badge{position:absolute;left:14px;top:14px;z-index:8;background:rgba(16,32,51,.92);color:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 8px 22px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;pointer-events:none}
+        .live-tracking-badge strong,.live-tracking-badge span{display:block}.live-tracking-badge strong{font-size:13px}.live-tracking-badge span{font-size:12px;margin-top:2px;color:#dce7ef}
       `}</style>
     </div>
   )
