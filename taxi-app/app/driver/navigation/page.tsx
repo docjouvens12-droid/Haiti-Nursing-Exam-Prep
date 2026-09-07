@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
-import DriverAutoNavigationMap from '../../../components/DriverAutoNavigationMap'
+import DriverMobileNavigationMap from '../../../components/DriverMobileNavigationMap'
 
 type RideStatus = 'accepted' | 'driver_arriving' | 'in_progress'
 
@@ -117,7 +117,7 @@ export default function DriverNavigationPage() {
         </div>
       </div>
 
-      <DriverAutoNavigationMap ride={ride} lang={lang} />
+      <DriverMobileNavigationMap ride={ride} lang={lang} />
 
       {message && <div style={{background:'#fff1f1',color:'#a12626',borderRadius:14,padding:12,marginTop:12,fontWeight:700}}>{message}</div>}
 
@@ -127,5 +127,3 @@ export default function DriverNavigationPage() {
     </section>
   </main>
 }
-
-// deployment trigger: accepted-ride GPS flow
