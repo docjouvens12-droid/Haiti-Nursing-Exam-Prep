@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import './menu.css'
+import './completion.css'
 import DriverCtaBridge from '../components/DriverCtaBridge'
 import GlobalSpacesButton from '../components/GlobalSpacesButton'
 import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
