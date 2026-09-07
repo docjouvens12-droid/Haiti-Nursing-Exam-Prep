@@ -12,19 +12,21 @@ export default function GlobalSpacesButton() {
       aria-label="Choisir un espace"
       style={{
         position: 'fixed',
-        right: 14,
-        bottom: 'calc(18px + env(safe-area-inset-bottom))',
+        right: 12,
+        bottom: 'calc(14px + env(safe-area-inset-bottom))',
         zIndex: 9999,
         display: 'inline-flex',
         alignItems: 'center',
-        gap: 8,
-        padding: '11px 14px',
+        gap: 6,
+        padding: '9px 11px',
         borderRadius: 999,
         background: '#102033',
         color: '#fff',
         textDecoration: 'none',
+        fontSize: 13,
         fontWeight: 850,
-        boxShadow: '0 10px 28px rgba(16,32,51,.25)',
+        lineHeight: 1,
+        boxShadow: '0 8px 22px rgba(16,32,51,.22)',
         border: '1px solid rgba(255,255,255,.18)',
       }}
     >
