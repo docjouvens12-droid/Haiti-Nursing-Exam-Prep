@@ -21,6 +21,7 @@ type Point = { lat: number; lng: number; heading: number | null }
 type MapboxModule = typeof import('mapbox-gl')
 
 export default function DriverNavigationMap({ ride, lang }: Props) {
+  const onDashboard = typeof window !== 'undefined' && window.location.pathname === '/driver/dashboard'
   const containerRef = useRef<HTMLDivElement | null>(null)
   const mapboxRef = useRef<MapboxModule | null>(null)
   const mapRef = useRef<MapboxMap | null>(null)
@@ -40,12 +41,19 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
   const targetAddress = goingToDestination ? ride.destination_address : ride.pickup_address
 
   useEffect(() => {
-    setOpened(true)
-    setMapFailed(false)
-  }, [ride.status])
+    if (onDashboard && ['accepted', 'driver_arriving', 'in_progress'].includes(ride.status)) {
+      window.location.replace('/driver/navigation')
+    }
+  }, [onDashboard, ride.status])
 
   useEffect(() => {
-    if (!opened) return
+    if (onDashboard) return
+    setOpened(true)
+    setMapFailed(false)
+  }, [ride.status, onDashboard])
+
+  useEffect(() => {
+    if (onDashboard || !opened) return
     let cancelled = false
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || !containerRef.current || mapRef.current) return
@@ -83,10 +91,10 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       mapboxRef.current = null
       setMapReady(false)
     }
-  }, [opened])
+  }, [opened, onDashboard])
 
   useEffect(() => {
-    if (!opened || !navigator.geolocation) return
+    if (onDashboard || !opened || !navigator.geolocation) return
     watchRef.current = navigator.geolocation.watchPosition(
       (p) => setPosition({ lat: p.coords.latitude, lng: p.coords.longitude, heading: p.coords.heading ?? null }),
       () => {},
@@ -96,9 +104,10 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       if (watchRef.current !== null) navigator.geolocation.clearWatch(watchRef.current)
       watchRef.current = null
     }
-  }, [opened])
+  }, [opened, onDashboard])
 
   useEffect(() => {
+    if (onDashboard) return
     const map = mapRef.current
     const mb = mapboxRef.current?.default
     if (!map || !mb || !position) return
@@ -111,9 +120,10 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
     driverMarkerRef.current.setLngLat([position.lng, position.lat])
     if (position.heading != null) driverMarkerRef.current.setRotation(position.heading)
     map.easeTo({ center: [position.lng, position.lat], zoom: 15.5, bearing: position.heading ?? map.getBearing(), pitch: 50, duration: 700 })
-  }, [position, mapReady])
+  }, [position, mapReady, onDashboard])
 
   useEffect(() => {
+    if (onDashboard) return
     const map = mapRef.current
     const mb = mapboxRef.current?.default
     if (!map || !mb || targetLat == null || targetLng == null) return
@@ -122,9 +132,10 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
     el.className = 'driver-nav-target'
     el.textContent = goingToDestination ? '🏁' : '📍'
     targetMarkerRef.current = new mb.Marker({ element: el }).setLngLat([targetLng, targetLat]).addTo(map)
-  }, [targetLat, targetLng, goingToDestination, mapReady])
+  }, [targetLat, targetLng, goingToDestination, mapReady, onDashboard])
 
   useEffect(() => {
+    if (onDashboard) return
     const map = mapRef.current
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!map || !token || !position || targetLat == null || targetLng == null || !mapReady) return
@@ -157,7 +168,11 @@ export default function DriverNavigationMap({ ride, lang }: Props) {
       }
     })()
     return () => { cancelled = true }
-  }, [position?.lat, position?.lng, targetLat, targetLng, mapReady])
+  }, [position?.lat, position?.lng, targetLat, targetLng, mapReady, onDashboard])
+
+  if (onDashboard) {
+    return <div style={{padding:'14px',borderRadius:16,background:'#eef4ff',color:'#174a8b',fontWeight:800,margin:'12px 0'}}>{lang === 'fr' ? 'Ouverture automatique du GPS…' : 'GPS ap louvri otomatikman…'}</div>
+  }
 
   if (!opened) {
     return <div className="driver-nav-launch">
