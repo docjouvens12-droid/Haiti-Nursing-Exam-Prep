@@ -4,7 +4,7 @@ import { usePathname } from 'next/navigation'
 
 export default function GlobalSpacesButton() {
   const pathname = usePathname()
-  if (pathname === '/spaces') return null
+  if (pathname === '/spaces' || pathname.startsWith('/driver')) return null
 
   return (
     <a
