@@ -16,6 +16,7 @@ import DriverMenuPersonalInfoCleanup from '../components/DriverMenuPersonalInfoC
 import PassengerHomePolish from '../components/PassengerHomePolish'
 import PassengerMenuPolish from '../components/PassengerMenuPolish'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
+import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><DriverDashboardTitleCleanup /><DriverMenuPersonalInfoCleanup /><PassengerHomePolish /><PassengerMenuPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><DriverDashboardTitleCleanup /><DriverMenuPersonalInfoCleanup /><PassengerHomePolish /><PassengerMenuPolish />{children}</body>
     </html>
   )
 }
