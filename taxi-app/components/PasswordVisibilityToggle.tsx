@@ -14,7 +14,7 @@ export default function PasswordVisibilityToggle() {
         if (!parent) return
 
         parent.style.position = 'relative'
-        input.style.paddingRight = '3.25rem'
+        input.style.paddingRight = '3.5rem'
 
         const button = document.createElement('button')
         button.type = 'button'
@@ -22,24 +22,31 @@ export default function PasswordVisibilityToggle() {
         button.setAttribute('title', 'Afficher / masquer le mot de passe')
         button.textContent = '👁'
         button.style.position = 'absolute'
-        button.style.right = '0.75rem'
-        button.style.bottom = '0.78rem'
+        button.style.right = '0.8rem'
+        button.style.top = '50%'
+        button.style.transform = 'translateY(-50%)'
         button.style.border = '0'
         button.style.background = 'transparent'
         button.style.cursor = 'pointer'
-        button.style.fontSize = '1.2rem'
+        button.style.fontSize = '1.25rem'
         button.style.lineHeight = '1'
-        button.style.padding = '0.25rem'
-        button.style.zIndex = '3'
+        button.style.padding = '0.3rem'
+        button.style.zIndex = '10'
+        button.style.webkitAppearance = 'none'
+        button.style.appearance = 'none'
 
-        button.addEventListener('click', () => {
-          const showing = input.type === 'text'
-          input.type = showing ? 'password' : 'text'
-          button.textContent = showing ? '👁' : '🙈'
-          button.setAttribute('aria-label', showing ? 'Afficher le mot de passe' : 'Masquer le mot de passe')
-          input.focus()
-        })
+        const toggle = (event: Event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          const nextType = input.type === 'password' ? 'text' : 'password'
+          input.setAttribute('type', nextType)
+          button.textContent = nextType === 'text' ? '🙈' : '👁'
+          button.setAttribute('aria-label', nextType === 'text' ? 'Masquer le mot de passe' : 'Afficher le mot de passe')
+          requestAnimationFrame(() => input.focus())
+        }
 
+        button.addEventListener('click', toggle)
+        button.addEventListener('touchend', toggle, { passive: false })
         parent.appendChild(button)
       })
     }
