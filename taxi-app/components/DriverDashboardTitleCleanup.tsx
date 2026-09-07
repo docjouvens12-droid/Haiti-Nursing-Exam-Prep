@@ -38,12 +38,22 @@ export default function DriverDashboardTitleCleanup() {
           main.page .brand > span { width: 38px !important; height: 38px !important; border-radius: 12px !important; font-size: 17px !important; }
           main.page .brand strong { font-size: 17px !important; line-height: 1.1 !important; white-space: nowrap !important; }
           main.page .brand small { display: none !important; }
-          main.page .driver-rating-card { gap: 8px; margin-top: 8px !important; }
-          main.page .driver-rating-card > div { min-width: 0; }
-          main.page .ride-count { flex: 0 0 auto; }
-          main.page .section-title { align-items: center; gap: 8px !important; }
-          main.page .section-title h2 { font-size: 20px; margin-right: 4px; }
-          main.page .refresh { padding: 10px 12px !important; font-size: 14px !important; }
+          main.page .driver-rating-card { gap: 8px !important; margin-top: 8px !important; margin-bottom: 10px !important; padding: 11px 12px !important; border-radius: 15px !important; align-items: center !important; }
+          main.page .driver-rating-card > div { min-width: 0; gap: 8px !important; }
+          main.page .rating-star { font-size: 25px !important; }
+          main.page .driver-rating-card small { font-size: 11px !important; }
+          main.page .driver-rating-card strong { font-size: 15px !important; line-height: 1.1 !important; }
+          main.page .ride-count { flex: 0 0 auto; padding: 6px 9px !important; font-size: 11px !important; }
+          main.page .status-card { padding: 12px !important; border-radius: 15px !important; margin-bottom: 8px !important; gap: 9px !important; }
+          main.page .status-card > div { width: 100%; }
+          main.page .status-card strong { font-size: 15px !important; }
+          main.page .status-card small { font-size: 11px !important; line-height: 1.25 !important; }
+          main.page .status-card button { padding: 10px 12px !important; border-radius: 12px !important; font-size: 13px !important; }
+          main.page .section { margin-top: 14px !important; }
+          main.page .section-title { align-items: center; gap: 8px !important; margin-bottom: 8px !important; }
+          main.page .section-title h2 { font-size: 19px !important; margin: 0 !important; }
+          main.page .refresh { padding: 9px 11px !important; font-size: 13px !important; border-radius: 12px !important; }
+          main.page .empty { padding: 22px 18px !important; border-radius: 15px !important; font-size: 14px !important; }
         }
       `
       document.head.appendChild(style)
