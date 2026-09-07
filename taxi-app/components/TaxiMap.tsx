@@ -39,6 +39,7 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
   const [tracking, setTracking] = useState<LiveTracking | null>(null)
   const [driverDistanceKm, setDriverDistanceKm] = useState<number | null>(null)
   const [driverEtaMin, setDriverEtaMin] = useState<number | null>(null)
+  const [driverRouteGeometry, setDriverRouteGeometry] = useState<RouteGeometry | null>(null)
 
   useEffect(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
@@ -112,10 +113,10 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
         type: 'line',
         source: 'taxi-route',
         layout: { 'line-cap': 'round', 'line-join': 'round' },
-        paint: { 'line-color': '#0f7a62', 'line-width': 5, 'line-opacity': 0.9 },
+        paint: { 'line-color': '#0f7a62', 'line-width': 5, 'line-opacity': 0.55 },
       })
 
-      if (pickup && destination) {
+      if (pickup && destination && !tracking) {
         const bounds = new mapboxgl.LngLatBounds()
           .extend([pickup.lng, pickup.lat])
           .extend([destination.lng, destination.lat])
@@ -126,7 +127,7 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
 
     if (map.isStyleLoaded()) render()
     else map.once('load', render)
-  }, [routeGeometry, pickup, destination])
+  }, [routeGeometry, pickup, destination, tracking])
 
   useEffect(() => {
     let active = true
@@ -161,6 +162,7 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
       driverMarkerRef.current = null
       setDriverDistanceKm(null)
       setDriverEtaMin(null)
+      setDriverRouteGeometry(null)
       return
     }
 
@@ -182,22 +184,64 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
     ;(async () => {
       try {
         const coords = `${lng},${lat};${targetLng},${targetLat}`
-        const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=false&steps=false&access_token=${encodeURIComponent(token)}`)
+        const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token)}`)
         const json = await response.json()
         const route = json.routes?.[0]
         if (!route || requestId !== trackingRequestRef.current) return
         setDriverDistanceKm(route.distance / 1000)
         setDriverEtaMin(Math.max(1, Math.round(route.duration / 60)))
+        setDriverRouteGeometry(route.geometry as RouteGeometry)
       } catch {
         if (requestId !== trackingRequestRef.current) return
         setDriverDistanceKm(null)
         setDriverEtaMin(null)
+        setDriverRouteGeometry(null)
       }
     })()
   }, [tracking])
 
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map) return
+
+    const render = () => {
+      if (map.getLayer('driver-live-route')) map.removeLayer('driver-live-route')
+      if (map.getSource('driver-live-route')) map.removeSource('driver-live-route')
+      if (!driverRouteGeometry || !tracking || tracking.driver_latitude == null || tracking.driver_longitude == null) return
+
+      map.addSource('driver-live-route', {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          properties: {},
+          geometry: driverRouteGeometry,
+        },
+      })
+      map.addLayer({
+        id: 'driver-live-route',
+        type: 'line',
+        source: 'driver-live-route',
+        layout: { 'line-cap': 'round', 'line-join': 'round' },
+        paint: { 'line-color': '#1479ff', 'line-width': 6, 'line-opacity': 0.95 },
+      })
+
+      const targetLat = tracking.ride_status === 'in_progress' ? tracking.destination_latitude : tracking.pickup_latitude
+      const targetLng = tracking.ride_status === 'in_progress' ? tracking.destination_longitude : tracking.pickup_longitude
+      if (targetLat == null || targetLng == null) return
+
+      const bounds = new mapboxgl.LngLatBounds()
+        .extend([tracking.driver_longitude, tracking.driver_latitude])
+        .extend([targetLng, targetLat])
+      for (const coord of driverRouteGeometry.coordinates) bounds.extend(coord as [number, number])
+      map.fitBounds(bounds as LngLatBoundsLike, { padding: 72, duration: 500, maxZoom: 15.5 })
+    }
+
+    if (map.isStyleLoaded()) render()
+    else map.once('load', render)
+  }, [driverRouteGeometry, tracking])
+
   const tokenReady = Boolean(process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN)
-  const trackingLabel = tracking?.ride_status === 'in_progress' ? 'Arrivée' : 'Chauffeur'
+  const trackingLabel = tracking?.ride_status === 'in_progress' ? 'Vers la destination' : 'Chauffeur en route'
 
   return (
     <div className="mapbox-wrap">
