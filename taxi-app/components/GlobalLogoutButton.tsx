@@ -27,7 +27,9 @@ export default function GlobalLogoutButton() {
     }
   }, [])
 
-  if (!visible || pathname.startsWith('/driver') || pathname.startsWith('/admin')) return null
+  // Admin pages already render their own logout control. Driver pages need
+  // this global control so drivers can always sign out from the dashboard.
+  if (!visible || pathname.startsWith('/admin')) return null
 
   async function logout() {
     if (busy) return
