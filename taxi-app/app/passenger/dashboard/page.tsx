@@ -5,66 +5,98 @@ import type { Session } from '@supabase/supabase-js'
 import HomePage from '../../page'
 import { supabase } from '../../../lib/supabase'
 
+function readStoredSession(): Session | null {
+  try {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    if (!url) return null
+    const projectRef = new URL(url).hostname.split('.')[0]
+    const raw = window.localStorage.getItem(`sb-${projectRef}-auth-token`)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    const session = (parsed?.currentSession ?? parsed?.session ?? parsed) as Session | null
+    return session?.user && session?.access_token ? session : null
+  } catch {
+    return null
+  }
+}
+
 export default function PassengerDashboardPage() {
   const [session, setSession] = useState<Session | null>(null)
   const [ready, setReady] = useState(false)
-  const [showDashboard, setShowDashboard] = useState(false)
 
   useEffect(() => {
     let active = true
+    let restoreAuth: (() => void) | null = null
 
-    const loadSession = async () => {
-      const { data } = await supabase.auth.getSession()
+    const finishWithSession = (stableSession: Session) => {
       if (!active) return
 
-      if (!data.session?.user) {
-        window.location.replace('/passenger/login')
-        return
+      const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
+      const originalOnAuthStateChange = supabase.auth.onAuthStateChange.bind(supabase.auth)
+
+      supabase.auth.getUser = (async () => ({
+        data: { user: stableSession.user },
+        error: null,
+      })) as typeof supabase.auth.getUser
+
+      supabase.auth.onAuthStateChange = ((callback: Parameters<typeof supabase.auth.onAuthStateChange>[0]) => {
+        return originalOnAuthStateChange((event, nextSession) => {
+          callback(event, nextSession?.user ? nextSession : stableSession)
+        })
+      }) as typeof supabase.auth.onAuthStateChange
+
+      restoreAuth = () => {
+        supabase.auth.getUser = originalGetUser as typeof supabase.auth.getUser
+        supabase.auth.onAuthStateChange = originalOnAuthStateChange as typeof supabase.auth.onAuthStateChange
       }
 
-      setSession(data.session)
+      setSession(stableSession)
       setReady(true)
+    }
+
+    const loadSession = async () => {
+      const localSession = readStoredSession()
+
+      try {
+        const result = await Promise.race([
+          supabase.auth.getSession(),
+          new Promise<null>((resolve) => window.setTimeout(() => resolve(null), 1400)),
+        ])
+
+        if (!active) return
+
+        const remoteSession = result && 'data' in result ? result.data.session : null
+        const stableSession = remoteSession?.user ? remoteSession : localSession
+
+        if (stableSession?.user) {
+          finishWithSession(stableSession)
+          return
+        }
+      } catch {
+        if (localSession?.user) {
+          finishWithSession(localSession)
+          return
+        }
+      }
+
+      if (!active) return
+      setReady(true)
+      window.location.replace('/passenger/login')
     }
 
     void loadSession()
 
-    const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      if (!active || !nextSession?.user) return
-      setSession(nextSession)
-      setReady(true)
-    })
-
     return () => {
       active = false
-      listener.subscription.unsubscribe()
+      restoreAuth?.()
     }
   }, [])
-
-  // HomePage has its own legacy auth bootstrap. Mount it hidden briefly so its
-  // getUser()/auth listener can recover the already-persisted Supabase session,
-  // but never block the passenger dashboard on another setSession() call.
-  useEffect(() => {
-    if (!ready || !session?.user) return
-
-    const revealTimer = window.setTimeout(() => {
-      setShowDashboard(true)
-    }, 650)
-
-    return () => window.clearTimeout(revealTimer)
-  }, [ready, session?.user?.id])
 
   if (!ready || !session?.user) {
     return <LoadingScreen />
   }
 
-  return (
-    <>
-      {!showDashboard && <LoadingScreen />}
-      <div style={{ display: showDashboard ? 'contents' : 'none' }}>
-        <HomePage />
-      </div>
-    </>
-  )
+  return <HomePage />
 }
 
 function LoadingScreen() {
