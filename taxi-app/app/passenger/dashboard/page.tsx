@@ -22,26 +22,40 @@ export default function PassengerDashboardPage() {
         return
       }
 
-      // Re-prime the exact session before mounting HomePage. This avoids the
-      // second auth check inside HomePage seeing a transient null user on
-      // Safari immediately after navigation from the passenger login page.
-      const { data: primed, error } = await supabase.auth.setSession({
+      const { data: primed, error: primeError } = await supabase.auth.setSession({
         access_token: data.session.access_token,
         refresh_token: data.session.refresh_token,
       })
 
       if (!active) return
 
-      if (error || !primed.session?.user) {
+      if (primeError || !primed.session?.user) {
         setReady(true)
         window.location.replace('/passenger/login')
         return
       }
 
-      setSession(primed.session)
-      window.setTimeout(() => {
-        if (active) setReady(true)
-      }, 120)
+      const { data: refreshed, error: refreshError } = await supabase.auth.refreshSession(primed.session)
+      if (!active) return
+
+      const stableSession = refreshed.session ?? primed.session
+      if (refreshError || !stableSession?.user) {
+        setReady(true)
+        window.location.replace('/passenger/login')
+        return
+      }
+
+      const { data: verified, error: verifyError } = await supabase.auth.getUser()
+      if (!active) return
+
+      if (verifyError || !verified.user) {
+        setReady(true)
+        window.location.replace('/passenger/login')
+        return
+      }
+
+      setSession(stableSession)
+      setReady(true)
     }
 
     void loadSession()
@@ -49,7 +63,6 @@ export default function PassengerDashboardPage() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (!active || !nextSession?.user) return
       setSession(nextSession)
-      setReady(true)
     })
 
     return () => {
