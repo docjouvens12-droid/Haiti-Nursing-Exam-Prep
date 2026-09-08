@@ -23,9 +23,9 @@ export default function PassengerLanguageLogoutPolish() {
       .nav-drawer .drawer-user{margin:0 0 4px!important;padding:2px 0!important;min-height:0!important}
       .nav-drawer .drawer-nav{gap:0!important;margin:0!important;padding:0!important}
       .nav-drawer .drawer-nav>button{min-height:38px!important;margin:0!important;padding:6px 4px!important;font-size:12px!important;line-height:1.15!important}
-      .nav-drawer [data-passenger-language-row="true"]{display:grid!important;grid-template-columns:24px minmax(0,1fr)!important;align-items:center!important;gap:7px!important;margin:0!important;padding:7px 4px!important;border-top:1px solid #e7ecef!important;border-bottom:0!important;background:#fff!important;min-height:0!important}
-      .passenger-language-icon{font-size:15px;line-height:1}
-      .passenger-language-main{display:grid;gap:4px;min-width:0}
+      .nav-drawer [data-passenger-language-row="true"]{display:block!important;margin:0!important;padding:7px 4px!important;border-top:1px solid #e7ecef!important;border-bottom:0!important;background:#fff!important;min-height:0!important}
+      .passenger-language-icon{display:none!important}
+      .passenger-language-main{display:grid;gap:4px;min-width:0;padding-left:0!important}
       .passenger-language-title{font-size:11px;font-weight:800;color:#5f6f7d;line-height:1}
       .passenger-lang-shell{width:132px;max-width:100%;height:28px;border:0!important;border-radius:0!important;background:transparent!important;padding:0 8px!important;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;cursor:pointer;overflow:visible;box-sizing:border-box;box-shadow:none!important}
       .passenger-lang-shell::before,.passenger-lang-shell::after{display:none!important;content:none!important}
@@ -100,10 +100,6 @@ export default function PassengerLanguageLogoutPolish() {
           nativeLang.dataset.passengerLanguageRow = 'true'
           nativeLang.innerHTML = ''
 
-          const icon = document.createElement('span')
-          icon.className = 'passenger-language-icon'
-          icon.textContent = '🌐'
-
           const main = document.createElement('div')
           main.className = 'passenger-language-main'
           const title = document.createElement('span')
@@ -125,7 +121,7 @@ export default function PassengerLanguageLogoutPolish() {
           ht.textContent = 'KREYÒL'
           shell.append(knob, fr, ht)
           main.append(title, shell)
-          nativeLang.append(icon, main)
+          nativeLang.append(main)
 
           const paint = () => {
             const isHt = window.localStorage.getItem('taxi-language') === 'ht'
