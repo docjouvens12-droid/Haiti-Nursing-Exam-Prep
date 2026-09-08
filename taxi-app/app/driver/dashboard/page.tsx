@@ -269,23 +269,26 @@ export default function DriverDashboardPage() {
 function RideOffer({ ride, t, busy, onAccept, onReject }: { ride: Ride; t: any; busy: boolean; onAccept: () => void; onReject: (reason: 'rejected' | 'timeout') => void }) {
   const [seconds, setSeconds] = useState(20)
   const finishedRef = useRef(false)
+  const rejectRef = useRef(onReject)
 
   useEffect(() => {
+    rejectRef.current = onReject
+  }, [onReject])
+
+  useEffect(() => {
+    setSeconds(20)
+    finishedRef.current = false
     const timer = window.setInterval(() => {
-      setSeconds((current) => {
-        if (current <= 1) {
-          window.clearInterval(timer)
-          if (!finishedRef.current) {
-            finishedRef.current = true
-            onReject('timeout')
-          }
-          return 0
-        }
-        return current - 1
-      })
+      setSeconds((current) => Math.max(0, current - 1))
     }, 1000)
     return () => window.clearInterval(timer)
   }, [ride.id])
+
+  useEffect(() => {
+    if (seconds !== 0 || finishedRef.current) return
+    finishedRef.current = true
+    rejectRef.current('timeout')
+  }, [seconds])
 
   function accept() {
     if (finishedRef.current) return
