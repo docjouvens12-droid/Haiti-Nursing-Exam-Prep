@@ -24,7 +24,6 @@ type RideRow = {
 }
 
 type AlertKind = 'stopped' | 'deviation'
-
 type Sample = { lat: number; lng: number; at: number }
 
 const STOP_WINDOW_MS = 4 * 60 * 1000
@@ -35,6 +34,7 @@ export default function PassengerRideSafetyMonitor() {
   const pathname = usePathname()
   const enabled = pathname === '/' || pathname === '/passenger/dashboard'
   const [ride, setRide] = useState<RideRow | null>(null)
+  const [userId, setUserId] = useState<string | null>(null)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
   const [alertKind, setAlertKind] = useState<AlertKind | null>(null)
   const [routeCoords, setRouteCoords] = useState<Array<[number, number]>>([])
@@ -42,6 +42,7 @@ export default function PassengerRideSafetyMonitor() {
   const deviationHitsRef = useRef(0)
   const routeRideRef = useRef<string | null>(null)
   const dismissedRef = useRef<Record<string, number>>({})
+  const loggedRef = useRef<Record<string, boolean>>({})
 
   useEffect(() => {
     if (!enabled) return
@@ -58,6 +59,27 @@ export default function PassengerRideSafetyMonitor() {
   useEffect(() => {
     if (!enabled) return
     let active = true
+
+    async function recordEvent(row: RideRow, kind: AlertKind, details: Record<string, unknown>) {
+      const eventType = kind === 'stopped' ? 'stalled' : 'route_deviation'
+      const key = `${row.ride_id}:${eventType}`
+      if (loggedRef.current[key]) return
+
+      const { data: auth } = await supabase.auth.getUser()
+      const uid = auth.user?.id
+      if (!uid) return
+      if (active) setUserId(uid)
+
+      const { error } = await supabase.from('ride_safety_events').insert({
+        ride_id: row.ride_id,
+        passenger_id: uid,
+        event_type: eventType,
+        severity: 'warning',
+        details,
+      })
+
+      if (!error || error.code === '23505') loggedRef.current[key] = true
+    }
 
     async function buildRoute(row: RideRow) {
       if (routeRideRef.current === row.ride_id && routeCoords.length) return
@@ -76,7 +98,7 @@ export default function PassengerRideSafetyMonitor() {
           setRouteCoords(coordinates as Array<[number, number]>)
         }
       } catch {
-        // Safety monitor simply skips route-deviation checks when routing is unavailable.
+        // Skip route-deviation checks when routing is unavailable.
       }
     }
 
@@ -104,6 +126,13 @@ export default function PassengerRideSafetyMonitor() {
         const speed = Number(row.driver_speed_kph ?? 0)
         if (moved < STOP_RADIUS_METERS && speed < 3 && !stoppedDismissedRecently) {
           setAlertKind('stopped')
+          void recordEvent(row, 'stopped', {
+            moved_meters: Math.round(moved),
+            speed_kph: speed,
+            observation_seconds: Math.round((now - oldest.at) / 1000),
+            driver_latitude: sample.lat,
+            driver_longitude: sample.lng,
+          })
           return
         }
       }
@@ -115,6 +144,12 @@ export default function PassengerRideSafetyMonitor() {
 
         if (deviationHitsRef.current >= 2 && !deviationDismissedRecently) {
           setAlertKind('deviation')
+          void recordEvent(row, 'deviation', {
+            distance_from_route_meters: Math.round(distance),
+            consecutive_checks: deviationHitsRef.current,
+            driver_latitude: sample.lat,
+            driver_longitude: sample.lng,
+          })
           return
         }
       }
@@ -125,9 +160,13 @@ export default function PassengerRideSafetyMonitor() {
     async function load() {
       const { data: auth } = await supabase.auth.getUser()
       if (!active || !auth.user) {
-        if (active) setRide(null)
+        if (active) {
+          setRide(null)
+          setUserId(null)
+        }
         return
       }
+      setUserId(auth.user.id)
       const { data, error } = await supabase.rpc('get_passenger_active_ride_bundle')
       if (!active) return
       const next = (!error ? (Array.isArray(data) ? data[0] : data) : null) as RideRow | null
@@ -180,9 +219,18 @@ export default function PassengerRideSafetyMonitor() {
 
   const safetyHref = `/passenger/help?ride=${encodeURIComponent(ride.ride_id)}&category=safety`
 
-  function dismiss() {
-    dismissedRef.current[`${ride.ride_id}:${alertKind}`] = Date.now()
+  async function dismiss() {
+    const currentKind = alertKind
+    dismissedRef.current[`${ride.ride_id}:${currentKind}`] = Date.now()
     setAlertKind(null)
+    if (!userId) return
+    const eventType = currentKind === 'stopped' ? 'stalled' : 'route_deviation'
+    await supabase
+      .from('ride_safety_events')
+      .update({ acknowledged_at: new Date().toISOString() })
+      .eq('ride_id', ride.ride_id)
+      .eq('passenger_id', userId)
+      .eq('event_type', eventType)
   }
 
   async function share() {
@@ -194,14 +242,25 @@ export default function PassengerRideSafetyMonitor() {
     }
   }
 
+  async function recordManualSafetyOpen() {
+    if (!userId) return
+    await supabase.from('ride_safety_events').insert({
+      ride_id: ride.ride_id,
+      passenger_id: userId,
+      event_type: 'manual_safety_opened',
+      severity: 'info',
+      details: { source_alert: alertKind },
+    })
+  }
+
   return <div className="safetyOverlay" role="dialog" aria-live="assertive" aria-label={title}>
     <div className="safetyCard">
       <div className="shield">🛡</div>
       <div className="copy"><strong>{title}</strong><p>{detail}</p></div>
       <div className="actions">
-        <button type="button" className="ok" onClick={dismiss}>{lang === 'ht' ? 'Mwen anfòm' : 'Tout va bien'}</button>
-        <button type="button" className="share" onClick={share}>↗ {lang === 'ht' ? 'Pataje trajè' : 'Partager'}</button>
-        <a className="safety" href={safetyHref}>🛡 {lang === 'ht' ? 'Sekirite' : 'Sécurité'}</a>
+        <button type="button" className="ok" onClick={() => void dismiss()}>{lang === 'ht' ? 'Mwen anfòm' : 'Tout va bien'}</button>
+        <button type="button" className="share" onClick={() => void share()}>↗ {lang === 'ht' ? 'Pataje trajè' : 'Partager'}</button>
+        <a className="safety" href={safetyHref} onClick={() => void recordManualSafetyOpen()}>🛡 {lang === 'ht' ? 'Sekirite' : 'Sécurité'}</a>
       </div>
       <small>{lang === 'ht' ? 'Alèt sa a baze sou GPS epi li ka gen fo alèt.' : 'Cette alerte est basée sur le GPS et peut produire de faux positifs.'}</small>
     </div>
