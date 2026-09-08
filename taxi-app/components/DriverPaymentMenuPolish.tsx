@@ -19,6 +19,7 @@ export default function DriverPaymentMenuPolish() {
         .driver-payment-menu-content{display:none;padding:0 0 12px}
         .driver-payment-menu-section.open .driver-payment-menu-content{display:block}
         .driver-payout-provider{margin:10px 0;padding:12px;border-radius:14px;background:#f7f9fa;border:1px solid #e2e8ed}
+        .driver-payout-provider.preferred{border-color:#9fd1c1;background:#f1faf7;box-shadow:inset 0 0 0 1px rgba(15,111,89,.08)}
         .driver-payout-head{display:flex;justify-content:space-between;align-items:center;gap:12px}
         .driver-payout-head strong{font-size:14px;color:#102033}
         .driver-payout-switch{position:relative;width:48px;height:28px;border:0;border-radius:999px;background:#b9c4cc;padding:0;transition:.18s ease}
@@ -29,7 +30,12 @@ export default function DriverPaymentMenuPolish() {
         .driver-payout-provider.enabled .driver-payout-form{display:grid}
         .driver-payout-form label{display:grid;gap:5px;font-size:12px;font-weight:750;color:#526273}
         .driver-payout-form input{width:100%;box-sizing:border-box;border:1px solid #d9e1e7;border-radius:11px;padding:10px 11px;font-size:15px;background:#fff;color:#102033}
-        .driver-payout-save{border:0;border-radius:11px;padding:10px 12px;background:#0f6f59;color:#fff;font-weight:900;font-size:13px}
+        .driver-payout-save,.driver-payout-prefer{border:0;border-radius:11px;padding:10px 12px;font-weight:900;font-size:13px}
+        .driver-payout-save{background:#0f6f59;color:#fff}
+        .driver-payout-prefer{background:#e7f3ef;color:#0f6f59;border:1px solid #c7e4db}
+        .driver-payout-provider.preferred .driver-payout-prefer{background:#0f6f59;color:#fff;border-color:#0f6f59}
+        .driver-payout-preferred-label{display:none;font-size:10px;font-weight:900;color:#0f6f59;text-transform:uppercase;letter-spacing:.04em}
+        .driver-payout-provider.preferred .driver-payout-preferred-label{display:block}
         .driver-payout-note{font-size:11px;line-height:1.35;color:#778694;margin:0}
         .driver-payout-status{min-height:16px;font-size:11px;font-weight:750;color:#0f6f59}
       `
@@ -58,7 +64,7 @@ export default function DriverPaymentMenuPolish() {
 
         const { data: payout } = await supabase
           .from('driver_profiles')
-          .select('moncash_enabled,moncash_name,moncash_phone,natcash_enabled,natcash_name,natcash_phone')
+          .select('moncash_enabled,moncash_name,moncash_phone,natcash_enabled,natcash_name,natcash_phone,preferred_payout_provider')
           .eq('user_id', auth.user.id)
           .maybeSingle()
         if (disposed) return
@@ -74,8 +80,8 @@ export default function DriverPaymentMenuPolish() {
             <span class="arrow" aria-hidden="true">›</span>
           </button>
           <div class="driver-payment-menu-content">
-            ${providerMarkup('moncash', 'MonCash', Boolean(payout?.moncash_enabled), payout?.moncash_name ?? '', payout?.moncash_phone ?? '', lang)}
-            ${providerMarkup('natcash', 'NatCash', Boolean(payout?.natcash_enabled), payout?.natcash_name ?? '', payout?.natcash_phone ?? '', lang)}
+            ${providerMarkup('moncash', 'MonCash', Boolean(payout?.moncash_enabled), payout?.moncash_name ?? '', payout?.moncash_phone ?? '', payout?.preferred_payout_provider === 'moncash', lang)}
+            ${providerMarkup('natcash', 'NatCash', Boolean(payout?.natcash_enabled), payout?.natcash_name ?? '', payout?.natcash_phone ?? '', payout?.preferred_payout_provider === 'natcash', lang)}
           </div>
         `
 
@@ -84,10 +90,22 @@ export default function DriverPaymentMenuPolish() {
           section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.setAttribute('aria-expanded', String(open))
         })
 
+        const setPreferredUi = (provider: 'moncash' | 'natcash') => {
+          for (const candidate of ['moncash', 'natcash'] as const) {
+            const candidateBox = section.querySelector<HTMLElement>(`[data-provider="${candidate}"]`)
+            candidateBox?.classList.toggle('preferred', candidate === provider)
+            const prefer = candidateBox?.querySelector<HTMLButtonElement>('.driver-payout-prefer')
+            if (prefer) prefer.textContent = candidate === provider
+              ? (lang === 'ht' ? '✓ Metòd payout mwen' : '✓ Mon mode de versement')
+              : (lang === 'ht' ? 'Chwazi pou resevwa payout' : 'Choisir pour recevoir mes versements')
+          }
+        }
+
         for (const provider of ['moncash', 'natcash'] as const) {
           const box = section.querySelector<HTMLElement>(`[data-provider="${provider}"]`)
           const toggle = box?.querySelector<HTMLButtonElement>('.driver-payout-switch')
           const save = box?.querySelector<HTMLButtonElement>('.driver-payout-save')
+          const prefer = box?.querySelector<HTMLButtonElement>('.driver-payout-prefer')
           const name = box?.querySelector<HTMLInputElement>('input[name="name"]')
           const phone = box?.querySelector<HTMLInputElement>('input[name="phone"]')
           const status = box?.querySelector<HTMLElement>('.driver-payout-status')
@@ -121,6 +139,25 @@ export default function DriverPaymentMenuPolish() {
               : (lang === 'ht' ? 'Enfòmasyon yo anrejistre.' : 'Informations enregistrées.')
             save.disabled = false
           })
+
+          prefer?.addEventListener('click', async () => {
+            const accountName = name?.value.trim() ?? ''
+            const accountPhone = phone?.value.trim() ?? ''
+            if (!box?.classList.contains('enabled') || !accountName || !accountPhone) {
+              if (status) status.textContent = lang === 'ht'
+                ? `Aktive ${provider === 'moncash' ? 'MonCash' : 'NatCash'} epi anrejistre non ak telefòn lan anvan.`
+                : `Activez ${provider === 'moncash' ? 'MonCash' : 'NatCash'} et enregistrez le nom et le téléphone d’abord.`
+              return
+            }
+            prefer.disabled = true
+            if (status) status.textContent = lang === 'ht' ? 'N ap chwazi metòd payout la…' : 'Sélection du mode de versement…'
+            const { error } = await supabase.rpc('set_driver_preferred_payout_provider', { p_provider: provider })
+            if (!error) setPreferredUi(provider)
+            if (status) status.textContent = error
+              ? (lang === 'ht' ? 'Nou pa ka chwazi metòd payout la.' : 'Impossible de sélectionner ce mode de versement.')
+              : (lang === 'ht' ? 'Metòd payout la chwazi.' : 'Mode de versement sélectionné.')
+            prefer.disabled = false
+          })
         }
 
         const languageSection = Array.from(drawer.querySelectorAll<HTMLElement>('.menuSection')).find((item) => {
@@ -147,11 +184,11 @@ export default function DriverPaymentMenuPolish() {
   return null
 }
 
-function providerMarkup(provider: 'moncash' | 'natcash', label: string, enabled: boolean, name: string, phone: string, lang: 'fr' | 'ht') {
+function providerMarkup(provider: 'moncash' | 'natcash', label: string, enabled: boolean, name: string, phone: string, preferred: boolean, lang: 'fr' | 'ht') {
   return `
-    <div class="driver-payout-provider${enabled ? ' enabled' : ''}" data-provider="${provider}">
+    <div class="driver-payout-provider${enabled ? ' enabled' : ''}${preferred ? ' preferred' : ''}" data-provider="${provider}">
       <div class="driver-payout-head">
-        <strong>${label}</strong>
+        <div><strong>${label}</strong><span class="driver-payout-preferred-label">${lang === 'ht' ? 'Metòd payout chwazi' : 'Mode de versement choisi'}</span></div>
         <button type="button" class="driver-payout-switch" aria-label="${label}" aria-pressed="${enabled}"></button>
       </div>
       <div class="driver-payout-form">
@@ -159,6 +196,7 @@ function providerMarkup(provider: 'moncash' | 'natcash', label: string, enabled:
         <label>${lang === 'ht' ? 'Telefòn ki asosye ak kont lan' : 'Téléphone associé au compte'}<input name="phone" type="tel" value="${escapeHtml(phone)}" autocomplete="tel" inputmode="tel" /></label>
         <p class="driver-payout-note">${lang === 'ht' ? `Nimewo sa a dwe menm nimewo ki asosye ak kont ${label} la.` : `Ce numéro doit être celui associé au compte ${label}.`}</p>
         <button type="button" class="driver-payout-save">${lang === 'ht' ? 'Anrejistre' : 'Enregistrer'}</button>
+        <button type="button" class="driver-payout-prefer">${preferred ? (lang === 'ht' ? '✓ Metòd payout mwen' : '✓ Mon mode de versement') : (lang === 'ht' ? 'Chwazi pou resevwa payout' : 'Choisir pour recevoir mes versements')}</button>
         <div class="driver-payout-status" aria-live="polite"></div>
       </div>
     </div>
@@ -166,5 +204,5 @@ function providerMarkup(provider: 'moncash' | 'natcash', label: string, enabled:
 }
 
 function escapeHtml(value: string) {
-  return value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char] ?? char))
+  return value.replace(/[&<>'\"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char] ?? char))
 }
