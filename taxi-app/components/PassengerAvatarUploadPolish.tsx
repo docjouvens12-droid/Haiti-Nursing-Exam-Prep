@@ -13,8 +13,20 @@ export default function PassengerAvatarUploadPolish() {
       const drawer = document.querySelector<HTMLElement>('.nav-drawer')
       const avatar = drawer?.querySelector<HTMLElement>('.drawer-avatar')
       const userBlock = drawer?.querySelector<HTMLElement>('.drawer-user')
-      if (!drawer || !avatar || !userBlock || avatar.dataset.passengerAvatarReady === 'true') return
+      if (!drawer || !avatar || !userBlock) return
 
+      Array.from(userBlock.children).forEach((child) => {
+        const element = child as HTMLElement
+        if (element === avatar || element.tagName === 'INPUT') return
+        element.style.setProperty('display', 'none', 'important')
+      })
+      Array.from(userBlock.childNodes).forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE && node.textContent?.trim()) node.textContent = ''
+      })
+      userBlock.style.setProperty('justify-content', 'flex-start', 'important')
+      userBlock.style.setProperty('gap', '0', 'important')
+
+      if (avatar.dataset.passengerAvatarReady === 'true') return
       avatar.dataset.passengerAvatarReady = 'true'
       avatar.setAttribute('role', 'button')
       avatar.setAttribute('tabindex', '0')
