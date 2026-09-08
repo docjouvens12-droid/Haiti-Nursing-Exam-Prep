@@ -15,44 +15,48 @@ export default function PassengerMenuCompactPolish() {
     style.id = id
     style.textContent = `
       .nav-drawer{
-        width:min(58vw,238px)!important;
+        width:min(60vw,244px)!important;
         height:auto!important;
         min-height:0!important;
         max-height:calc(100dvh - 8px)!important;
-        padding:7px 9px 8px!important;
+        padding:8px 10px 10px!important;
         border-bottom-right-radius:18px!important;
         font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
       }
-      .nav-drawer .drawer-head{padding:0!important;margin:0!important;min-height:30px!important}
+      .nav-drawer .drawer-head{padding:0!important;margin:0 0 3px!important;min-height:30px!important}
       .nav-drawer .drawer-head>button{width:29px!important;height:29px!important;font-size:18px!important}
-      .nav-drawer .drawer-user{margin:0!important;padding:0!important;min-height:36px!important}
-      .nav-drawer .drawer-avatar{width:36px!important;height:36px!important;font-size:13px!important;font-weight:800!important}
-      .nav-drawer .drawer-nav{display:grid!important;gap:0!important;margin:0!important;padding:0!important}
+      .nav-drawer .drawer-user{margin:0 0 5px!important;padding:0!important;min-height:38px!important}
+      .nav-drawer .drawer-avatar{width:38px!important;height:38px!important;font-size:13px!important;font-weight:800!important}
+      .nav-drawer .drawer-nav{display:grid!important;gap:1px!important;margin:0!important;padding:0!important}
       .nav-drawer .drawer-nav>button{
+        display:grid!important;
+        grid-template-columns:24px minmax(0,1fr) 14px!important;
+        align-items:center!important;
+        gap:7px!important;
         width:100%!important;
-        min-height:36px!important;
-        height:36px!important;
+        min-height:38px!important;
+        height:38px!important;
         margin:0!important;
-        padding:5px 3px!important;
+        padding:6px 6px!important;
         border:0!important;
-        border-radius:8px!important;
+        border-radius:9px!important;
         background:transparent!important;
         color:#243747!important;
         font-family:inherit!important;
         font-size:12px!important;
         font-weight:750!important;
         line-height:1!important;
+        text-align:left!important;
         box-shadow:none!important;
       }
       .nav-drawer .drawer-nav>button.active{background:#eef7f4!important;color:#243747!important}
       .nav-drawer .drawer-nav>button>*{color:#243747!important;font-family:inherit!important;font-weight:750!important}
-      .nav-drawer .drawer-nav>button span{font-size:14px!important;line-height:1!important}
-      .nav-drawer .drawer-nav>button b{font-size:12px!important;line-height:1!important;color:#243747!important}
-      .nav-drawer .drawer-nav>button b:last-child{font-size:14px!important;font-weight:700!important;color:#243747!important}
+      .nav-drawer .drawer-nav>button span:first-child{display:flex!important;align-items:center!important;justify-content:center!important;width:20px!important;font-size:14px!important;line-height:1!important}
+      .nav-drawer .drawer-nav>button b:last-child{font-size:14px!important;font-weight:700!important;color:#7a8998!important;text-align:right!important}
 
       .passenger-profile-details,.passenger-payment-details{
         margin:0!important;
-        padding:1px 2px 4px 24px!important;
+        padding:2px 4px 5px 31px!important;
         border-bottom:1px solid #edf0f2!important;
       }
       .passenger-profile-details p{margin:4px 0!important;font-size:10.5px!important;line-height:1.15!important}
@@ -70,7 +74,7 @@ export default function PassengerMenuCompactPolish() {
         width:100%!important;
         box-sizing:border-box!important;
         margin:0!important;
-        padding:0 0 3px 0!important;
+        padding:0 0 4px 31px!important;
         border:0!important;
         background:transparent!important;
       }
@@ -87,40 +91,49 @@ export default function PassengerMenuCompactPolish() {
       .passenger-help-answer{margin:0!important;padding:5px 6px!important;font-size:9.5px!important;line-height:1.3!important}
       .passenger-help-contact{min-height:32px!important;padding:6px!important;margin:0!important;border-radius:8px!important;font-size:10.5px!important;font-weight:750!important}
 
-      .nav-drawer .drawer-language{
-        min-height:36px!important;
-        margin:0!important;
-        padding:4px 3px!important;
-        border-top:1px solid #edf0f2!important;
+      .nav-drawer .drawer-language,
+      .nav-drawer [data-passenger-language-row="true"]{
+        min-height:40px!important;
+        margin:5px 0 0!important;
+        padding:7px 6px 4px!important;
+        border-top:1px solid #dde5e9!important;
         color:#243747!important;
         font-family:inherit!important;
       }
       .nav-drawer .drawer-language small,
       .nav-drawer .drawer-language>span,
-      .nav-drawer .drawer-language b{
-        font-size:12px!important;
+      .nav-drawer .drawer-language b,
+      .passenger-language-title{
+        font-size:11px!important;
         font-weight:750!important;
-        color:#243747!important;
+        color:#5f6f7d!important;
         line-height:1!important;
       }
-      .nav-drawer .drawer-language small{margin:0 0 1px!important}
+      .nav-drawer .drawer-language small{margin:0 0 2px!important}
       .nav-drawer .drawer-language .language-trigger{padding:5px 6px!important;font-size:12px!important;font-weight:750!important;color:#243747!important}
-      .passenger-lang-shell{height:32px!important;font-family:inherit!important}
+      .passenger-lang-shell{height:30px!important;font-family:inherit!important}
       .passenger-lang-label{font-size:9.5px!important;font-weight:800!important}
-      .nav-drawer .drawer-logout{
+
+      .nav-drawer .drawer-nav>button[data-passenger-help-route="true"],
+      .nav-drawer .drawer-nav>button[data-passenger-help-ready="true"]{
+        margin-top:1px!important;
+      }
+
+      .nav-drawer .drawer-logout,
+      .nav-drawer [data-passenger-logout="true"]{
         width:100%!important;
-        min-height:36px!important;
-        height:36px!important;
-        margin:2px 0 0!important;
-        padding:6px 8px!important;
-        border-radius:8px!important;
+        min-height:38px!important;
+        height:38px!important;
+        margin:6px 0 0!important;
+        padding:7px 10px!important;
+        border-radius:9px!important;
         font-family:inherit!important;
         font-size:12px!important;
         font-weight:750!important;
         line-height:1!important;
-        color:#243747!important;
-        background:transparent!important;
-        border:0!important;
+        color:#9a3030!important;
+        background:#fff7f7!important;
+        border:1px solid #efdede!important;
         box-shadow:none!important;
       }
     `
