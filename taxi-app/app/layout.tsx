@@ -20,6 +20,7 @@ import DriverLanguageSwitchPolish from '../components/DriverLanguageSwitchPolish
 import DriverDashboardTitleHide from '../components/DriverDashboardTitleHide'
 import DriverOnlineSwitchPolish from '../components/DriverOnlineSwitchPolish'
 import DriverBrandTaxiPolish from '../components/DriverBrandTaxiPolish'
+import DriverCompactBrandPolish from '../components/DriverCompactBrandPolish'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 import LoginTitlePolish from '../components/LoginTitlePolish'
@@ -32,7 +33,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish />{children}</body>
     </html>
   )
 }
