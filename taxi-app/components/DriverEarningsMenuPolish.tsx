@@ -42,7 +42,7 @@ export default function DriverEarningsMenuPolish() {
           .eq('status', 'completed'),
         supabase
           .from('rides')
-          .select('final_fare_htg')
+          .select('id,final_fare_htg')
           .eq('driver_id', userId)
           .eq('status', 'completed')
           .gte('completed_at', startOfToday),
@@ -57,6 +57,7 @@ export default function DriverEarningsMenuPolish() {
       return {
         latestFare: latestCompleted?.final_fare_htg != null ? Number(latestCompleted.final_fare_htg) : null,
         rideCount: completedRides?.length ?? 0,
+        todayRideCount: todayRides?.length ?? 0,
         todayRevenue: (todayRides ?? []).reduce((sum, ride) => sum + Number(ride.final_fare_htg ?? 0), 0),
         weeklyRevenue: (weeklyRides ?? []).reduce((sum, ride) => sum + Number(ride.final_fare_htg ?? 0), 0),
       }
@@ -74,10 +75,12 @@ export default function DriverEarningsMenuPolish() {
 
       const latest = section.querySelector<HTMLElement>('[data-earning-value="latest"]')
       const count = section.querySelector<HTMLElement>('[data-earning-value="count"]')
+      const todayCount = section.querySelector<HTMLElement>('[data-earning-value="today-count"]')
       const today = section.querySelector<HTMLElement>('[data-earning-value="today"]')
       const weekly = section.querySelector<HTMLElement>('[data-earning-value="weekly"]')
       if (latest) latest.textContent = formatHtg(values.latestFare)
       if (count) count.textContent = String(values.rideCount)
+      if (todayCount) todayCount.textContent = String(values.todayRideCount)
       if (today) today.textContent = formatHtg(values.todayRevenue)
       if (weekly) weekly.textContent = formatHtg(values.weeklyRevenue)
     }
@@ -128,7 +131,7 @@ export default function DriverEarningsMenuPolish() {
         })
         title.appendChild(arrow)
 
-        const makeRow = (label: string, value: string, key: 'latest' | 'count' | 'today' | 'weekly') => {
+        const makeRow = (label: string, value: string, key: 'latest' | 'count' | 'today-count' | 'today' | 'weekly') => {
           const row = document.createElement('p')
           const left = document.createElement('span')
           const right = document.createElement('b')
@@ -141,7 +144,8 @@ export default function DriverEarningsMenuPolish() {
 
         const rows = [
           makeRow(lang === 'ht' ? 'Salè pa trajè' : 'Revenu du dernier trajet', formatHtg(values.latestFare), 'latest'),
-          makeRow(lang === 'ht' ? 'Kantite trajè' : 'Nombre de trajets', String(values.rideCount), 'count'),
+          makeRow(lang === 'ht' ? 'Kantite trajè total' : 'Nombre total de trajets', String(values.rideCount), 'count'),
+          makeRow(lang === 'ht' ? 'Trajè jodi a' : "Trajets aujourd’hui", String(values.todayRideCount), 'today-count'),
           makeRow(lang === 'ht' ? 'Revni jodi a' : "Revenu aujourd’hui", formatHtg(values.todayRevenue), 'today'),
           makeRow(lang === 'ht' ? 'Revni pa semèn' : 'Revenu sur 7 jours', formatHtg(values.weeklyRevenue), 'weekly'),
         ]
