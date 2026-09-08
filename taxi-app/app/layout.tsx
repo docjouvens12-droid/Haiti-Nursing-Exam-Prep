@@ -17,6 +17,7 @@ import PassengerMobilePaymentPolish from '../components/PassengerMobilePaymentPo
 import PassengerMenuPolish from '../components/PassengerMenuPolish'
 import PassengerMenuCompactPolish from '../components/PassengerMenuCompactPolish'
 import PassengerLanguageLogoutPolish from '../components/PassengerLanguageLogoutPolish'
+import PassengerLanguageStayPut from '../components/PassengerLanguageStayPut'
 import PassengerRideHistoryMenuPolish from '../components/PassengerRideHistoryMenuPolish'
 import PassengerHelpDirectNavigation from '../components/PassengerHelpDirectNavigation'
 import PassengerNativeHelpPanelPolish from '../components/PassengerNativeHelpPanelPolish'
@@ -51,7 +52,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><PassengerMenuCompactPolish /><PassengerLanguageLogoutPolish /><PassengerRideHistoryMenuPolish /><PassengerHelpDirectNavigation /><PassengerNativeHelpPanelPolish /><PassengerAvatarUploadPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverNetEarningsPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><PassengerMenuCompactPolish /><PassengerLanguageLogoutPolish /><PassengerLanguageStayPut /><PassengerRideHistoryMenuPolish /><PassengerHelpDirectNavigation /><PassengerNativeHelpPanelPolish /><PassengerAvatarUploadPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverNetEarningsPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
     </html>
   )
 }
