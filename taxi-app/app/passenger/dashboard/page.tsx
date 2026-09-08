@@ -11,7 +11,7 @@ export default function PassengerDashboardPage() {
 
   useEffect(() => {
     let active = true
-    let restoreGetUser: (() => void) | null = null
+    let restoreAuthMethods: (() => void) | null = null
 
     const loadSession = async () => {
       const { data } = await supabase.auth.getSession()
@@ -55,19 +55,29 @@ export default function PassengerDashboardPage() {
         return
       }
 
-      // HomePage historically performs its own getUser() call on mount. On
-      // Safari that second check could briefly return null and render the old
-      // embedded green login screen even though this dashboard already has a
-      // fully validated passenger session. While the protected passenger
-      // dashboard is mounted, make that read deterministic from the verified
-      // session. RLS still remains the backend authorization boundary.
+      // The passenger session is already fully validated here. HomePage still
+      // has legacy auth bootstrap code that calls both getUser() and
+      // onAuthStateChange(). Safari can emit a transient null auth event during
+      // that second bootstrap and HomePage then renders its old embedded green
+      // login screen. Keep auth reads deterministic while this protected
+      // dashboard is mounted and ignore only those transient null events.
       const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
+      const originalOnAuthStateChange = supabase.auth.onAuthStateChange.bind(supabase.auth)
+
       supabase.auth.getUser = (async () => ({
         data: { user: verified.user },
         error: null,
       })) as typeof supabase.auth.getUser
-      restoreGetUser = () => {
+
+      supabase.auth.onAuthStateChange = ((callback: Parameters<typeof supabase.auth.onAuthStateChange>[0]) => {
+        return originalOnAuthStateChange((event, nextSession) => {
+          callback(event, nextSession?.user ? nextSession : stableSession)
+        })
+      }) as typeof supabase.auth.onAuthStateChange
+
+      restoreAuthMethods = () => {
         supabase.auth.getUser = originalGetUser as typeof supabase.auth.getUser
+        supabase.auth.onAuthStateChange = originalOnAuthStateChange as typeof supabase.auth.onAuthStateChange
       }
 
       setSession(stableSession)
@@ -83,7 +93,7 @@ export default function PassengerDashboardPage() {
 
     return () => {
       active = false
-      restoreGetUser?.()
+      restoreAuthMethods?.()
       listener.subscription.unsubscribe()
     }
   }, [])
