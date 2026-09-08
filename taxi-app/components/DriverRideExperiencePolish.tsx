@@ -76,6 +76,13 @@ export default function DriverRideExperiencePolish() {
         .driver-arriving-action { background:#f4b740 !important; color:#332500 !important; }
         .driver-start-action { background:#173f68 !important; color:#fff !important; }
         .driver-complete-action { background:#0b6b55 !important; color:#fff !important; }
+        .driver-accept-action:disabled,
+        .driver-arriving-action:disabled,
+        .driver-start-action:disabled,
+        .driver-complete-action:disabled {
+          opacity:.65 !important;
+          cursor:not-allowed !important;
+        }
         .pill.driver-status-pill {
           font-size:11px !important;
           font-weight:850 !important;
@@ -188,6 +195,7 @@ export default function DriverRideExperiencePolish() {
       })
 
       document.querySelectorAll<HTMLButtonElement>('button.primary.action').forEach((button) => {
+        if (button.dataset.driverProcessing === 'true') return
         button.classList.remove('driver-arriving-action', 'driver-start-action', 'driver-complete-action')
         const text = (button.textContent || '').toLowerCase()
         if (text.includes('arrivé') || text.includes('rive')) button.classList.add('driver-arriving-action')
@@ -230,22 +238,50 @@ export default function DriverRideExperiencePolish() {
 
     const onClickCapture = (event: Event) => {
       const target = event.target as HTMLElement | null
-      const button = target?.closest('button.primary.action') as HTMLButtonElement | null
-      if (!button) return
+      const button = target?.closest('.ride-wrap > button.primary, button.primary.action') as HTMLButtonElement | null
+      if (!button || button.disabled || button.dataset.driverProcessing === 'true') return
+
       const text = (button.textContent || '').toLowerCase()
-      if (!text.includes('terminer') && !text.includes('fini')) return
-      if (button.dataset.finishConfirmed === 'true') {
-        delete button.dataset.finishConfirmed
-        return
-      }
       const lang = getLang()
-      const confirmed = window.confirm(lang === 'ht' ? 'Èske ou sèten ou vle fini trajè sa a?' : 'Voulez-vous vraiment terminer ce trajet ?')
-      if (!confirmed) {
-        event.preventDefault()
-        event.stopPropagation()
-        return
+      const isStart = text.includes('commencer') || text.includes('kòmanse')
+      const isFinish = text.includes('terminer') || text.includes('fini')
+
+      if (isStart) {
+        const confirmed = window.confirm(lang === 'ht'
+          ? 'Èske kliyan an deja nan machin nan epi li pare pou kòmanse trajè a?'
+          : 'Le client est-il déjà dans le véhicule et prêt à commencer le trajet ?')
+        if (!confirmed) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
       }
-      button.dataset.finishConfirmed = 'true'
+
+      if (isFinish) {
+        const confirmed = window.confirm(lang === 'ht'
+          ? 'Èske kliyan an rive nan destinasyon an? Konfime pou fini trajè a.'
+          : 'Le client est-il arrivé à destination ? Confirmez pour terminer le trajet.')
+        if (!confirmed) {
+          event.preventDefault()
+          event.stopPropagation()
+          return
+        }
+      }
+
+      button.dataset.driverProcessing = 'true'
+      const originalText = button.textContent || ''
+      window.setTimeout(() => {
+        if (!button.isConnected) return
+        button.disabled = true
+        button.textContent = lang === 'ht' ? '⏳ N ap trete…' : '⏳ Traitement…'
+        window.setTimeout(() => {
+          if (!button.isConnected) return
+          if (!button.disabled) {
+            button.textContent = originalText
+            delete button.dataset.driverProcessing
+          }
+        }, 5000)
+      }, 0)
     }
 
     apply()
