@@ -26,12 +26,21 @@ type PayoutRow = {
   payout_ready?: boolean
 }
 
+type PayoutHistoryRow = {
+  id: string
+  payout_id: string
+  old_status: string | null
+  new_status: string
+  payout_reference: string | null
+  created_at: string
+}
+
 const copy = {
   fr: {
-    title: 'Paiements chauffeurs', subtitle: 'Suivez les 85 % dus aux chauffeurs après paiement confirmé du passager', back: 'Paiements & commissions', loading: 'Chargement des paiements chauffeurs…', denied: 'Accès réservé aux administrateurs.', all: 'Tous', pending: 'À payer', processing: 'En traitement', paid: 'Payé', failed: 'Échoué', driver: 'Chauffeur', amount: 'Net chauffeur', route: 'Trajet', created: 'Créé', paidAt: 'Payé le', noRows: 'Aucun paiement chauffeur dans cette catégorie.', readyTotal: 'À payer', paidTotal: 'Déjà payé', count: 'Dossiers', reference: 'Référence', provider: 'Fournisseur', destination: 'Destination du versement', missingDestination: 'Informations de versement manquantes', markProcessing: 'Marquer en traitement', markPaid: 'Marquer payé', markFailed: 'Marquer échoué', note: "Ces boutons mettent à jour le suivi interne uniquement. Ils n’envoient pas d’argent à MonCash/NatCash.", error: 'Impossible de mettre à jour ce paiement.', incomplete: 'Le chauffeur doit d’abord choisir MonCash ou NatCash et enregistrer le nom et le numéro associés.'
+    title: 'Paiements chauffeurs', subtitle: 'Suivez les 85 % dus aux chauffeurs après paiement confirmé du passager', back: 'Paiements & commissions', loading: 'Chargement des paiements chauffeurs…', denied: 'Accès réservé aux administrateurs.', all: 'Tous', pending: 'À payer', processing: 'En traitement', paid: 'Payé', failed: 'Échoué', driver: 'Chauffeur', amount: 'Net chauffeur', route: 'Trajet', created: 'Créé', paidAt: 'Payé le', noRows: 'Aucun paiement chauffeur dans cette catégorie.', readyTotal: 'À payer', paidTotal: 'Déjà payé', count: 'Dossiers', reference: 'Référence', referencePlaceholder: 'Référence MonCash/NatCash', provider: 'Fournisseur', destination: 'Destination du versement', missingDestination: 'Informations de versement manquantes', markProcessing: 'Marquer en traitement', markPaid: 'Marquer payé', markFailed: 'Marquer échoué', note: "Ces boutons mettent à jour le suivi interne uniquement. Ils n’envoient pas d’argent à MonCash/NatCash.", error: 'Impossible de mettre à jour ce paiement.', incomplete: 'Le chauffeur doit d’abord choisir MonCash ou NatCash et enregistrer le nom et le numéro associés.', referenceRequired: 'Une référence de transaction est obligatoire avant de marquer ce versement payé.', history: 'Historique du versement'
   },
   ht: {
-    title: 'Peman chofè', subtitle: 'Swiv 85% ki pou chofè yo apre peman kliyan an konfime', back: 'Peman & komisyon', loading: 'N ap chaje peman chofè yo…', denied: 'Se administratè sèlman ki gen aksè.', all: 'Tout', pending: 'Pou peye', processing: 'Ap trete', paid: 'Peye', failed: 'Echwe', driver: 'Chofè', amount: 'Net chofè', route: 'Trajè', created: 'Kreye', paidAt: 'Peye nan', noRows: 'Pa gen peman chofè nan kategori sa a.', readyTotal: 'Pou peye', paidTotal: 'Deja peye', count: 'Dosye', reference: 'Referans', provider: 'Founisè', destination: 'Kote payout la prale', missingDestination: 'Enfòmasyon payout manke', markProcessing: 'Mete ap trete', markPaid: 'Make kòm peye', markFailed: 'Make kòm echwe', note: 'Bouton sa yo sèlman mete estati entèn ajou. Yo pa voye lajan sou MonCash/NatCash.', error: 'Nou pa ka modifye peman sa a.', incomplete: 'Chofè a dwe chwazi MonCash oswa NatCash epi anrejistre non ak nimewo ki asosye a anvan.'
+    title: 'Peman chofè', subtitle: 'Swiv 85% ki pou chofè yo apre peman kliyan an konfime', back: 'Peman & komisyon', loading: 'N ap chaje peman chofè yo…', denied: 'Se administratè sèlman ki gen aksè.', all: 'Tout', pending: 'Pou peye', processing: 'Ap trete', paid: 'Peye', failed: 'Echwe', driver: 'Chofè', amount: 'Net chofè', route: 'Trajè', created: 'Kreye', paidAt: 'Peye nan', noRows: 'Pa gen peman chofè nan kategori sa a.', readyTotal: 'Pou peye', paidTotal: 'Deja peye', count: 'Dosye', reference: 'Referans', referencePlaceholder: 'Referans MonCash/NatCash', provider: 'Founisè', destination: 'Kote payout la prale', missingDestination: 'Enfòmasyon payout manke', markProcessing: 'Mete ap trete', markPaid: 'Make kòm peye', markFailed: 'Make kòm echwe', note: 'Bouton sa yo sèlman mete estati entèn ajou. Yo pa voye lajan sou MonCash/NatCash.', error: 'Nou pa ka modifye peman sa a.', incomplete: 'Chofè a dwe chwazi MonCash oswa NatCash epi anrejistre non ak nimewo ki asosye a anvan.', referenceRequired: 'Ou dwe antre referans tranzaksyon an anvan ou make payout la kòm peye.', history: 'Istwa payout la'
   }
 }
 
@@ -40,6 +49,8 @@ export default function AdminPayoutsPage() {
   const t = copy[lang]
   const [authorized, setAuthorized] = useState<boolean | null>(null)
   const [rows, setRows] = useState<PayoutRow[]>([])
+  const [history, setHistory] = useState<Record<string, PayoutHistoryRow[]>>({})
+  const [referenceDrafts, setReferenceDrafts] = useState<Record<string, string>>({})
   const [filter, setFilter] = useState<'all' | PayoutStatus>('all')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [message, setMessage] = useState('')
@@ -54,6 +65,7 @@ export default function AdminPayoutsPage() {
     if (!authorized) return
     const channel = supabase.channel('admin-driver-payouts-live')
       .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_payouts' }, () => void loadRows())
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_payout_status_history' }, () => void loadRows())
       .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'driver_profiles' }, () => void loadRows())
       .subscribe()
     return () => { void supabase.removeChannel(channel) }
@@ -77,14 +89,23 @@ export default function AdminPayoutsPage() {
     const base = (data ?? []) as PayoutRow[]
     const driverIds = Array.from(new Set(base.map(x => x.driver_id)))
     const rideIds = Array.from(new Set(base.map(x => x.ride_id)))
-    const [{ data: profiles }, { data: driverProfiles }, { data: rides }] = await Promise.all([
+    const payoutIds = base.map(x => x.id)
+    const [{ data: profiles }, { data: driverProfiles }, { data: rides }, { data: historyRows }] = await Promise.all([
       driverIds.length ? supabase.from('profiles').select('id,full_name').in('id', driverIds) : Promise.resolve({ data: [] as any[] }),
       driverIds.length ? supabase.from('driver_profiles').select('user_id,preferred_payout_provider,moncash_enabled,moncash_name,moncash_phone,natcash_enabled,natcash_name,natcash_phone').in('user_id', driverIds) : Promise.resolve({ data: [] as any[] }),
       rideIds.length ? supabase.from('rides').select('id,pickup_address,destination_address').in('id', rideIds) : Promise.resolve({ data: [] as any[] }),
+      payoutIds.length ? supabase.from('driver_payout_status_history').select('id,payout_id,old_status,new_status,payout_reference,created_at').in('payout_id', payoutIds).order('created_at', { ascending: false }) : Promise.resolve({ data: [] as any[] }),
     ])
     const names = new Map((profiles ?? []).map((p: any) => [p.id, p.full_name]))
     const driverMap = new Map((driverProfiles ?? []).map((p: any) => [p.user_id, p]))
     const rideMap = new Map((rides ?? []).map((r: any) => [r.id, r]))
+
+    const groupedHistory: Record<string, PayoutHistoryRow[]> = {}
+    for (const item of (historyRows ?? []) as PayoutHistoryRow[]) {
+      if (!groupedHistory[item.payout_id]) groupedHistory[item.payout_id] = []
+      groupedHistory[item.payout_id].push(item)
+    }
+    setHistory(groupedHistory)
 
     setRows(base.map(x => {
       const profile: any = driverMap.get(x.driver_id)
@@ -105,6 +126,14 @@ export default function AdminPayoutsPage() {
         payout_ready: Boolean(preferred && enabled && accountName?.trim() && accountPhone?.trim()),
       }
     }))
+
+    setReferenceDrafts(current => {
+      const next = { ...current }
+      for (const payout of base) {
+        if (next[payout.id] === undefined) next[payout.id] = payout.payout_reference ?? ''
+      }
+      return next
+    })
   }
 
   async function setStatus(row: PayoutRow, status: PayoutStatus) {
@@ -112,10 +141,16 @@ export default function AdminPayoutsPage() {
       setMessage(t.incomplete)
       return
     }
+    const reference = (referenceDrafts[row.id] ?? row.payout_reference ?? '').trim()
+    if (status === 'paid' && !reference) {
+      setMessage(t.referenceRequired)
+      return
+    }
     setBusyId(row.id)
     setMessage('')
     const payload: Record<string, any> = { status }
     if (status === 'processing' || status === 'paid') payload.provider = row.preferred_payout_provider
+    if (reference) payload.payout_reference = reference
     const { error } = await supabase.from('driver_payouts').update(payload).eq('id', row.id)
     if (error) setMessage(`${t.error} ${error.message}`)
     else await loadRows()
@@ -128,6 +163,7 @@ export default function AdminPayoutsPage() {
   const paidTotal = rows.filter(r => r.status === 'paid').reduce((s, r) => s + Number(r.amount_htg ?? 0), 0)
   const dateLabel = (v: string | null) => v ? new Intl.DateTimeFormat(lang === 'ht' ? 'fr-HT' : 'fr-FR', { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(v)) : '—'
   const providerLabel = (r: PayoutRow) => r.preferred_payout_provider === 'moncash' ? 'MonCash' : r.preferred_payout_provider === 'natcash' ? 'NatCash' : '—'
+  const historyStatusLabel = (status: string | null) => status === 'pending' ? t.pending : status === 'processing' ? t.processing : status === 'paid' ? t.paid : status === 'failed' ? t.failed : '—'
 
   if (authorized === null) return <main className="page"><section className="card"><p>{t.loading}</p></section></main>
   if (!authorized) return <main className="page"><section className="card"><h1>{t.title}</h1><p>{t.denied}</p><button onClick={() => location.href='/admin/login'}>Admin login</button></section></main>
@@ -149,16 +185,18 @@ export default function AdminPayoutsPage() {
         {r.payout_ready ? <><strong>{providerLabel(r)} · {r.payout_account_name}</strong><span>{r.payout_account_phone}</span></> : <><strong>⚠ {t.missingDestination}</strong><span>{t.incomplete}</span></>}
       </div>
       <div className="route"><small>{t.route}</small><strong>{r.pickup_address || '—'} → {r.destination_address || '—'}</strong></div>
+      <div className="referenceBox"><label>{t.reference}<input value={referenceDrafts[r.id] ?? ''} onChange={e => setReferenceDrafts(current => ({ ...current, [r.id]: e.target.value }))} placeholder={t.referencePlaceholder} disabled={r.status === 'paid'} /></label></div>
       <div className="meta"><span><b>{t.provider}:</b> {r.provider || providerLabel(r)}</span><span><b>{t.reference}:</b> {r.payout_reference || '—'}</span>{r.paid_at && <span><b>{t.paidAt}:</b> {dateLabel(r.paid_at)}</span>}</div>
       <div className="actions">
         {r.status !== 'processing' && r.status !== 'paid' && <button onClick={() => void setStatus(r,'processing')} disabled={busyId===r.id || !r.payout_ready}>{t.markProcessing}</button>}
-        {r.status !== 'paid' && <button className="paidBtn" onClick={() => void setStatus(r,'paid')} disabled={busyId===r.id || !r.payout_ready}>{t.markPaid}</button>}
+        {r.status !== 'paid' && <button className="paidBtn" onClick={() => void setStatus(r,'paid')} disabled={busyId===r.id || !r.payout_ready || !(referenceDrafts[r.id] ?? r.payout_reference ?? '').trim()}>{t.markPaid}</button>}
         {r.status !== 'failed' && r.status !== 'paid' && <button className="failedBtn" onClick={() => void setStatus(r,'failed')} disabled={busyId===r.id}>{t.markFailed}</button>}
       </div>
+      <div className="history"><small>{t.history}</small>{(history[r.id] ?? []).slice(0,5).map(item => <div className="historyRow" key={item.id}><span>{historyStatusLabel(item.old_status)} → {historyStatusLabel(item.new_status)}</span><span>{dateLabel(item.created_at)}</span>{item.payout_reference && <span className="historyRef">{item.payout_reference}</span>}</div>)}</div>
     </article>)}</div>
   </section>
   <style jsx>{`
-    .page{min-height:100vh;background:linear-gradient(160deg,#e7f0ff,#eef3f8 48%,#e8edf4);padding:24px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,920px);margin:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.14);box-sizing:border-box}.top{display:flex;justify-content:space-between}.top button{border:0;background:none;color:#185fc2;font-weight:900}.top select,.filters select{border:1px solid #d8e1e9;border-radius:11px;padding:9px;background:white}.brand{display:flex;gap:10px;align-items:center;margin-top:18px}.brand>span{width:42px;height:42px;border-radius:13px;background:#1b70eb;color:#fff;display:grid;place-items:center;font-weight:950}.brand strong,.brand small{display:block}.brand small{color:#77879a}.card h1{font-size:30px;margin:18px 0}.warning{background:#fff7e8;color:#7a5200;border:1px solid #f1ddaf;border-radius:14px;padding:11px 13px;font-size:12px;font-weight:800}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stats>div{background:#f5f8fc;border:1px solid #e2e8ef;border-radius:15px;padding:12px}.stats small,.stats strong{display:block}.stats small{font-size:9px;color:#718192;text-transform:uppercase;font-weight:900}.stats strong{margin-top:5px;font-size:17px}.filters{display:flex;gap:8px;margin-bottom:14px}.filters button{border:0;border-radius:11px;background:#102033;color:#fff;padding:10px 13px}.message{background:#fff0f0;color:#9b2c2c;border-radius:12px;padding:10px;margin-bottom:12px}.empty{padding:28px;text-align:center;border:1px dashed #d8e1e9;border-radius:16px;color:#78889a}.list{display:grid;gap:12px}.payout{border:1px solid #dfe6ee;border-radius:18px;padding:14px}.head{display:flex;justify-content:space-between;gap:10px}.head strong,.head small{display:block}.head small{color:#7c8996;margin-top:3px}.status{height:max-content;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900}.status.pending{background:#fff4d8;color:#805c00}.status.processing{background:#eaf2ff;color:#185fc2}.status.paid{background:#e7f7ef;color:#087052}.status.failed{background:#fff0f0;color:#a12e2e}.amount{margin-top:12px;background:#eaf7f2;border-radius:13px;padding:11px}.amount small,.amount strong{display:block}.amount small{font-size:9px;color:#53756a;font-weight:900;text-transform:uppercase}.amount strong{font-size:18px;margin-top:3px}.destination{margin-top:9px;border-radius:13px;padding:11px;border:1px solid}.destination small,.destination strong,.destination span{display:block}.destination small{font-size:9px;text-transform:uppercase;font-weight:900}.destination strong{font-size:13px;margin-top:3px}.destination span{font-size:11px;margin-top:3px}.destination.ready{background:#f1faf7;border-color:#c9e8dd;color:#155f4e}.destination.missing{background:#fff7e8;border-color:#f0d7a5;color:#7a5200}.route{margin-top:9px;background:#f8fafc;border-radius:12px;padding:10px}.route small,.route strong{display:block}.route small{font-size:9px;color:#7b8997;font-weight:900;text-transform:uppercase}.route strong{font-size:12px;margin-top:3px}.meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#657487}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{border:0;border-radius:11px;padding:9px 11px;background:#eaf2ff;color:#185fc2;font-weight:900}.actions button:disabled{opacity:.45;cursor:not-allowed}.actions .paidBtn{background:#0b7a5d;color:#fff}.actions .failedBtn{background:#fff0f0;color:#a12e2e}@media(max-width:650px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 14px}.stats{grid-template-columns:1fr}.card h1{font-size:26px}.actions{display:grid;grid-template-columns:1fr}.actions button{width:100%}}
+    .page{min-height:100vh;background:linear-gradient(160deg,#e7f0ff,#eef3f8 48%,#e8edf4);padding:24px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,920px);margin:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.14);box-sizing:border-box}.top{display:flex;justify-content:space-between}.top button{border:0;background:none;color:#185fc2;font-weight:900}.top select,.filters select{border:1px solid #d8e1e9;border-radius:11px;padding:9px;background:white}.brand{display:flex;gap:10px;align-items:center;margin-top:18px}.brand>span{width:42px;height:42px;border-radius:13px;background:#1b70eb;color:#fff;display:grid;place-items:center;font-weight:950}.brand strong,.brand small{display:block}.brand small{color:#77879a}.card h1{font-size:30px;margin:18px 0}.warning{background:#fff7e8;color:#7a5200;border:1px solid #f1ddaf;border-radius:14px;padding:11px 13px;font-size:12px;font-weight:800}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}.stats>div{background:#f5f8fc;border:1px solid #e2e8ef;border-radius:15px;padding:12px}.stats small,.stats strong{display:block}.stats small{font-size:9px;color:#718192;text-transform:uppercase;font-weight:900}.stats strong{margin-top:5px;font-size:17px}.filters{display:flex;gap:8px;margin-bottom:14px}.filters button{border:0;border-radius:11px;background:#102033;color:#fff;padding:10px 13px}.message{background:#fff0f0;color:#9b2c2c;border-radius:12px;padding:10px;margin-bottom:12px}.empty{padding:28px;text-align:center;border:1px dashed #d8e1e9;border-radius:16px;color:#78889a}.list{display:grid;gap:12px}.payout{border:1px solid #dfe6ee;border-radius:18px;padding:14px}.head{display:flex;justify-content:space-between;gap:10px}.head strong,.head small{display:block}.head small{color:#7c8996;margin-top:3px}.status{height:max-content;border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900}.status.pending{background:#fff4d8;color:#805c00}.status.processing{background:#eaf2ff;color:#185fc2}.status.paid{background:#e7f7ef;color:#087052}.status.failed{background:#fff0f0;color:#a12e2e}.amount{margin-top:12px;background:#eaf7f2;border-radius:13px;padding:11px}.amount small,.amount strong{display:block}.amount small{font-size:9px;color:#53756a;font-weight:900;text-transform:uppercase}.amount strong{font-size:18px;margin-top:3px}.destination{margin-top:9px;border-radius:13px;padding:11px;border:1px solid}.destination small,.destination strong,.destination span{display:block}.destination small{font-size:9px;text-transform:uppercase;font-weight:900}.destination strong{font-size:13px;margin-top:3px}.destination span{font-size:11px;margin-top:3px}.destination.ready{background:#f1faf7;border-color:#c9e8dd;color:#155f4e}.destination.missing{background:#fff7e8;border-color:#f0d7a5;color:#7a5200}.route{margin-top:9px;background:#f8fafc;border-radius:12px;padding:10px}.route small,.route strong{display:block}.route small{font-size:9px;color:#7b8997;font-weight:900;text-transform:uppercase}.route strong{font-size:12px;margin-top:3px}.referenceBox{margin-top:10px}.referenceBox label{display:grid;gap:5px;font-size:10px;font-weight:900;color:#657487}.referenceBox input{border:1px solid #d8e1e9;border-radius:11px;padding:10px 11px;font-size:13px}.meta{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:11px;color:#657487}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.actions button{border:0;border-radius:11px;padding:9px 11px;background:#eaf2ff;color:#185fc2;font-weight:900}.actions button:disabled{opacity:.45;cursor:not-allowed}.actions .paidBtn{background:#0b7a5d;color:#fff}.actions .failedBtn{background:#fff0f0;color:#a12e2e}.history{margin-top:13px;border-top:1px solid #e8edf2;padding-top:10px}.history>small{display:block;font-size:9px;text-transform:uppercase;font-weight:900;color:#778594;margin-bottom:6px}.historyRow{display:flex;gap:8px;flex-wrap:wrap;justify-content:space-between;font-size:10px;color:#5f6f7f;padding:5px 0}.historyRef{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#22384d}@media(max-width:650px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 14px}.stats{grid-template-columns:1fr}.card h1{font-size:26px}.actions{display:grid;grid-template-columns:1fr}.actions button{width:100%}}
   `}</style>
   </main>
 }
