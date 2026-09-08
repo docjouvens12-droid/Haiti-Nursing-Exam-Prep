@@ -76,6 +76,17 @@ export default function DriverDashboardPage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (authorized !== true) return
+    const channel = supabase
+      .channel(`driver-rides-${userIdRef.current ?? 'active'}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rides' }, () => {
+        void loadRides(userIdRef.current, online)
+      })
+      .subscribe()
+    return () => { void supabase.removeChannel(channel) }
+  }, [authorized, online])
+
   async function init() {
     setBusy(true)
     const { data: auth } = await supabase.auth.getUser()
