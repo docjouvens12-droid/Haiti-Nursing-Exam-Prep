@@ -11,11 +11,14 @@ export default function DriverPaymentMenuPolish() {
       const style = document.createElement('style')
       style.id = styleId
       style.textContent = `
-        .driver-payment-menu-section{padding:16px 2px;border-bottom:1px solid #e5eaee}
-        .driver-payment-menu-section h3{margin:0 0 10px;font-size:14px;color:#0f6f59}
+        .driver-payment-menu-section{padding:0 2px;border-bottom:1px solid #e5eaee}
+        .driver-payment-menu-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;background:transparent;padding:16px 0;color:#0f6f59;font-size:15px;font-weight:800;text-align:left}
+        .driver-payment-menu-trigger .arrow{font-size:22px;line-height:1;transition:transform .18s ease}
+        .driver-payment-menu-section.open .driver-payment-menu-trigger .arrow{transform:rotate(90deg)}
+        .driver-payment-menu-content{display:none;padding:0 0 12px}
+        .driver-payment-menu-section.open .driver-payment-menu-content{display:block}
         .driver-payment-menu-option{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:8px 0;padding:10px 12px;border-radius:12px;background:#f6f9fa;border:1px solid #e3e9ee;font-size:13px}
         .driver-payment-menu-option strong{font-weight:900;color:#102033}
-        .driver-payment-menu-split{margin-top:10px;padding:11px 12px;border-radius:12px;background:#eef7f4;color:#115f4d;font-size:12px;font-weight:850;text-align:center}
       `
       document.head.appendChild(style)
     }
@@ -29,15 +32,31 @@ export default function DriverPaymentMenuPolish() {
       section.className = 'driver-payment-menu-section'
       section.dataset.driverPaymentMenu = 'true'
       section.innerHTML = `
-        <h3>${lang === 'ht' ? 'Peman' : 'Paiements'}</h3>
-        <div class="driver-payment-menu-option"><span>MonCash</span><strong>${lang === 'ht' ? 'Disponib' : 'Disponible'}</strong></div>
-        <div class="driver-payment-menu-option"><span>NatCash</span><strong>${lang === 'ht' ? 'Disponib' : 'Disponible'}</strong></div>
-        <div class="driver-payment-menu-split">${lang === 'ht' ? 'Chofè 85% · Platfòm 15%' : 'Chauffeur 85% · Plateforme 15%'}</div>
+        <button type="button" class="driver-payment-menu-trigger" aria-expanded="false">
+          <span>${lang === 'ht' ? 'Peman' : 'Paiements'}</span>
+          <span class="arrow" aria-hidden="true">›</span>
+        </button>
+        <div class="driver-payment-menu-content">
+          <div class="driver-payment-menu-option"><span>MonCash</span><strong>${lang === 'ht' ? 'Disponib' : 'Disponible'}</strong></div>
+          <div class="driver-payment-menu-option"><span>NatCash</span><strong>${lang === 'ht' ? 'Disponib' : 'Disponible'}</strong></div>
+        </div>
       `
 
-      const logout = drawer.querySelector('.drawerLogout')
-      if (logout) drawer.insertBefore(section, logout)
-      else drawer.appendChild(section)
+      section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.addEventListener('click', () => {
+        const open = section.classList.toggle('open')
+        section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.setAttribute('aria-expanded', String(open))
+      })
+
+      const languageSection = Array.from(drawer.querySelectorAll<HTMLElement>('.menuSection')).find((item) => {
+        const text = item.querySelector('h3')?.textContent?.trim().toLowerCase() ?? ''
+        return text === 'langue' || text === 'lang'
+      })
+      if (languageSection) drawer.insertBefore(section, languageSection)
+      else {
+        const logout = drawer.querySelector('.drawerLogout')
+        if (logout) drawer.insertBefore(section, logout)
+        else drawer.appendChild(section)
+      }
     }
 
     apply()
