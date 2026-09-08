@@ -27,8 +27,8 @@ export default function GlobalLogoutButton() {
     }
   }, [])
 
-  // Admin and driver pages render their own logout controls.
-  if (!visible || pathname.startsWith('/admin') || pathname.startsWith('/driver')) return null
+  // Admin, driver, and passenger dashboard pages render their own logout controls.
+  if (!visible || pathname.startsWith('/admin') || pathname.startsWith('/driver') || pathname.startsWith('/passenger')) return null
 
   async function logout(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
