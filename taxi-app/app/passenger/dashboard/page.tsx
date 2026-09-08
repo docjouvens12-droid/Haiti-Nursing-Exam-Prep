@@ -11,6 +11,7 @@ export default function PassengerDashboardPage() {
 
   useEffect(() => {
     let active = true
+    let restoreGetUser: (() => void) | null = null
 
     const loadSession = async () => {
       const { data } = await supabase.auth.getSession()
@@ -54,6 +55,21 @@ export default function PassengerDashboardPage() {
         return
       }
 
+      // HomePage historically performs its own getUser() call on mount. On
+      // Safari that second check could briefly return null and render the old
+      // embedded green login screen even though this dashboard already has a
+      // fully validated passenger session. While the protected passenger
+      // dashboard is mounted, make that read deterministic from the verified
+      // session. RLS still remains the backend authorization boundary.
+      const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
+      supabase.auth.getUser = (async () => ({
+        data: { user: verified.user },
+        error: null,
+      })) as typeof supabase.auth.getUser
+      restoreGetUser = () => {
+        supabase.auth.getUser = originalGetUser as typeof supabase.auth.getUser
+      }
+
       setSession(stableSession)
       setReady(true)
     }
@@ -67,6 +83,7 @@ export default function PassengerDashboardPage() {
 
     return () => {
       active = false
+      restoreGetUser?.()
       listener.subscription.unsubscribe()
     }
   }, [])
