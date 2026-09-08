@@ -21,6 +21,7 @@ export default function RideRealtimeNotifications() {
     let mounted = true
     let passengerChannel: ReturnType<typeof supabase.channel> | null = null
     let driverChannel: ReturnType<typeof supabase.channel> | null = null
+    let audioContext: AudioContext | null = null
 
     function show(next: Notice) {
       if (!mounted) return
@@ -28,6 +29,45 @@ export default function RideRealtimeNotifications() {
       if (timerRef.current !== null) window.clearTimeout(timerRef.current)
       timerRef.current = window.setTimeout(() => setNotice(null), 6500)
     }
+
+    function ensureAudio() {
+      try {
+        if (!audioContext) {
+          const Ctx = window.AudioContext || (window as any).webkitAudioContext
+          if (Ctx) audioContext = new Ctx()
+        }
+        if (audioContext?.state === 'suspended') void audioContext.resume()
+      } catch {}
+    }
+
+    function playDriverAlert() {
+      try {
+        if ('vibrate' in navigator) navigator.vibrate?.([180, 90, 180])
+      } catch {}
+
+      try {
+        ensureAudio()
+        if (!audioContext || audioContext.state !== 'running') return
+        const now = audioContext.currentTime
+        ;[0, 0.22].forEach((offset) => {
+          const oscillator = audioContext!.createOscillator()
+          const gain = audioContext!.createGain()
+          oscillator.type = 'sine'
+          oscillator.frequency.setValueAtTime(880, now + offset)
+          gain.gain.setValueAtTime(0.0001, now + offset)
+          gain.gain.exponentialRampToValueAtTime(0.18, now + offset + 0.015)
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + offset + 0.14)
+          oscillator.connect(gain)
+          gain.connect(audioContext!.destination)
+          oscillator.start(now + offset)
+          oscillator.stop(now + offset + 0.16)
+        })
+      } catch {}
+    }
+
+    const unlockAudio = () => ensureAudio()
+    document.addEventListener('pointerdown', unlockAudio, { passive: true })
+    document.addEventListener('touchstart', unlockAudio, { passive: true })
 
     async function setup() {
       const { data } = await supabase.auth.getUser()
@@ -56,7 +96,13 @@ export default function RideRealtimeNotifications() {
           .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'rides' }, (payload) => {
             const row = payload.new as any
             if (row?.status !== 'requested' || row?.passenger_id === user.id) return
-            show({ icon: '🔔', title: 'Nouvelle demande', body: `${row.pickup_address ?? 'Prise en charge'} → ${row.destination_address ?? 'Destination'}` })
+            const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
+            playDriverAlert()
+            show({
+              icon: '🔔',
+              title: lang === 'ht' ? 'Nouvo komand' : 'Nouvelle demande',
+              body: `${row.pickup_address ?? (lang === 'ht' ? 'Kote pou pran pasaje a' : 'Prise en charge')} → ${row.destination_address ?? 'Destination'}`,
+            })
             window.setTimeout(() => window.location.reload(), 900)
           })
           .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'rides', filter: `driver_id=eq.${user.id}` }, (payload) => {
@@ -89,8 +135,11 @@ export default function RideRealtimeNotifications() {
     return () => {
       mounted = false
       if (timerRef.current !== null) window.clearTimeout(timerRef.current)
+      document.removeEventListener('pointerdown', unlockAudio)
+      document.removeEventListener('touchstart', unlockAudio)
       if (passengerChannel) void supabase.removeChannel(passengerChannel)
       if (driverChannel) void supabase.removeChannel(driverChannel)
+      if (audioContext) void audioContext.close().catch(() => undefined)
     }
   }, [])
 
