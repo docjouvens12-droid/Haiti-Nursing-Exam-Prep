@@ -35,6 +35,7 @@ export default function PassengerRideHistoryMenuPolish() {
       .passenger-ride-route{font-size:10px;line-height:1.35;color:#334654;margin:2px 0}
       .passenger-ride-price{font-size:10px;font-weight:850;color:#102033;margin-top:5px}
       .passenger-rides-more{width:100%;min-height:32px;border:0;border-radius:8px;background:#eef3f5;color:#243747;font-size:10.5px;font-weight:800;padding:6px 8px}
+      .passenger-rides-more-note{font-size:9.5px;color:#7a8998;text-align:center;padding:2px 4px 0}
     `
     document.head.appendChild(style)
 
@@ -59,6 +60,30 @@ export default function PassengerRideHistoryMenuPolish() {
     }
 
     const isActive = (status: string) => !['completed','done','cancelled','canceled'].includes(status.toLowerCase())
+
+    const addMoreButton = (details: HTMLElement, ht: boolean, hasExtra: boolean) => {
+      const more = document.createElement('button')
+      more.type = 'button'
+      more.className = 'passenger-rides-more'
+      more.textContent = ht ? 'Plis' : 'Plus'
+      more.addEventListener('click', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        if (!hasExtra) {
+          let note = details.querySelector<HTMLElement>('.passenger-rides-more-note')
+          if (!note) {
+            note = document.createElement('div')
+            note.className = 'passenger-rides-more-note'
+            more.insertAdjacentElement('afterend', note)
+          }
+          note.textContent = ht ? 'Pa gen lòt trajè pou montre kounye a.' : 'Aucun autre trajet à afficher pour le moment.'
+          return
+        }
+        const showingMore = details.classList.toggle('show-more')
+        more.textContent = showingMore ? (ht ? 'Mwens' : 'Moins') : (ht ? 'Plis' : 'Plus')
+      })
+      details.appendChild(more)
+    }
 
     const apply = () => {
       const drawer = document.querySelector<HTMLElement>('.nav-drawer')
@@ -86,6 +111,7 @@ export default function PassengerRideHistoryMenuPolish() {
         const user = auth.user
         if (!user) {
           details.innerHTML = `<div class="passenger-rides-empty">${ht ? 'Konekte pou wè trajè ou yo.' : 'Connectez-vous pour voir vos trajets.'}</div>`
+          addMoreButton(details, ht, false)
           return
         }
 
@@ -98,12 +124,14 @@ export default function PassengerRideHistoryMenuPolish() {
 
         if (error) {
           details.innerHTML = `<div class="passenger-rides-empty">${ht ? 'Nou pa ka chaje trajè yo kounye a.' : 'Impossible de charger les trajets pour le moment.'}</div>`
+          addMoreButton(details, ht, false)
           return
         }
 
         const rides = (data ?? []) as Ride[]
         if (!rides.length) {
           details.innerHTML = `<div class="passenger-rides-empty">${ht ? 'Ou poko gen okenn trajè.' : 'Vous n’avez encore aucun trajet.'}</div>`
+          addMoreButton(details, ht, false)
           loaded = true
           return
         }
@@ -127,20 +155,7 @@ export default function PassengerRideHistoryMenuPolish() {
           details.appendChild(card)
         })
 
-        if (rides.length > 3) {
-          const more = document.createElement('button')
-          more.type = 'button'
-          more.className = 'passenger-rides-more'
-          more.textContent = ht ? 'Plis' : 'Plus'
-          more.addEventListener('click', (event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            const showingMore = details.classList.toggle('show-more')
-            more.textContent = showingMore ? (ht ? 'Mwens' : 'Moins') : (ht ? 'Plis' : 'Plus')
-          })
-          details.appendChild(more)
-        }
-
+        addMoreButton(details, ht, rides.length > 3)
         loaded = true
       }
 
