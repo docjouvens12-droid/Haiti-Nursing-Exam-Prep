@@ -16,7 +16,8 @@ const copy = {
     connecting: 'Connexion…',
     submit: 'Se connecter',
     invalidRole: 'Ce compte n’est pas un compte passager. Utilisez un compte client.',
-    error: 'Impossible de connecter ce compte.'
+    error: 'Impossible de connecter ce compte.',
+    sessionError: 'La session n’a pas pu être enregistrée. Réessayez.'
   },
   ht: {
     subtitle: 'Koneksyon kliyan',
@@ -28,7 +29,8 @@ const copy = {
     connecting: 'N ap konekte…',
     submit: 'Konekte kòm kliyan',
     invalidRole: 'Kont sa a pa yon kont kliyan/pasaje. Antre yon kont kliyan.',
-    error: 'Nou pa kapab konekte kont sa a.'
+    error: 'Nou pa kapab konekte kont sa a.',
+    sessionError: 'Sesyon an pa rive anrejistre. Eseye ankò.'
   }
 }
 
@@ -59,7 +61,7 @@ export default function PassengerLoginPage() {
     setMessage('')
 
     const { data, error } = await supabase.auth.signInWithPassword({ email, password })
-    if (error || !data.user) {
+    if (error || !data.user || !data.session) {
       setMessage(error?.message || t.error)
       setBusy(false)
       return
@@ -78,7 +80,37 @@ export default function PassengerLoginPage() {
       return
     }
 
-    window.location.replace('/passenger/dashboard')
+    // Force the authenticated session into the persisted Supabase client
+    // before navigating. This avoids an iOS/Safari race where the next page
+    // mounts before the session has been written to local storage.
+    const { error: setSessionError } = await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    })
+
+    if (setSessionError) {
+      setMessage(t.sessionError)
+      setBusy(false)
+      return
+    }
+
+    let confirmed = false
+    for (let attempt = 0; attempt < 8; attempt += 1) {
+      const { data: sessionData } = await supabase.auth.getSession()
+      if (sessionData.session?.user?.id === data.user.id) {
+        confirmed = true
+        break
+      }
+      await new Promise((resolve) => window.setTimeout(resolve, 150))
+    }
+
+    if (!confirmed) {
+      setMessage(t.sessionError)
+      setBusy(false)
+      return
+    }
+
+    window.location.assign('/passenger/dashboard')
   }
 
   return <main className="passenger-login-page">
