@@ -133,10 +133,22 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
   }, [tracking])
 
   const passengerRoutePolyline = useMemo(() => {
-    if (!routeGeometry?.coordinates?.length) return null
-    const encoded = encodePolyline(routeGeometry.coordinates)
-    return encoded || null
-  }, [routeGeometry])
+    if (routeGeometry?.coordinates?.length) {
+      const encoded = encodePolyline(routeGeometry.coordinates)
+      if (encoded) return encoded
+    }
+
+    // Keep a visible temporary route while Mapbox Directions is still loading.
+    // Once the real route geometry arrives, the map automatically switches to it.
+    if (pickup && destination) {
+      return encodePolyline([
+        [pickup.lng, pickup.lat],
+        [destination.lng, destination.lat],
+      ])
+    }
+
+    return null
+  }, [routeGeometry, pickup, destination])
 
   const mapUrl = useMemo(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
