@@ -123,9 +123,9 @@ export default function PassengerMenuPolish() {
         const details = document.createElement('div')
         details.className = 'passenger-profile-details'
         details.append(
-          row(lang === 'ht' ? 'Dat nesans' : 'Date de naissance', meta.birth_date ?? meta.date_of_birth ?? ''),
-          row(lang === 'ht' ? 'Sèks' : 'Sexe', meta.sex ?? meta.gender ?? ''),
-          row(lang === 'ht' ? 'Tel' : 'Tél.', person?.phone ?? ''),
+          row(lang === 'ht' ? 'Dat nesans :' : 'Date de naissance :', meta.birth_date ?? meta.date_of_birth ?? ''),
+          row(lang === 'ht' ? 'Sèks :' : 'Sexe :', meta.sex ?? meta.gender ?? ''),
+          row(lang === 'ht' ? 'Telefòn :' : 'Téléphone :', person?.phone ?? ''),
         )
         profileButton.insertAdjacentElement('afterend', details)
         const arrow = profileButton.querySelector<HTMLElement>('b:last-child')
@@ -211,5 +211,5 @@ export default function PassengerMenuPolish() {
 }
 
 function escapeHtml(value: string) {
-  return value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char] ?? char))
+  return value.replace(/[&<>'\"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '\"': '&quot;' }[char] ?? char))
 }
