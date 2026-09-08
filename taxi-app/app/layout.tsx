@@ -24,6 +24,7 @@ import PassengerNativeHelpPanelPolish from '../components/PassengerNativeHelpPan
 import PassengerAvatarUploadPolish from '../components/PassengerAvatarUploadPolish'
 import PassengerMenuFinalConsistency from '../components/PassengerMenuFinalConsistency'
 import PassengerDashboardDriverStyle from '../components/PassengerDashboardDriverStyle'
+import PassengerDashboardQuickInfo from '../components/PassengerDashboardQuickInfo'
 import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
 import DriverVehicleMenuPolish from '../components/DriverVehicleMenuPolish'
@@ -54,7 +55,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><PassengerMenuCompactPolish /><PassengerLanguageLogoutPolish /><PassengerLanguageStayPut /><PassengerRideHistoryMenuPolish /><PassengerHelpDirectNavigation /><PassengerNativeHelpPanelPolish /><PassengerAvatarUploadPolish /><PassengerMenuFinalConsistency /><PassengerDashboardDriverStyle /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverNetEarningsPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><PassengerMenuCompactPolish /><PassengerLanguageLogoutPolish /><PassengerLanguageStayPut /><PassengerRideHistoryMenuPolish /><PassengerHelpDirectNavigation /><PassengerNativeHelpPanelPolish /><PassengerAvatarUploadPolish /><PassengerMenuFinalConsistency /><PassengerDashboardDriverStyle /><PassengerDashboardQuickInfo /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverNetEarningsPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
     </html>
   )
 }
