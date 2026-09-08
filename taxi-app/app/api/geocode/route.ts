@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     autocomplete: 'true',
     limit: '10',
     language: 'fr',
-    types: 'address,street,neighborhood,locality,place,district',
+    types: 'address,street,neighborhood,locality,place,district,region',
   })
 
   if (Number.isFinite(lat) && Number.isFinite(lng)) params.set('proximity', `${lng},${lat}`)
