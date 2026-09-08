@@ -27,11 +27,14 @@ export default function PassengerRideHistoryMenuPolish() {
       .passenger-rides-loading,.passenger-rides-empty{font-size:10.5px;color:#73818e;padding:8px 4px}
       .passenger-ride-card{padding:9px;border:1px solid #e2e8ed;border-radius:11px;background:#f8fafb}
       .passenger-ride-card.active{border-color:#b7d8ce;background:#eef8f5}
+      .passenger-ride-card.passenger-ride-extra{display:none}
+      .passenger-rides-details.show-more .passenger-ride-card.passenger-ride-extra{display:block}
       .passenger-ride-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start;margin-bottom:5px}
       .passenger-ride-status{font-size:10px;font-weight:850;color:#0f6f59}
       .passenger-ride-date{font-size:9px;color:#83909a;text-align:right}
       .passenger-ride-route{font-size:10px;line-height:1.35;color:#334654;margin:2px 0}
       .passenger-ride-price{font-size:10px;font-weight:850;color:#102033;margin-top:5px}
+      .passenger-rides-more{width:100%;min-height:32px;border:0;border-radius:8px;background:#eef3f5;color:#243747;font-size:10.5px;font-weight:800;padding:6px 8px}
     `
     document.head.appendChild(style)
 
@@ -91,7 +94,7 @@ export default function PassengerRideHistoryMenuPolish() {
           .select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at')
           .eq('passenger_id', user.id)
           .order('requested_at', { ascending: false })
-          .limit(8)
+          .limit(20)
 
         if (error) {
           details.innerHTML = `<div class="passenger-rides-empty">${ht ? 'Nou pa ka chaje trajè yo kounye a.' : 'Impossible de charger les trajets pour le moment.'}</div>`
@@ -107,9 +110,9 @@ export default function PassengerRideHistoryMenuPolish() {
 
         details.innerHTML = ''
         rides.sort((a, b) => Number(isActive(b.status)) - Number(isActive(a.status)))
-        for (const ride of rides) {
+        rides.forEach((ride, index) => {
           const card = document.createElement('div')
-          card.className = `passenger-ride-card${isActive(ride.status) ? ' active' : ''}`
+          card.className = `passenger-ride-card${isActive(ride.status) ? ' active' : ''}${index >= 3 ? ' passenger-ride-extra' : ''}`
           const date = new Date(ride.requested_at)
           const fare = ride.final_fare_htg ?? ride.estimated_fare_htg
           card.innerHTML = `
@@ -122,7 +125,22 @@ export default function PassengerRideHistoryMenuPolish() {
             <div class="passenger-ride-price">${fare != null ? `${Number(fare).toLocaleString()} HTG` : '—'}</div>
           `
           details.appendChild(card)
+        })
+
+        if (rides.length > 3) {
+          const more = document.createElement('button')
+          more.type = 'button'
+          more.className = 'passenger-rides-more'
+          more.textContent = ht ? 'Plis' : 'Plus'
+          more.addEventListener('click', (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            const showingMore = details.classList.toggle('show-more')
+            more.textContent = showingMore ? (ht ? 'Mwens' : 'Moins') : (ht ? 'Plis' : 'Plus')
+          })
+          details.appendChild(more)
         }
+
         loaded = true
       }
 
@@ -148,5 +166,5 @@ export default function PassengerRideHistoryMenuPolish() {
 }
 
 function escapeHtml(value: string) {
-  return value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char] ?? char))
+  return value.replace(/[&<>'\"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char] ?? char))
 }
