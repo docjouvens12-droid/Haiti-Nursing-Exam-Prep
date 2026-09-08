@@ -65,6 +65,7 @@ export default function HomePage() {
   const [pickupCoords, setPickupCoords] = useState<Point | null>(null)
   const [destination, setDestination] = useState('')
   const [destinationCoords, setDestinationCoords] = useState<Point | null>(null)
+  const [resolvedDestinationCoords, setResolvedDestinationCoords] = useState<Point | null>(null)
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [searchBusy, setSearchBusy] = useState(false)
   const [routeGeometry, setRouteGeometry] = useState<RouteGeometry | null>(null)
@@ -80,19 +81,20 @@ export default function HomePage() {
   const [rides, setRides] = useState<RideHistory[]>([])
   const [ridesBusy, setRidesBusy] = useState(false)
 
+  const effectiveDestinationCoords = destinationCoords ?? resolvedDestinationCoords
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
   const fallbackQuote = useMemo<Quote | null>(() => {
-    if (!pickupCoords || !destinationCoords) return null
+    if (!pickupCoords || !effectiveDestinationCoords) return null
 
     let distanceKm = routeDistanceKm
     let durationMin = routeDurationMin
 
     if (distanceKm == null || durationMin == null) {
       const toRad = (value: number) => value * Math.PI / 180
-      const dLat = toRad(destinationCoords.lat - pickupCoords.lat)
-      const dLng = toRad(destinationCoords.lng - pickupCoords.lng)
+      const dLat = toRad(effectiveDestinationCoords.lat - pickupCoords.lat)
+      const dLng = toRad(effectiveDestinationCoords.lng - pickupCoords.lng)
       const lat1 = toRad(pickupCoords.lat)
-      const lat2 = toRad(destinationCoords.lat)
+      const lat2 = toRad(effectiveDestinationCoords.lat)
       const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
       distanceKm = Math.round((6371 * 2 * Math.asin(Math.sqrt(a))) * 100) / 100
       durationMin = Math.max(5, Math.ceil(distanceKm * 3.2))
@@ -101,7 +103,7 @@ export default function HomePage() {
     const p = localPricing[selectedRide]
     const fare = Math.max(p.minimum, p.base + distanceKm * p.perKm + durationMin * p.perMin)
     return { distance_km: distanceKm, duration_min: durationMin, fare_htg: Math.round(fare * 100) / 100 }
-  }, [pickupCoords, destinationCoords, routeDistanceKm, routeDurationMin, selectedRide])
+  }, [pickupCoords, effectiveDestinationCoords, routeDistanceKm, routeDurationMin, selectedRide])
   const effectiveQuote = quote ?? fallbackQuote
 
   useEffect(() => {
@@ -132,7 +134,11 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation) {
+      setPickupCoords({ lat: 18.5392, lng: -72.3364 })
+      setPickup(copy[lang].testPosition)
+      return
+    }
     navigator.geolocation.getCurrentPosition(
       (p) => setPickupCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
       () => { setPickupCoords({ lat: 18.5392, lng: -72.3364 }); setPickup(copy[lang].testPosition) },
@@ -146,21 +152,25 @@ export default function HomePage() {
       setSearchBusy(true)
       try {
         const proximity = pickupCoords ? `&proximity=${pickupCoords.lng},${pickupCoords.lat}` : ''
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=5&language=fr${proximity}&access_token=${encodeURIComponent(token)}`
+        const types = 'address,poi,place,locality,neighborhood,district'
+        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=10&types=${types}&language=fr${proximity}&access_token=${encodeURIComponent(token)}`
         const response = await fetch(url)
         const json = await response.json()
-        setSearchResults((json.features ?? []).map((f: any) => ({ id: f.id, label: f.place_name, center: f.center })))
-      } catch { setSearchResults([]) } finally { setSearchBusy(false) }
+        const results = (json.features ?? []).map((f: any) => ({ id: f.id, label: f.place_name, center: f.center })) as SearchResult[]
+        setSearchResults(results)
+        const first = results[0]
+        if (first) setResolvedDestinationCoords({ lng: first.center[0], lat: first.center[1] })
+      } catch { setSearchResults([]); setResolvedDestinationCoords(null) } finally { setSearchBusy(false) }
     }, 350)
     return () => window.clearTimeout(timer)
   }, [destination, destinationCoords, pickupCoords, token])
 
   useEffect(() => {
-    if (!token || !pickupCoords || !destinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
+    if (!token || !pickupCoords || !effectiveDestinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
     let cancelled = false
     ;(async () => {
       try {
-        const coords = `${pickupCoords.lng},${pickupCoords.lat};${destinationCoords.lng},${destinationCoords.lat}`
+        const coords = `${pickupCoords.lng},${pickupCoords.lat};${effectiveDestinationCoords.lng},${effectiveDestinationCoords.lat}`
         const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token)}`)
         const json = await response.json(); const route = json.routes?.[0]
         if (!route || cancelled) return
@@ -168,10 +178,10 @@ export default function HomePage() {
       } catch { if (!cancelled) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null) } }
     })()
     return () => { cancelled = true }
-  }, [pickupCoords, destinationCoords, token])
+  }, [pickupCoords, effectiveDestinationCoords, token])
 
   useEffect(() => {
-    if (!user || !pickupCoords || !destinationCoords) { setQuote(null); return }
+    if (!user || !pickupCoords || !effectiveDestinationCoords) { setQuote(null); return }
     let cancelled = false
     let timeoutId: number | undefined
 
@@ -183,8 +193,8 @@ export default function HomePage() {
         p_service_type: selectedRide,
         p_pickup_latitude: pickupCoords.lat,
         p_pickup_longitude: pickupCoords.lng,
-        p_destination_latitude: destinationCoords.lat,
-        p_destination_longitude: destinationCoords.lng,
+        p_destination_latitude: effectiveDestinationCoords.lat,
+        p_destination_longitude: effectiveDestinationCoords.lng,
       }
 
       const withTimeout = async () => {
@@ -232,7 +242,7 @@ export default function HomePage() {
       cancelled = true
       if (timeoutId) window.clearTimeout(timeoutId)
     }
-  }, [user, pickupCoords, destinationCoords, selectedRide, lang, fallbackQuote])
+  }, [user, pickupCoords, effectiveDestinationCoords, selectedRide, lang, fallbackQuote])
 
   async function submitAuth(e: FormEvent) {
     e.preventDefault(); setAuthBusy(true); setAuthMessage('')
@@ -243,12 +253,19 @@ export default function HomePage() {
     setAuthBusy(false)
   }
 
-  function chooseSearchResult(result: SearchResult) { setDestination(result.label); setDestinationCoords({ lng: result.center[0], lat: result.center[1] }); setSearchResults([]); setRideError('') }
+  function chooseSearchResult(result: SearchResult) {
+    const coords = { lng: result.center[0], lat: result.center[1] }
+    setDestination(result.label)
+    setDestinationCoords(coords)
+    setResolvedDestinationCoords(coords)
+    setSearchResults([])
+    setRideError('')
+  }
 
   async function requestRide() {
-    if (!user || !pickupCoords || !destinationCoords || !effectiveQuote) return
+    if (!user || !pickupCoords || !effectiveDestinationCoords || !effectiveQuote) return
     setRequestState('requesting'); setRideError('')
-    const { data, error } = await supabase.rpc('request_ride_v2', { p_service_type: selectedRide, p_pickup_address: pickup, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_address: destination, p_destination_latitude: destinationCoords.lat, p_destination_longitude: destinationCoords.lng })
+    const { data, error } = await supabase.rpc('request_ride_v2', { p_service_type: selectedRide, p_pickup_address: pickup, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_address: destination, p_destination_latitude: effectiveDestinationCoords.lat, p_destination_longitude: effectiveDestinationCoords.lng })
     if (error) { setRideError(error.message); setRequestState('idle'); return }
     setRideId(String(data)); setRequestState('searching')
   }
@@ -280,12 +297,12 @@ export default function HomePage() {
   return <main className="shell"><section className="phone-frame">
     {panelContent}
     <div className={`app-underlay ${panel !== 'home' ? 'panel-hidden' : ''}`}>
-      <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={destinationCoords} routeGeometry={routeGeometry} />
+      <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={effectiveDestinationCoords} routeGeometry={routeGeometry} />
         <div className="topbar"><button className="round-button" onClick={() => setMenuOpen(true)}>☰</button><div className="brand-chip"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.tagline}</small></div></div><button className="round-button" onClick={() => openPanel('profile')}>👤</button></div>
       </div>
       <section className="booking-sheet"><div className="grabber" />
         <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
-        <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null) }} placeholder={t.destinationPlaceholder} /></div></div></div>
+        <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null); setResolvedDestinationCoords(null); setQuote(null); setRideError('') }} placeholder={t.destinationPlaceholder} /></div></div></div>
         {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
         <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : effectiveQuote ? `${effectiveQuote.distance_km.toFixed(1)} km · ${effectiveQuote.duration_min} min` : t.chooseDestination}</span></div>
         <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
