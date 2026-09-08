@@ -148,20 +148,21 @@ export default function DriverNavigationPage() {
 
     <style jsx>{`
       .page{min-height:100vh;background:#eef3f6;padding:12px 12px 104px;font-family:Inter,system-ui,sans-serif;color:#102033;overflow-x:hidden}
-      .shell{max-width:760px;margin:0 auto;width:100%}
-      .tripHeader{background:#102033;color:#fff;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 10px 28px rgba(16,32,51,.12)}
+      .shell{display:block!important;max-width:760px;margin:0 auto;width:100%;min-width:0;overflow:visible}
+      .tripHeader{display:block;width:100%;box-sizing:border-box;background:#102033;color:#fff;border-radius:18px;padding:14px;margin-bottom:10px;box-shadow:0 10px 28px rgba(16,32,51,.12)}
       .tripHeader small{display:block;opacity:.72;font-weight:900;letter-spacing:.06em;font-size:10px}
       .tripHeader h1{margin:5px 0 0;font-size:21px;line-height:1.2;overflow-wrap:anywhere}
       .metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:11px}
       .metrics span{display:flex;flex-direction:column;background:#1c3148;border-radius:13px;padding:9px 10px;min-width:0}
       .metrics b{font-size:15px;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
       .metrics em{font-style:normal;font-size:10px;opacity:.68;margin-top:3px;font-weight:700}
-      .mapWrap{width:100%;min-width:0;overflow:hidden;border-radius:18px}
-      .message{background:#fff1f1;color:#a12626;border-radius:13px;padding:11px 12px;margin-top:10px;font-weight:750;font-size:13px}
-      .actionButton{width:100%;margin-top:12px;border:0;border-radius:15px;padding:15px 16px;background:#0d7b61;color:#fff;font-size:16px;font-weight:900;box-shadow:0 8px 20px rgba(13,123,97,.2)}
+      .mapWrap{display:block;width:100%;min-width:0;max-width:100%;overflow:hidden;border-radius:18px}
+      .message{display:block;width:100%;box-sizing:border-box;background:#fff1f1;color:#a12626;border-radius:13px;padding:11px 12px;margin-top:10px;font-weight:750;font-size:13px}
+      .actionButton{display:block;width:100%;height:auto;box-sizing:border-box;margin-top:12px;border:0;border-radius:15px;padding:15px 16px;background:#0d7b61;color:#fff;font-size:16px;font-weight:900;box-shadow:0 8px 20px rgba(13,123,97,.2)}
       .actionButton:disabled{opacity:.62}
       @media(max-width:600px){
         .page{padding:10px 10px 92px}
+        .shell{display:block!important;width:100%;max-width:100%}
         .tripHeader{border-radius:16px;padding:12px;margin-bottom:8px}
         .tripHeader h1{font-size:18px;line-height:1.18}
         .metrics{gap:7px;margin-top:9px}
