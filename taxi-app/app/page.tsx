@@ -82,11 +82,26 @@ export default function HomePage() {
 
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
   const fallbackQuote = useMemo<Quote | null>(() => {
-    if (routeDistanceKm == null || routeDurationMin == null) return null
+    if (!pickupCoords || !destinationCoords) return null
+
+    let distanceKm = routeDistanceKm
+    let durationMin = routeDurationMin
+
+    if (distanceKm == null || durationMin == null) {
+      const toRad = (value: number) => value * Math.PI / 180
+      const dLat = toRad(destinationCoords.lat - pickupCoords.lat)
+      const dLng = toRad(destinationCoords.lng - pickupCoords.lng)
+      const lat1 = toRad(pickupCoords.lat)
+      const lat2 = toRad(destinationCoords.lat)
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+      distanceKm = Math.round((6371 * 2 * Math.asin(Math.sqrt(a))) * 100) / 100
+      durationMin = Math.max(5, Math.ceil(distanceKm * 3.2))
+    }
+
     const p = localPricing[selectedRide]
-    const fare = Math.max(p.minimum, p.base + routeDistanceKm * p.perKm + routeDurationMin * p.perMin)
-    return { distance_km: routeDistanceKm, duration_min: routeDurationMin, fare_htg: Math.round(fare * 100) / 100 }
-  }, [routeDistanceKm, routeDurationMin, selectedRide])
+    const fare = Math.max(p.minimum, p.base + distanceKm * p.perKm + durationMin * p.perMin)
+    return { distance_km: distanceKm, duration_min: durationMin, fare_htg: Math.round(fare * 100) / 100 }
+  }, [pickupCoords, destinationCoords, routeDistanceKm, routeDurationMin, selectedRide])
   const effectiveQuote = quote ?? fallbackQuote
 
   useEffect(() => {
