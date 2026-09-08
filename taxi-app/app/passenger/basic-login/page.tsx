@@ -1,6 +1,7 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import HomePage from '../../page'
 import { supabase } from '../../../lib/supabase'
 
 export default function BasicPassengerLoginPage() {
@@ -8,6 +9,7 @@ export default function BasicPassengerLoginPage() {
   const [password, setPassword] = useState('')
   const [message, setMessage] = useState('')
   const [busy, setBusy] = useState(false)
+  const [signedIn, setSignedIn] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -43,9 +45,11 @@ export default function BasicPassengerLoginPage() {
       return
     }
 
-    await new Promise((resolve) => window.setTimeout(resolve, 250))
-    window.location.replace('/passenger/dashboard')
+    setSignedIn(true)
+    setBusy(false)
   }
+
+  if (signedIn) return <HomePage />
 
   return (
     <main style={{position:'fixed',inset:0,zIndex:2147483647,background:'#fff',padding:'32px 20px',overflow:'auto',fontFamily:'system-ui,sans-serif',pointerEvents:'auto',touchAction:'manipulation'}}>
