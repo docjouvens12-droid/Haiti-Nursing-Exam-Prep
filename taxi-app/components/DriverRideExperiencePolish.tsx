@@ -84,6 +84,35 @@ export default function DriverRideExperiencePolish() {
           border:1px solid #cce7df !important;
           padding:7px 10px !important;
         }
+        .driver-step-guide {
+          display:flex;
+          align-items:flex-start;
+          gap:10px;
+          margin:12px 0 14px;
+          padding:12px 13px;
+          border-radius:16px;
+          border:1px solid #d7e7e2;
+          background:#f2f9f7;
+          color:#173f36;
+        }
+        .driver-step-guide .driver-step-icon {
+          font-size:21px;
+          line-height:1;
+          margin-top:1px;
+        }
+        .driver-step-guide strong {
+          display:block;
+          font-size:14px;
+          line-height:1.25;
+        }
+        .driver-step-guide small {
+          display:block;
+          margin-top:3px;
+          color:#657a73;
+          font-size:11px;
+          line-height:1.35;
+          font-weight:650;
+        }
         .empty.driver-search-empty {
           border:1px dashed #bcd7cf !important;
           background:#f6fbf9 !important;
@@ -104,6 +133,53 @@ export default function DriverRideExperiencePolish() {
 
     const getLang = () => localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
 
+    const updateStepGuide = (lang: 'ht' | 'fr') => {
+      const action = document.querySelector<HTMLButtonElement>('button.primary.action')
+      if (!action) {
+        document.querySelectorAll('[data-driver-step-guide="true"]').forEach((el) => el.remove())
+        return
+      }
+
+      const section = action.closest('.section') as HTMLElement | null
+      const rideCard = section?.querySelector('.ride-card') as HTMLElement | null
+      if (!section || !rideCard) return
+
+      let guide = section.querySelector<HTMLElement>('[data-driver-step-guide="true"]')
+      if (!guide) {
+        guide = document.createElement('div')
+        guide.className = 'driver-step-guide'
+        guide.dataset.driverStepGuide = 'true'
+        guide.innerHTML = '<span class="driver-step-icon" aria-hidden="true"></span><div><strong></strong><small></small></div>'
+        section.insertBefore(guide, rideCard)
+      }
+
+      const text = (action.textContent || '').toLowerCase()
+      let icon = '🚕'
+      let title = ''
+      let detail = ''
+
+      if (text.includes('arrivé') || text.includes('rive')) {
+        icon = '📍'
+        title = lang === 'ht' ? 'Ale pran kliyan an' : 'Allez chercher le client'
+        detail = lang === 'ht' ? 'Swiv direksyon an rive nan kote kliyan an ap tann lan.' : 'Suivez l’itinéraire jusqu’au point de prise en charge.'
+      } else if (text.includes('commencer') || text.includes('kòmanse')) {
+        icon = '👤'
+        title = lang === 'ht' ? 'Kliyan an pare pou monte' : 'Le client est prêt à monter'
+        detail = lang === 'ht' ? 'Lè kliyan an antre nan veyikil la, peze Kòmanse trajè a.' : 'Quand le client est dans le véhicule, commencez le trajet.'
+      } else if (text.includes('terminer') || text.includes('fini')) {
+        icon = '🛣️'
+        title = lang === 'ht' ? 'Trajè an kou' : 'Trajet en cours'
+        detail = lang === 'ht' ? 'Kondwi rive nan destinasyon an. Peze Fini trajè a sèlman lè kliyan an rive.' : 'Conduisez jusqu’à destination. Terminez le trajet uniquement à l’arrivée.'
+      }
+
+      const iconEl = guide.querySelector<HTMLElement>('.driver-step-icon')
+      const strong = guide.querySelector<HTMLElement>('strong')
+      const small = guide.querySelector<HTMLElement>('small')
+      if (iconEl && iconEl.textContent !== icon) iconEl.textContent = icon
+      if (strong && strong.textContent !== title) strong.textContent = title
+      if (small && small.textContent !== detail) small.textContent = detail
+    }
+
     const apply = () => {
       const lang = getLang()
 
@@ -122,14 +198,16 @@ export default function DriverRideExperiencePolish() {
       document.querySelectorAll<HTMLElement>('.pill').forEach((pill) => {
         const raw = (pill.textContent || '').trim()
         const labels: Record<string, [string, string]> = {
-          accepted: ['Chauffeur en route', 'Chofè sou wout'],
-          driver_arriving: ['Chauffeur arrivé', 'Chofè rive'],
+          accepted: ['En route vers le client', 'Sou wout pou kliyan an'],
+          driver_arriving: ['Arrivé au point de prise en charge', 'Rive kote kliyan an'],
           in_progress: ['Trajet en cours', 'Trajè an kou'],
         }
         const label = labels[raw]
         if (label) pill.textContent = lang === 'ht' ? label[1] : label[0]
         pill.classList.add('driver-status-pill')
       })
+
+      updateStepGuide(lang)
 
       document.querySelectorAll<HTMLElement>('.empty').forEach((empty) => {
         const text = (empty.textContent || '').toLowerCase()
