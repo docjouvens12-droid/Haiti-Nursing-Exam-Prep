@@ -100,7 +100,7 @@ export default function DriverCompletedRideSummary() {
   async function closeSummary() {
     const { data: auth } = await supabase.auth.getUser()
     if (auth.user && summary) localStorage.setItem(dismissedKey(auth.user.id, summary.id), '1')
-    setSummary(null)
+    window.location.assign('https://taxi-platform-haiti.vercel.app/driver/dashboard')
   }
 
   return <div className="driver-summary-backdrop" role="dialog" aria-modal="true">
