@@ -148,7 +148,7 @@ export default function HomePage() {
 
   useEffect(() => {
     const query = destination.trim()
-    if (!token || query.length < 3 || destinationCoords) {
+    if (query.length < 3 || destinationCoords) {
       setSearchResults([])
       setSearchBusy(false)
       return
@@ -157,47 +157,18 @@ export default function HomePage() {
     let controller: AbortController | null = null
     const timer = window.setTimeout(async () => {
       controller = new AbortController()
-      const abortTimer = window.setTimeout(() => controller?.abort(), 6000)
+      const abortTimer = window.setTimeout(() => controller?.abort(), 6500)
       setSearchBusy(true)
       try {
-        const params = new URLSearchParams({
-          q: query,
-          access_token: token,
-          country: 'ht',
-          autocomplete: 'true',
-          limit: '10',
-          language: 'fr',
-          types: 'address,street,neighborhood,locality,place,district',
-        })
-        if (pickupCoords) params.set('proximity', `${pickupCoords.lng},${pickupCoords.lat}`)
-
-        const response = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?${params.toString()}`, { signal: controller.signal })
+        const params = new URLSearchParams({ q: query })
+        if (pickupCoords) {
+          params.set('lat', String(pickupCoords.lat))
+          params.set('lng', String(pickupCoords.lng))
+        }
+        const response = await fetch(`/api/geocode?${params.toString()}`, { signal: controller.signal, cache: 'no-store' })
         if (!response.ok) throw new Error(`GEOCODE_${response.status}`)
         const json = await response.json()
-        let results = (json.features ?? []).flatMap((f: any) => {
-          const center = f.geometry?.coordinates
-          if (!Array.isArray(center) || center.length < 2) return []
-          const props = f.properties ?? {}
-          const label = props.full_address || [props.name, props.place_formatted].filter(Boolean).join(', ') || f.name || 'Destination'
-          return [{ id: f.id || props.mapbox_id || `${center[0]},${center[1]}`, label, center: [Number(center[0]), Number(center[1])] as [number, number] }]
-        }) as SearchResult[]
-
-        if (pickupCoords) {
-          const toRad = (value: number) => value * Math.PI / 180
-          const distanceFromPickup = (result: SearchResult) => {
-            const lat2 = result.center[1]
-            const lng2 = result.center[0]
-            const dLat = toRad(lat2 - pickupCoords.lat)
-            const dLng = toRad(lng2 - pickupCoords.lng)
-            const lat1Rad = toRad(pickupCoords.lat)
-            const lat2Rad = toRad(lat2)
-            const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1Rad) * Math.cos(lat2Rad) * Math.sin(dLng / 2) ** 2
-            return 6371 * 2 * Math.asin(Math.sqrt(a))
-          }
-          results = [...results].sort((a, b) => distanceFromPickup(a) - distanceFromPickup(b))
-        }
-
-        setSearchResults(results)
+        setSearchResults((json.results ?? []) as SearchResult[])
       } catch {
         setSearchResults([])
       } finally {
@@ -210,7 +181,7 @@ export default function HomePage() {
       window.clearTimeout(timer)
       controller?.abort()
     }
-  }, [destination, destinationCoords, pickupCoords, token, lang])
+  }, [destination, destinationCoords, pickupCoords])
 
   useEffect(() => {
     if (!token || !pickupCoords || !effectiveDestinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
