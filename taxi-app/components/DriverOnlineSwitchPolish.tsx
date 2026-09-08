@@ -19,7 +19,7 @@ export default function DriverOnlineSwitchPolish() {
             justify-content:space-between !important;
             gap:14px !important;
             padding:15px 16px !important;
-            margin-top:16px !important;
+            margin-top:34px !important;
             margin-bottom:12px !important;
             background:#f4f8f7 !important;
           }
