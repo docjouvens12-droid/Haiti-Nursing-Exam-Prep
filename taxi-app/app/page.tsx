@@ -145,16 +145,64 @@ export default function HomePage() {
   useEffect(() => {
     if (!user || !pickupCoords || !destinationCoords) { setQuote(null); return }
     let cancelled = false
-    setRequestState((s) => s === 'searching' ? s : 'quoting')
-    supabase.rpc('quote_ride', { p_service_type: selectedRide, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_latitude: destinationCoords.lat, p_destination_longitude: destinationCoords.lng })
-      .then(({ data, error }) => {
+    let timeoutId: number | undefined
+
+    const runQuote = async () => {
+      setRideError('')
+      setRequestState((s) => s === 'searching' ? s : 'quoting')
+
+      const args = {
+        p_service_type: selectedRide,
+        p_pickup_latitude: pickupCoords.lat,
+        p_pickup_longitude: pickupCoords.lng,
+        p_destination_latitude: destinationCoords.lat,
+        p_destination_longitude: destinationCoords.lng,
+      }
+
+      const withTimeout = async () => {
+        const request = supabase.rpc('quote_ride', args)
+        const timeout = new Promise<never>((_, reject) => {
+          timeoutId = window.setTimeout(() => reject(new Error('QUOTE_TIMEOUT')), 8000)
+        })
+        return Promise.race([request, timeout])
+      }
+
+      try {
+        let result: any
+        try {
+          result = await withTimeout()
+        } catch (firstError) {
+          if (cancelled) return
+          if (timeoutId) window.clearTimeout(timeoutId)
+          timeoutId = undefined
+          result = await withTimeout()
+        }
+
         if (cancelled) return
-        if (error) { setRideError(error.message); setQuote(null) }
-        else { const row = Array.isArray(data) ? data[0] : data; setQuote(row ? { distance_km: Number(row.distance_km), duration_min: Number(row.duration_min), fare_htg: Number(row.fare_htg) } : null) }
-        setRequestState((s) => s === 'searching' ? s : 'idle')
-      })
-    return () => { cancelled = true }
-  }, [user, pickupCoords, destinationCoords, selectedRide])
+        const { data, error } = result
+        if (error) throw error
+        const row = Array.isArray(data) ? data[0] : data
+        if (!row) throw new Error('QUOTE_EMPTY')
+        setQuote({ distance_km: Number(row.distance_km), duration_min: Number(row.duration_min), fare_htg: Number(row.fare_htg) })
+      } catch (error: any) {
+        if (cancelled) return
+        setQuote(null)
+        const timeout = error?.message === 'QUOTE_TIMEOUT'
+        setRideError(timeout
+          ? (lang === 'ht' ? 'Kalkil pri a pran twòp tan. Tanpri chwazi destinasyon an ankò oswa eseye ankò.' : 'Le calcul du prix prend trop de temps. Veuillez sélectionner de nouveau la destination ou réessayer.')
+          : (error?.message || (lang === 'ht' ? 'Nou pa rive kalkile pri a. Tanpri eseye ankò.' : 'Impossible de calculer le prix. Veuillez réessayer.')))
+      } finally {
+        if (timeoutId) window.clearTimeout(timeoutId)
+        if (!cancelled) setRequestState((s) => s === 'searching' ? s : 'idle')
+      }
+    }
+
+    void runQuote()
+    return () => {
+      cancelled = true
+      if (timeoutId) window.clearTimeout(timeoutId)
+    }
+  }, [user, pickupCoords, destinationCoords, selectedRide, lang])
 
   async function submitAuth(e: FormEvent) {
     e.preventDefault(); setAuthBusy(true); setAuthMessage('')
@@ -217,7 +265,6 @@ export default function HomePage() {
         <p className="fine-print">{t.mapNote}</p>
       </section>
     </div>
-
     {menuOpen && <><button className="drawer-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} /><aside className="nav-drawer">
       <div className="drawer-head"><div className="drawer-brand"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.menu}</small></div></div><button onClick={() => setMenuOpen(false)}>×</button></div>
       <div className="drawer-user"><div className="drawer-avatar">{(user.user_metadata?.full_name?.[0] ?? user.email?.[0] ?? 'U').toUpperCase()}</div><div><strong>{user.user_metadata?.full_name || t.passengerAccount}</strong><small>{user.email}</small></div></div>
