@@ -19,6 +19,7 @@ type RideHistory = { id: string; status: string; pickup_address: string; destina
 const rideOptions: RideOption[] = [
   { id: 'moto', name: 'Moto', detailFr: '1 passager', detailHt: '1 pasaje', eta: '3 min' },
   { id: 'standard', name: 'Standard', detailFr: 'Jusqu’à 4 passagers', detailHt: 'Jiska 4 pasaje', eta: '5 min' },
+  { id: 'comfort', name: 'Comfort', detailFr: 'Plus d’espace', detailHt: 'Plis espas', eta: '7 min' },
 ]
 
 const copy = {
