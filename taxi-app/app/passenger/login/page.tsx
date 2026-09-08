@@ -45,7 +45,7 @@ export default function PassengerLoginPage() {
       return
     }
 
-    window.location.replace('/')
+    window.location.replace('/passenger/dashboard')
   }
 
   return <main className="passenger-login-page">
