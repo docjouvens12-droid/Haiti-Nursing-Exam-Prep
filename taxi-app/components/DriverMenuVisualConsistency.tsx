@@ -11,6 +11,11 @@ export default function DriverMenuVisualConsistency() {
       const style = document.createElement('style')
       style.id = styleId
       style.textContent = `
+        @media (max-width: 600px) {
+          .drawer {
+            width:min(62vw, 255px) !important;
+          }
+        }
         .drawer .menuSection {
           border-bottom:1px solid #e7ecef !important;
         }
