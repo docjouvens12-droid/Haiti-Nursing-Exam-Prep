@@ -37,89 +37,104 @@ export default function DriverPaymentMenuPolish() {
     }
 
     let disposed = false
+    let setupRunning = false
 
     const setup = async () => {
+      if (setupRunning || disposed) return
       const drawer = document.querySelector<HTMLElement>('.drawer')
-      if (!drawer || drawer.querySelector('[data-driver-payment-menu="true"]')) return
+      if (!drawer) return
 
-      const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
-      const { data: auth } = await supabase.auth.getUser()
-      if (disposed || !auth.user) return
-
-      const { data: payout } = await supabase
-        .from('driver_profiles')
-        .select('moncash_enabled,moncash_name,moncash_phone,natcash_enabled,natcash_name,natcash_phone')
-        .eq('user_id', auth.user.id)
-        .maybeSingle()
-      if (disposed) return
-
-      const section = document.createElement('div')
-      section.className = 'driver-payment-menu-section'
-      section.dataset.driverPaymentMenu = 'true'
-      section.innerHTML = `
-        <button type="button" class="driver-payment-menu-trigger" aria-expanded="false">
-          <span>${lang === 'ht' ? 'Peman' : 'Paiements'}</span>
-          <span class="arrow" aria-hidden="true">›</span>
-        </button>
-        <div class="driver-payment-menu-content">
-          ${providerMarkup('moncash', 'MonCash', Boolean(payout?.moncash_enabled), payout?.moncash_name ?? '', payout?.moncash_phone ?? '', lang)}
-          ${providerMarkup('natcash', 'NatCash', Boolean(payout?.natcash_enabled), payout?.natcash_name ?? '', payout?.natcash_phone ?? '', lang)}
-        </div>
-      `
-
-      section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.addEventListener('click', () => {
-        const open = section.classList.toggle('open')
-        section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.setAttribute('aria-expanded', String(open))
-      })
-
-      for (const provider of ['moncash', 'natcash'] as const) {
-        const box = section.querySelector<HTMLElement>(`[data-provider="${provider}"]`)
-        const toggle = box?.querySelector<HTMLButtonElement>('.driver-payout-switch')
-        const save = box?.querySelector<HTMLButtonElement>('.driver-payout-save')
-        const name = box?.querySelector<HTMLInputElement>('input[name="name"]')
-        const phone = box?.querySelector<HTMLInputElement>('input[name="phone"]')
-        const status = box?.querySelector<HTMLElement>('.driver-payout-status')
-
-        toggle?.addEventListener('click', async () => {
-          if (!box) return
-          const enabled = !box.classList.contains('enabled')
-          box.classList.toggle('enabled', enabled)
-          toggle.setAttribute('aria-pressed', String(enabled))
-          const update = provider === 'moncash' ? { moncash_enabled: enabled } : { natcash_enabled: enabled }
-          const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
-          if (status) status.textContent = error ? (lang === 'ht' ? 'Pa ka anrejistre chanjman an.' : 'Impossible d’enregistrer ce changement.') : ''
-        })
-
-        save?.addEventListener('click', async () => {
-          const accountName = name?.value.trim() ?? ''
-          const accountPhone = phone?.value.trim() ?? ''
-          if (!accountName || !accountPhone) {
-            if (status) status.textContent = lang === 'ht' ? 'Antre non ak nimewo telefòn lan.' : 'Entrez le nom et le numéro de téléphone.'
-            return
-          }
-          save.disabled = true
-          if (status) status.textContent = lang === 'ht' ? 'N ap anrejistre…' : 'Enregistrement…'
-          const update = provider === 'moncash'
-            ? { moncash_name: accountName, moncash_phone: accountPhone, moncash_enabled: true }
-            : { natcash_name: accountName, natcash_phone: accountPhone, natcash_enabled: true }
-          const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
-          if (!error) box?.classList.add('enabled')
-          if (status) status.textContent = error
-            ? (lang === 'ht' ? 'Nou pa ka anrejistre enfòmasyon yo.' : 'Impossible d’enregistrer les informations.')
-            : (lang === 'ht' ? 'Enfòmasyon yo anrejistre.' : 'Informations enregistrées.')
-          save.disabled = false
-        })
+      const existing = Array.from(drawer.querySelectorAll<HTMLElement>('[data-driver-payment-menu="true"]'))
+      if (existing.length > 0) {
+        existing.slice(1).forEach((item) => item.remove())
+        return
       }
 
-      const languageSection = Array.from(drawer.querySelectorAll<HTMLElement>('.menuSection')).find((item) => {
-        const text = item.querySelector('h3')?.textContent?.trim().toLowerCase() ?? ''
-        return text === 'langue' || text === 'lang'
-      })
-      if (languageSection) drawer.insertBefore(section, languageSection)
-      else {
-        const logout = drawer.querySelector('.drawerLogout')
-        if (logout) drawer.insertBefore(section, logout)
-        else drawer.appendChild(section)
+      setupRunning = true
+      try {
+        const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
+        const { data: auth } = await supabase.auth.getUser()
+        if (disposed || !auth.user) return
+
+        const { data: payout } = await supabase
+          .from('driver_profiles')
+          .select('moncash_enabled,moncash_name,moncash_phone,natcash_enabled,natcash_name,natcash_phone')
+          .eq('user_id', auth.user.id)
+          .maybeSingle()
+        if (disposed) return
+
+        if (drawer.querySelector('[data-driver-payment-menu="true"]')) return
+
+        const section = document.createElement('div')
+        section.className = 'driver-payment-menu-section'
+        section.dataset.driverPaymentMenu = 'true'
+        section.innerHTML = `
+          <button type="button" class="driver-payment-menu-trigger" aria-expanded="false">
+            <span>${lang === 'ht' ? 'Peman' : 'Paiements'}</span>
+            <span class="arrow" aria-hidden="true">›</span>
+          </button>
+          <div class="driver-payment-menu-content">
+            ${providerMarkup('moncash', 'MonCash', Boolean(payout?.moncash_enabled), payout?.moncash_name ?? '', payout?.moncash_phone ?? '', lang)}
+            ${providerMarkup('natcash', 'NatCash', Boolean(payout?.natcash_enabled), payout?.natcash_name ?? '', payout?.natcash_phone ?? '', lang)}
+          </div>
+        `
+
+        section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.addEventListener('click', () => {
+          const open = section.classList.toggle('open')
+          section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.setAttribute('aria-expanded', String(open))
+        })
+
+        for (const provider of ['moncash', 'natcash'] as const) {
+          const box = section.querySelector<HTMLElement>(`[data-provider="${provider}"]`)
+          const toggle = box?.querySelector<HTMLButtonElement>('.driver-payout-switch')
+          const save = box?.querySelector<HTMLButtonElement>('.driver-payout-save')
+          const name = box?.querySelector<HTMLInputElement>('input[name="name"]')
+          const phone = box?.querySelector<HTMLInputElement>('input[name="phone"]')
+          const status = box?.querySelector<HTMLElement>('.driver-payout-status')
+
+          toggle?.addEventListener('click', async () => {
+            if (!box) return
+            const enabled = !box.classList.contains('enabled')
+            box.classList.toggle('enabled', enabled)
+            toggle.setAttribute('aria-pressed', String(enabled))
+            const update = provider === 'moncash' ? { moncash_enabled: enabled } : { natcash_enabled: enabled }
+            const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
+            if (status) status.textContent = error ? (lang === 'ht' ? 'Pa ka anrejistre chanjman an.' : 'Impossible d’enregistrer ce changement.') : ''
+          })
+
+          save?.addEventListener('click', async () => {
+            const accountName = name?.value.trim() ?? ''
+            const accountPhone = phone?.value.trim() ?? ''
+            if (!accountName || !accountPhone) {
+              if (status) status.textContent = lang === 'ht' ? 'Antre non ak nimewo telefòn lan.' : 'Entrez le nom et le numéro de téléphone.'
+              return
+            }
+            save.disabled = true
+            if (status) status.textContent = lang === 'ht' ? 'N ap anrejistre…' : 'Enregistrement…'
+            const update = provider === 'moncash'
+              ? { moncash_name: accountName, moncash_phone: accountPhone, moncash_enabled: true }
+              : { natcash_name: accountName, natcash_phone: accountPhone, natcash_enabled: true }
+            const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
+            if (!error) box?.classList.add('enabled')
+            if (status) status.textContent = error
+              ? (lang === 'ht' ? 'Nou pa ka anrejistre enfòmasyon yo.' : 'Impossible d’enregistrer les informations.')
+              : (lang === 'ht' ? 'Enfòmasyon yo anrejistre.' : 'Informations enregistrées.')
+            save.disabled = false
+          })
+        }
+
+        const languageSection = Array.from(drawer.querySelectorAll<HTMLElement>('.menuSection')).find((item) => {
+          const text = item.querySelector('h3')?.textContent?.trim().toLowerCase() ?? ''
+          return text === 'langue' || text === 'lang'
+        })
+        if (languageSection) drawer.insertBefore(section, languageSection)
+        else {
+          const logout = drawer.querySelector('.drawerLogout')
+          if (logout) drawer.insertBefore(section, logout)
+          else drawer.appendChild(section)
+        }
+      } finally {
+        setupRunning = false
       }
     }
 
