@@ -39,10 +39,10 @@ type Vehicle = {
 
 const copy = {
   fr: {
-    title: 'Espace chauffeur', subtitle: 'Gérez votre disponibilité et vos trajets', online: 'En ligne', offline: 'Hors ligne', goOnline: 'Passer en ligne', goOffline: 'Passer hors ligne', available: 'Demandes disponibles', activeRide: 'Trajet en cours', noRequests: 'Aucune demande disponible pour le moment.', waitingOnline: 'Passez en ligne pour recevoir les demandes.', pickup: 'Prise en charge', destination: 'Destination', fare: 'Prix estimé', distance: 'Distance', duration: 'Durée', service: 'Service', accept: 'Accepter', arriving: 'Je suis arrivé', start: 'Commencer le trajet', complete: 'Terminer le trajet', refresh: 'Actualiser', logout: 'Se déconnecter', notDriver: 'Ce compte n’est pas un chauffeur approuvé.', loading: 'Chargement…', vehicle: 'Véhicule', gpsOn: 'Position GPS active', gpsOff: 'Position GPS indisponible', completed: 'Trajet terminé.', accepted: 'Trajet accepté.', arrivingMsg: 'Statut mis à jour : chauffeur arrivé.', started: 'Trajet démarré.', onlineConfirmed: 'Vous êtes maintenant en ligne.', offlineConfirmed: 'Vous êtes maintenant hors ligne.', gpsPermission: 'Autorisez la localisation sur votre iPhone pour partager votre position.', rating: 'Note chauffeur', trips: 'trajet', personal: 'Informations personnelles', language: 'Langue', email: 'E-mail', phone: 'Téléphone', color: 'Couleur', plate: 'Plaque', model: 'Modèle'
+    title: 'Espace chauffeur', subtitle: 'Gérez votre disponibilité et vos trajets', online: 'En ligne', offline: 'Hors ligne', goOnline: 'Passer en ligne', goOffline: 'Passer hors ligne', available: 'Demandes disponibles', activeRide: 'Trajet en cours', noRequests: 'Aucune demande disponible pour le moment.', waitingOnline: 'Passez en ligne pour recevoir les demandes.', pickup: 'Prise en charge', destination: 'Destination', fare: 'Prix estimé', distance: 'Distance', duration: 'Durée', service: 'Service', accept: 'Accepter', reject: 'Refuser', arriving: 'Je suis arrivé', start: 'Commencer le trajet', complete: 'Terminer le trajet', refresh: 'Actualiser', logout: 'Se déconnecter', notDriver: 'Ce compte n’est pas un chauffeur approuvé.', loading: 'Chargement…', vehicle: 'Véhicule', gpsOn: 'Position GPS active', gpsOff: 'Position GPS indisponible', completed: 'Trajet terminé.', accepted: 'Trajet accepté.', rejected: 'Demande refusée.', arrivingMsg: 'Statut mis à jour : chauffeur arrivé.', started: 'Trajet démarré.', onlineConfirmed: 'Vous êtes maintenant en ligne.', offlineConfirmed: 'Vous êtes maintenant hors ligne.', gpsPermission: 'Autorisez la localisation sur votre iPhone pour partager votre position.', rating: 'Note chauffeur', trips: 'trajet', personal: 'Informations personnelles', language: 'Langue', email: 'E-mail', phone: 'Téléphone', color: 'Couleur', plate: 'Plaque', model: 'Modèle', decide: 'Temps pour répondre'
   },
   ht: {
-    title: 'Espas chofè', subtitle: 'Jere disponiblite ou ak trajè ou yo', online: 'Sou liy', offline: 'Pa sou liy', goOnline: 'Mete m sou liy', goOffline: 'Retire m sou liy', available: 'Demann trajè ki disponib', activeRide: 'Trajè aktyèl', noRequests: 'Pa gen demann trajè pou kounye a.', waitingOnline: 'Mete tèt ou sou liy pou resevwa demann.', pickup: 'Kote pou pran pasaje a', destination: 'Destinasyon', fare: 'Pri estime', distance: 'Distans', duration: 'Dire', service: 'Sèvis', accept: 'Aksepte', arriving: 'Mwen rive', start: 'Kòmanse trajè a', complete: 'Fini trajè a', refresh: 'Rafrechi', logout: 'Dekonekte', notDriver: 'Kont sa a pa yon chofè ki apwouve.', loading: 'N ap chaje…', vehicle: 'Veyikil', gpsOn: 'Pozisyon GPS aktif', gpsOff: 'Pozisyon GPS pa disponib', completed: 'Trajè a fini.', accepted: 'Trajè a aksepte.', arrivingMsg: 'Estati a chanje: chofè a rive.', started: 'Trajè a kòmanse.', onlineConfirmed: 'Ou sou liy kounye a.', offlineConfirmed: 'Ou pa sou liy kounye a.', gpsPermission: 'Bay aplikasyon an pèmisyon Location sou iPhone pou pataje pozisyon ou.', rating: 'Nòt chofè', trips: 'trajè', personal: 'Enfòmasyon pèsonèl', language: 'Lang', email: 'Imèl', phone: 'Telefòn', color: 'Koulè', plate: 'Plak', model: 'Modèl'
+    title: 'Espas chofè', subtitle: 'Jere disponiblite ou ak trajè ou yo', online: 'Sou liy', offline: 'Pa sou liy', goOnline: 'Mete m sou liy', goOffline: 'Retire m sou liy', available: 'Demann trajè ki disponib', activeRide: 'Trajè aktyèl', noRequests: 'Pa gen demann trajè pou kounye a.', waitingOnline: 'Mete tèt ou sou liy pou resevwa demann.', pickup: 'Kote pou pran pasaje a', destination: 'Destinasyon', fare: 'Pri estime', distance: 'Distans', duration: 'Dire', service: 'Sèvis', accept: 'Aksepte', reject: 'Rejte', arriving: 'Mwen rive', start: 'Kòmanse trajè a', complete: 'Fini trajè a', refresh: 'Rafrechi', logout: 'Dekonekte', notDriver: 'Kont sa a pa yon chofè ki apwouve.', loading: 'N ap chaje…', vehicle: 'Veyikil', gpsOn: 'Pozisyon GPS aktif', gpsOff: 'Pozisyon GPS pa disponib', completed: 'Trajè a fini.', accepted: 'Trajè a aksepte.', rejected: 'Demann nan rejte.', arrivingMsg: 'Estati a chanje: chofè a rive.', started: 'Trajè a kòmanse.', onlineConfirmed: 'Ou sou liy kounye a.', offlineConfirmed: 'Ou pa sou liy kounye a.', gpsPermission: 'Bay aplikasyon an pèmisyon Location sou iPhone pou pataje pozisyon ou.', rating: 'Nòt chofè', trips: 'trajè', personal: 'Enfòmasyon pèsonèl', language: 'Lang', email: 'Imèl', phone: 'Telefòn', color: 'Koulè', plate: 'Plak', model: 'Modèl', decide: 'Tan pou reponn'
   }
 }
 
@@ -121,8 +121,12 @@ export default function DriverDashboardPage() {
     const { data: mine } = await supabase.from('rides').select('*').eq('driver_id', userId).in('status', ['accepted','driver_arriving','in_progress']).order('requested_at', { ascending: false }).limit(1).maybeSingle()
     setActiveRide((mine ?? null) as Ride | null)
     if (!isOnline || mine) { setAvailable([]); return }
-    const { data: requests } = await supabase.from('rides').select('*').eq('status', 'requested').is('driver_id', null).order('requested_at', { ascending: true }).limit(20)
-    setAvailable((requests ?? []) as Ride[])
+    const [{ data: requests }, { data: rejected }] = await Promise.all([
+      supabase.from('rides').select('*').eq('status', 'requested').is('driver_id', null).order('requested_at', { ascending: true }).limit(30),
+      supabase.from('driver_ride_rejections').select('ride_id').eq('driver_id', userId),
+    ])
+    const hidden = new Set((rejected ?? []).map((r: any) => String(r.ride_id)))
+    setAvailable(((requests ?? []) as Ride[]).filter((r) => !hidden.has(r.id)).slice(0, 20))
   }
 
   function startGpsWatch() {
@@ -187,6 +191,16 @@ export default function DriverDashboardPage() {
     setBusy(false)
   }
 
+  async function rejectRide(ride: Ride, reason: 'rejected' | 'timeout' = 'rejected') {
+    const { error } = await supabase.rpc('reject_ride_request', { p_ride_id: ride.id, p_reason: reason })
+    if (error) {
+      if (reason === 'rejected') setMessage(error.message)
+      return
+    }
+    if (reason === 'rejected') setMessage(t.rejected)
+    await loadRides(userIdRef.current, online)
+  }
+
   async function logout() {
     if (online) await supabase.rpc('set_driver_online', { p_online: false })
     stopGpsWatch(); await supabase.auth.signOut(); location.href = '/'
@@ -229,7 +243,7 @@ export default function DriverDashboardPage() {
 
     {activeRide && <section className="section"><div className="section-title"><h2>{t.activeRide}</h2><span className="pill">{activeRide.status}</span></div><DriverNavigationMap ride={activeRide} lang={lang} /><RideCard ride={activeRide} t={t} />{statusAction && <button className="primary action" disabled={busy} onClick={()=>void rideAction(statusAction.key, activeRide)}>{statusAction.label}</button>}</section>}
 
-    {!activeRide && <section className="section"><div className="section-title"><h2>{t.available}</h2><button className="refresh" onClick={()=>void loadRides()} disabled={busy}>↻ {t.refresh}</button></div>{!online ? <div className="empty">{t.waitingOnline}</div> : available.length === 0 ? <div className="empty">{t.noRequests}</div> : <div className="rides">{available.map(r => <div className="ride-wrap" key={r.id}><RideCard ride={r} t={t}/><button className="primary" disabled={busy || !vehicle} onClick={()=>void rideAction('accept', r)}>{t.accept}</button></div>)}</div>}</section>}
+    {!activeRide && <section className="section"><div className="section-title"><h2>{t.available}</h2><button className="refresh" onClick={()=>void loadRides()} disabled={busy}>↻ {t.refresh}</button></div>{!online ? <div className="empty">{t.waitingOnline}</div> : available.length === 0 ? <div className="empty">🔎 {t.noRequests}</div> : <div className="rides">{available.map(r => <RideOffer key={r.id} ride={r} t={t} busy={busy || !vehicle} onAccept={() => void rideAction('accept', r)} onReject={(reason) => void rejectRide(r, reason)} />)}</div>}</section>}
   </section>
 
   {menuOpen && <div className="menuBackdrop" onClick={() => setMenuOpen(false)}>
@@ -247,9 +261,56 @@ export default function DriverDashboardPage() {
   </div>}
 
   <style jsx>{`
-    .page{min-height:100vh;background:linear-gradient(160deg,#e5f1ed,#eef2f7 50%,#e7edf3);padding:22px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,760px);margin:auto;background:#fff;border-radius:28px;padding:22px;box-shadow:0 24px 70px rgba(18,36,61,.14)}.topbar{display:flex;gap:12px;align-items:center}.menuButton{width:44px;height:44px;border:1px solid #dce4eb;border-radius:14px;background:#fff;color:#0f6f59;font-size:22px;font-weight:900;flex:0 0 auto}.brand{display:flex;align-items:center;gap:10px}.brand>span{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#0f6f59;color:#fff;font-weight:900}.brand strong,.brand small{display:block}.brand small{color:#77879a;margin-top:2px}.card h1{font-size:32px;margin:24px 0 18px}.driver-rating-card{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid #f0dfad;background:#fffaf0;border-radius:18px;margin-bottom:12px}.driver-rating-card>div{display:flex;align-items:center;gap:10px}.driver-rating-card small,.driver-rating-card strong{display:block}.driver-rating-card small{color:#7a8998}.rating-star{font-size:30px;color:#f5b000}.ride-count{font-size:13px;font-weight:850;color:#6a7580;background:#fff;border:1px solid #eadfca;border-radius:999px;padding:8px 11px}.status-card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f4f8f7;border-radius:18px;padding:16px;margin-bottom:12px}.status-card>div{display:grid;grid-template-columns:auto 1fr;column-gap:8px}.status-card small{grid-column:2;color:#78889a}.dot{width:12px;height:12px;border-radius:50%;background:#9aabba;margin-top:4px}.dot.on{background:#16a36f}.online-btn,.offline-btn,.primary,.refresh{border:0;border-radius:14px;padding:12px 16px;font-weight:900}.online-btn,.primary{background:#0f6f59;color:#fff}.offline-btn{background:#fff0f0;color:#a02d2d}.message{padding:12px 14px;border-radius:13px;background:#eef7f4;color:#115f4d;font-weight:750;margin-bottom:12px}.message.error{background:#fff0f0;color:#9b3030}.section{margin-top:20px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section h2{font-size:20px}.pill{font-size:11px;font-weight:900;background:#eef3f7;border-radius:999px;padding:7px 10px}.refresh{background:#102033;color:#fff}.empty{padding:28px;border:1px dashed #d4dee7;border-radius:18px;text-align:center;color:#7a8998}.rides{display:grid;gap:14px}.ride-wrap{border:1px solid #dfe6ed;border-radius:20px;padding:14px}.ride-wrap>.primary{width:100%;margin-top:12px}.action{width:100%;margin-top:12px}.menuBackdrop{position:fixed;inset:0;z-index:30000;background:rgba(10,22,34,.45);display:flex}.drawer{width:min(88vw,360px);height:100%;background:#fff;padding:20px 18px;overflow:auto;box-shadow:20px 0 60px rgba(0,0,0,.2)}.drawerHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.drawerHead strong{font-size:20px}.drawerHead button{border:0;background:#eef2f5;width:38px;height:38px;border-radius:50%;font-size:24px}.profileBlock{display:flex;align-items:center;gap:12px;padding:14px;background:#f4f8f7;border-radius:18px}.avatar{width:54px;height:54px;border-radius:50%;background:#dff2eb;color:#0f6f59;display:grid;place-items:center;font-weight:900;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profileBlock strong,.profileBlock span{display:block}.profileBlock span{font-size:12px;color:#748496;margin-top:3px}.menuSection{padding:16px 2px;border-bottom:1px solid #e5eaee}.menuSection h3{margin:0 0 10px;font-size:14px;color:#0f6f59}.menuSection p{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:13px}.menuSection p span{color:#7a8998}.menuSection p b{text-align:right}.langButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.langButtons button{border:1px solid #dce4eb;background:#fff;border-radius:12px;padding:10px;font-weight:800}.langButtons button.active{border-color:#0f6f59;background:#eaf6f2;color:#0f6f59}.drawerLogout{display:flex;width:100%;align-items:center;justify-content:center;border-radius:14px;padding:13px 14px;margin-top:12px;font-weight:900;box-sizing:border-box;border:0;background:#fff0f0;color:#9a3030}@media(max-width:600px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 16px}.brand small{font-size:11px}.card h1{font-size:28px;margin-top:20px}.status-card{align-items:flex-start;flex-direction:column}.status-card button{width:100%}.driver-rating-card{align-items:flex-start}}
+    .page{min-height:100vh;background:linear-gradient(160deg,#e5f1ed,#eef2f7 50%,#e7edf3);padding:22px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,760px);margin:auto;background:#fff;border-radius:28px;padding:22px;box-shadow:0 24px 70px rgba(18,36,61,.14)}.topbar{display:flex;gap:12px;align-items:center}.menuButton{width:44px;height:44px;border:1px solid #dce4eb;border-radius:14px;background:#fff;color:#0f6f59;font-size:22px;font-weight:900;flex:0 0 auto}.brand{display:flex;align-items:center;gap:10px}.brand>span{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#0f6f59;color:#fff;font-weight:900}.brand strong,.brand small{display:block}.brand small{color:#77879a;margin-top:2px}.card h1{font-size:32px;margin:24px 0 18px}.driver-rating-card{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid #f0dfad;background:#fffaf0;border-radius:18px;margin-bottom:12px}.driver-rating-card>div{display:flex;align-items:center;gap:10px}.driver-rating-card small,.driver-rating-card strong{display:block}.driver-rating-card small{color:#7a8998}.rating-star{font-size:30px;color:#f5b000}.ride-count{font-size:13px;font-weight:850;color:#6a7580;background:#fff;border:1px solid #eadfca;border-radius:999px;padding:8px 11px}.status-card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f4f8f7;border-radius:18px;padding:16px;margin-bottom:12px}.status-card>div{display:grid;grid-template-columns:auto 1fr;column-gap:8px}.status-card small{grid-column:2;color:#78889a}.dot{width:12px;height:12px;border-radius:50%;background:#9aabba;margin-top:4px}.dot.on{background:#16a36f}.online-btn,.offline-btn,.primary,.refresh{border:0;border-radius:14px;padding:12px 16px;font-weight:900}.online-btn,.primary{background:#0f6f59;color:#fff}.offline-btn{background:#fff0f0;color:#a02d2d}.message{padding:12px 14px;border-radius:13px;background:#eef7f4;color:#115f4d;font-weight:750;margin-bottom:12px}.message.error{background:#fff0f0;color:#9b3030}.section{margin-top:20px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section h2{font-size:20px}.pill{font-size:11px;font-weight:900;background:#eef3f7;border-radius:999px;padding:7px 10px}.refresh{background:#102033;color:#fff}.empty{padding:28px;border:1px dashed #d4dee7;border-radius:18px;text-align:center;color:#7a8998}.rides{display:grid;gap:14px}.action{width:100%;margin-top:12px}.menuBackdrop{position:fixed;inset:0;z-index:30000;background:rgba(10,22,34,.45);display:flex}.drawer{width:min(88vw,360px);height:100%;background:#fff;padding:20px 18px;overflow:auto;box-shadow:20px 0 60px rgba(0,0,0,.2)}.drawerHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.drawerHead strong{font-size:20px}.drawerHead button{border:0;background:#eef2f5;width:38px;height:38px;border-radius:50%;font-size:24px}.profileBlock{display:flex;align-items:center;gap:12px;padding:14px;background:#f4f8f7;border-radius:18px}.avatar{width:54px;height:54px;border-radius:50%;background:#dff2eb;color:#0f6f59;display:grid;place-items:center;font-weight:900;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profileBlock strong,.profileBlock span{display:block}.profileBlock span{font-size:12px;color:#748496;margin-top:3px}.menuSection{padding:16px 2px;border-bottom:1px solid #e5eaee}.menuSection h3{margin:0 0 10px;font-size:14px;color:#0f6f59}.menuSection p{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:13px}.menuSection p span{color:#7a8998}.menuSection p b{text-align:right}.langButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.langButtons button{border:1px solid #dce4eb;background:#fff;border-radius:12px;padding:10px;font-weight:800}.langButtons button.active{border-color:#0f6f59;background:#eaf6f2;color:#0f6f59}.drawerLogout{display:flex;width:100%;align-items:center;justify-content:center;border-radius:14px;padding:13px 14px;margin-top:12px;font-weight:900;box-sizing:border-box;border:0;background:#fff0f0;color:#9a3030}@media(max-width:600px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 16px}.brand small{font-size:11px}.card h1{font-size:28px;margin-top:20px}.status-card{align-items:flex-start;flex-direction:column}.status-card button{width:100%}.driver-rating-card{align-items:flex-start}}
   `}</style>
   </main>
+}
+
+function RideOffer({ ride, t, busy, onAccept, onReject }: { ride: Ride; t: any; busy: boolean; onAccept: () => void; onReject: (reason: 'rejected' | 'timeout') => void }) {
+  const [seconds, setSeconds] = useState(20)
+  const finishedRef = useRef(false)
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setSeconds((current) => {
+        if (current <= 1) {
+          window.clearInterval(timer)
+          if (!finishedRef.current) {
+            finishedRef.current = true
+            onReject('timeout')
+          }
+          return 0
+        }
+        return current - 1
+      })
+    }, 1000)
+    return () => window.clearInterval(timer)
+  }, [ride.id])
+
+  function accept() {
+    if (finishedRef.current) return
+    finishedRef.current = true
+    onAccept()
+  }
+
+  function reject() {
+    if (finishedRef.current) return
+    finishedRef.current = true
+    onReject('rejected')
+  }
+
+  const pct = Math.max(0, Math.min(100, (seconds / 20) * 100))
+
+  return <div className="offer-wrap">
+    <div className="offer-top"><strong>{t.decide}</strong><span>{seconds}s</span></div>
+    <div className="countdown"><i style={{ width: `${pct}%` }} /></div>
+    <RideCard ride={ride} t={t} />
+    <div className="offer-actions">
+      <button className="reject" disabled={busy || seconds === 0} onClick={reject}>✕ {t.reject}</button>
+      <button className="accept" disabled={busy || seconds === 0} onClick={accept}>✓ {t.accept}</button>
+    </div>
+    <style jsx>{`.offer-wrap{border:1px solid #dfe6ed;border-radius:20px;padding:14px;background:#fff;box-shadow:0 10px 28px rgba(14,38,55,.08)}.offer-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:7px}.offer-top strong{font-size:12px;color:#67798a}.offer-top span{font-size:18px;font-weight:900;color:#0f6f59}.countdown{height:6px;background:#edf1f4;border-radius:999px;overflow:hidden;margin-bottom:14px}.countdown i{display:block;height:100%;background:#0f6f59;transition:width 1s linear}.offer-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}.offer-actions button{border:0;border-radius:14px;padding:13px 12px;font-weight:900;font-size:15px}.offer-actions button:disabled{opacity:.55}.reject{background:#fff0f0;color:#9f2f2f}.accept{background:#0f6f59;color:#fff}`}</style>
+  </div>
 }
 
 function RideCard({ ride, t }: { ride: Ride; t: any }) {
