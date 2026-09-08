@@ -9,6 +9,7 @@ export default function DriverEarningsMenuPolish() {
 
     const cleanups: Array<() => void> = []
     let applying = false
+    let driverId = ''
 
     const formatHtg = (value: number | null | undefined) => {
       if (value == null || Number.isNaN(value)) return '—'
@@ -21,52 +22,78 @@ export default function DriverEarningsMenuPolish() {
       return sections[0] ?? null
     }
 
+    const getEarnings = async (userId: string) => {
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+      const [{ data: latestCompleted }, { data: completedRides }, { data: weeklyRides }] = await Promise.all([
+        supabase
+          .from('rides')
+          .select('final_fare_htg,completed_at')
+          .eq('driver_id', userId)
+          .eq('status', 'completed')
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('rides')
+          .select('id')
+          .eq('driver_id', userId)
+          .eq('status', 'completed'),
+        supabase
+          .from('rides')
+          .select('final_fare_htg')
+          .eq('driver_id', userId)
+          .eq('status', 'completed')
+          .gte('completed_at', sevenDaysAgo),
+      ])
+
+      return {
+        latestFare: latestCompleted?.final_fare_htg != null ? Number(latestCompleted.final_fare_htg) : null,
+        rideCount: completedRides?.length ?? 0,
+        weeklyRevenue: (weeklyRides ?? []).reduce((sum, ride) => sum + Number(ride.final_fare_htg ?? 0), 0),
+      }
+    }
+
+    const refreshVisibleEarnings = async () => {
+      if (!driverId) return
+      const drawer = document.querySelector('.drawer') as HTMLElement | null
+      if (!drawer) return
+      const section = removeDuplicateSections(drawer)
+      if (!section) return
+
+      const values = await getEarnings(driverId)
+      if (!section.isConnected) return
+
+      const latest = section.querySelector<HTMLElement>('[data-earning-value="latest"]')
+      const count = section.querySelector<HTMLElement>('[data-earning-value="count"]')
+      const weekly = section.querySelector<HTMLElement>('[data-earning-value="weekly"]')
+      if (latest) latest.textContent = formatHtg(values.latestFare)
+      if (count) count.textContent = String(values.rideCount)
+      if (weekly) weekly.textContent = formatHtg(values.weeklyRevenue)
+    }
+
     const apply = async () => {
       const drawer = document.querySelector('.drawer') as HTMLElement | null
       if (!drawer) return
 
       const existing = removeDuplicateSections(drawer)
-      if (existing || applying) return
+      if (existing) {
+        void refreshVisibleEarnings()
+        return
+      }
+      if (applying) return
       applying = true
 
       try {
         const { data: auth } = await supabase.auth.getUser()
         const user = auth.user
         if (!user || !drawer.isConnected) return
+        driverId = user.id
 
-        // Another observer pass may have completed while the data request was running.
         if (removeDuplicateSections(drawer)) return
 
         const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
-
-        const [{ data: latestCompleted }, { data: completedRides }, { data: weeklyRides }] = await Promise.all([
-          supabase
-            .from('rides')
-            .select('final_fare_htg,completed_at')
-            .eq('driver_id', user.id)
-            .eq('status', 'completed')
-            .order('completed_at', { ascending: false })
-            .limit(1)
-            .maybeSingle(),
-          supabase
-            .from('rides')
-            .select('id')
-            .eq('driver_id', user.id)
-            .eq('status', 'completed'),
-          supabase
-            .from('rides')
-            .select('final_fare_htg')
-            .eq('driver_id', user.id)
-            .eq('status', 'completed')
-            .gte('completed_at', sevenDaysAgo),
-        ])
-
+        const values = await getEarnings(user.id)
         if (!drawer.isConnected || removeDuplicateSections(drawer)) return
-
-        const latestFare = latestCompleted?.final_fare_htg != null ? Number(latestCompleted.final_fare_htg) : null
-        const rideCount = completedRides?.length ?? 0
-        const weeklyRevenue = (weeklyRides ?? []).reduce((sum, ride) => sum + Number(ride.final_fare_htg ?? 0), 0)
 
         const section = document.createElement('div')
         section.className = 'menuSection'
@@ -90,20 +117,21 @@ export default function DriverEarningsMenuPolish() {
         })
         title.appendChild(arrow)
 
-        const makeRow = (label: string, value: string) => {
+        const makeRow = (label: string, value: string, key: 'latest' | 'count' | 'weekly') => {
           const row = document.createElement('p')
           const left = document.createElement('span')
           const right = document.createElement('b')
           left.textContent = `${label}: `
           right.textContent = value
+          right.dataset.earningValue = key
           row.append(left, right)
           return row
         }
 
         const rows = [
-          makeRow(lang === 'ht' ? 'Salè pa trajè' : 'Revenu du dernier trajet', formatHtg(latestFare)),
-          makeRow(lang === 'ht' ? 'Kantite trajè' : 'Nombre de trajets', String(rideCount)),
-          makeRow(lang === 'ht' ? 'Revni pa semèn' : 'Revenu sur 7 jours', formatHtg(weeklyRevenue)),
+          makeRow(lang === 'ht' ? 'Salè pa trajè' : 'Revenu du dernier trajet', formatHtg(values.latestFare), 'latest'),
+          makeRow(lang === 'ht' ? 'Kantite trajè' : 'Nombre de trajets', String(values.rideCount), 'count'),
+          makeRow(lang === 'ht' ? 'Revni pa semèn' : 'Revenu sur 7 jours', formatHtg(values.weeklyRevenue), 'weekly'),
         ]
 
         section.append(title, ...rows)
@@ -126,6 +154,7 @@ export default function DriverEarningsMenuPolish() {
           arrow.style.transform = next ? 'rotate(90deg)' : 'rotate(0deg)'
           title.setAttribute('aria-expanded', String(next))
           section.style.paddingBottom = next ? '16px' : '12px'
+          if (next) void refreshVisibleEarnings()
         }
         const toggle = () => setOpen(!open)
         const keyToggle = (e: Event) => {
@@ -145,7 +174,32 @@ export default function DriverEarningsMenuPolish() {
       }
     }
 
+    const setupRealtime = async () => {
+      const { data: auth } = await supabase.auth.getUser()
+      if (!auth.user) return
+      driverId = auth.user.id
+
+      const channel = supabase
+        .channel(`driver-earnings-${driverId}`)
+        .on(
+          'postgres_changes',
+          { event: 'UPDATE', schema: 'public', table: 'rides', filter: `driver_id=eq.${driverId}` },
+          (payload) => {
+            const next = payload.new as { status?: string }
+            const previous = payload.old as { status?: string }
+            if (next?.status === 'completed' || previous?.status === 'completed') {
+              window.setTimeout(() => { void refreshVisibleEarnings() }, 250)
+            }
+          }
+        )
+        .subscribe()
+
+      cleanups.push(() => { void supabase.removeChannel(channel) })
+    }
+
+    void setupRealtime()
     void apply()
+
     const observer = new MutationObserver(() => {
       const drawer = document.querySelector('.drawer') as HTMLElement | null
       if (drawer) removeDuplicateSections(drawer)
@@ -153,8 +207,14 @@ export default function DriverEarningsMenuPolish() {
     })
     observer.observe(document.body, { childList: true, subtree: true })
 
+    const fallbackRefresh = window.setInterval(() => { void refreshVisibleEarnings() }, 15000)
+    const onVisible = () => { if (document.visibilityState === 'visible') void refreshVisibleEarnings() }
+    document.addEventListener('visibilitychange', onVisible)
+
     return () => {
       observer.disconnect()
+      window.clearInterval(fallbackRefresh)
+      document.removeEventListener('visibilitychange', onVisible)
       cleanups.forEach((fn) => fn())
     }
   }, [])
