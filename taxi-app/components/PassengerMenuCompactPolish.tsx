@@ -44,11 +44,12 @@ export default function PassengerMenuCompactPolish() {
         line-height:1!important;
         box-shadow:none!important;
       }
-      .nav-drawer .drawer-nav>button.active{background:#eef7f4!important;color:#0f6f59!important}
-      .nav-drawer .drawer-nav>button>*{color:inherit!important;font-family:inherit!important;font-weight:750!important}
+      .nav-drawer .drawer-nav>button.active{background:#eef7f4!important;color:#243747!important}
+      .nav-drawer .drawer-nav>button>*{color:#243747!important;font-family:inherit!important;font-weight:750!important}
       .nav-drawer .drawer-nav>button span{font-size:14px!important;line-height:1!important}
-      .nav-drawer .drawer-nav>button b{font-size:12px!important;line-height:1!important}
-      .nav-drawer .drawer-nav>button b:last-child{font-size:14px!important;font-weight:700!important}
+      .nav-drawer .drawer-nav>button b{font-size:12px!important;line-height:1!important;color:#243747!important}
+      .nav-drawer .drawer-nav>button b:last-child{font-size:14px!important;font-weight:700!important;color:#243747!important}
+
       .passenger-profile-details,.passenger-payment-details{
         margin:0!important;
         padding:1px 2px 4px 24px!important;
@@ -73,28 +74,13 @@ export default function PassengerMenuCompactPolish() {
         border:0!important;
         background:transparent!important;
       }
-      .passenger-rides-details.open,.passenger-help-details.open{
-        display:grid!important;
-        gap:3px!important;
-      }
+      .passenger-rides-details.open,.passenger-help-details.open{display:grid!important;gap:3px!important}
       .passenger-rides-loading,.passenger-rides-empty{padding:4px 5px!important;margin:0!important;font-size:10px!important}
       .passenger-ride-card{padding:6px!important;margin:0!important;border-radius:8px!important}
       .passenger-ride-top{margin-bottom:2px!important}
       .passenger-ride-route{margin:1px 0!important;font-size:9.5px!important}
       .passenger-ride-price{margin-top:2px!important;font-size:10px!important}
-      .passenger-help-item{
-        width:100%!important;
-        min-height:32px!important;
-        margin:0!important;
-        padding:5px 6px!important;
-        border-radius:8px!important;
-        background:#f7f9fa!important;
-        color:#243747!important;
-        font-family:inherit!important;
-        font-size:10.5px!important;
-        font-weight:750!important;
-        line-height:1.1!important;
-      }
+      .passenger-help-item{width:100%!important;min-height:32px!important;margin:0!important;padding:5px 6px!important;border-radius:8px!important;background:#f7f9fa!important;color:#243747!important;font-family:inherit!important;font-size:10.5px!important;font-weight:750!important;line-height:1.1!important}
       .passenger-help-item b{font-size:10.5px!important;font-weight:750!important;color:#243747!important}
       .passenger-help-item span:first-child{font-size:13px!important}
       .passenger-help-item span:last-child{font-size:12px!important}
@@ -109,8 +95,16 @@ export default function PassengerMenuCompactPolish() {
         color:#243747!important;
         font-family:inherit!important;
       }
-      .nav-drawer .drawer-language small{font-size:10px!important;font-weight:750!important;margin:0 0 1px!important;color:#243747!important}
-      .nav-drawer .drawer-language .language-trigger{padding:5px 6px!important;font-size:10.5px!important;font-weight:750!important;color:#243747!important}
+      .nav-drawer .drawer-language small,
+      .nav-drawer .drawer-language>span,
+      .nav-drawer .drawer-language b{
+        font-size:12px!important;
+        font-weight:750!important;
+        color:#243747!important;
+        line-height:1!important;
+      }
+      .nav-drawer .drawer-language small{margin:0 0 1px!important}
+      .nav-drawer .drawer-language .language-trigger{padding:5px 6px!important;font-size:12px!important;font-weight:750!important;color:#243747!important}
       .passenger-lang-shell{height:32px!important;font-family:inherit!important}
       .passenger-lang-label{font-size:9.5px!important;font-weight:800!important}
       .nav-drawer .drawer-logout{
@@ -124,6 +118,10 @@ export default function PassengerMenuCompactPolish() {
         font-size:12px!important;
         font-weight:750!important;
         line-height:1!important;
+        color:#243747!important;
+        background:transparent!important;
+        border:0!important;
+        box-shadow:none!important;
       }
     `
     document.head.appendChild(style)
