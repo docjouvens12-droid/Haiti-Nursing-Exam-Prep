@@ -1,8 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-type Result = { id: string; label: string; center: [number, number] }
+type Result = { id: string; label: string; center: [number, number]; featureType?: string }
 
 const SEARCH_TYPES = 'address,street,neighborhood,locality,place,district,region'
+
+function normalize(value: string) {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, ' ')
+    .trim()
+}
 
 export async function GET(request: NextRequest) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
@@ -54,6 +63,7 @@ export async function GET(request: NextRequest) {
           id: f.id || props.mapbox_id || `${center[0]},${center[1]}`,
           label,
           center: [Number(center[0]), Number(center[1])] as [number, number],
+          featureType: props.feature_type || f.feature_type || '',
         }]
       })
     } catch {
@@ -65,20 +75,12 @@ export async function GET(request: NextRequest) {
 
   try {
     const batches: Result[][] = []
-
-    // 1) Natural query exactly as the passenger typed it.
     batches.push(await searchMapbox(q, true))
 
-    // 2) Some Haitian neighborhoods/streets are indexed only when Haiti is
-    // explicitly present in the query. This lets users type just “Lalue”,
-    // “Raboto”, “Rue Egalite”, etc.
     if (!batches[0].length && !/ha[iï]ti/i.test(q)) {
       batches.push(await searchMapbox(`${q}, Haïti`, true))
     }
 
-    // 3) Last Mapbox fallback: remove the type restriction. This catches
-    // locally indexed POIs/areas whose feature type is not one of our usual
-    // address/locality types.
     if (!batches.some((batch) => batch.length)) {
       batches.push(await searchMapbox(q, false))
       if (!/ha[iï]ti/i.test(q)) batches.push(await searchMapbox(`${q}, Haïti`, false))
@@ -92,22 +94,38 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    let results = Array.from(deduped.values()).slice(0, 12)
+    let results = Array.from(deduped.values())
+    const normalizedQuery = normalize(q)
 
-    if (Number.isFinite(lat) && Number.isFinite(lng)) {
-      const toRad = (value: number) => value * Math.PI / 180
-      const distance = (result: Result) => {
-        const dLat = toRad(result.center[1] - lat)
-        const dLng = toRad(result.center[0] - lng)
-        const lat1 = toRad(lat)
-        const lat2 = toRad(result.center[1])
-        const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
-        return 6371 * 2 * Math.asin(Math.sqrt(a))
-      }
-      results = [...results].sort((a, b) => distance(a) - distance(b))
+    const toRad = (value: number) => value * Math.PI / 180
+    const distance = (result: Result) => {
+      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return 0
+      const dLat = toRad(result.center[1] - lat)
+      const dLng = toRad(result.center[0] - lng)
+      const lat1 = toRad(lat)
+      const lat2 = toRad(result.center[1])
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+      return 6371 * 2 * Math.asin(Math.sqrt(a))
     }
 
-    return NextResponse.json({ results, query: q })
+    results = [...results].sort((a, b) => {
+      const aLabel = normalize(a.label)
+      const bLabel = normalize(b.label)
+      const aMatches = aLabel.includes(normalizedQuery) ? 0 : 1
+      const bMatches = bLabel.includes(normalizedQuery) ? 0 : 1
+      if (aMatches !== bMatches) return aMatches - bMatches
+
+      const aRegionPenalty = a.featureType === 'region' ? 1 : 0
+      const bRegionPenalty = b.featureType === 'region' ? 1 : 0
+      if (aRegionPenalty !== bRegionPenalty) return aRegionPenalty - bRegionPenalty
+
+      return distance(a) - distance(b)
+    })
+
+    const matchingResults = results.filter((result) => normalize(result.label).includes(normalizedQuery))
+    if (matchingResults.length) results = matchingResults
+
+    return NextResponse.json({ results: results.slice(0, 12), query: q })
   } catch {
     return NextResponse.json({ results: [], error: 'GEOCODE_FAILED' }, { status: 502 })
   }
