@@ -38,27 +38,53 @@ export default function PassengerMenuFinalConsistency() {
       .nav-drawer .drawer-nav>button[data-passenger-help-ready="true"]{border-top:1px solid #e3e9ed!important;border-radius:0!important;margin-top:5px!important;padding-top:8px!important;height:42px!important}
 
       .nav-drawer [data-passenger-logout="true"]{position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important}
-      .nav-drawer [data-passenger-logout="true"]>span:first-child{display:none!important}
-      .nav-drawer [data-passenger-logout="true"]::before{content:'↪'!important;display:inline-block!important;font-size:15px!important;line-height:1!important;color:#9a3030!important}
+      .nav-drawer [data-passenger-logout="true"]::before,
       .nav-drawer [data-passenger-logout="true"]::after{display:none!important;content:none!important}
+      .nav-drawer [data-passenger-logout="true"]>.passenger-logout-icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;width:16px!important;min-width:16px!important;font-size:15px!important;line-height:1!important;color:#9a3030!important}
+      .nav-drawer [data-passenger-logout="true"]>.passenger-logout-label{display:inline!important;font:inherit!important;color:inherit!important}
     `
     document.head.appendChild(style)
 
     const normalize = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
 
-    const markHelp = () => {
+    const apply = () => {
       const drawer = document.querySelector<HTMLElement>('.nav-drawer')
       if (!drawer) return
+
       const buttons = Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
       const help = buttons.find((button) => {
         const text = normalize(button.textContent || '')
         return text.includes('aide') || text.includes('ed')
       })
       if (help) help.dataset.passengerHelpRoute = 'true'
+
+      const logout = drawer.querySelector<HTMLButtonElement>('[data-passenger-logout="true"], .drawer-logout')
+      if (logout) {
+        logout.dataset.passengerLogout = 'true'
+        const isHt = window.localStorage.getItem('taxi-language') === 'ht'
+        const desiredLabel = isHt ? 'Dekonekte' : 'Se déconnecter'
+        const hasControlledIcon = logout.querySelector('.passenger-logout-icon')
+        const hasControlledLabel = logout.querySelector('.passenger-logout-label')
+
+        if (!hasControlledIcon || !hasControlledLabel) {
+          logout.replaceChildren()
+          const icon = document.createElement('span')
+          icon.className = 'passenger-logout-icon'
+          icon.textContent = '↪'
+          icon.setAttribute('aria-hidden', 'true')
+          const label = document.createElement('span')
+          label.className = 'passenger-logout-label'
+          label.textContent = desiredLabel
+          logout.append(icon, label)
+        } else {
+          const label = logout.querySelector<HTMLElement>('.passenger-logout-label')
+          if (label && label.textContent !== desiredLabel) label.textContent = desiredLabel
+        }
+      }
     }
 
-    markHelp()
-    const observer = new MutationObserver(markHelp)
+    apply()
+    const observer = new MutationObserver(apply)
     observer.observe(document.body, { childList: true, subtree: true })
 
     return () => {
