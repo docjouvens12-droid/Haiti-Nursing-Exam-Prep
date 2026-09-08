@@ -123,11 +123,9 @@ export default function PassengerMenuPolish() {
         const details = document.createElement('div')
         details.className = 'passenger-profile-details'
         details.append(
-          row(lang === 'ht' ? 'Non' : 'Nom', person?.full_name ?? meta.full_name ?? ''),
           row(lang === 'ht' ? 'Dat nesans' : 'Date de naissance', meta.birth_date ?? meta.date_of_birth ?? ''),
           row(lang === 'ht' ? 'Sèks' : 'Sexe', meta.sex ?? meta.gender ?? ''),
           row(lang === 'ht' ? 'Tel' : 'Tél.', person?.phone ?? ''),
-          row(lang === 'ht' ? 'Imèl' : 'E-mail', user?.email ?? ''),
         )
         profileButton.insertAdjacentElement('afterend', details)
         const arrow = profileButton.querySelector<HTMLElement>('b:last-child')
