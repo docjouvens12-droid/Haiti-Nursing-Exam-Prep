@@ -14,13 +14,37 @@ export default function BasicPassengerLoginPage() {
     if (busy) return
     setBusy(true)
     setMessage('')
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password })
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    })
+
     if (error) {
       setMessage(error.message)
       setBusy(false)
       return
     }
-    window.location.href = '/passenger/dashboard'
+
+    if (!data.session) {
+      setMessage('Connexion réussie, mais la session n’a pas été créée. Réessayez.')
+      setBusy(false)
+      return
+    }
+
+    const { error: persistError } = await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    })
+
+    if (persistError) {
+      setMessage(persistError.message)
+      setBusy(false)
+      return
+    }
+
+    await new Promise((resolve) => window.setTimeout(resolve, 250))
+    window.location.replace('/passenger/dashboard')
   }
 
   return (
