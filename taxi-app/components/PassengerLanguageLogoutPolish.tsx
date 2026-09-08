@@ -26,9 +26,10 @@ export default function PassengerLanguageLogoutPolish() {
       .passenger-language-icon{font-size:15px;line-height:1}
       .passenger-language-main{display:grid;gap:4px;min-width:0}
       .passenger-language-title{font-size:11px;font-weight:800;color:#5f6f7d;line-height:1}
-      .passenger-lang-shell{width:132px;max-width:100%;height:32px;border:1px solid #d7e1e8;border-radius:999px;background:#f2f5f7;padding:3px 8px;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;cursor:pointer;overflow:hidden;box-sizing:border-box}
-      .passenger-lang-knob{position:absolute;top:5px;left:7px;width:20px;height:20px;border-radius:50%;background:#0f6f59;box-shadow:0 2px 7px rgba(15,111,89,.22);transition:transform .2s ease;z-index:2}
-      .passenger-lang-label{position:relative;z-index:1;text-align:center;font-size:10px;font-weight:850;transition:color .2s ease;pointer-events:none;color:#657483}
+      .passenger-lang-shell{width:132px;max-width:100%;height:28px;border:0!important;border-radius:0!important;background:transparent!important;padding:0 8px!important;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;cursor:pointer;overflow:visible;box-sizing:border-box;box-shadow:none!important}
+      .passenger-lang-shell::before,.passenger-lang-shell::after{display:none!important;content:none!important}
+      .passenger-lang-knob{position:absolute;top:7px;left:8px;width:14px;height:14px;border-radius:50%;background:#0f6f59;box-shadow:none;transition:transform .2s ease;z-index:2}
+      .passenger-lang-label{position:relative;z-index:1;text-align:center;font-size:10px;font-weight:850;transition:color .2s ease;pointer-events:none;color:#657483;background:transparent!important;border:0!important;border-radius:0!important}
       .nav-drawer .drawer-logout,
       .nav-drawer [data-passenger-logout="true"]{
         display:flex!important;align-items:center!important;justify-content:center!important;
@@ -92,7 +93,7 @@ export default function PassengerLanguageLogoutPolish() {
 
           const paint = () => {
             const isHt = window.localStorage.getItem('taxi-language') === 'ht'
-            knob.style.transform = isHt ? 'translateX(96px)' : 'translateX(0)'
+            knob.style.transform = isHt ? 'translateX(100px)' : 'translateX(0)'
             fr.style.color = isHt ? '#657483' : '#0f6f59'
             ht.style.color = isHt ? '#0f6f59' : '#657483'
             shell.setAttribute('aria-checked', String(isHt))
