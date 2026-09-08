@@ -26,12 +26,14 @@ type SafetyRow = {
 
 const text = {
   fr: {
-    title: 'Sécurité des trajets', subtitle: 'Surveillez et traitez les alertes de sécurité', back: 'Chauffeurs', logout: 'Se déconnecter', loading: 'Chargement des alertes…', denied: 'Accès réservé aux administrateurs.', notSigned: 'Vous devez être connecté.', all: 'Toutes', fresh: 'Nouvelles', ack: 'Reconnues', resolved: 'Résolues', noAlerts: 'Aucune alerte dans cette catégorie.', passenger: 'Passager', driver: 'Chauffeur', route: 'Trajet', created: 'Détectée', status: 'Statut', type: 'Type', severity: 'Niveau', note: 'Note admin', resolve: 'Marquer résolue', reopen: 'Rouvrir', save: 'Enregistrer la note', saved: 'Mise à jour enregistrée.', error: 'Impossible de mettre à jour cette alerte.', stopped: 'Arrêt prolongé', deviation: 'Écart d’itinéraire', safetyOpen: 'Centre de sécurité ouvert', unknown: 'Alerte de sécurité', newStatus: 'Nouvelle', ackStatus: 'Reconnue', resolvedStatus: 'Résolue'
+    title: 'Sécurité des trajets', subtitle: 'Surveillez et traitez les alertes de sécurité', back: 'Chauffeurs', logout: 'Se déconnecter', loading: 'Chargement des alertes…', denied: 'Accès réservé aux administrateurs.', notSigned: 'Vous devez être connecté.', all: 'Toutes', fresh: 'Nouvelles', ack: 'Reconnues', resolved: 'Résolues', noAlerts: 'Aucune alerte dans cette catégorie.', passenger: 'Passager', driver: 'Chauffeur', route: 'Trajet', created: 'Détectée', status: 'Statut', type: 'Type', severity: 'Niveau', note: 'Note admin', resolve: 'Marquer résolue', reopen: 'Rouvrir', save: 'Enregistrer la note', saved: 'Mise à jour enregistrée.', error: 'Impossible de mettre à jour cette alerte.', stopped: 'Arrêt prolongé', deviation: 'Écart d’itinéraire', safetyOpen: 'Centre de sécurité ouvert', unknown: 'Alerte de sécurité', newStatus: 'Nouvelle', ackStatus: 'Reconnue', resolvedStatus: 'Résolue', live: 'Temps réel'
   },
   ht: {
-    title: 'Sekirite trajè yo', subtitle: 'Siveye epi trete alèt sekirite yo', back: 'Chofè yo', logout: 'Dekonekte', loading: 'N ap chaje alèt yo…', denied: 'Se administratè sèlman ki gen aksè.', notSigned: 'Ou dwe konekte.', all: 'Tout', fresh: 'Nouvo', ack: 'Rekonèt', resolved: 'Rezoud', noAlerts: 'Pa gen alèt nan kategori sa a.', passenger: 'Kliyan', driver: 'Chofè', route: 'Trajè', created: 'Detekte', status: 'Estati', type: 'Kalite', severity: 'Nivo', note: 'Nòt admin', resolve: 'Make kòm rezoud', reopen: 'Relouvri', save: 'Anrejistre nòt', saved: 'Mizajou anrejistre.', error: 'Nou pa ka modifye alèt sa a.', stopped: 'Machin kanpe lontan', deviation: 'Devyasyon wout', safetyOpen: 'Sant sekirite ouvri', unknown: 'Alèt sekirite', newStatus: 'Nouvo', ackStatus: 'Rekonèt', resolvedStatus: 'Rezoud'
+    title: 'Sekirite trajè yo', subtitle: 'Siveye epi trete alèt sekirite yo', back: 'Chofè yo', logout: 'Dekonekte', loading: 'N ap chaje alèt yo…', denied: 'Se administratè sèlman ki gen aksè.', notSigned: 'Ou dwe konekte.', all: 'Tout', fresh: 'Nouvo', ack: 'Rekonèt', resolved: 'Rezoud', noAlerts: 'Pa gen alèt nan kategori sa a.', passenger: 'Kliyan', driver: 'Chofè', route: 'Trajè', created: 'Detekte', status: 'Estati', type: 'Kalite', severity: 'Nivo', note: 'Nòt admin', resolve: 'Make kòm rezoud', reopen: 'Relouvri', save: 'Anrejistre nòt', saved: 'Mizajou anrejistre.', error: 'Nou pa ka modifye alèt sa a.', stopped: 'Machin kanpe lontan', deviation: 'Devyasyon wout', safetyOpen: 'Sant sekirite ouvri', unknown: 'Alèt sekirite', newStatus: 'Nouvo', ackStatus: 'Rekonèt', resolvedStatus: 'Rezoud', live: 'An tan reyèl'
   },
 }
+
+const severityRank: Record<string, number> = { critical: 4, high: 3, medium: 2, low: 1 }
 
 export default function AdminSafetyPage() {
   const [lang, setLang] = useState<Lang>('fr')
@@ -48,6 +50,17 @@ export default function AdminSafetyPage() {
     if (saved === 'fr' || saved === 'ht') setLang(saved)
     void init()
   }, [])
+
+  useEffect(() => {
+    if (!authorized) return
+    const channel = supabase
+      .channel('admin-safety-events-live')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'ride_safety_events' }, () => {
+        void loadAlerts(false)
+      })
+      .subscribe()
+    return () => { void supabase.removeChannel(channel) }
+  }, [authorized])
 
   async function init() {
     setBusy(true)
@@ -70,8 +83,8 @@ export default function AdminSafetyPage() {
     setBusy(false)
   }
 
-  async function loadAlerts() {
-    setBusy(true)
+  async function loadAlerts(showBusy = true) {
+    if (showBusy) setBusy(true)
     setMessage('')
     const { data: events, error } = await supabase
       .from('ride_safety_events')
@@ -81,7 +94,7 @@ export default function AdminSafetyPage() {
 
     if (error) {
       setMessage(error.message)
-      setBusy(false)
+      if (showBusy) setBusy(false)
       return
     }
 
@@ -112,10 +125,17 @@ export default function AdminSafetyPage() {
         pickup_address: ride?.pickup_address ?? null,
         destination_address: ride?.destination_address ?? null,
       }
+    }).sort((a, b) => {
+      const aOpen = !a.resolved_at ? 1 : 0
+      const bOpen = !b.resolved_at ? 1 : 0
+      if (aOpen !== bOpen) return bOpen - aOpen
+      const severityDiff = (severityRank[b.severity] ?? 0) - (severityRank[a.severity] ?? 0)
+      if (severityDiff) return severityDiff
+      return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     })
     setRows(merged)
     setNotes(Object.fromEntries(merged.map((r) => [r.id, r.admin_note ?? ''])))
-    setBusy(false)
+    if (showBusy) setBusy(false)
   }
 
   async function updateEvent(row: SafetyRow, resolved: boolean) {
@@ -182,6 +202,7 @@ export default function AdminSafetyPage() {
       <div className="topbar">
         <button className="back" onClick={() => location.href = '/admin/drivers'}>‹ {t.back}</button>
         <div className="topActions">
+          <span className="liveBadge">● {t.live}</span>
           <select value={lang} onChange={(e) => changeLang(e.target.value as Lang)}><option value="fr">Français</option><option value="ht">Kreyòl</option></select>
           <button className="logout" onClick={() => void logout()}>{t.logout}</button>
         </div>
@@ -225,7 +246,7 @@ export default function AdminSafetyPage() {
     </section>
 
     <style jsx>{`
-      .page{min-height:100vh;background:linear-gradient(160deg,#e8f1ff,#eef3f8 48%,#e7edf3);padding:24px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,820px);margin:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.14);box-sizing:border-box}.denied{margin-top:8vh}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:none;color:#185fc2;font-weight:900}.topActions{display:flex;gap:8px;align-items:center}.topActions select{border:1px solid #d8e1e9;border-radius:12px;background:#fff;padding:9px 11px}.logout{border:1px solid #efd4d4;border-radius:12px;background:#fff5f5;color:#9c2d2d;padding:9px 11px;font-weight:900}.brand{display:flex;gap:10px;align-items:center}.brand>span{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#1b70eb;color:#fff;font-weight:950}.brand strong,.brand small{display:block}.brand small{color:#77879a;margin-top:2px}.titleRow{display:flex;align-items:end;justify-content:space-between;gap:12px}.titleRow h1{font-size:30px;margin:18px 0 3px}.titleRow p{margin:0 0 16px;color:#78889a;font-size:12px}.refresh{width:40px;height:40px;border:0;border-radius:12px;background:#102033;color:#fff;font-size:18px;margin-bottom:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 16px}.stats button{border:1px solid #dfe7ef;border-radius:15px;background:#f8fafc;padding:12px 8px;color:#536579}.stats button.active{border-color:#b9d2fb;background:#eef5ff;color:#185fc2}.stats b,.stats span{display:block}.stats b{font-size:21px}.stats span{font-size:10px;font-weight:850;margin-top:3px}.message{padding:11px 13px;border-radius:12px;background:#eef5ff;color:#185fc2;font-size:12px;font-weight:750;margin-bottom:12px}.muted{color:#78889a}.empty{padding:30px;text-align:center;border:1px dashed #d7e0e8;border-radius:18px;color:#78889a}.list{display:grid;gap:14px}.alert{border:1px solid #dfe6ed;border-radius:20px;padding:16px;background:#fff}.alert.new{border-left:4px solid #d97706}.alert.acknowledged{border-left:4px solid #1b70eb}.alert.resolved{border-left:4px solid #0f7a5d}.alertHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.alertHead>div{min-width:0}.kind{display:block;color:#6d7d8d;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.alertHead strong{font-size:16px}.status{border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900;white-space:nowrap}.status.new{background:#fff3df;color:#9a5a00}.status.acknowledged{background:#eaf2ff;color:#185fc2}.status.resolved{background:#e8f7f1;color:#0b6a50}.details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.details>div{background:#f7f9fb;border-radius:12px;padding:10px;min-width:0}.details .wide{grid-column:1/-1}.details span,.details strong{display:block}.details span{font-size:9px;text-transform:uppercase;color:#8492a0;font-weight:900}.details strong{font-size:12px;margin-top:3px;overflow-wrap:anywhere}.note{display:grid;gap:6px;margin-top:12px}.note span{font-size:10px;font-weight:900;color:#718192}.note textarea{min-height:68px;resize:vertical;border:1px solid #dce4ec;border-radius:12px;padding:10px;font:inherit;font-size:12px;color:#102033;box-sizing:border-box;width:100%}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.actions button{border:0;border-radius:12px;padding:11px;font-weight:900}.save{background:#eef3f8;color:#334d66}.resolve{background:#1b70eb;color:#fff}.reopen{background:#fff2df;color:#9a5a00}@media(max-width:600px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 14px}.stats{grid-template-columns:1fr 1fr}.details{grid-template-columns:1fr}.details .wide{grid-column:auto}.actions{grid-template-columns:1fr}.topActions{flex-direction:column;align-items:stretch}.titleRow h1{font-size:26px}}
+      .page{min-height:100vh;background:linear-gradient(160deg,#e8f1ff,#eef3f8 48%,#e7edf3);padding:24px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,820px);margin:auto;background:#fff;border-radius:28px;padding:24px;box-shadow:0 24px 70px rgba(18,36,61,.14);box-sizing:border-box}.denied{margin-top:8vh}.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}.back{border:0;background:none;color:#185fc2;font-weight:900}.topActions{display:flex;gap:8px;align-items:center}.liveBadge{display:inline-flex;align-items:center;gap:5px;border-radius:999px;background:#e9f8f1;color:#087052;padding:7px 9px;font-size:10px;font-weight:900}.topActions select{border:1px solid #d8e1e9;border-radius:12px;background:#fff;padding:9px 11px}.logout{border:1px solid #efd4d4;border-radius:12px;background:#fff5f5;color:#9c2d2d;padding:9px 11px;font-weight:900}.brand{display:flex;gap:10px;align-items:center}.brand>span{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:#1b70eb;color:#fff;font-weight:950}.brand strong,.brand small{display:block}.brand small{color:#77879a;margin-top:2px}.titleRow{display:flex;align-items:end;justify-content:space-between;gap:12px}.titleRow h1{font-size:30px;margin:18px 0 3px}.titleRow p{margin:0 0 16px;color:#78889a;font-size:12px}.refresh{width:40px;height:40px;border:0;border-radius:12px;background:#102033;color:#fff;font-size:18px;margin-bottom:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:8px 0 16px}.stats button{position:relative;border:1px solid #dfe7ef;border-radius:15px;background:#f8fafc;padding:12px 8px;color:#536579}.stats button:first-child b{color:#b42318}.stats button.active{border-color:#b9d2fb;background:#eef5ff;color:#185fc2}.stats b,.stats span{display:block}.stats b{font-size:21px}.stats span{font-size:10px;font-weight:850;margin-top:3px}.message{padding:11px 13px;border-radius:12px;background:#eef5ff;color:#185fc2;font-size:12px;font-weight:750;margin-bottom:12px}.muted{color:#78889a}.empty{padding:30px;text-align:center;border:1px dashed #d7e0e8;border-radius:18px;color:#78889a}.list{display:grid;gap:14px}.alert{border:1px solid #dfe6ed;border-radius:20px;padding:16px;background:#fff}.alert.new{border-left:4px solid #d97706}.alert.acknowledged{border-left:4px solid #1b70eb}.alert.resolved{border-left:4px solid #0f7a5d}.alertHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.alertHead>div{min-width:0}.kind{display:block;color:#6d7d8d;font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.04em;margin-bottom:5px}.alertHead strong{font-size:16px}.status{border-radius:999px;padding:6px 9px;font-size:10px;font-weight:900;white-space:nowrap}.status.new{background:#fff3df;color:#9a5a00}.status.acknowledged{background:#eaf2ff;color:#185fc2}.status.resolved{background:#e8f7f1;color:#0b6a50}.details{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:14px}.details>div{background:#f7f9fb;border-radius:12px;padding:10px;min-width:0}.details .wide{grid-column:1/-1}.details span,.details strong{display:block}.details span{font-size:9px;text-transform:uppercase;color:#8492a0;font-weight:900}.details strong{font-size:12px;margin-top:3px;overflow-wrap:anywhere}.note{display:grid;gap:6px;margin-top:12px}.note span{font-size:10px;font-weight:900;color:#718192}.note textarea{min-height:68px;resize:vertical;border:1px solid #dce4ec;border-radius:12px;padding:10px;font:inherit;font-size:12px;color:#102033;box-sizing:border-box;width:100%}.actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.actions button{border:0;border-radius:12px;padding:11px;font-weight:900}.save{background:#eef3f8;color:#334d66}.resolve{background:#1b70eb;color:#fff}.reopen{background:#fff2df;color:#9a5a00}@media(max-width:600px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 14px}.stats{grid-template-columns:1fr 1fr}.details{grid-template-columns:1fr}.details .wide{grid-column:auto}.actions{grid-template-columns:1fr}.topActions{flex-direction:column;align-items:stretch}.titleRow h1{font-size:26px}}
     `}</style>
   </main>
 }
