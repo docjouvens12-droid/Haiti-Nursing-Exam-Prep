@@ -24,6 +24,7 @@ import DriverOnlineSwitchPolish from '../components/DriverOnlineSwitchPolish'
 import DriverBrandTaxiPolish from '../components/DriverBrandTaxiPolish'
 import DriverCompactBrandPolish from '../components/DriverCompactBrandPolish'
 import DriverEarningsMenuPolish from '../components/DriverEarningsMenuPolish'
+import DriverNetEarningsPolish from '../components/DriverNetEarningsPolish'
 import DriverRideHistoryMenuPolish from '../components/DriverRideHistoryMenuPolish'
 import DriverMenuVisualConsistency from '../components/DriverMenuVisualConsistency'
 import DriverLogoutPolish from '../components/DriverLogoutPolish'
@@ -44,7 +45,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMobilePaymentPolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverNetEarningsPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary /><DriverPaymentMethodPolish /><DriverPaymentMenuPolish />{children}</body>
     </html>
   )
 }
