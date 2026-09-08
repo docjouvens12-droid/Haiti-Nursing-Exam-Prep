@@ -52,7 +52,7 @@ export default function DriverNavigationPage() {
       .maybeSingle()
 
     if (error || !data) {
-      location.replace('/driver/dashboard')
+      window.location.assign('https://taxi-platform-haiti.vercel.app/driver/dashboard?from=navigation')
       return
     }
 
@@ -87,7 +87,7 @@ export default function DriverNavigationPage() {
     }
 
     if (ride.status === 'in_progress') {
-      location.replace('/driver/dashboard')
+      window.location.assign('https://taxi-platform-haiti.vercel.app/driver/dashboard?ride=completed')
       return
     }
 
