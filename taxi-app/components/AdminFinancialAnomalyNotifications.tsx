@@ -12,11 +12,15 @@ type Anomaly = {
 }
 
 export default function AdminFinancialAnomalyNotifications() {
+  const [isAdminRoute, setIsAdminRoute] = useState(false)
   const [anomaly, setAnomaly] = useState<Anomaly | null>(null)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
-    if (!window.location.pathname.startsWith('/admin')) return
+    const onAdminRoute = window.location.pathname.startsWith('/admin')
+    setIsAdminRoute(onAdminRoute)
+    if (!onAdminRoute) return
+
     let active = true
     let paymentChannel: ReturnType<typeof supabase.channel> | null = null
     let caseChannel: ReturnType<typeof supabase.channel> | null = null
@@ -65,7 +69,7 @@ export default function AdminFinancialAnomalyNotifications() {
     }
   }, [])
 
-  if (!window?.location?.pathname?.startsWith('/admin')) return null
+  if (!isAdminRoute) return null
 
   return <>
     {count > 0 && <button
