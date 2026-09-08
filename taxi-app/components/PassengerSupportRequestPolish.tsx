@@ -12,13 +12,14 @@ export default function PassengerSupportRequestPolish() {
     const style = document.createElement('style')
     style.id = styleId
     style.textContent = `
-      .passenger-support-box{display:none;gap:6px;padding:7px;border:1px solid #dce4e8;border-radius:9px;background:#f8fafb}
-      .passenger-support-box.open{display:grid}
-      .passenger-support-select,.passenger-support-text{width:100%;box-sizing:border-box;border:1px solid #d6e0e5;border-radius:8px;background:#fff;color:#243747;font-size:10px;padding:7px 8px}
-      .passenger-support-text{min-height:72px;resize:vertical;font-family:inherit}
-      .passenger-support-send{width:100%;border:0;border-radius:8px;background:#0f6f59;color:#fff;font-size:10.5px;font-weight:850;padding:8px}
-      .passenger-support-send:disabled{opacity:.55}
-      .passenger-support-status{min-height:14px;font-size:9.5px;line-height:1.3;color:#0f6f59}
+      .passenger-support-box,.passenger-driver-report-box{display:none;gap:6px;padding:7px;border:1px solid #dce4e8;border-radius:9px;background:#f8fafb}
+      .passenger-support-box.open,.passenger-driver-report-box.open{display:grid}
+      .passenger-support-select,.passenger-support-text,.passenger-driver-report-select,.passenger-driver-report-text{width:100%;box-sizing:border-box;border:1px solid #d6e0e5;border-radius:8px;background:#fff;color:#243747;font-size:10px;padding:7px 8px}
+      .passenger-support-text,.passenger-driver-report-text{min-height:72px;resize:vertical;font-family:inherit}
+      .passenger-support-send,.passenger-driver-report-send{width:100%;border:0;border-radius:8px;background:#0f6f59;color:#fff;font-size:10.5px;font-weight:850;padding:8px}
+      .passenger-support-send:disabled,.passenger-driver-report-send:disabled{opacity:.55}
+      .passenger-support-status,.passenger-driver-report-status{min-height:14px;font-size:9.5px;line-height:1.3;color:#0f6f59}
+      .passenger-driver-report{display:block;width:100%;border:0;border-radius:10px;padding:9px 10px;background:#fff4f4;color:#9a3030;font-size:11px;font-weight:850;text-align:center}
     `
     document.head.appendChild(style)
 
@@ -29,11 +30,100 @@ export default function PassengerSupportRequestPolish() {
 
       const ht = window.localStorage.getItem('taxi-language') === 'ht'
 
-      // Clone removes the previous temporary alert listener.
       const contact = oldContact.cloneNode(true) as HTMLButtonElement
       contact.dataset.realSupportReady = 'true'
       contact.textContent = ht ? 'Kontakte sipò' : 'Contacter le support'
       oldContact.replaceWith(contact)
+
+      const report = document.createElement('button')
+      report.type = 'button'
+      report.className = 'passenger-driver-report'
+      report.textContent = ht ? 'Rapòte yon chofè' : 'Signaler un chauffeur'
+
+      const reportBox = document.createElement('div')
+      reportBox.className = 'passenger-driver-report-box'
+      reportBox.innerHTML = `
+        <select class="passenger-driver-report-select" aria-label="${ht ? 'Rezon rapò a' : 'Motif du signalement'}">
+          <option value="behavior">${ht ? 'Konpòtman' : 'Comportement'}</option>
+          <option value="safety">${ht ? 'Sekirite' : 'Sécurité'}</option>
+          <option value="price">${ht ? 'Pri oswa peman' : 'Prix ou paiement'}</option>
+          <option value="vehicle">${ht ? 'Machin oswa plak' : 'Véhicule ou plaque'}</option>
+          <option value="other">${ht ? 'Lòt' : 'Autre'}</option>
+        </select>
+        <textarea class="passenger-driver-report-text" maxlength="2000" placeholder="${ht ? 'Eksplike sa ki pase…' : 'Expliquez ce qui s’est passé…'}"></textarea>
+        <button type="button" class="passenger-driver-report-send">${ht ? 'Voye rapò a' : 'Envoyer le signalement'}</button>
+        <div class="passenger-driver-report-status" aria-live="polite"></div>
+      `
+
+      contact.insertAdjacentElement('beforebegin', report)
+      report.insertAdjacentElement('afterend', reportBox)
+
+      report.addEventListener('click', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        reportBox.classList.toggle('open')
+      })
+
+      const reportSelect = reportBox.querySelector<HTMLSelectElement>('.passenger-driver-report-select')
+      const reportText = reportBox.querySelector<HTMLTextAreaElement>('.passenger-driver-report-text')
+      const reportSend = reportBox.querySelector<HTMLButtonElement>('.passenger-driver-report-send')
+      const reportStatus = reportBox.querySelector<HTMLElement>('.passenger-driver-report-status')
+
+      reportSend?.addEventListener('click', async (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        const message = reportText?.value.trim() || ''
+        if (message.length < 3) {
+          if (reportStatus) reportStatus.textContent = ht ? 'Eksplike pwoblèm nan anvan ou voye.' : 'Expliquez le problème avant de l’envoyer.'
+          return
+        }
+
+        reportSend.disabled = true
+        if (reportStatus) reportStatus.textContent = ht ? 'N ap voye rapò a…' : 'Envoi du signalement…'
+
+        const { data: auth } = await supabase.auth.getUser()
+        const user = auth.user
+        if (!user) {
+          if (reportStatus) reportStatus.textContent = ht ? 'Ou bezwen konekte pou voye rapò a.' : 'Vous devez être connecté pour envoyer le signalement.'
+          reportSend.disabled = false
+          return
+        }
+
+        const { data: rideData } = await supabase
+          .from('rides')
+          .select('id,driver_id')
+          .eq('passenger_id', user.id)
+          .not('driver_id', 'is', null)
+          .order('requested_at', { ascending: false })
+          .limit(1)
+
+        const ride = (rideData ?? [])[0] as { id?: string; driver_id?: string | null } | undefined
+        if (!ride?.id || !ride.driver_id) {
+          if (reportStatus) reportStatus.textContent = ht ? 'Nou pa jwenn yon trajè ki gen chofè pou rapòte.' : 'Aucun trajet avec chauffeur n’a été trouvé.'
+          reportSend.disabled = false
+          return
+        }
+
+        const reasonMap: Record<string, string> = ht
+          ? { behavior: 'Konpòtman', safety: 'Sekirite', price: 'Pri oswa peman', vehicle: 'Machin oswa plak', other: 'Lòt' }
+          : { behavior: 'Comportement', safety: 'Sécurité', price: 'Prix ou paiement', vehicle: 'Véhicule ou plaque', other: 'Autre' }
+        const reason = reasonMap[reportSelect?.value || 'other'] || reasonMap.other
+
+        const { error } = await supabase.from('support_requests').insert({
+          passenger_id: user.id,
+          ride_id: ride.id,
+          category: 'safety',
+          message: `[${ht ? 'Rapò chofè' : 'Signalement chauffeur'} — ${reason}] ${message}`,
+        })
+
+        if (error) {
+          if (reportStatus) reportStatus.textContent = ht ? 'Rapò a pa pase. Eseye ankò.' : 'Le signalement n’a pas été envoyé. Réessayez.'
+        } else {
+          if (reportStatus) reportStatus.textContent = ht ? 'Rapò a voye bay admin. ✅' : 'Signalement envoyé à l’administrateur. ✅'
+          if (reportText) reportText.value = ''
+        }
+        reportSend.disabled = false
+      })
 
       const box = document.createElement('div')
       box.className = 'passenger-support-box'
