@@ -44,12 +44,7 @@ export default function PassengerLoginPage() {
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
     if (saved === 'fr' || saved === 'ht') setLang(saved)
-    let active = true
-    ;(async () => {
-      await supabase.auth.signOut()
-      if (active) setReady(true)
-    })()
-    return () => { active = false }
+    setReady(true)
   }, [])
 
   function changeLang(next: Lang) {
