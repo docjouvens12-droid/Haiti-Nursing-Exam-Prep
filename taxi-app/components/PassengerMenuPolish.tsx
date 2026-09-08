@@ -48,7 +48,25 @@ export default function PassengerMenuPolish() {
       }
     `
     document.head.appendChild(style)
-    return () => document.getElementById(styleId)?.remove()
+
+    const cleanPassengerMenu = () => {
+      if (pathname !== '/passenger/dashboard') return
+      const drawer = document.querySelector<HTMLElement>('.nav-drawer')
+      if (!drawer) return
+      drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button').forEach((button) => {
+        const text = (button.textContent || '').toLowerCase()
+        if (text.includes('devenir chauffeur') || text.includes('vin chofè')) button.remove()
+      })
+    }
+
+    cleanPassengerMenu()
+    const observer = new MutationObserver(cleanPassengerMenu)
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      observer.disconnect()
+      document.getElementById(styleId)?.remove()
+    }
   }, [pathname])
 
   return null
