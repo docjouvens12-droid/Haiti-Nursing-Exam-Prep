@@ -13,6 +13,8 @@ type Summary = {
   completed_at: string | null
 }
 
+const dismissedKey = (driverId: string, rideId: string) => `taxi-driver-dismissed-summary:${driverId}:${rideId}`
+
 export default function DriverCompletedRideSummary() {
   const [summary, setSummary] = useState<Summary | null>(null)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
@@ -21,30 +23,68 @@ export default function DriverCompletedRideSummary() {
     if (window.location.pathname !== '/driver/dashboard') return
     setLang(localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr')
 
-    const onClick = (event: Event) => {
-      const target = event.target as HTMLElement | null
-      const button = target?.closest('button.primary.action') as HTMLButtonElement | null
-      if (!button) return
-      const text = (button.textContent || '').toLowerCase()
-      if (!text.includes('terminer') && !text.includes('fini')) return
+    let active = true
+    let driverId: string | null = null
+    let channel: ReturnType<typeof supabase.channel> | null = null
 
-      window.setTimeout(async () => {
-        const { data: auth } = await supabase.auth.getUser()
-        if (!auth.user) return
-        const { data } = await supabase
-          .from('rides')
-          .select('id,pickup_address,destination_address,estimated_distance_km,estimated_duration_min,final_fare_htg,completed_at')
-          .eq('driver_id', auth.user.id)
-          .eq('status', 'completed')
-          .order('completed_at', { ascending: false })
-          .limit(1)
-          .maybeSingle()
-        if (data?.id) setSummary(data as Summary)
-      }, 900)
+    async function loadLatest(showOnlyRecent = false) {
+      const { data: auth } = await supabase.auth.getUser()
+      if (!active || !auth.user) return
+      driverId = auth.user.id
+
+      const { data } = await supabase
+        .from('rides')
+        .select('id,pickup_address,destination_address,estimated_distance_km,estimated_duration_min,final_fare_htg,completed_at')
+        .eq('driver_id', auth.user.id)
+        .eq('status', 'completed')
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (!active || !data?.id) return
+      if (localStorage.getItem(dismissedKey(auth.user.id, data.id)) === '1') return
+
+      if (showOnlyRecent && data.completed_at) {
+        const age = Date.now() - new Date(data.completed_at).getTime()
+        if (age > 10 * 60 * 1000) return
+      }
+
+      setSummary(data as Summary)
     }
 
-    document.addEventListener('click', onClick, true)
-    return () => document.removeEventListener('click', onClick, true)
+    async function start() {
+      const { data: auth } = await supabase.auth.getUser()
+      if (!active || !auth.user) return
+      driverId = auth.user.id
+
+      await loadLatest(true)
+
+      channel = supabase
+        .channel(`driver-completed-summary-${auth.user.id}`)
+        .on('postgres_changes', {
+          event: 'UPDATE',
+          schema: 'public',
+          table: 'rides',
+          filter: `driver_id=eq.${auth.user.id}`,
+        }, (payload) => {
+          if ((payload.new as any)?.status === 'completed') {
+            window.setTimeout(() => void loadLatest(false), 250)
+          }
+        })
+        .subscribe()
+    }
+
+    void start()
+
+    const languageTimer = window.setInterval(() => {
+      setLang(localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr')
+    }, 800)
+
+    return () => {
+      active = false
+      window.clearInterval(languageTimer)
+      if (channel) void supabase.removeChannel(channel)
+    }
   }, [])
 
   if (!summary) return null
@@ -56,6 +96,12 @@ export default function DriverCompletedRideSummary() {
   const time = summary.completed_at
     ? new Intl.DateTimeFormat(isHt ? 'fr-HT' : 'fr-FR', { hour: '2-digit', minute: '2-digit' }).format(new Date(summary.completed_at))
     : '—'
+
+  async function closeSummary() {
+    const { data: auth } = await supabase.auth.getUser()
+    if (auth.user && summary) localStorage.setItem(dismissedKey(auth.user.id, summary.id), '1')
+    setSummary(null)
+  }
 
   return <div className="driver-summary-backdrop" role="dialog" aria-modal="true">
     <section className="driver-summary-card">
@@ -75,7 +121,7 @@ export default function DriverCompletedRideSummary() {
         <div><small>{isHt ? 'Fini a' : 'Terminé à'}</small><strong>{time}</strong></div>
       </div>
 
-      <button type="button" onClick={() => setSummary(null)}>{isHt ? 'Retounen sou dashboard' : 'Retour au tableau de bord'}</button>
+      <button type="button" onClick={() => void closeSummary()}>{isHt ? 'Retounen sou dashboard' : 'Retour au tableau de bord'}</button>
     </section>
 
     <style jsx>{`
