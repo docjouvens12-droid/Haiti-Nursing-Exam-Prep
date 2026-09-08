@@ -37,6 +37,14 @@ export default function PassengerHelpMenuPolish() {
       .passenger-help-answer{display:none;margin:-2px 0 3px;padding:8px 10px;border-radius:9px;background:#fff;border:1px solid #e7ecef;color:#657483;font-size:10.5px;line-height:1.4}
       .passenger-help-answer.open{display:block}
       .passenger-help-contact{display:block;width:100%;border:0;border-radius:10px;padding:9px 10px;background:#0f6f59;color:#fff;font-size:11px;font-weight:850;text-align:center}
+      .passenger-ai-box{display:none;margin:-2px 0 3px;padding:8px;border:1px solid #dce6e3;border-radius:10px;background:#f8fbfa}
+      .passenger-ai-box.open{display:grid;gap:7px}
+      .passenger-ai-head{display:flex;justify-content:space-between;gap:8px;align-items:center;font-size:10px;font-weight:850;color:#243747}
+      .passenger-ai-beta{font-size:8.5px;padding:3px 6px;border-radius:999px;background:#e7f3ef;color:#0f6f59}
+      .passenger-ai-message{font-size:10px;line-height:1.35;color:#526273;background:#fff;border:1px solid #e5ece9;border-radius:8px;padding:7px}
+      .passenger-ai-form{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px}
+      .passenger-ai-input{width:100%;min-width:0;box-sizing:border-box;border:1px solid #d6e0e5;border-radius:8px;padding:7px 8px;background:#fff;color:#243747;font-size:10px;outline:none}
+      .passenger-ai-send{border:0;border-radius:8px;padding:7px 9px;background:#0f6f59;color:#fff;font-size:10px;font-weight:850}
     `
     document.head.appendChild(style)
 
@@ -54,6 +62,53 @@ export default function PassengerHelpMenuPolish() {
       const details = document.createElement('div')
       details.className = 'passenger-help-details'
       details.dataset.passengerHelpDetails = 'true'
+
+      const aiItem = document.createElement('button')
+      aiItem.type = 'button'
+      aiItem.className = 'passenger-help-item passenger-ai-trigger'
+      aiItem.innerHTML = `<span>🤖</span><b>${ht ? 'Asistan AI' : 'Assistant IA'}</b><span>›</span>`
+
+      const aiBox = document.createElement('div')
+      aiBox.className = 'passenger-ai-box'
+      aiBox.innerHTML = `
+        <div class="passenger-ai-head">
+          <span>${ht ? 'Asistan Taxi Haiti' : 'Assistant Taxi Haiti'}</span>
+          <span class="passenger-ai-beta">BETA</span>
+        </div>
+        <div class="passenger-ai-message" aria-live="polite">${ht ? 'Poze yon kesyon sou trajè, peman, pri oswa kont ou. Koneksyon ak vrè sèvis AI a ap fèt nan pwochen etap la.' : 'Posez une question sur votre trajet, paiement, prix ou compte. La connexion au véritable service IA sera faite à la prochaine étape.'}</div>
+        <div class="passenger-ai-form">
+          <input class="passenger-ai-input" type="text" placeholder="${ht ? 'Ekri kesyon ou…' : 'Écrivez votre question…'}" />
+          <button class="passenger-ai-send" type="button">${ht ? 'Voye' : 'Envoyer'}</button>
+        </div>
+      `
+
+      aiItem.addEventListener('click', (event) => {
+        event.preventDefault(); event.stopPropagation()
+        const open = aiBox.classList.toggle('open')
+        const arrow = aiItem.querySelector<HTMLElement>('span:last-child')
+        if (arrow) arrow.style.transform = open ? 'rotate(90deg)' : 'rotate(0deg)'
+      })
+
+      const aiInput = aiBox.querySelector<HTMLInputElement>('.passenger-ai-input')
+      const aiSend = aiBox.querySelector<HTMLButtonElement>('.passenger-ai-send')
+      const aiMessage = aiBox.querySelector<HTMLElement>('.passenger-ai-message')
+      aiSend?.addEventListener('click', (event) => {
+        event.preventDefault(); event.stopPropagation()
+        const question = aiInput?.value.trim() || ''
+        if (!question) return
+        if (aiMessage) aiMessage.textContent = ht
+          ? 'Chat AI a pare vizyèlman. Nan pwochen etap la n ap konekte li ak done trajè yo ak sèvis AI a pou repons an tan reyèl.'
+          : 'Le chat IA est prêt visuellement. À la prochaine étape, nous le connecterons aux données de trajet et au service IA pour des réponses en temps réel.'
+        if (aiInput) aiInput.value = ''
+      })
+      aiInput?.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+          event.preventDefault()
+          aiSend?.click()
+        }
+      })
+
+      details.append(aiItem, aiBox)
 
       const items = ht ? [
         ['🚕','Pwoblèm ak yon trajè','Chofè pa vini, trajè anile, move destinasyon oswa lòt pwoblèm ki gen rapò ak yon trajè.'],
