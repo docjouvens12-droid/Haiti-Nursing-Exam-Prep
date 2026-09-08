@@ -104,7 +104,7 @@ export default function HomePage() {
     const fare = Math.max(p.minimum, p.base + distanceKm * p.perKm + durationMin * p.perMin)
     return { distance_km: distanceKm, duration_min: durationMin, fare_htg: Math.round(fare * 100) / 100 }
   }, [pickupCoords, effectiveDestinationCoords, routeDistanceKm, routeDurationMin, selectedRide])
-  const effectiveQuote = quote ?? fallbackQuote
+  const effectiveQuote = routeDistanceKm != null && routeDurationMin != null ? fallbackQuote : null
 
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
