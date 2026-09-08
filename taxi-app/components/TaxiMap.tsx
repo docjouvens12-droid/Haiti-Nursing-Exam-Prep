@@ -27,7 +27,40 @@ type LiveTracking = {
   destination_longitude: number | null
 }
 
-export default function TaxiMap({ pickup, destination }: Props) {
+function encodePolyline(coordinates: number[][]) {
+  if (!coordinates.length) return ''
+  const sampled = coordinates.length > 80
+    ? coordinates.filter((_, index) => index % Math.ceil(coordinates.length / 80) === 0 || index === coordinates.length - 1)
+    : coordinates
+
+  let lastLat = 0
+  let lastLng = 0
+  let result = ''
+
+  const encodeNumber = (value: number) => {
+    let v = value < 0 ? ~(value << 1) : value << 1
+    let out = ''
+    while (v >= 0x20) {
+      out += String.fromCharCode((0x20 | (v & 0x1f)) + 63)
+      v >>= 5
+    }
+    out += String.fromCharCode(v + 63)
+    return out
+  }
+
+  for (const [lng, lat] of sampled) {
+    const latE5 = Math.round(lat * 1e5)
+    const lngE5 = Math.round(lng * 1e5)
+    result += encodeNumber(latE5 - lastLat)
+    result += encodeNumber(lngE5 - lastLng)
+    lastLat = latE5
+    lastLng = lngE5
+  }
+
+  return result
+}
+
+export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
   const requestRef = useRef(0)
   const [tracking, setTracking] = useState<LiveTracking | null>(null)
   const [driverDistanceKm, setDriverDistanceKm] = useState<number | null>(null)
@@ -99,6 +132,12 @@ export default function TaxiMap({ pickup, destination }: Props) {
     return () => controller.abort()
   }, [tracking])
 
+  const passengerRoutePolyline = useMemo(() => {
+    if (!routeGeometry?.coordinates?.length) return null
+    const encoded = encodePolyline(routeGeometry.coordinates)
+    return encoded || null
+  }, [routeGeometry])
+
   const mapUrl = useMemo(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token) return ''
@@ -114,20 +153,21 @@ export default function TaxiMap({ pickup, destination }: Props) {
         `pin-s-a+1479ff(${driverLng},${driverLat})`,
         `pin-s-b+0d7b61(${targetLng},${targetLat})`,
       ].filter(Boolean).join(',')
-      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/800x600?padding=55&access_token=${encodeURIComponent(token)}`
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=70&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
 
     if (pickup && destination) {
       const overlays = [
+        passengerRoutePolyline ? `path-5+1479ff-0.88(${encodeURIComponent(passengerRoutePolyline)})` : null,
         `pin-s-a+1479ff(${pickup.lng},${pickup.lat})`,
-        `pin-s-b+0d7b61(${destination.lng},${destination.lat})`,
-      ].join(',')
-      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/800x600?padding=55&access_token=${encodeURIComponent(token)}`
+        `pin-s-b+e11d48(${destination.lng},${destination.lat})`,
+      ].filter(Boolean).join(',')
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=70&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
 
     const center = pickup ?? { lat: 18.5392, lng: -72.3364 }
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${center.lng},${center.lat},12/800x600?access_token=${encodeURIComponent(token)}`
-  }, [pickup, destination, tracking, driverRoutePolyline])
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${center.lng},${center.lat},11/900x650@2x?logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+  }, [pickup, destination, tracking, driverRoutePolyline, passengerRoutePolyline])
 
   useEffect(() => setMapFailed(false), [mapUrl])
 
@@ -140,6 +180,12 @@ export default function TaxiMap({ pickup, destination }: Props) {
       ) : (
         <div className="safe-map-placeholder">Carte temporairement indisponible</div>
       )}
+      {pickup && destination && !tracking && (
+        <div className="route-map-badge">
+          <strong>📍 Trajet sélectionné</strong>
+          <span>Bleu = départ · Rouge = destination</span>
+        </div>
+      )}
       {tracking && tracking.driver_latitude != null && tracking.driver_longitude != null && (
         <div className="live-tracking-badge">
           <strong>🚕 {trackingLabel}</strong>
@@ -150,8 +196,12 @@ export default function TaxiMap({ pickup, destination }: Props) {
         .safe-map-wrap{position:relative;width:100%;height:100%;min-height:300px;background:#eaf0f4;overflow:hidden}
         .safe-map{display:block;width:100%;height:100%;min-height:300px;object-fit:cover}
         .safe-map-placeholder{min-height:300px;display:grid;place-items:center;color:#66778a;font-weight:750;padding:20px;text-align:center}
-        .live-tracking-badge{position:absolute;left:14px;top:14px;z-index:8;background:rgba(16,32,51,.92);color:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 8px 22px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;pointer-events:none}
-        .live-tracking-badge strong,.live-tracking-badge span{display:block}.live-tracking-badge strong{font-size:13px}.live-tracking-badge span{font-size:12px;margin-top:2px;color:#dce7ef}
+        .live-tracking-badge,.route-map-badge{position:absolute;left:14px;top:14px;z-index:8;background:rgba(16,32,51,.92);color:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 8px 22px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;pointer-events:none}
+        .route-map-badge{background:rgba(255,255,255,.94);color:#17324d;border:1px solid rgba(20,121,255,.12)}
+        .live-tracking-badge strong,.live-tracking-badge span,.route-map-badge strong,.route-map-badge span{display:block}
+        .live-tracking-badge strong,.route-map-badge strong{font-size:13px}
+        .live-tracking-badge span,.route-map-badge span{font-size:12px;margin-top:2px}
+        .live-tracking-badge span{color:#dce7ef}.route-map-badge span{color:#607489}
       `}</style>
     </div>
   )
