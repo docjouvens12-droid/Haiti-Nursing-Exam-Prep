@@ -12,6 +12,7 @@ import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import RideRealtimeNotifications from '../components/RideRealtimeNotifications'
 import PassengerHomePolish from '../components/PassengerHomePolish'
+import PassengerBookingFlowPolish from '../components/PassengerBookingFlowPolish'
 import PassengerMenuPolish from '../components/PassengerMenuPolish'
 import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
@@ -40,7 +41,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary />{children}</body>
+      <body><PasswordVisibilityToggle /><LoginTitlePolish /><AuthRoleRedirector /><HaitiTestGeolocation /><DriverCtaBridge /><GlobalSpacesButton /><GlobalLogoutButton /><PassengerRideCompletion /><PassengerActiveDriver /><PassengerPendingRideCancel /><RideRealtimeNotifications /><PassengerHomePolish /><PassengerBookingFlowPolish /><PassengerMenuPolish /><DriverMenuAccordionPolish /><DriverAvatarUploadPolish /><DriverVehicleMenuPolish /><DriverLanguageSwitchPolish /><DriverDashboardTitleHide /><DriverOnlineSwitchPolish /><DriverBrandTaxiPolish /><DriverCompactBrandPolish /><DriverEarningsMenuPolish /><DriverRideHistoryMenuPolish /><DriverMenuVisualConsistency /><DriverLogoutPolish /><DriverAutoRequestSearch /><DriverRideExperiencePolish /><DriverCompletedRideSummary />{children}</body>
     </html>
   )
 }
