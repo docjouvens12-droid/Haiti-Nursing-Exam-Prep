@@ -31,11 +31,40 @@ export default function PassengerDashboardDriverStyle() {
         box-shadow:0 8px 24px rgba(19,39,64,.16)!important;
       }
       .brand-chip{
-        border-radius:15px!important;
-        padding:8px 11px!important;
+        display:flex!important;
+        align-items:center!important;
+        gap:10px!important;
+        border-radius:16px!important;
+        padding:9px 12px!important;
+        background:rgba(255,255,255,.96)!important;
         box-shadow:0 8px 24px rgba(19,39,64,.14)!important;
       }
-      .brand-mark{background:#1b70eb!important;border-radius:12px!important}
+      .brand-mark{
+        width:40px!important;
+        height:40px!important;
+        min-width:40px!important;
+        display:grid!important;
+        place-items:center!important;
+        background:#1b70eb!important;
+        color:#fff!important;
+        border-radius:13px!important;
+        font-size:15px!important;
+        font-weight:900!important;
+      }
+      .brand-chip strong{
+        display:block!important;
+        font-size:13px!important;
+        line-height:1.15!important;
+        color:#102033!important;
+        font-weight:900!important;
+      }
+      .brand-chip small{
+        display:block!important;
+        margin-top:2px!important;
+        font-size:9.5px!important;
+        line-height:1.15!important;
+        color:#758596!important;
+      }
       .booking-sheet{
         margin-top:-24px!important;
         border-radius:26px 26px 0 0!important;
@@ -86,6 +115,10 @@ export default function PassengerDashboardDriverStyle() {
         }
         .map-panel{height:39vh!important;min-height:310px!important}
         .booking-sheet{padding:13px 18px 112px!important}
+        .brand-chip{padding:8px 10px!important;gap:8px!important}
+        .brand-mark{width:36px!important;height:36px!important;min-width:36px!important}
+        .brand-chip strong{font-size:12px!important}
+        .brand-chip small{font-size:9px!important}
       }
     `
     document.head.appendChild(style)
