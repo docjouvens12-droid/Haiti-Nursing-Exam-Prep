@@ -3,22 +3,12 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
-function getAuthStorageKey() {
-  if (typeof window === 'undefined') return 'taxi-auth-default'
-
-  const path = window.location.pathname
-  if (path.startsWith('/passenger')) return 'taxi-auth-passenger'
-  if (path.startsWith('/driver')) return 'taxi-auth-driver'
-  if (path.startsWith('/admin')) return 'taxi-auth-admin'
-  return 'taxi-auth-default'
-}
-
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    storageKey: getAuthStorageKey(),
+    storageKey: 'taxi-auth-default',
   },
 })
 
