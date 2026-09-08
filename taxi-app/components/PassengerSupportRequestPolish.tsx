@@ -12,14 +12,16 @@ export default function PassengerSupportRequestPolish() {
     const style = document.createElement('style')
     style.id = styleId
     style.textContent = `
-      .passenger-support-box,.passenger-driver-report-box{display:none;gap:6px;padding:7px;border:1px solid #dce4e8;border-radius:9px;background:#f8fafb}
-      .passenger-support-box.open,.passenger-driver-report-box.open{display:grid}
-      .passenger-support-select,.passenger-support-text,.passenger-driver-report-select,.passenger-driver-report-text{width:100%;box-sizing:border-box;border:1px solid #d6e0e5;border-radius:8px;background:#fff;color:#243747;font-size:10px;padding:7px 8px}
-      .passenger-support-text,.passenger-driver-report-text{min-height:72px;resize:vertical;font-family:inherit}
-      .passenger-support-send,.passenger-driver-report-send{width:100%;border:0;border-radius:8px;background:#0f6f59;color:#fff;font-size:10.5px;font-weight:850;padding:8px}
-      .passenger-support-send:disabled,.passenger-driver-report-send:disabled{opacity:.55}
-      .passenger-support-status,.passenger-driver-report-status{min-height:14px;font-size:9.5px;line-height:1.3;color:#0f6f59}
-      .passenger-driver-report{display:block;width:100%;border:0;border-radius:10px;padding:9px 10px;background:#fff4f4;color:#9a3030;font-size:11px;font-weight:850;text-align:center}
+      .passenger-support-box,.passenger-driver-report-box,.passenger-ride-report-box{display:none;gap:6px;padding:7px;border:1px solid #dce4e8;border-radius:9px;background:#f8fafb}
+      .passenger-support-box.open,.passenger-driver-report-box.open,.passenger-ride-report-box.open{display:grid}
+      .passenger-support-select,.passenger-support-text,.passenger-driver-report-select,.passenger-driver-report-text,.passenger-ride-report-select,.passenger-ride-report-text{width:100%;box-sizing:border-box;border:1px solid #d6e0e5;border-radius:8px;background:#fff;color:#243747;font-size:10px;padding:7px 8px}
+      .passenger-support-text,.passenger-driver-report-text,.passenger-ride-report-text{min-height:72px;resize:vertical;font-family:inherit}
+      .passenger-support-send,.passenger-driver-report-send,.passenger-ride-report-send{width:100%;border:0;border-radius:8px;background:#0f6f59;color:#fff;font-size:10.5px;font-weight:850;padding:8px}
+      .passenger-support-send:disabled,.passenger-driver-report-send:disabled,.passenger-ride-report-send:disabled{opacity:.55}
+      .passenger-support-status,.passenger-driver-report-status,.passenger-ride-report-status{min-height:14px;font-size:9.5px;line-height:1.3;color:#0f6f59}
+      .passenger-driver-report,.passenger-ride-report{display:block;width:100%;border:0;border-radius:10px;padding:9px 10px;font-size:11px;font-weight:850;text-align:center}
+      .passenger-ride-report{background:#f3f7f9;color:#243747}
+      .passenger-driver-report{background:#fff4f4;color:#9a3030}
     `
     document.head.appendChild(style)
 
@@ -34,6 +36,27 @@ export default function PassengerSupportRequestPolish() {
       contact.dataset.realSupportReady = 'true'
       contact.textContent = ht ? 'Kontakte sipò' : 'Contacter le support'
       oldContact.replaceWith(contact)
+
+      const rideReport = document.createElement('button')
+      rideReport.type = 'button'
+      rideReport.className = 'passenger-ride-report'
+      rideReport.textContent = ht ? 'Rapòte pwoblèm ak trajè' : 'Signaler un problème de trajet'
+
+      const rideReportBox = document.createElement('div')
+      rideReportBox.className = 'passenger-ride-report-box'
+      rideReportBox.innerHTML = `
+        <select class="passenger-ride-report-select" aria-label="${ht ? 'Kalite pwoblèm trajè' : 'Type de problème de trajet'}">
+          <option value="driver_no_show">${ht ? 'Chofè pa vini' : 'Chauffeur absent'}</option>
+          <option value="cancelled">${ht ? 'Trajè anile san rezon' : 'Trajet annulé sans raison'}</option>
+          <option value="wrong_destination">${ht ? 'Move destinasyon' : 'Mauvaise destination'}</option>
+          <option value="delay">${ht ? 'Twòp reta' : 'Retard important'}</option>
+          <option value="route">${ht ? 'Pwoblèm ak wout la' : 'Problème d’itinéraire'}</option>
+          <option value="other">${ht ? 'Lòt' : 'Autre'}</option>
+        </select>
+        <textarea class="passenger-ride-report-text" maxlength="2000" placeholder="${ht ? 'Eksplike pwoblèm trajè a…' : 'Expliquez le problème du trajet…'}"></textarea>
+        <button type="button" class="passenger-ride-report-send">${ht ? 'Voye pwoblèm nan' : 'Envoyer le problème'}</button>
+        <div class="passenger-ride-report-status" aria-live="polite"></div>
+      `
 
       const report = document.createElement('button')
       report.type = 'button'
@@ -55,8 +78,76 @@ export default function PassengerSupportRequestPolish() {
         <div class="passenger-driver-report-status" aria-live="polite"></div>
       `
 
-      contact.insertAdjacentElement('beforebegin', report)
+      contact.insertAdjacentElement('beforebegin', rideReport)
+      rideReport.insertAdjacentElement('afterend', rideReportBox)
+      rideReportBox.insertAdjacentElement('afterend', report)
       report.insertAdjacentElement('afterend', reportBox)
+
+      rideReport.addEventListener('click', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        rideReportBox.classList.toggle('open')
+      })
+
+      const rideSelect = rideReportBox.querySelector<HTMLSelectElement>('.passenger-ride-report-select')
+      const rideText = rideReportBox.querySelector<HTMLTextAreaElement>('.passenger-ride-report-text')
+      const rideSend = rideReportBox.querySelector<HTMLButtonElement>('.passenger-ride-report-send')
+      const rideStatus = rideReportBox.querySelector<HTMLElement>('.passenger-ride-report-status')
+
+      rideSend?.addEventListener('click', async (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        const message = rideText?.value.trim() || ''
+        if (message.length < 3) {
+          if (rideStatus) rideStatus.textContent = ht ? 'Eksplike pwoblèm trajè a anvan ou voye.' : 'Expliquez le problème du trajet avant de l’envoyer.'
+          return
+        }
+
+        rideSend.disabled = true
+        if (rideStatus) rideStatus.textContent = ht ? 'N ap voye pwoblèm nan…' : 'Envoi du problème…'
+
+        const { data: auth } = await supabase.auth.getUser()
+        const user = auth.user
+        if (!user) {
+          if (rideStatus) rideStatus.textContent = ht ? 'Ou bezwen konekte pou voye pwoblèm nan.' : 'Vous devez être connecté pour envoyer le problème.'
+          rideSend.disabled = false
+          return
+        }
+
+        const { data: rideData } = await supabase
+          .from('rides')
+          .select('id')
+          .eq('passenger_id', user.id)
+          .order('requested_at', { ascending: false })
+          .limit(1)
+
+        const rideId = (rideData ?? [])[0]?.id ?? null
+        if (!rideId) {
+          if (rideStatus) rideStatus.textContent = ht ? 'Nou pa jwenn okenn trajè pou rapòte.' : 'Aucun trajet n’a été trouvé.'
+          rideSend.disabled = false
+          return
+        }
+
+        const reasonMap: Record<string, string> = ht
+          ? { driver_no_show: 'Chofè pa vini', cancelled: 'Trajè anile san rezon', wrong_destination: 'Move destinasyon', delay: 'Twòp reta', route: 'Pwoblèm ak wout la', other: 'Lòt' }
+          : { driver_no_show: 'Chauffeur absent', cancelled: 'Trajet annulé sans raison', wrong_destination: 'Mauvaise destination', delay: 'Retard important', route: 'Problème d’itinéraire', other: 'Autre' }
+        const reason = reasonMap[rideSelect?.value || 'other'] || reasonMap.other
+
+        const { error } = await supabase.from('support_requests').insert({
+          passenger_id: user.id,
+          ride_id: rideId,
+          category: 'ride',
+          message: `[${ht ? 'Pwoblèm trajè' : 'Problème trajet'} — ${reason}] ${message}`,
+        })
+
+        if (error) {
+          if (rideStatus) rideStatus.textContent = ht ? 'Pwoblèm nan pa pase. Eseye ankò.' : 'Le problème n’a pas été envoyé. Réessayez.'
+        } else {
+          if (rideStatus) rideStatus.textContent = ht ? 'Pwoblèm trajè a voye bay admin. ✅' : 'Le problème du trajet a été envoyé à l’administrateur. ✅'
+          if (rideText) rideText.value = ''
+        }
+        rideSend.disabled = false
+      })
 
       report.addEventListener('click', (event) => {
         event.preventDefault()
@@ -173,14 +264,13 @@ export default function PassengerSupportRequestPolish() {
           return
         }
 
-        let rideId: string | null = null
         const { data: rideData } = await supabase
           .from('rides')
           .select('id')
           .eq('passenger_id', user.id)
           .order('requested_at', { ascending: false })
           .limit(1)
-        rideId = (rideData ?? [])[0]?.id ?? null
+        const rideId = (rideData ?? [])[0]?.id ?? null
 
         const { error } = await supabase.from('support_requests').insert({
           passenger_id: user.id,
