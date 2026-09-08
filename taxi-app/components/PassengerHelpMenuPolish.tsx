@@ -11,6 +11,23 @@ export default function PassengerHelpMenuPolish() {
     const style = document.createElement('style')
     style.id = styleId
     style.textContent = `
+      .nav-drawer .drawer-nav>button[data-passenger-help-ready="true"]{
+        color:#243747!important;
+        font-size:12px!important;
+        font-weight:750!important;
+        line-height:1!important;
+        font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif!important;
+      }
+      .nav-drawer .drawer-nav>button[data-passenger-help-ready="true"]>*{
+        color:#243747!important;
+        font-family:inherit!important;
+        font-weight:750!important;
+      }
+      .nav-drawer .drawer-nav>button[data-passenger-help-ready="true"] b{
+        font-size:12px!important;
+        line-height:1!important;
+        color:#243747!important;
+      }
       .passenger-help-details{display:none;padding:4px 4px 10px 30px;border-bottom:1px solid #e7ecef}
       .passenger-help-details.open{display:grid;gap:6px}
       .passenger-help-item{width:100%;display:grid;grid-template-columns:22px minmax(0,1fr) 12px;align-items:center;gap:7px;border:0;background:#f7f9fa;color:#243747;border-radius:10px;padding:9px 8px;text-align:left;font-size:11px;font-weight:750;line-height:1.2}
