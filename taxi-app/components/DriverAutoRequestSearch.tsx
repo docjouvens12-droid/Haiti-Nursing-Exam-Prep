@@ -46,7 +46,7 @@ export default function DriverAutoRequestSearch() {
 
       if (online) {
         refresh.classList.add('driver-auto-search')
-        const label = lang === 'ht' ? 'Chèche komand…' : 'Recherche de courses…'
+        const label = lang === 'ht' ? 'Chèche komand…' : 'Recherche en cours…'
         if (refresh.dataset.autoSearchLabel !== label) {
           refresh.innerHTML = `<span class="driver-auto-search-icon" aria-hidden="true">↻</span><span>${label}</span>`
           refresh.dataset.autoSearchLabel = label
