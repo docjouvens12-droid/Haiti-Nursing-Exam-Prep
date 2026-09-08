@@ -11,16 +11,48 @@ export default function DriverMenuVisualConsistency() {
       const style = document.createElement('style')
       style.id = styleId
       style.textContent = `
+        .drawer .menuSection {
+          border-bottom:1px solid #e7ecef !important;
+        }
         .drawer .menuSection > h3 {
-          font-size:14px !important;
+          font-size:15px !important;
           font-weight:800 !important;
-          line-height:1.25 !important;
+          line-height:1.3 !important;
           color:#0f6f59 !important;
           letter-spacing:0 !important;
+          text-transform:none !important;
+          margin:0 !important;
+          padding:7px 0 !important;
         }
         .drawer .menuSection > h3 > span[aria-hidden="true"] {
-          font-size:22px !important;
+          font-size:21px !important;
           line-height:1 !important;
+          color:#0f6f59 !important;
+          font-weight:700 !important;
+        }
+        .drawer .menuSection p {
+          font-size:13px !important;
+          line-height:1.35 !important;
+          margin:9px 0 !important;
+        }
+        .drawer .menuSection p > span {
+          color:#7a8998 !important;
+          font-weight:500 !important;
+        }
+        .drawer .menuSection p > b {
+          color:#102033 !important;
+          font-weight:750 !important;
+        }
+        .drawer .menuSection small {
+          color:#688074;
+        }
+        .drawer .langButtons button {
+          font-size:13px !important;
+          font-weight:800 !important;
+          color:#354657;
+        }
+        .drawer .langButtons button.active {
+          color:#0f6f59 !important;
         }
       `
       document.head.appendChild(style)
