@@ -22,6 +22,12 @@ const rideOptions: RideOption[] = [
   { id: 'comfort', name: 'Comfort', detailFr: 'Plus d’espace', detailHt: 'Plis espas', eta: '7 min' },
 ]
 
+const localPricing = {
+  moto: { base: 150, perKm: 35, perMin: 5, minimum: 200 },
+  standard: { base: 250, perKm: 55, perMin: 7, minimum: 350 },
+  comfort: { base: 400, perKm: 75, perMin: 10, minimum: 550 },
+} as const
+
 const copy = {
   fr: {
     tagline: 'Déplacez-vous facilement, en toute sécurité', welcome: 'BON RETOUR', createPassenger: 'CRÉER UN COMPTE PASSAGER', signInTitle: 'Connectez-vous pour commander un taxi', signUpTitle: 'Inscrivez-vous comme passager', fullName: 'Nom complet', email: 'E-mail', password: 'Mot de passe', wait: 'Veuillez patienter…', signIn: 'Se connecter', createAccount: 'Créer mon compte', noAccount: 'Pas encore de compte ? Créez-en un', haveAccount: 'Vous avez déjà un compte ? Connectez-vous', accountCreated: 'Compte créé. Vérifiez votre e-mail pour confirmer votre adresse, puis connectez-vous.', hello: 'Bonjour', where: 'Où allez-vous ?', drivers: 'Chauffeurs disponibles', pickup: 'Lieu de prise en charge', current: 'Ma position actuelle', testPosition: 'Port-au-Prince (position de test)', destination: 'Destination', destinationPlaceholder: 'Saisissez une adresse ou un lieu en Haïti', searchingAddress: 'Recherche des adresses…', chooseService: 'Choisissez le service', vehicles: 'Véhicules disponibles', chooseDestination: 'Choisissez une destination', payment: 'Paiement', cash: 'Espèces', change: 'Changer ›', searchingDriver: 'Nous cherchons un chauffeur pour vous…', trip: 'trajet', calculating: 'Calcul du prix…', sending: 'Envoi de la demande…', request: 'Commander', mapNote: 'Carte, recherche et itinéraire : Mapbox. Prix et création du trajet : Supabase.',
@@ -75,6 +81,13 @@ export default function HomePage() {
   const [ridesBusy, setRidesBusy] = useState(false)
 
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
+  const fallbackQuote = useMemo<Quote | null>(() => {
+    if (routeDistanceKm == null || routeDurationMin == null) return null
+    const p = localPricing[selectedRide]
+    const fare = Math.max(p.minimum, p.base + routeDistanceKm * p.perKm + routeDurationMin * p.perMin)
+    return { distance_km: routeDistanceKm, duration_min: routeDurationMin, fare_htg: Math.round(fare * 100) / 100 }
+  }, [routeDistanceKm, routeDurationMin, selectedRide])
+  const effectiveQuote = quote ?? fallbackQuote
 
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
@@ -149,7 +162,7 @@ export default function HomePage() {
 
     const runQuote = async () => {
       setRideError('')
-      setRequestState((s) => s === 'searching' ? s : 'quoting')
+      if (!fallbackQuote) setRequestState((s) => s === 'searching' ? s : 'quoting')
 
       const args = {
         p_service_type: selectedRide,
@@ -171,7 +184,7 @@ export default function HomePage() {
         let result: any
         try {
           result = await withTimeout()
-        } catch (firstError) {
+        } catch {
           if (cancelled) return
           if (timeoutId) window.clearTimeout(timeoutId)
           timeoutId = undefined
@@ -186,11 +199,13 @@ export default function HomePage() {
         setQuote({ distance_km: Number(row.distance_km), duration_min: Number(row.duration_min), fare_htg: Number(row.fare_htg) })
       } catch (error: any) {
         if (cancelled) return
-        setQuote(null)
-        const timeout = error?.message === 'QUOTE_TIMEOUT'
-        setRideError(timeout
-          ? (lang === 'ht' ? 'Kalkil pri a pran twòp tan. Tanpri chwazi destinasyon an ankò oswa eseye ankò.' : 'Le calcul du prix prend trop de temps. Veuillez sélectionner de nouveau la destination ou réessayer.')
-          : (error?.message || (lang === 'ht' ? 'Nou pa rive kalkile pri a. Tanpri eseye ankò.' : 'Impossible de calculer le prix. Veuillez réessayer.')))
+        if (!fallbackQuote) {
+          setQuote(null)
+          const timeout = error?.message === 'QUOTE_TIMEOUT'
+          setRideError(timeout
+            ? (lang === 'ht' ? 'Kalkil pri a pran twòp tan. Tanpri chwazi destinasyon an ankò oswa eseye ankò.' : 'Le calcul du prix prend trop de temps. Veuillez sélectionner de nouveau la destination ou réessayer.')
+            : (error?.message || (lang === 'ht' ? 'Nou pa rive kalkile pri a. Tanpri eseye ankò.' : 'Impossible de calculer le prix. Veuillez réessayer.')))
+        }
       } finally {
         if (timeoutId) window.clearTimeout(timeoutId)
         if (!cancelled) setRequestState((s) => s === 'searching' ? s : 'idle')
@@ -202,7 +217,7 @@ export default function HomePage() {
       cancelled = true
       if (timeoutId) window.clearTimeout(timeoutId)
     }
-  }, [user, pickupCoords, destinationCoords, selectedRide, lang])
+  }, [user, pickupCoords, destinationCoords, selectedRide, lang, fallbackQuote])
 
   async function submitAuth(e: FormEvent) {
     e.preventDefault(); setAuthBusy(true); setAuthMessage('')
@@ -216,7 +231,7 @@ export default function HomePage() {
   function chooseSearchResult(result: SearchResult) { setDestination(result.label); setDestinationCoords({ lng: result.center[0], lat: result.center[1] }); setSearchResults([]); setRideError('') }
 
   async function requestRide() {
-    if (!user || !pickupCoords || !destinationCoords || !quote) return
+    if (!user || !pickupCoords || !destinationCoords || !effectiveQuote) return
     setRequestState('requesting'); setRideError('')
     const { data, error } = await supabase.rpc('request_ride_v2', { p_service_type: selectedRide, p_pickup_address: pickup, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_address: destination, p_destination_latitude: destinationCoords.lat, p_destination_longitude: destinationCoords.lng })
     if (error) { setRideError(error.message); setRequestState('idle'); return }
@@ -257,11 +272,11 @@ export default function HomePage() {
         <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
         <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null) }} placeholder={t.destinationPlaceholder} /></div></div></div>
         {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
-        <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : quote ? `${quote.distance_km.toFixed(1)} km · ${quote.duration_min} min` : t.chooseDestination}</span></div>
-        <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
+        <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : effectiveQuote ? `${effectiveQuote.distance_km.toFixed(1)} km · ${effectiveQuote.duration_min} min` : t.chooseDestination}</span></div>
+        <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
         <div className="payment-row"><div><span className="payment-icon">💵</span><div><small>{t.payment}</small><strong>{t.cash}</strong></div></div><button onClick={() => openPanel('payment')}>{t.change}</button></div>
         {rideError && <div className="ride-error">{rideError}</div>}
-        {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!quote || requestState === 'quoting' || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'quoting' ? t.calculating : requestState === 'requesting' ? t.sending : `${t.request} ${ride.name}`}</span><strong>{quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
+        {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!effectiveQuote || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'requesting' ? t.sending : effectiveQuote ? `${t.request} ${ride.name}` : t.calculating}</span><strong>{effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
         <p className="fine-print">{t.mapNote}</p>
       </section>
     </div>
