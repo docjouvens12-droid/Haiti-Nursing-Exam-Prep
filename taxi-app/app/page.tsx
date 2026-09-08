@@ -147,23 +147,56 @@ export default function HomePage() {
   }, [lang])
 
   useEffect(() => {
-    if (!token || destination.trim().length < 3 || destinationCoords) { setSearchResults([]); return }
+    if (!token || destination.trim().length < 3 || destinationCoords) {
+      setSearchResults([])
+      setSearchBusy(false)
+      return
+    }
+
+    let controller: AbortController | null = null
     const timer = window.setTimeout(async () => {
+      controller = new AbortController()
+      const abortTimer = window.setTimeout(() => controller?.abort(), 6000)
       setSearchBusy(true)
       try {
-        const proximity = pickupCoords ? `&proximity=${pickupCoords.lng},${pickupCoords.lat}` : ''
-        const types = 'address,poi,place,locality,neighborhood,district'
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=10&types=${types}&language=fr${proximity}&access_token=${encodeURIComponent(token)}`
-        const response = await fetch(url)
+        const params = new URLSearchParams({
+          q: destination.trim(),
+          access_token: token,
+          country: 'ht',
+          autocomplete: 'true',
+          limit: '10',
+          language: lang === 'ht' ? 'fr' : 'fr',
+          types: 'address,street,neighborhood,locality,place,district',
+        })
+        if (pickupCoords) params.set('proximity', `${pickupCoords.lng},${pickupCoords.lat}`)
+
+        const response = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?${params.toString()}`, { signal: controller.signal })
+        if (!response.ok) throw new Error(`GEOCODE_${response.status}`)
         const json = await response.json()
-        const results = (json.features ?? []).map((f: any) => ({ id: f.id, label: f.place_name, center: f.center })) as SearchResult[]
+        const results = (json.features ?? []).flatMap((f: any) => {
+          const center = f.geometry?.coordinates
+          if (!Array.isArray(center) || center.length < 2) return []
+          const props = f.properties ?? {}
+          const label = props.full_address || [props.name, props.place_formatted].filter(Boolean).join(', ') || f.name || 'Destination'
+          return [{ id: f.id || props.mapbox_id || `${center[0]},${center[1]}`, label, center: [Number(center[0]), Number(center[1])] as [number, number] }]
+        }) as SearchResult[]
         setSearchResults(results)
         const first = results[0]
-        if (first) setResolvedDestinationCoords({ lng: first.center[0], lat: first.center[1] })
-      } catch { setSearchResults([]); setResolvedDestinationCoords(null) } finally { setSearchBusy(false) }
-    }, 350)
-    return () => window.clearTimeout(timer)
-  }, [destination, destinationCoords, pickupCoords, token])
+        setResolvedDestinationCoords(first ? { lng: first.center[0], lat: first.center[1] } : null)
+      } catch (error: any) {
+        if (error?.name !== 'AbortError') setResolvedDestinationCoords(null)
+        setSearchResults([])
+      } finally {
+        window.clearTimeout(abortTimer)
+        setSearchBusy(false)
+      }
+    }, 450)
+
+    return () => {
+      window.clearTimeout(timer)
+      controller?.abort()
+    }
+  }, [destination, destinationCoords, pickupCoords, token, lang])
 
   useEffect(() => {
     if (!token || !pickupCoords || !effectiveDestinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
