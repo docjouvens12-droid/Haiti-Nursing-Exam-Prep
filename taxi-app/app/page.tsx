@@ -283,7 +283,18 @@ export default function HomePage() {
   async function requestRide() {
     if (!user || !pickupCoords || !effectiveDestinationCoords || !effectiveQuote) return
     setRequestState('requesting'); setRideError('')
-    const { data, error } = await supabase.rpc('request_ride_v2', { p_service_type: selectedRide, p_pickup_address: pickup, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_address: destination, p_destination_latitude: effectiveDestinationCoords.lat, p_destination_longitude: effectiveDestinationCoords.lng })
+    const { data, error } = await supabase.rpc('request_ride_v3', {
+      p_service_type: selectedRide,
+      p_pickup_address: pickup,
+      p_pickup_latitude: pickupCoords.lat,
+      p_pickup_longitude: pickupCoords.lng,
+      p_destination_address: destination,
+      p_destination_latitude: effectiveDestinationCoords.lat,
+      p_destination_longitude: effectiveDestinationCoords.lng,
+      p_estimated_distance_km: effectiveQuote.distance_km,
+      p_estimated_duration_min: effectiveQuote.duration_min,
+      p_estimated_fare_htg: effectiveQuote.fare_htg,
+    })
     if (error) { setRideError(error.message); setRequestState('idle'); return }
     setRideId(String(data)); setRequestState('searching')
   }
