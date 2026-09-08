@@ -209,26 +209,28 @@ export default function PassengerRideSafetyMonitor() {
 
   if (!enabled || !ride || !alertKind) return null
 
-  const title = alertKind === 'stopped'
+  const activeRide = ride
+  const currentAlertKind = alertKind
+
+  const title = currentAlertKind === 'stopped'
     ? (lang === 'ht' ? 'Trajè a sanble kanpe depi yon ti tan' : 'Le trajet semble arrêté depuis un moment')
     : (lang === 'ht' ? 'Trajè a sanble devye sou wout la' : 'Le trajet semble s’écarter de l’itinéraire')
 
-  const detail = alertKind === 'stopped'
+  const detail = currentAlertKind === 'stopped'
     ? (lang === 'ht' ? 'Sa ka nòmal akoz trafik oswa yon poz. Verifye si tout bagay anfòm.' : 'Cela peut être normal à cause du trafic ou d’un arrêt. Vérifiez que tout va bien.')
     : (lang === 'ht' ? 'GPS la montre machin nan lwen wout kalkile a. Sa pa vle di gen danje, men ou ka verifye.' : 'Le GPS montre le véhicule loin de l’itinéraire calculé. Cela ne signifie pas forcément un danger, mais vous pouvez vérifier.')
 
-  const safetyHref = `/passenger/help?ride=${encodeURIComponent(ride.ride_id)}&category=safety`
+  const safetyHref = `/passenger/help?ride=${encodeURIComponent(activeRide.ride_id)}&category=safety`
 
   async function dismiss() {
-    const currentKind = alertKind
-    dismissedRef.current[`${ride.ride_id}:${currentKind}`] = Date.now()
+    dismissedRef.current[`${activeRide.ride_id}:${currentAlertKind}`] = Date.now()
     setAlertKind(null)
     if (!userId) return
-    const eventType = currentKind === 'stopped' ? 'stalled' : 'route_deviation'
+    const eventType = currentAlertKind === 'stopped' ? 'stalled' : 'route_deviation'
     await supabase
       .from('ride_safety_events')
       .update({ acknowledged_at: new Date().toISOString() })
-      .eq('ride_id', ride.ride_id)
+      .eq('ride_id', activeRide.ride_id)
       .eq('passenger_id', userId)
       .eq('event_type', eventType)
   }
@@ -245,11 +247,11 @@ export default function PassengerRideSafetyMonitor() {
   async function recordManualSafetyOpen() {
     if (!userId) return
     await supabase.from('ride_safety_events').insert({
-      ride_id: ride.ride_id,
+      ride_id: activeRide.ride_id,
       passenger_id: userId,
       event_type: 'manual_safety_opened',
       severity: 'info',
-      details: { source_alert: alertKind },
+      details: { source_alert: currentAlertKind },
     })
   }
 
