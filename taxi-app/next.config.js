@@ -9,53 +9,25 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/spaces',
+        destination: '/login',
         permanent: false,
       },
     ]
   },
   async headers() {
+    const noCache = [
+      { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
+      { key: 'Pragma', value: 'no-cache' },
+      { key: 'Expires', value: '0' },
+    ]
+
     return [
-      {
-        source: '/',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
-          { key: 'Pragma', value: 'no-cache' },
-          { key: 'Expires', value: '0' },
-        ],
-      },
-      {
-        source: '/spaces',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
-          { key: 'Pragma', value: 'no-cache' },
-          { key: 'Expires', value: '0' },
-        ],
-      },
-      {
-        source: '/passenger/login',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
-          { key: 'Pragma', value: 'no-cache' },
-          { key: 'Expires', value: '0' },
-        ],
-      },
-      {
-        source: '/driver/login',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
-          { key: 'Pragma', value: 'no-cache' },
-          { key: 'Expires', value: '0' },
-        ],
-      },
-      {
-        source: '/admin/login',
-        headers: [
-          { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
-          { key: 'Pragma', value: 'no-cache' },
-          { key: 'Expires', value: '0' },
-        ],
-      },
+      { source: '/', headers: noCache },
+      { source: '/login', headers: noCache },
+      { source: '/spaces', headers: noCache },
+      { source: '/passenger/login', headers: noCache },
+      { source: '/driver/login', headers: noCache },
+      { source: '/admin/login', headers: noCache },
     ]
   },
 }
