@@ -12,8 +12,17 @@ export default function DriverMenuVisualConsistency() {
       style.id = styleId
       style.textContent = `
         @media (max-width: 600px) {
+          .menuBackdrop {
+            align-items:flex-start !important;
+          }
           .drawer {
             width:min(62vw, 255px) !important;
+            height:auto !important;
+            min-height:0 !important;
+            max-height:calc(100dvh - 18px) !important;
+            overflow-y:auto !important;
+            border-bottom-right-radius:24px !important;
+            padding-bottom:18px !important;
           }
         }
         .drawer .menuSection {
