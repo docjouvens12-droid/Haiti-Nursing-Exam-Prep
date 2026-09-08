@@ -76,10 +76,21 @@ export default function DriverDashboardPage() {
     }
   }, [])
 
+  useEffect(() => {
+    if (authorized !== true) return
+    const channel = supabase
+      .channel(`driver-rides-${userIdRef.current ?? 'active'}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rides' }, () => {
+        void loadRides(userIdRef.current, online)
+      })
+      .subscribe()
+    return () => { void supabase.removeChannel(channel) }
+  }, [authorized, online])
+
   async function init() {
     setBusy(true)
     const { data: auth } = await supabase.auth.getUser()
-    if (!auth.user) { location.href = '/'; return }
+    if (!auth.user) { location.href = '/driver/login?test=haiti'; return }
     userIdRef.current = auth.user.id
     setDriverEmail(auth.user.email ?? '')
 
@@ -178,7 +189,7 @@ export default function DriverDashboardPage() {
 
   async function logout() {
     if (online) await supabase.rpc('set_driver_online', { p_online: false })
-    stopGpsWatch(); await supabase.auth.signOut(); location.href = '/'
+    stopGpsWatch(); await supabase.auth.signOut(); location.href = '/driver/login?test=haiti'
   }
 
   function changeLang(next: Lang) { setLang(next); localStorage.setItem('taxi-language', next) }
@@ -192,7 +203,7 @@ export default function DriverDashboardPage() {
   }, [activeRide, t])
 
   if (authorized === null) return <main className="page"><section className="card"><p>{t.loading}</p></section></main>
-  if (!authorized) return <main className="page"><section className="card"><h1>{t.title}</h1><div className="message error">{t.notDriver}</div><button className="primary" onClick={() => location.href='/driver'}>←</button></section></main>
+  if (!authorized) return <main className="page"><section className="card"><h1>{t.title}</h1><div className="message error">{t.notDriver}</div><button className="primary" onClick={() => location.href='/driver/login?test=haiti'}>← {t.logout}</button></section></main>
 
   const initials = (driverName || 'C').split(' ').map(x => x[0]).join('').slice(0,2).toUpperCase()
 
@@ -209,49 +220,38 @@ export default function DriverDashboardPage() {
       <span className="ride-count">{totalRides} {t.trips}{totalRides === 1 ? '' : 's'}</span>
     </div>
 
-    <div className="status-card">
-      <div><span className={`dot ${online ? 'on' : ''}`}></span><strong>{online ? t.online : t.offline}</strong><small>{gpsActive ? t.gpsOn : t.gpsOff}</small></div>
-      <button className={online ? 'offline-btn' : 'online-btn'} onClick={()=>void toggleOnline()} disabled={busy}>{online ? t.goOffline : t.goOnline}</button>
+    <div className="online-card">
+      <div><span className={online ? 'dot on' : 'dot'}></span><div><strong>{online ? t.online : t.offline}</strong><small>{gpsActive ? t.gpsOn : t.gpsOff}</small></div></div>
+      <button className={online ? 'switch on' : 'switch'} onClick={toggleOnline} disabled={busy} aria-label={online ? t.goOffline : t.goOnline}><span></span></button>
     </div>
 
     {message && <div className="message">{message}</div>}
 
-    {activeRide && <section className="section"><div className="section-title"><h2>{t.activeRide}</h2><span className="pill">{activeRide.status}</span></div><DriverNavigationMap ride={activeRide} lang={lang} /><RideCard ride={activeRide} t={t} />{statusAction && <button className="primary action" disabled={busy} onClick={()=>void rideAction(statusAction.key, activeRide)}>{statusAction.label}</button>}</section>}
+    {activeRide ? <div className="ride-card active">
+      <div className="ride-head"><strong>{t.activeRide}</strong><span>{activeRide.service_type ?? 'standard'}</span></div>
+      <p><b>{t.pickup}:</b> {activeRide.pickup_address}</p><p><b>{t.destination}:</b> {activeRide.destination_address}</p>
+      <div className="stats"><span>{activeRide.estimated_distance_km ?? '-'} km</span><span>{activeRide.estimated_duration_min ?? '-'} min</span><span>{activeRide.estimated_fare_htg ?? '-'} HTG</span></div>
+      {statusAction && <button className="primary" onClick={() => rideAction(statusAction.key, activeRide)} disabled={busy}>{statusAction.label}</button>}
+    </div> : null}
 
-    {!activeRide && <section className="section"><div className="section-title"><h2>{t.available}</h2><button className="refresh" onClick={()=>void loadRides()} disabled={busy}>↻ {t.refresh}</button></div>{!online ? <div className="empty">{t.waitingOnline}</div> : available.length === 0 ? <div className="empty">{t.noRequests}</div> : <div className="rides">{available.map(r => <div className="ride-wrap" key={r.id}><RideCard ride={r} t={t}/><button className="primary" disabled={busy || !vehicle} onClick={()=>void rideAction('accept', r)}>{t.accept}</button></div>)}</div>}</section>}
+    <div className="section-title"><h2>{t.available}</h2><button onClick={()=>loadRides()} disabled={busy}>{t.refresh}</button></div>
+    {!online ? <div className="empty">{t.waitingOnline}</div> : available.length === 0 ? <div className="empty">{t.noRequests}</div> : available.map((ride) => <div className="ride-card" key={ride.id}>
+      <div className="ride-head"><strong>{ride.pickup_address}</strong><span>{ride.service_type ?? 'standard'}</span></div>
+      <p><b>{t.destination}:</b> {ride.destination_address}</p>
+      <div className="stats"><span>{ride.estimated_distance_km ?? '-'} km</span><span>{ride.estimated_duration_min ?? '-'} min</span><span>{ride.estimated_fare_htg ?? '-'} HTG</span></div>
+      <button className="primary" onClick={() => rideAction('accept', ride)} disabled={busy || !vehicle}>{t.accept}</button>
+    </div>)}
+
+    {menuOpen && <div className="overlay" onClick={()=>setMenuOpen(false)}><aside className="drawer" onClick={(e)=>e.stopPropagation()}>
+      <div className="drawerTop"><button onClick={()=>setMenuOpen(false)}>×</button><strong>{t.title}</strong></div>
+      <div className="profile"><div className="avatar">{driverAvatar ? <img src={driverAvatar} alt=""/> : initials}</div><div><strong>{driverName || 'Chauffeur'}</strong><span>{driverEmail}</span></div></div>
+      <div className="menuSection"><h3>{t.personal}</h3>{driverPhone && <p>{t.phone}: {driverPhone}</p>}</div>
+      {vehicle && <div className="menuSection"><h3>{t.vehicle}</h3><p>{vehicle.make} {vehicle.model}</p><p>{t.color}: {vehicle.color ?? '-'}</p><p>{t.plate}: {vehicle.plate_number}</p></div>}
+      <div className="menuSection"><h3>{t.language}</h3><div className="langBtns"><button className={lang==='fr'?'active':''} onClick={()=>changeLang('fr')}>Français</button><button className={lang==='ht'?'active':''} onClick={()=>changeLang('ht')}>Kreyòl</button></div></div>
+      <button className="logout" onClick={logout}>{t.logout}</button>
+    </aside></div>}
   </section>
-
-  {menuOpen && <div className="menuBackdrop" onClick={() => setMenuOpen(false)}>
-    <aside className="drawer" onClick={(e) => e.stopPropagation()}>
-      <div className="drawerHead"><strong>{t.title}</strong><button onClick={() => setMenuOpen(false)}>×</button></div>
-      <div className="profileBlock">
-        <div className="avatar">{driverAvatar ? <img src={driverAvatar} alt="" /> : initials}</div>
-        <div><strong>{driverName || 'Chauffeur'}</strong><span>{driverEmail || '—'}</span>{driverPhone && <span>{driverPhone}</span>}</div>
-      </div>
-      <div className="menuSection"><h3>{t.personal}</h3><p><span>{t.email}</span><b>{driverEmail || '—'}</b></p><p><span>{t.phone}</span><b>{driverPhone || '—'}</b></p></div>
-      {vehicle && <div className="menuSection"><h3>{t.vehicle}</h3><p><span>{t.model}</span><b>{vehicle.make} {vehicle.model}</b></p><p><span>{t.color}</span><b>{vehicle.color || '—'}</b></p><p><span>{t.plate}</span><b>{vehicle.plate_number}</b></p></div>}
-      <div className="menuSection"><h3>{t.language}</h3><div className="langButtons"><button className={lang==='fr'?'active':''} onClick={()=>changeLang('fr')}>Français</button><button className={lang==='ht'?'active':''} onClick={()=>changeLang('ht')}>Kreyòl</button></div></div>
-      <button className="drawerLogout" onClick={()=>void logout()}>{t.logout}</button>
-    </aside>
-  </div>}
-
   <style jsx>{`
-    .page{min-height:100vh;background:linear-gradient(160deg,#e5f1ed,#eef2f7 50%,#e7edf3);padding:22px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{width:min(100%,760px);margin:auto;background:#fff;border-radius:28px;padding:22px;box-shadow:0 24px 70px rgba(18,36,61,.14)}.topbar{display:flex;gap:12px;align-items:center}.menuButton{width:44px;height:44px;border:1px solid #dce4eb;border-radius:14px;background:#fff;color:#0f6f59;font-size:22px;font-weight:900;flex:0 0 auto}.brand{display:flex;align-items:center;gap:10px}.brand>span{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:#0f6f59;color:#fff;font-weight:900}.brand strong,.brand small{display:block}.brand small{color:#77879a;margin-top:2px}.card h1{font-size:32px;margin:24px 0 18px}.driver-rating-card{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 16px;border:1px solid #f0dfad;background:#fffaf0;border-radius:18px;margin-bottom:12px}.driver-rating-card>div{display:flex;align-items:center;gap:10px}.driver-rating-card small,.driver-rating-card strong{display:block}.driver-rating-card small{color:#7a8998}.rating-star{font-size:30px;color:#f5b000}.ride-count{font-size:13px;font-weight:850;color:#6a7580;background:#fff;border:1px solid #eadfca;border-radius:999px;padding:8px 11px}.status-card{display:flex;justify-content:space-between;align-items:center;gap:12px;background:#f4f8f7;border-radius:18px;padding:16px;margin-bottom:12px}.status-card>div{display:grid;grid-template-columns:auto 1fr;column-gap:8px}.status-card small{grid-column:2;color:#78889a}.dot{width:12px;height:12px;border-radius:50%;background:#9aabba;margin-top:4px}.dot.on{background:#16a36f}.online-btn,.offline-btn,.primary,.refresh{border:0;border-radius:14px;padding:12px 16px;font-weight:900}.online-btn,.primary{background:#0f6f59;color:#fff}.offline-btn{background:#fff0f0;color:#a02d2d}.message{padding:12px 14px;border-radius:13px;background:#eef7f4;color:#115f4d;font-weight:750;margin-bottom:12px}.message.error{background:#fff0f0;color:#9b3030}.section{margin-top:20px}.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px}.section h2{font-size:20px}.pill{font-size:11px;font-weight:900;background:#eef3f7;border-radius:999px;padding:7px 10px}.refresh{background:#102033;color:#fff}.empty{padding:28px;border:1px dashed #d4dee7;border-radius:18px;text-align:center;color:#7a8998}.rides{display:grid;gap:14px}.ride-wrap{border:1px solid #dfe6ed;border-radius:20px;padding:14px}.ride-wrap>.primary{width:100%;margin-top:12px}.action{width:100%;margin-top:12px}.menuBackdrop{position:fixed;inset:0;z-index:30000;background:rgba(10,22,34,.45);display:flex}.drawer{width:min(88vw,360px);height:100%;background:#fff;padding:20px 18px;overflow:auto;box-shadow:20px 0 60px rgba(0,0,0,.2)}.drawerHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.drawerHead strong{font-size:20px}.drawerHead button{border:0;background:#eef2f5;width:38px;height:38px;border-radius:50%;font-size:24px}.profileBlock{display:flex;align-items:center;gap:12px;padding:14px;background:#f4f8f7;border-radius:18px}.avatar{width:54px;height:54px;border-radius:50%;background:#dff2eb;color:#0f6f59;display:grid;place-items:center;font-weight:900;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profileBlock strong,.profileBlock span{display:block}.profileBlock span{font-size:12px;color:#748496;margin-top:3px}.menuSection{padding:16px 2px;border-bottom:1px solid #e5eaee}.menuSection h3{margin:0 0 10px;font-size:14px;color:#0f6f59}.menuSection p{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:13px}.menuSection p span{color:#7a8998}.menuSection p b{text-align:right}.langButtons{display:grid;grid-template-columns:1fr 1fr;gap:8px}.langButtons button{border:1px solid #dce4eb;background:#fff;border-radius:12px;padding:10px;font-weight:800}.langButtons button.active{border-color:#0f6f59;background:#eaf6f2;color:#0f6f59}.drawerLogout{display:flex;width:100%;align-items:center;justify-content:center;border-radius:14px;padding:13px 14px;margin-top:12px;font-weight:900;box-sizing:border-box;border:0;background:#fff0f0;color:#9a3030}@media(max-width:600px){.page{padding:0}.card{min-height:100vh;border-radius:0;padding:18px 16px}.brand small{font-size:11px}.card h1{font-size:28px;margin-top:20px}.status-card{align-items:flex-start;flex-direction:column}.status-card button{width:100%}.driver-rating-card{align-items:flex-start}}
-  `}</style>
-  </main>
-}
-
-function RideCard({ ride, t }: { ride: Ride; t: any }) {
-  const serviceLabel = ride.service_type === 'moto' ? 'Moto' : ride.service_type === 'comfort' ? 'Comfort' : 'Standard'
-  return <article className="ride-card">
-    <div className="row"><span>📍</span><div><small>{t.pickup}</small><strong>{ride.pickup_address}</strong></div></div>
-    <div className="row"><span>🏁</span><div><small>{t.destination}</small><strong>{ride.destination_address}</strong></div></div>
-    <div className="metrics">
-      <div><small>{t.distance}</small><strong>{ride.estimated_distance_km != null ? `${Number(ride.estimated_distance_km).toFixed(1)} km` : '—'}</strong></div>
-      <div><small>{t.duration}</small><strong>{ride.estimated_duration_min != null ? `${ride.estimated_duration_min} min` : '—'}</strong></div>
-      <div><small>{t.fare}</small><strong>{ride.estimated_fare_htg != null ? `${Math.round(Number(ride.estimated_fare_htg))} HTG` : '—'}</strong></div>
-      <div><small>{t.service}</small><strong>{serviceLabel}</strong></div>
-    </div>
-    <style jsx>{`.ride-card{display:grid;gap:12px}.row{display:flex;gap:10px;align-items:flex-start}.row>span{font-size:20px}.row small,.row strong{display:block}.row small,.metrics small{color:#7a8998;font-size:11px}.row strong{margin-top:2px}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.metrics>div{background:#f6f8fa;border-radius:13px;padding:10px}.metrics small,.metrics strong{display:block}.metrics strong{margin-top:3px;font-size:13px}@media(max-width:620px){.metrics{grid-template-columns:1fr 1fr}}`}</style>
-  </article>
+    .page{min-height:100vh;background:#f6f8fa;padding:16px;color:#102033;font-family:Inter,system-ui,sans-serif}.card{max-width:760px;margin:0 auto}.topbar{display:flex;align-items:center;gap:12px}.menuButton{width:48px;height:48px;border-radius:14px;border:1px solid #d9e1e7;background:#fff;font-size:22px}.brand{display:flex;gap:10px;align-items:center}.brand>span{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:#0f705a;color:#fff;font-weight:900}.brand strong,.brand small{display:block}.brand small{color:#8190a0;margin-top:2px}.card>h1{font-size:30px;margin:22px 0}.driver-rating-card,.online-card{background:#fff;border:1px solid #e3e8ed;border-radius:20px;padding:18px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}.driver-rating-card>div,.online-card>div{display:flex;align-items:center;gap:12px}.rating-star{font-size:34px;color:#f4b000}.driver-rating-card small,.driver-rating-card strong,.online-card small,.online-card strong{display:block}.ride-count{padding:9px 14px;background:#f5f7f8;border-radius:999px;font-weight:800}.dot{width:13px;height:13px;border-radius:50%;background:#9aa6b2}.dot.on{background:#13a36b}.online-card small{color:#6d7d8d;margin-top:4px}.switch{width:70px;height:38px;border:0;border-radius:999px;background:#c9d2d8;padding:4px}.switch span{display:block;width:30px;height:30px;border-radius:50%;background:#fff}.switch.on{background:#58ad98}.switch.on span{margin-left:32px}.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px}.section-title h2{margin:0}.section-title button{border:0;border-radius:12px;padding:10px 14px;background:#102033;color:#fff;font-weight:800}.empty{border:1px dashed #bfd2cc;border-radius:18px;padding:24px;text-align:center;color:#697c75;background:#f9fffc}.ride-card{background:#fff;border:1px solid #dfe6eb;border-radius:18px;padding:18px;margin-bottom:14px}.ride-card.active{border-color:#0f705a}.ride-head{display:flex;justify-content:space-between;gap:12px}.ride-head span{font-size:12px;font-weight:800;color:#0f705a;text-transform:capitalize}.ride-card p{margin:10px 0;color:#506174}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.stats span{text-align:center;background:#f4f7f8;padding:10px 6px;border-radius:12px;font-weight:800}.primary{width:100%;border:0;border-radius:13px;background:#0f705a;color:#fff;padding:13px;font-weight:900}.message{padding:12px 14px;border-radius:13px;background:#eef8f4;color:#0f705a;font-weight:700;margin-bottom:14px}.message.error{background:#fff0f0;color:#9d2d2d}.overlay{position:fixed;inset:0;background:rgba(15,30,43,.45);z-index:50}.drawer{position:absolute;left:0;top:0;bottom:0;width:min(88vw,360px);background:#fff;padding:18px;overflow:auto}.drawerTop{display:flex;align-items:center;gap:12px}.drawerTop button{width:42px;height:42px;border:0;border-radius:12px;background:#eef2f4;font-size:25px}.profile{display:flex;gap:12px;align-items:center;padding:20px 0;border-bottom:1px solid #e5eaee}.avatar{width:58px;height:58px;border-radius:50%;background:#0f705a;color:#fff;display:grid;place-items:center;font-size:20px;font-weight:900;overflow:hidden}.avatar img{width:100%;height:100%;object-fit:cover}.profile strong,.profile span{display:block}.profile span{font-size:12px;color:#778697;margin-top:3px}.menuSection{padding:16px 0;border-bottom:1px solid #e5eaee}.menuSection h3{margin:0 0 10px;font-size:14px}.menuSection p{margin:6px 0;font-size:13px;color:#566778}.langBtns{display:flex;gap:8px}.langBtns button{border:1px solid #dbe3e8;background:#fff;border-radius:10px;padding:9px 12px}.langBtns button.active{background:#e9f6f1;border-color:#0f705a;color:#0f705a;font-weight:900}.logout{width:100%;margin-top:20px;border:0;border-radius:13px;background:#fff0f0;color:#a33;padding:13px;font-weight:900}@media(max-width:560px){.page{padding:12px}.card>h1{display:none}.topbar{margin-bottom:14px}.brand small{font-size:12px}.driver-rating-card,.online-card{padding:15px}.stats{grid-template-columns:1fr 1fr 1fr}}
+  `}</style></main>
 }

@@ -13,12 +13,13 @@ type PendingRide = {
 
 export default function PassengerPendingRideCancel() {
   const pathname = usePathname()
+  const isPassengerPage = pathname === '/' || pathname === '/passenger/dashboard'
   const [ride, setRide] = useState<PendingRide | null>(null)
   const [busy, setBusy] = useState(false)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
 
   useEffect(() => {
-    if (pathname !== '/') return
+    if (!isPassengerPage) return
     const saved = window.localStorage.getItem('taxi-language')
     if (saved === 'fr' || saved === 'ht') setLang(saved)
 
@@ -40,7 +41,7 @@ export default function PassengerPendingRideCancel() {
     void load()
     const timer = window.setInterval(() => void load(), 3000)
     return () => { active = false; window.clearInterval(timer) }
-  }, [pathname])
+  }, [isPassengerPage])
 
   async function cancelRide() {
     if (!ride || busy) return
@@ -58,7 +59,7 @@ export default function PassengerPendingRideCancel() {
     window.dispatchEvent(new Event('taxi-ride-cancelled'))
   }
 
-  if (pathname !== '/' || !ride) return null
+  if (!isPassengerPage || !ride) return null
 
   return <aside className="pending-ride-card" aria-live="polite">
     <div className="pending-copy">

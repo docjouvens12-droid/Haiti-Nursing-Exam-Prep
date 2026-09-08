@@ -2,4 +2,4 @@
 
 Ce dépôt est connecté au projet Vercel `haiti-nursing-exam-prep`.
 
-Ce fichier marque le premier commit effectué après la connexion GitHub/Vercel afin de déclencher et vérifier le déploiement automatique de la nouvelle interface.
+Branche `taxi-production` créée depuis le dernier commit Taxi Platform Haiti connu comme READY afin de déclencher un déploiement de vérification propre.

@@ -22,6 +22,12 @@ const rideOptions: RideOption[] = [
   { id: 'comfort', name: 'Comfort', detailFr: 'Plus d’espace', detailHt: 'Plis espas', eta: '7 min' },
 ]
 
+const localPricing = {
+  moto: { base: 150, perKm: 35, perMin: 5, minimum: 200 },
+  standard: { base: 250, perKm: 55, perMin: 7, minimum: 350 },
+  comfort: { base: 400, perKm: 75, perMin: 10, minimum: 550 },
+} as const
+
 const copy = {
   fr: {
     tagline: 'Déplacez-vous facilement, en toute sécurité', welcome: 'BON RETOUR', createPassenger: 'CRÉER UN COMPTE PASSAGER', signInTitle: 'Connectez-vous pour commander un taxi', signUpTitle: 'Inscrivez-vous comme passager', fullName: 'Nom complet', email: 'E-mail', password: 'Mot de passe', wait: 'Veuillez patienter…', signIn: 'Se connecter', createAccount: 'Créer mon compte', noAccount: 'Pas encore de compte ? Créez-en un', haveAccount: 'Vous avez déjà un compte ? Connectez-vous', accountCreated: 'Compte créé. Vérifiez votre e-mail pour confirmer votre adresse, puis connectez-vous.', hello: 'Bonjour', where: 'Où allez-vous ?', drivers: 'Chauffeurs disponibles', pickup: 'Lieu de prise en charge', current: 'Ma position actuelle', testPosition: 'Port-au-Prince (position de test)', destination: 'Destination', destinationPlaceholder: 'Saisissez une adresse ou un lieu en Haïti', searchingAddress: 'Recherche des adresses…', chooseService: 'Choisissez le service', vehicles: 'Véhicules disponibles', chooseDestination: 'Choisissez une destination', payment: 'Paiement', cash: 'Espèces', change: 'Changer ›', searchingDriver: 'Nous cherchons un chauffeur pour vous…', trip: 'trajet', calculating: 'Calcul du prix…', sending: 'Envoi de la demande…', request: 'Commander', mapNote: 'Carte, recherche et itinéraire : Mapbox. Prix et création du trajet : Supabase.',
@@ -59,6 +65,7 @@ export default function HomePage() {
   const [pickupCoords, setPickupCoords] = useState<Point | null>(null)
   const [destination, setDestination] = useState('')
   const [destinationCoords, setDestinationCoords] = useState<Point | null>(null)
+  const [resolvedDestinationCoords, setResolvedDestinationCoords] = useState<Point | null>(null)
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [searchBusy, setSearchBusy] = useState(false)
   const [routeGeometry, setRouteGeometry] = useState<RouteGeometry | null>(null)
@@ -74,7 +81,30 @@ export default function HomePage() {
   const [rides, setRides] = useState<RideHistory[]>([])
   const [ridesBusy, setRidesBusy] = useState(false)
 
+  const effectiveDestinationCoords = destinationCoords ?? resolvedDestinationCoords
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
+  const fallbackQuote = useMemo<Quote | null>(() => {
+    if (!pickupCoords || !effectiveDestinationCoords) return null
+
+    let distanceKm = routeDistanceKm
+    let durationMin = routeDurationMin
+
+    if (distanceKm == null || durationMin == null) {
+      const toRad = (value: number) => value * Math.PI / 180
+      const dLat = toRad(effectiveDestinationCoords.lat - pickupCoords.lat)
+      const dLng = toRad(effectiveDestinationCoords.lng - pickupCoords.lng)
+      const lat1 = toRad(pickupCoords.lat)
+      const lat2 = toRad(effectiveDestinationCoords.lat)
+      const a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLng / 2) ** 2
+      distanceKm = Math.round((6371 * 2 * Math.asin(Math.sqrt(a))) * 100) / 100
+      durationMin = Math.max(5, Math.ceil(distanceKm * 3.2))
+    }
+
+    const p = localPricing[selectedRide]
+    const fare = Math.max(p.minimum, p.base + distanceKm * p.perKm + durationMin * p.perMin)
+    return { distance_km: distanceKm, duration_min: durationMin, fare_htg: Math.round(fare * 100) / 100 }
+  }, [pickupCoords, effectiveDestinationCoords, routeDistanceKm, routeDurationMin, selectedRide])
+  const effectiveQuote = routeDistanceKm != null && routeDurationMin != null ? fallbackQuote : null
 
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
@@ -104,7 +134,11 @@ export default function HomePage() {
   }
 
   useEffect(() => {
-    if (!navigator.geolocation) return
+    if (!navigator.geolocation) {
+      setPickupCoords({ lat: 18.5392, lng: -72.3364 })
+      setPickup(copy[lang].testPosition)
+      return
+    }
     navigator.geolocation.getCurrentPosition(
       (p) => setPickupCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
       () => { setPickupCoords({ lat: 18.5392, lng: -72.3364 }); setPickup(copy[lang].testPosition) },
@@ -113,26 +147,48 @@ export default function HomePage() {
   }, [lang])
 
   useEffect(() => {
-    if (!token || destination.trim().length < 3 || destinationCoords) { setSearchResults([]); return }
+    const query = destination.trim()
+    if (query.length < 3 || destinationCoords) {
+      setSearchResults([])
+      setSearchBusy(false)
+      return
+    }
+
+    let controller: AbortController | null = null
     const timer = window.setTimeout(async () => {
+      controller = new AbortController()
+      const abortTimer = window.setTimeout(() => controller?.abort(), 6500)
       setSearchBusy(true)
       try {
-        const proximity = pickupCoords ? `&proximity=${pickupCoords.lng},${pickupCoords.lat}` : ''
-        const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(destination)}.json?country=ht&autocomplete=true&limit=5&language=fr${proximity}&access_token=${encodeURIComponent(token)}`
-        const response = await fetch(url)
+        const params = new URLSearchParams({ q: query })
+        if (pickupCoords) {
+          params.set('lat', String(pickupCoords.lat))
+          params.set('lng', String(pickupCoords.lng))
+        }
+        const response = await fetch(`/api/geocode?${params.toString()}`, { signal: controller.signal, cache: 'no-store' })
+        if (!response.ok) throw new Error(`GEOCODE_${response.status}`)
         const json = await response.json()
-        setSearchResults((json.features ?? []).map((f: any) => ({ id: f.id, label: f.place_name, center: f.center })))
-      } catch { setSearchResults([]) } finally { setSearchBusy(false) }
-    }, 350)
-    return () => window.clearTimeout(timer)
-  }, [destination, destinationCoords, pickupCoords, token])
+        setSearchResults((json.results ?? []) as SearchResult[])
+      } catch {
+        setSearchResults([])
+      } finally {
+        window.clearTimeout(abortTimer)
+        setSearchBusy(false)
+      }
+    }, 800)
+
+    return () => {
+      window.clearTimeout(timer)
+      controller?.abort()
+    }
+  }, [destination, destinationCoords, pickupCoords])
 
   useEffect(() => {
-    if (!token || !pickupCoords || !destinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
+    if (!token || !pickupCoords || !effectiveDestinationCoords) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null); return }
     let cancelled = false
     ;(async () => {
       try {
-        const coords = `${pickupCoords.lng},${pickupCoords.lat};${destinationCoords.lng},${destinationCoords.lat}`
+        const coords = `${pickupCoords.lng},${pickupCoords.lat};${effectiveDestinationCoords.lng},${effectiveDestinationCoords.lat}`
         const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/driving/${coords}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token)}`)
         const json = await response.json(); const route = json.routes?.[0]
         if (!route || cancelled) return
@@ -140,21 +196,71 @@ export default function HomePage() {
       } catch { if (!cancelled) { setRouteGeometry(null); setRouteDistanceKm(null); setRouteDurationMin(null) } }
     })()
     return () => { cancelled = true }
-  }, [pickupCoords, destinationCoords, token])
+  }, [pickupCoords, effectiveDestinationCoords, token])
 
   useEffect(() => {
-    if (!user || !pickupCoords || !destinationCoords) { setQuote(null); return }
+    if (!user || !pickupCoords || !effectiveDestinationCoords) { setQuote(null); return }
     let cancelled = false
-    setRequestState((s) => s === 'searching' ? s : 'quoting')
-    supabase.rpc('quote_ride', { p_service_type: selectedRide, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_latitude: destinationCoords.lat, p_destination_longitude: destinationCoords.lng })
-      .then(({ data, error }) => {
+    let timeoutId: number | undefined
+
+    const runQuote = async () => {
+      setRideError('')
+      if (!fallbackQuote) setRequestState((s) => s === 'searching' ? s : 'quoting')
+
+      const args = {
+        p_service_type: selectedRide,
+        p_pickup_latitude: pickupCoords.lat,
+        p_pickup_longitude: pickupCoords.lng,
+        p_destination_latitude: effectiveDestinationCoords.lat,
+        p_destination_longitude: effectiveDestinationCoords.lng,
+      }
+
+      const withTimeout = async () => {
+        const request = supabase.rpc('quote_ride', args)
+        const timeout = new Promise<never>((_, reject) => {
+          timeoutId = window.setTimeout(() => reject(new Error('QUOTE_TIMEOUT')), 8000)
+        })
+        return Promise.race([request, timeout])
+      }
+
+      try {
+        let result: any
+        try {
+          result = await withTimeout()
+        } catch {
+          if (cancelled) return
+          if (timeoutId) window.clearTimeout(timeoutId)
+          timeoutId = undefined
+          result = await withTimeout()
+        }
+
         if (cancelled) return
-        if (error) { setRideError(error.message); setQuote(null) }
-        else { const row = Array.isArray(data) ? data[0] : data; setQuote(row ? { distance_km: Number(row.distance_km), duration_min: Number(row.duration_min), fare_htg: Number(row.fare_htg) } : null) }
-        setRequestState((s) => s === 'searching' ? s : 'idle')
-      })
-    return () => { cancelled = true }
-  }, [user, pickupCoords, destinationCoords, selectedRide])
+        const { data, error } = result
+        if (error) throw error
+        const row = Array.isArray(data) ? data[0] : data
+        if (!row) throw new Error('QUOTE_EMPTY')
+        setQuote({ distance_km: Number(row.distance_km), duration_min: Number(row.duration_min), fare_htg: Number(row.fare_htg) })
+      } catch (error: any) {
+        if (cancelled) return
+        if (!fallbackQuote) {
+          setQuote(null)
+          const timeout = error?.message === 'QUOTE_TIMEOUT'
+          setRideError(timeout
+            ? (lang === 'ht' ? 'Kalkil pri a pran twòp tan. Tanpri chwazi destinasyon an ankò oswa eseye ankò.' : 'Le calcul du prix prend trop de temps. Veuillez sélectionner de nouveau la destination ou réessayer.')
+            : (error?.message || (lang === 'ht' ? 'Nou pa rive kalkile pri a. Tanpri eseye ankò.' : 'Impossible de calculer le prix. Veuillez réessayer.')))
+        }
+      } finally {
+        if (timeoutId) window.clearTimeout(timeoutId)
+        if (!cancelled) setRequestState((s) => s === 'searching' ? s : 'idle')
+      }
+    }
+
+    void runQuote()
+    return () => {
+      cancelled = true
+      if (timeoutId) window.clearTimeout(timeoutId)
+    }
+  }, [user, pickupCoords, effectiveDestinationCoords, selectedRide, lang, fallbackQuote])
 
   async function submitAuth(e: FormEvent) {
     e.preventDefault(); setAuthBusy(true); setAuthMessage('')
@@ -165,12 +271,30 @@ export default function HomePage() {
     setAuthBusy(false)
   }
 
-  function chooseSearchResult(result: SearchResult) { setDestination(result.label); setDestinationCoords({ lng: result.center[0], lat: result.center[1] }); setSearchResults([]); setRideError('') }
+  function chooseSearchResult(result: SearchResult) {
+    const coords = { lng: result.center[0], lat: result.center[1] }
+    setDestination(result.label)
+    setDestinationCoords(coords)
+    setResolvedDestinationCoords(coords)
+    setSearchResults([])
+    setRideError('')
+  }
 
   async function requestRide() {
-    if (!user || !pickupCoords || !destinationCoords || !quote) return
+    if (!user || !pickupCoords || !effectiveDestinationCoords || !effectiveQuote) return
     setRequestState('requesting'); setRideError('')
-    const { data, error } = await supabase.rpc('request_ride_v2', { p_service_type: selectedRide, p_pickup_address: pickup, p_pickup_latitude: pickupCoords.lat, p_pickup_longitude: pickupCoords.lng, p_destination_address: destination, p_destination_latitude: destinationCoords.lat, p_destination_longitude: destinationCoords.lng })
+    const { data, error } = await supabase.rpc('request_ride_v3', {
+      p_service_type: selectedRide,
+      p_pickup_address: pickup,
+      p_pickup_latitude: pickupCoords.lat,
+      p_pickup_longitude: pickupCoords.lng,
+      p_destination_address: destination,
+      p_destination_latitude: effectiveDestinationCoords.lat,
+      p_destination_longitude: effectiveDestinationCoords.lng,
+      p_estimated_distance_km: effectiveQuote.distance_km,
+      p_estimated_duration_min: effectiveQuote.duration_min,
+      p_estimated_fare_htg: effectiveQuote.fare_htg,
+    })
     if (error) { setRideError(error.message); setRequestState('idle'); return }
     setRideId(String(data)); setRequestState('searching')
   }
@@ -202,22 +326,21 @@ export default function HomePage() {
   return <main className="shell"><section className="phone-frame">
     {panelContent}
     <div className={`app-underlay ${panel !== 'home' ? 'panel-hidden' : ''}`}>
-      <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={destinationCoords} routeGeometry={routeGeometry} />
+      <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={effectiveDestinationCoords} routeGeometry={routeGeometry} />
         <div className="topbar"><button className="round-button" onClick={() => setMenuOpen(true)}>☰</button><div className="brand-chip"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.tagline}</small></div></div><button className="round-button" onClick={() => openPanel('profile')}>👤</button></div>
       </div>
       <section className="booking-sheet"><div className="grabber" />
         <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
-        <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null) }} placeholder={t.destinationPlaceholder} /></div></div></div>
+        <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} autoComplete="off" autoCorrect="off" spellCheck={false} enterKeyHint="search" onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null); setResolvedDestinationCoords(null); setQuote(null); setRideError('') }} placeholder={t.destinationPlaceholder} /></div></div></div>
         {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
-        <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : quote ? `${quote.distance_km.toFixed(1)} km · ${quote.duration_min} min` : t.chooseDestination}</span></div>
-        <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
+        <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : effectiveQuote ? `${effectiveQuote.distance_km.toFixed(1)} km · ${effectiveQuote.duration_min} min` : t.chooseDestination}</span></div>
+        <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
         <div className="payment-row"><div><span className="payment-icon">💵</span><div><small>{t.payment}</small><strong>{t.cash}</strong></div></div><button onClick={() => openPanel('payment')}>{t.change}</button></div>
         {rideError && <div className="ride-error">{rideError}</div>}
-        {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!quote || requestState === 'quoting' || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'quoting' ? t.calculating : requestState === 'requesting' ? t.sending : `${t.request} ${ride.name}`}</span><strong>{quote ? `${quote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
+        {requestState === 'searching' ? <div className="searching-card"><div className="spinner" /><div><strong>{t.searchingDriver}</strong><small>{ride.name} · {t.trip} #{rideId?.slice(0, 8)}</small></div></div> : <button className="request-button" disabled={!effectiveQuote || requestState === 'requesting'} onClick={requestRide}><span>{requestState === 'requesting' ? t.sending : effectiveQuote ? `${t.request} ${ride.name}` : t.calculating}</span><strong>{effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>}
         <p className="fine-print">{t.mapNote}</p>
       </section>
     </div>
-
     {menuOpen && <><button className="drawer-backdrop" aria-label="Close menu" onClick={() => setMenuOpen(false)} /><aside className="nav-drawer">
       <div className="drawer-head"><div className="drawer-brand"><span className="brand-mark">T</span><div><strong>Taxi Platform Haiti</strong><small>{t.menu}</small></div></div><button onClick={() => setMenuOpen(false)}>×</button></div>
       <div className="drawer-user"><div className="drawer-avatar">{(user.user_metadata?.full_name?.[0] ?? user.email?.[0] ?? 'U').toUpperCase()}</div><div><strong>{user.user_metadata?.full_name || t.passengerAccount}</strong><small>{user.email}</small></div></div>
