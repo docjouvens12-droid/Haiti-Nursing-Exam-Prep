@@ -25,7 +25,18 @@ export default function PassengerDashboardDriverStyle() {
         min-height:300px!important;
         background:linear-gradient(155deg,#dbe9ff 0%,#edf3fb 48%,#e1e9f4 100%)!important;
       }
-      .topbar{top:18px!important;left:16px!important;right:16px!important}
+      .topbar{
+        top:18px!important;
+        left:16px!important;
+        right:16px!important;
+        display:grid!important;
+        grid-template-columns:44px minmax(0,1fr) 44px!important;
+        align-items:center!important;
+        gap:8px!important;
+      }
+      .topbar>.round-button:first-child{grid-column:1!important;justify-self:start!important}
+      .topbar>.brand-chip{grid-column:2!important;justify-self:center!important}
+      .topbar>.round-button:last-child{grid-column:3!important;justify-self:end!important}
       .round-button{
         border-radius:13px!important;
         box-shadow:0 8px 24px rgba(19,39,64,.16)!important;
@@ -33,37 +44,58 @@ export default function PassengerDashboardDriverStyle() {
       .brand-chip{
         display:flex!important;
         align-items:center!important;
-        gap:10px!important;
-        border-radius:16px!important;
-        padding:9px 12px!important;
-        background:rgba(255,255,255,.96)!important;
-        box-shadow:0 8px 24px rgba(19,39,64,.14)!important;
+        justify-content:center!important;
+        gap:9px!important;
+        width:max-content!important;
+        max-width:100%!important;
+        border-radius:18px!important;
+        padding:8px 12px!important;
+        background:rgba(255,255,255,.97)!important;
+        border:1px solid rgba(218,228,242,.92)!important;
+        box-shadow:0 10px 28px rgba(19,39,64,.14)!important;
+        text-align:center!important;
       }
       .brand-mark{
-        width:40px!important;
-        height:40px!important;
-        min-width:40px!important;
+        position:relative!important;
+        width:42px!important;
+        height:42px!important;
+        min-width:42px!important;
         display:grid!important;
         place-items:center!important;
-        background:#1b70eb!important;
+        background:linear-gradient(145deg,#2b7df0 0%,#145fd5 100%)!important;
         color:#fff!important;
-        border-radius:13px!important;
-        font-size:15px!important;
-        font-weight:900!important;
+        border-radius:14px!important;
+        border:1px solid rgba(255,255,255,.46)!important;
+        box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 7px 16px rgba(27,112,235,.24)!important;
+        font-size:19px!important;
+        line-height:1!important;
+        font-weight:950!important;
+        letter-spacing:-.03em!important;
+      }
+      .brand-chip>div{
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:center!important;
+        justify-content:center!important;
+        min-width:0!important;
       }
       .brand-chip strong{
         display:block!important;
         font-size:13px!important;
-        line-height:1.15!important;
+        line-height:1.08!important;
         color:#102033!important;
         font-weight:900!important;
+        white-space:nowrap!important;
+        text-align:center!important;
       }
       .brand-chip small{
         display:block!important;
-        margin-top:2px!important;
-        font-size:9.5px!important;
-        line-height:1.15!important;
+        margin-top:3px!important;
+        font-size:9px!important;
+        line-height:1.1!important;
         color:#758596!important;
+        white-space:nowrap!important;
+        text-align:center!important;
       }
       .booking-sheet{
         margin-top:-24px!important;
@@ -115,10 +147,11 @@ export default function PassengerDashboardDriverStyle() {
         }
         .map-panel{height:39vh!important;min-height:310px!important}
         .booking-sheet{padding:13px 18px 112px!important}
-        .brand-chip{padding:8px 10px!important;gap:8px!important}
-        .brand-mark{width:36px!important;height:36px!important;min-width:36px!important}
-        .brand-chip strong{font-size:12px!important}
-        .brand-chip small{font-size:9px!important}
+        .topbar{grid-template-columns:40px minmax(0,1fr) 40px!important;gap:6px!important}
+        .brand-chip{padding:7px 9px!important;gap:7px!important;border-radius:16px!important}
+        .brand-mark{width:36px!important;height:36px!important;min-width:36px!important;border-radius:12px!important;font-size:17px!important}
+        .brand-chip strong{font-size:11.5px!important}
+        .brand-chip small{font-size:8px!important}
       }
     `
     document.head.appendChild(style)
