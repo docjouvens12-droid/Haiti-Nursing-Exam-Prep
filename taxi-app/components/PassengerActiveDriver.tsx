@@ -7,6 +7,8 @@ import { supabase } from '../lib/supabase'
 type ActiveRideBundle = {
   ride_id: string
   ride_status: 'accepted' | 'driver_arriving' | 'in_progress'
+  pickup_address?: string | null
+  destination_address?: string | null
   pickup_latitude: number | null
   pickup_longitude: number | null
   destination_latitude: number | null
@@ -34,6 +36,7 @@ export default function PassengerActiveDriver() {
   const [liveDistanceKm, setLiveDistanceKm] = useState<number | null>(null)
   const [liveEtaMin, setLiveEtaMin] = useState<number | null>(null)
   const [routeGeometry, setRouteGeometry] = useState<string | null>(null)
+  const [shareNote, setShareNote] = useState('')
 
   useEffect(() => {
     if (!isPassengerDashboard) return
@@ -183,6 +186,30 @@ export default function PassengerActiveDriver() {
       : (lang === 'ht' ? 'Trajè ap fèt' : 'Trajet en cours')
 
   const helpHref = `/passenger/help?ride=${encodeURIComponent(bundle.ride_id)}`
+  const safetyHref = `/passenger/help?ride=${encodeURIComponent(bundle.ride_id)}&category=safety`
+
+  async function shareRide() {
+    const pickup = bundle?.pickup_address?.trim() || (lang === 'ht' ? 'Pwen depa a pa disponib' : 'Point de départ indisponible')
+    const destination = bundle?.destination_address?.trim() || (lang === 'ht' ? 'Destinasyon an pa disponib' : 'Destination indisponible')
+    const text = lang === 'ht'
+      ? `M ap pataje trajè Taxi Platform Haiti mwen an.\nChofè: ${name}\nMachin: ${vehicle} (${color})\nPlak: ${plate}\nSoti: ${pickup}\nAle: ${destination}\nEstati: ${statusLabel}\nETA: ${eta}`
+      : `Je partage mon trajet Taxi Platform Haiti.\nChauffeur : ${name}\nVéhicule : ${vehicle} (${color})\nPlaque : ${plate}\nDépart : ${pickup}\nDestination : ${destination}\nStatut : ${statusLabel}\nETA : ${eta}`
+
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: 'Taxi Platform Haiti', text })
+        setShareNote(lang === 'ht' ? 'Trajè a pare pou pataje.' : 'Trajet prêt à être partagé.')
+      } else if (navigator.clipboard) {
+        await navigator.clipboard.writeText(text)
+        setShareNote(lang === 'ht' ? 'Detay trajè a kopye.' : 'Détails du trajet copiés.')
+      } else {
+        setShareNote(lang === 'ht' ? 'Pataje pa disponib sou aparèy sa a.' : 'Le partage n’est pas disponible sur cet appareil.')
+      }
+    } catch {
+      setShareNote('')
+    }
+    window.setTimeout(() => setShareNote(''), 2800)
+  }
 
   return <aside className={`driverCard ${bundle.ride_status === 'driver_arriving' ? 'arrived' : ''}`} aria-live="polite">
     <div className="topLine">
@@ -206,6 +233,12 @@ export default function PassengerActiveDriver() {
       <div className="plate"><small>{lang === 'ht' ? 'Plak' : 'Plaque'}</small><strong>{plate}</strong></div>
     </div>
 
+    <div className="safetyActions">
+      <button type="button" className="shareRide" onClick={shareRide}>↗ {lang === 'ht' ? 'Pataje trajè' : 'Partager le trajet'}</button>
+      <a className="safetyRide" href={safetyHref}>🛡 {lang === 'ht' ? 'Sekirite' : 'Sécurité'}</a>
+    </div>
+    {shareNote && <div className="shareNote" role="status">{shareNote}</div>}
+
     {bundle.ride_status === 'driver_arriving' && <div className="arrivalBanner">
       <span>✓</span>
       <div><strong>{lang === 'ht' ? 'Chofè ou rive' : 'Votre chauffeur est arrivé'}</strong><small>{lang === 'ht' ? 'Li ap tann ou nan pwen pickup la.' : 'Il vous attend au point de prise en charge.'}</small></div>
@@ -219,6 +252,7 @@ export default function PassengerActiveDriver() {
       .topLine{display:flex;align-items:center;gap:7px;padding:1px 2px 10px}.statusDot{width:8px;height:8px;border-radius:50%;background:#1b70eb;box-shadow:0 0 0 4px #eaf2ff;flex:0 0 auto}.topLine>strong{font-size:10px;letter-spacing:.055em;text-transform:uppercase;color:#185fc2}.metrics{margin-left:auto;display:flex;gap:5px}.metrics span{display:inline-flex;align-items:center;white-space:nowrap;border-radius:999px;background:#eef4ff;color:#18324e;padding:5px 8px;font-size:10px;font-weight:850}
       .identity{display:grid;grid-template-columns:50px minmax(0,1fr) 38px;gap:10px;align-items:center;padding:2px}.avatar{width:50px;height:50px;border-radius:16px;overflow:hidden;background:linear-gradient(145deg,#e8f1ff,#d9e8ff);color:#1b70eb;display:grid;place-items:center;font-size:20px;font-weight:950}.avatar img{width:100%;height:100%;object-fit:cover}.driverCopy{min-width:0}.nameLine{display:flex;align-items:center;gap:7px;min-width:0}.nameLine h3{margin:0;font-size:16px;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.rating{flex:0 0 auto;border-radius:999px;background:#fff7d8;color:#8a6500;padding:3px 6px;font-size:10px;font-weight:900}.driverCopy p{margin:4px 0 0;color:#728293;font-size:10px}.helpButton{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;text-decoration:none;background:#edf4ff;color:#1b70eb;font-weight:950;font-size:17px;border:1px solid #d7e6ff}
       .vehicleBox{display:grid;grid-template-columns:1.3fr .8fr .8fr;gap:7px;margin-top:10px}.vehicleBox>div{background:#f7f9fc;border:1px solid #e1e8f0;border-radius:13px;padding:9px;min-width:0}.vehicleBox small,.vehicleBox strong{display:block}.vehicleBox small{font-size:8.5px;text-transform:uppercase;letter-spacing:.045em;color:#8794a1;font-weight:850}.vehicleBox strong{margin-top:3px;font-size:11px;line-height:1.2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vehicleBox .plate{background:#102033;color:#fff;border-color:#102033}.vehicleBox .plate small{color:#aebbc8}.vehicleBox .plate strong{color:#fff;letter-spacing:.04em}
+      .safetyActions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px}.safetyActions button,.safetyActions a{min-height:40px;border-radius:13px;border:1px solid #dce6f3;font:inherit;font-size:10.5px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:5px;text-decoration:none;box-sizing:border-box}.shareRide{background:#edf4ff;color:#185fc2}.safetyRide{background:#fff6f6!important;color:#9a3030!important;border-color:#f0dddd!important}.shareNote{margin-top:6px;text-align:center;font-size:9.5px;color:#66798b;font-weight:700}
       .arrivalBanner{margin-top:9px;display:flex;align-items:center;gap:9px;border-radius:14px;background:#eef5ff;border:1px solid #cfe0fb;padding:9px 10px}.arrivalBanner>span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:#1b70eb;color:#fff;font-weight:950}.arrivalBanner div{min-width:0}.arrivalBanner strong,.arrivalBanner small{display:block}.arrivalBanner strong{font-size:12px;color:#185fc2}.arrivalBanner small{font-size:9.5px;color:#6f7f8f;margin-top:2px}
       .miniMap{margin-top:9px;border-radius:15px;overflow:hidden;background:#e8eef5;min-height:128px;border:1px solid #e0e8f2}.miniMap img{display:block;width:100%;height:150px;object-fit:cover}
       @media(max-width:600px){.driverCard{width:calc(100vw - 20px);padding:10px;border-radius:19px}.metrics span{padding:4px 6px;font-size:9px}.avatar{width:46px;height:46px;border-radius:14px}.identity{grid-template-columns:46px minmax(0,1fr) 36px;gap:8px}.nameLine h3{font-size:14px}.vehicleBox{grid-template-columns:1.2fr .8fr .8fr}.vehicleBox>div{padding:8px}.miniMap img{height:138px}}
