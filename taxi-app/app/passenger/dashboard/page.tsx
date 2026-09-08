@@ -22,20 +22,7 @@ export default function PassengerDashboardPage() {
         return
       }
 
-      const { data: primed, error } = await supabase.auth.setSession({
-        access_token: data.session.access_token,
-        refresh_token: data.session.refresh_token,
-      })
-
-      if (!active) return
-
-      const stableSession = primed.session ?? data.session
-      if (error || !stableSession?.user) {
-        window.location.replace('/passenger/login')
-        return
-      }
-
-      setSession(stableSession)
+      setSession(data.session)
       setReady(true)
     }
 
@@ -44,6 +31,7 @@ export default function PassengerDashboardPage() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, nextSession) => {
       if (!active || !nextSession?.user) return
       setSession(nextSession)
+      setReady(true)
     })
 
     return () => {
@@ -52,49 +40,18 @@ export default function PassengerDashboardPage() {
     }
   }, [])
 
-  // HomePage still contains the legacy embedded login. Mount it while hidden
-  // first so its auth listener is registered, then re-emit the already
-  // validated passenger session. This makes HomePage receive the signed-in
-  // user before it becomes visible and prevents the green login screen from
-  // flashing or getting stuck on Safari/iPhone.
+  // HomePage has its own legacy auth bootstrap. Mount it hidden briefly so its
+  // getUser()/auth listener can recover the already-persisted Supabase session,
+  // but never block the passenger dashboard on another setSession() call.
   useEffect(() => {
     if (!ready || !session?.user) return
 
-    let cancelled = false
-    let timer1: number | undefined
-    let timer2: number | undefined
-    let revealTimer: number | undefined
+    const revealTimer = window.setTimeout(() => {
+      setShowDashboard(true)
+    }, 650)
 
-    const reemitSession = async () => {
-      await supabase.auth.setSession({
-        access_token: session.access_token,
-        refresh_token: session.refresh_token,
-      })
-      if (cancelled) return
-
-      timer2 = window.setTimeout(() => {
-        void supabase.auth.setSession({
-          access_token: session.access_token,
-          refresh_token: session.refresh_token,
-        })
-      }, 180)
-
-      revealTimer = window.setTimeout(() => {
-        if (!cancelled) setShowDashboard(true)
-      }, 500)
-    }
-
-    timer1 = window.setTimeout(() => {
-      void reemitSession()
-    }, 60)
-
-    return () => {
-      cancelled = true
-      if (timer1) window.clearTimeout(timer1)
-      if (timer2) window.clearTimeout(timer2)
-      if (revealTimer) window.clearTimeout(revealTimer)
-    }
-  }, [ready, session])
+    return () => window.clearTimeout(revealTimer)
+  }, [ready, session?.user?.id])
 
   if (!ready || !session?.user) {
     return <LoadingScreen />
