@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { supabase } from '../lib/supabase'
 
 export default function PassengerLanguageLogoutPolish() {
   useEffect(() => {
@@ -32,15 +33,50 @@ export default function PassengerLanguageLogoutPolish() {
       .passenger-lang-label{position:relative;z-index:1;text-align:center;font-size:10px;font-weight:850;transition:color .2s ease;pointer-events:none;color:#657483;background:transparent!important;border:0!important;border-radius:0!important}
       .nav-drawer .drawer-logout,
       .nav-drawer [data-passenger-logout="true"]{
-        display:flex!important;align-items:center!important;justify-content:center!important;
-        width:100%!important;min-height:38px!important;margin:4px 0 0!important;padding:8px 10px!important;
-        border:1px solid #efdcdc!important;border-radius:10px!important;background:#fff6f6!important;color:#9a3030!important;
-        font-size:12px!important;font-weight:800!important;line-height:1.1!important;box-shadow:none!important;text-align:center!important;
+        display:flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;
+        width:100%!important;min-height:40px!important;margin:8px 0 0!important;padding:9px 12px!important;
+        border:1px solid #efdddd!important;border-radius:11px!important;background:#fffafa!important;color:#9d3434!important;
+        font-size:12px!important;font-weight:850!important;line-height:1.1!important;box-shadow:none!important;text-align:center!important;
       }
+      .nav-drawer [data-passenger-logout="true"]::before{content:'↪';font-size:15px;line-height:1;color:#9d3434}
+      .passenger-logout-backdrop{position:fixed;inset:0;z-index:99998;background:rgba(20,35,48,.34);display:flex;align-items:flex-end;justify-content:center;padding:16px;box-sizing:border-box}
+      .passenger-logout-dialog{width:min(100%,360px);background:#fff;border-radius:18px;padding:18px;box-shadow:0 18px 50px rgba(20,35,48,.22);display:grid;gap:14px}
+      .passenger-logout-dialog h3{margin:0;color:#243747;font-size:17px;line-height:1.2;text-align:center}
+      .passenger-logout-dialog p{margin:0;color:#6b7a88;font-size:12px;line-height:1.45;text-align:center}
+      .passenger-logout-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+      .passenger-logout-cancel,.passenger-logout-confirm{min-height:42px;border-radius:11px;font-size:12px;font-weight:850}
+      .passenger-logout-cancel{border:1px solid #dfe6ea;background:#f7f9fa;color:#405261}
+      .passenger-logout-confirm{border:1px solid #efd7d7;background:#a43a3a;color:#fff}
     `
     document.head.appendChild(style)
 
     const normalize = (value: string) => value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+
+    const openLogoutDialog = () => {
+      document.querySelector('.passenger-logout-backdrop')?.remove()
+      const isHt = window.localStorage.getItem('taxi-language') === 'ht'
+      const backdrop = document.createElement('div')
+      backdrop.className = 'passenger-logout-backdrop'
+      backdrop.innerHTML = `
+        <div class="passenger-logout-dialog" role="dialog" aria-modal="true" aria-label="${isHt ? 'Konfime dekoneksyon' : 'Confirmer la déconnexion'}">
+          <h3>${isHt ? 'Ou vle dekonekte?' : 'Voulez-vous vous déconnecter ?'}</h3>
+          <p>${isHt ? 'W ap bezwen konekte ankò pou antre nan kont kliyan ou.' : 'Vous devrez vous reconnecter pour accéder à votre compte passager.'}</p>
+          <div class="passenger-logout-actions">
+            <button class="passenger-logout-cancel" type="button">${isHt ? 'Anile' : 'Annuler'}</button>
+            <button class="passenger-logout-confirm" type="button">${isHt ? 'Dekonekte' : 'Se déconnecter'}</button>
+          </div>
+        </div>
+      `
+      document.body.appendChild(backdrop)
+      backdrop.querySelector<HTMLButtonElement>('.passenger-logout-cancel')?.addEventListener('click', () => backdrop.remove())
+      backdrop.addEventListener('click', (event) => { if (event.target === backdrop) backdrop.remove() })
+      backdrop.querySelector<HTMLButtonElement>('.passenger-logout-confirm')?.addEventListener('click', async () => {
+        const confirm = backdrop.querySelector<HTMLButtonElement>('.passenger-logout-confirm')
+        if (confirm) confirm.disabled = true
+        await supabase.auth.signOut()
+        window.location.replace('/passenger/login')
+      })
+    }
 
     const apply = () => {
       const drawer = document.querySelector<HTMLElement>('.nav-drawer')
@@ -115,7 +151,18 @@ export default function PassengerLanguageLogoutPolish() {
         const text = normalize(button.textContent || '')
         return text.includes('deconnect') || text.includes('dekonekte')
       })
-      if (logout) logout.dataset.passengerLogout = 'true'
+      if (logout) {
+        logout.dataset.passengerLogout = 'true'
+        if (logout.dataset.passengerLogoutBound !== 'true') {
+          logout.dataset.passengerLogoutBound = 'true'
+          logout.addEventListener('click', (event) => {
+            event.preventDefault()
+            event.stopPropagation()
+            event.stopImmediatePropagation()
+            openLogoutDialog()
+          }, true)
+        }
+      }
     }
 
     apply()
@@ -123,6 +170,7 @@ export default function PassengerLanguageLogoutPolish() {
     observer.observe(document.body, { childList: true, subtree: true })
     return () => {
       observer.disconnect()
+      document.querySelector('.passenger-logout-backdrop')?.remove()
       document.getElementById(styleId)?.remove()
     }
   }, [])
