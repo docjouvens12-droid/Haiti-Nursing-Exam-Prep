@@ -45,7 +45,7 @@ export default function PassengerPendingRideCancel() {
 
   async function cancelRide() {
     if (!ride || busy) return
-    const ok = window.confirm(lang === 'ht' ? 'Ou vle anile demann trajè sa a?' : 'Voulez-vous annuler cette demande de trajet ?')
+    const ok = window.confirm(lang === 'ht' ? 'Ou vle anile kous sa a?' : 'Voulez-vous annuler cette course ?')
     if (!ok) return
     setBusy(true)
     const reason = lang === 'ht' ? 'Anile pa pasaje a' : 'Annulé par le passager'
@@ -63,14 +63,14 @@ export default function PassengerPendingRideCancel() {
 
   return <aside className="pending-ride-card" aria-live="polite">
     <div className="pending-copy">
-      <strong>{lang === 'ht' ? 'N ap chèche yon chofè…' : 'Recherche d’un chauffeur…'}</strong>
+      <strong>{lang === 'ht' ? 'N ap chèche yon chofè pou ou…' : 'Nous cherchons un chauffeur pour vous…'}</strong>
       <small>{ride.destination_address}</small>
     </div>
-    <button onClick={() => void cancelRide()} disabled={busy}>
-      {busy ? (lang === 'ht' ? 'N ap anile…' : 'Annulation…') : (lang === 'ht' ? 'Anile trajè' : 'Annuler le trajet')}
+    <button className="cancel-button" onClick={() => void cancelRide()} disabled={busy}>
+      {busy ? (lang === 'ht' ? 'N ap anile…' : 'Annulation…') : (lang === 'ht' ? 'Anile kous la' : 'Annuler la course')}
     </button>
     <style jsx>{`
-      .pending-ride-card{position:fixed;left:50%;bottom:86px;transform:translateX(-50%);z-index:900;width:min(calc(100vw - 28px),720px);display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #dce7e3;border-radius:18px;padding:12px 13px;box-shadow:0 16px 45px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;color:#102033}.pending-copy{min-width:0;flex:1}.pending-copy strong,.pending-copy small{display:block}.pending-copy strong{font-size:14px}.pending-copy small{margin-top:3px;color:#71808e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pending-ride-card button{border:0;border-radius:13px;background:#fff0ee;color:#9f2e2e;font-weight:850;padding:10px 12px;white-space:nowrap}.pending-ride-card button:disabled{opacity:.6}@media(max-width:520px){.pending-ride-card{bottom:82px}.pending-copy strong{font-size:13px}.pending-ride-card button{font-size:12px;padding:9px 10px}}
+      .pending-ride-card{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:2147483000;width:min(calc(100vw - 24px),720px);display:grid;gap:11px;background:#fff;border:1px solid #e4d5d2;border-radius:20px;padding:14px;box-shadow:0 18px 50px rgba(16,32,51,.26);font-family:Inter,system-ui,sans-serif;color:#102033}.pending-copy{min-width:0}.pending-copy strong,.pending-copy small{display:block}.pending-copy strong{font-size:15px}.pending-copy small{margin-top:4px;color:#71808e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.cancel-button{width:100%;min-height:52px;border:0;border-radius:14px;background:#b42318;color:#fff;font-weight:900;font-size:16px;padding:13px 16px;cursor:pointer;touch-action:manipulation}.cancel-button:disabled{opacity:.6}@media(max-width:520px){.pending-ride-card{bottom:12px;width:calc(100vw - 20px);padding:12px}.pending-copy strong{font-size:14px}.cancel-button{min-height:54px;font-size:16px}}
     `}</style>
   </aside>
 }
