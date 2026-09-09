@@ -2,3 +2,30 @@
 
 /* iPhone/Safari auth input interaction hardening */
 .auth-shell,.auth-card,.auth-form,.auth-form label{position:relative;z-index:1000;pointer-events:auto!important}.auth-form input{position:relative;z-index:1001;pointer-events:auto!important;touch-action:manipulation;-webkit-user-select:text!important;user-select:text!important;-webkit-touch-callout:default!important;opacity:1!important}.auth-form input:disabled{pointer-events:auto!important}.auth-form button,.auth-switch{position:relative;z-index:1002;pointer-events:auto!important}
+
+/* 2026 centered Taxi Platform redesign */
+html,body{min-height:100%;background:radial-gradient(circle at 50% -10%,#dceee8 0,#edf3f0 34%,#e7ecef 72%,#dfe6ea 100%);overflow-x:hidden}
+body{display:flex;justify-content:center;align-items:flex-start}
+body>div,body>main{max-width:100%}
+.shell{width:100%;min-height:100dvh;align-items:flex-start;justify-content:center;padding:0 14px}
+.phone-frame{width:100%;max-width:460px;min-height:100dvh;margin:0 auto;background:#fff;border-left:1px solid rgba(213,225,220,.72);border-right:1px solid rgba(213,225,220,.72);box-shadow:0 22px 70px rgba(16,32,51,.16)}
+.topbar{left:14px;right:14px;display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px}
+.topbar>.brand-chip{justify-self:center;max-width:190px;text-align:center}
+.topbar>.top-actions{justify-self:end}
+.brand-chip{border:1px solid rgba(218,229,224,.9);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.brand-chip strong{font-size:12.5px;letter-spacing:.01em}
+.round-button{display:grid;place-items:center;border:1px solid rgba(216,227,222,.92);background:rgba(255,255,255,.95);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.booking-sheet{width:100%;max-width:460px;margin-left:auto;margin-right:auto}
+.auth-shell{width:100vw;min-height:100dvh;padding:24px 16px;background:radial-gradient(circle at 50% 0,#d8eee5 0,#eef3f1 45%,#e5eaee 100%)}
+.auth-card{width:min(100%,410px);margin:auto;border:1px solid #e0e9e5;box-shadow:0 24px 70px rgba(16,32,51,.14)}
+.auth-brand{justify-content:center;text-align:center}.auth-card h1{text-align:center}
+@media(min-width:700px){
+  .shell{padding:28px 18px}
+  .phone-frame{min-height:calc(100dvh - 56px);border-radius:34px;border:1px solid rgba(205,218,212,.9);overflow:hidden;box-shadow:0 32px 90px rgba(16,32,51,.18)}
+  .map-panel{height:390px}
+  .booking-sheet{min-height:470px}
+}
+@media(max-width:699px){
+  .shell{padding:0}
+  .phone-frame{max-width:none;border:0;box-shadow:none}
+}
