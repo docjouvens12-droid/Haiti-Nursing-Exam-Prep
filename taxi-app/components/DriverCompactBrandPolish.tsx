@@ -25,27 +25,33 @@ export default function DriverCompactBrandPolish() {
       Object.assign(topbar.style, {
         position: 'relative',
         minHeight: '62px',
-        display: 'flex',
-        alignItems: 'center'
+        display: 'grid',
+        gridTemplateColumns: '48px minmax(0,1fr) 48px',
+        alignItems: 'center',
+        columnGap: '8px',
+        width: '100%'
       })
 
       if (menuButton) Object.assign(menuButton.style, {
         position: 'relative',
-        zIndex: '20',
+        zIndex: '50',
         pointerEvents: 'auto',
-        flex: '0 0 auto'
+        gridColumn: '1',
+        justifySelf: 'start',
+        touchAction: 'manipulation'
       })
 
       Object.assign(brand.style, {
-        position: 'absolute',
-        left: '50%',
-        transform: 'translateX(-50%)',
+        position: 'static',
+        left: 'auto',
+        transform: 'none',
+        gridColumn: '2',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         gap: '9px',
-        width: 'max-content',
-        maxWidth: 'calc(100% - 120px)',
+        width: '100%',
+        maxWidth: '100%',
         minWidth: '0',
         pointerEvents: 'none',
         zIndex: '1'
