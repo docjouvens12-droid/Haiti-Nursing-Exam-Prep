@@ -69,17 +69,17 @@ export default function PassengerAvatarEnhancer() {
 
       const nav = drawer.querySelector('.drawer-nav') as HTMLElement | null
       if (nav) {
-        const allButtons = () => Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button'))
-        const byText = (terms: string[]) => allButtons().find((button) => {
+        const buttons = Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button'))
+        const byText = (terms: string[]) => buttons.find((button) => {
           const text = (button.textContent || '').toLowerCase()
           return terms.some((term) => text.includes(term))
         }) || null
 
         const homeButton = byText(['accueil', 'akèy'])
-        if (homeButton) homeButton.remove()
+        if (homeButton) homeButton.style.display = 'none'
 
         const becomeDriverButton = byText(['devenir chauffeur', 'vin chofè', 'vin chofe'])
-        if (becomeDriverButton) becomeDriverButton.remove()
+        if (becomeDriverButton) becomeDriverButton.style.display = 'none'
 
         const profileButton = byText(['profil', 'pwofil'])
         const tripsButton = byText(['mes trajets', 'trajè mwen yo'])
@@ -89,16 +89,13 @@ export default function PassengerAvatarEnhancer() {
         const profileTarget = nav.querySelector(':scope > .drawer-profile-inline-target') as HTMLElement | null
         const tripsTarget = nav.querySelector(':scope > .drawer-trips-inline-target') as HTMLElement | null
 
-        const ordered: HTMLElement[] = []
-        if (profileButton) ordered.push(profileButton)
-        if (profileTarget) ordered.push(profileTarget)
-        if (tripsButton) ordered.push(tripsButton)
-        if (tripsTarget) ordered.push(tripsTarget)
-        if (paymentButton) ordered.push(paymentButton)
-        if (languageBlock) ordered.push(languageBlock)
-        if (helpButton) ordered.push(helpButton)
-
-        for (const element of ordered) nav.appendChild(element)
+        if (profileButton) profileButton.style.order = '10'
+        if (profileTarget) profileTarget.style.order = '11'
+        if (tripsButton) tripsButton.style.order = '20'
+        if (tripsTarget) tripsTarget.style.order = '21'
+        if (paymentButton) paymentButton.style.order = '30'
+        if (languageBlock) languageBlock.style.order = '40'
+        if (helpButton) helpButton.style.order = '50'
       }
 
       const circle = drawer.querySelector('.drawer-avatar') as HTMLElement | null
