@@ -31,10 +31,7 @@ export default function DriverApplicationSubmitButton(){
     return()=>observer.disconnect()
   },[])
 
-  useEffect(()=>{
-    if(!target) return
-    void loadStatus()
-  },[target])
+  useEffect(()=>{if(target) void loadStatus()},[target])
 
   async function loadStatus(){
     const {data:auth}=await supabase.auth.getUser()
@@ -47,11 +44,8 @@ export default function DriverApplicationSubmitButton(){
   async function submit(){
     if(busy) return
     const ht=lang==='ht'
-    setBusy(true)
-    setMessage('')
-
-    const {data:auth}=await supabase.auth.getUser()
-    const user=auth.user
+    setBusy(true);setMessage('')
+    const {data:auth}=await supabase.auth.getUser();const user=auth.user
     if(!user){setMessage(ht?'Ou dwe konekte anvan.':'Vous devez être connecté.');setBusy(false);return}
 
     const metadata=user.user_metadata||{}
@@ -73,49 +67,26 @@ export default function DriverApplicationSubmitButton(){
     const make=String(vehicle?.make||'').trim()
     const model=String(vehicle?.model||'').trim()
     const color=String(vehicle?.color||'').trim()
-    const year=vehicle?.year ? Number(vehicle.year) : 0
+    const year=vehicle?.year?Number(vehicle.year):0
     const plate=String(vehicle?.plate_number||'').trim()
-    const seats=vehicle?.seats ? Number(vehicle.seats) : 0
+    const seats=vehicle?.seats?Number(vehicle.seats):0
 
-    if(!fullName||!birthDate||!gender||!address||!maritalStatus||!phone||!license||!nationalId||!vehicleType||!make||!model||!color||!year||!plate||!seats){
-      setMessage(ht?'Tanpri ranpli tout enfòmasyon obligatwa nan Pwofil ak Veyikil anvan ou voye demand lan.':'Veuillez compléter toutes les informations obligatoires dans Profil et Véhicule avant d’envoyer la demande.')
-      setBusy(false)
-      return
+    if(!fullName||!birthDate||!gender||!address||!phone||!license||!nationalId||!vehicleType||!make||!model||!color||!year||!plate||!seats){
+      setMessage(ht?'Tanpri ranpli tout chan obligatwa nan Pwofil ak tout chan Veyikil yo. Eta sivil ak imèl opsyonèl.':'Veuillez compléter tous les champs obligatoires du Profil et tous les champs du Véhicule. L’état civil et l’e-mail sont facultatifs.')
+      setBusy(false);return
     }
 
     const normalizedType=vehicleType==='moto'?'moto':'car'
     const {error}=await supabase.rpc('submit_driver_application_with_profile',{
-      p_full_name:fullName,
-      p_birth_date:birthDate,
-      p_gender:gender,
-      p_address:address,
-      p_marital_status:maritalStatus,
-      p_phone:phone,
-      p_email:user.email||'',
-      p_license_number:license,
-      p_national_id_number:nationalId,
-      p_vehicle_type:normalizedType,
-      p_vehicle_make:make,
-      p_vehicle_model:model,
-      p_vehicle_color:color,
-      p_vehicle_year:year,
-      p_plate_number:plate,
-      p_seats:seats,
+      p_full_name:fullName,p_birth_date:birthDate,p_gender:gender,p_address:address,p_marital_status:maritalStatus,p_phone:phone,p_email:user.email||'',p_license_number:license,p_national_id_number:nationalId,p_vehicle_type:normalizedType,p_vehicle_make:make,p_vehicle_model:model,p_vehicle_color:color,p_vehicle_year:year,p_plate_number:plate,p_seats:seats,
     })
-
     if(error){setMessage(error.message);setBusy(false);return}
-    setStatus('pending')
-    setMessage(ht?'Demand lan voye avèk siksè. Li an attente verifikasyon.':'Demande envoyée avec succès. Elle est en attente de vérification.')
-    setBusy(false)
+    setStatus('pending');setMessage(ht?'Demand lan voye avèk siksè. Li an attente verifikasyon.':'Demande envoyée avec succès. Elle est en attente de vérification.');setBusy(false)
   }
 
   if(!target) return null
   const ht=lang==='ht'
   const locked=status==='pending'||status==='approved'||status==='suspended'
   const label=status==='pending'?(ht?'Demand lan an attente':'Demande en attente'):status==='approved'?(ht?'Chofè apwouve':'Chauffeur approuvé'):status==='suspended'?(ht?'Kont chofè sispann':'Compte chauffeur suspendu'):(busy?(ht?'N ap voye…':'Envoi…'):(ht?'Voye demand lan':'Envoyer la demande'))
-
-  return createPortal(<div style={{marginTop:10}}>
-    <button type="button" className="dfm-primary" disabled={busy||locked} onClick={()=>void submit()} style={locked?{opacity:.65,cursor:'default'}:undefined}>{label}</button>
-    {message&&<div className="dfm-status" style={{marginTop:8,lineHeight:1.4}}>{message}</div>}
-  </div>,target)
+  return createPortal(<div style={{marginTop:10}}><button type="button" className="dfm-primary" disabled={busy||locked} onClick={()=>void submit()} style={locked?{opacity:.65,cursor:'default'}:undefined}>{label}</button>{message&&<div className="dfm-status" style={{marginTop:8,lineHeight:1.4}}>{message}</div>}</div>,target)
 }
