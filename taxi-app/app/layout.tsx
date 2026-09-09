@@ -34,11 +34,6 @@ import DriverAutoRequestSearch from '../components/DriverAutoRequestSearch'
 import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish'
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
 import DriverFinalMenuStable from '../components/DriverFinalMenuStable'
-import DriverApplicationProfileAddon from '../components/DriverApplicationProfileAddon'
-import DriverProfileRequiredFields from '../components/DriverProfileRequiredFields'
-import DriverVehicleRequiredFieldsGuard from '../components/DriverVehicleRequiredFieldsGuard'
-import DriverHelpTopicsAddon from '../components/DriverHelpTopicsAddon'
-import DriverAccordionTapFix from '../components/DriverAccordionTapFix'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
@@ -75,11 +70,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverRideExperiencePolish />
         <DriverCompletedRideSummary />
         <DriverFinalMenuStable />
-        <DriverApplicationProfileAddon />
-        <DriverProfileRequiredFields />
-        <DriverVehicleRequiredFieldsGuard />
-        <DriverHelpTopicsAddon />
-        <DriverAccordionTapFix />
         <AdminDriverApplicationProfileSnapshot />
         <AdminDriverVehicleSnapshot />
         {children}
