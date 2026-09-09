@@ -7,7 +7,8 @@ type Method = 'moncash' | 'natcash'
 
 export default function PassengerRidePaymentSync() {
   useEffect(() => {
-    if (window.location.pathname !== '/passenger/dashboard') return
+    const pathname = window.location.pathname
+    if (pathname !== '/' && pathname !== '/passenger/dashboard') return
 
     let timers: number[] = []
 
@@ -30,24 +31,31 @@ export default function PassengerRidePaymentSync() {
       })
     }
 
+    const scheduleSync = () => {
+      timers.forEach((id) => window.clearTimeout(id))
+      timers = [
+        window.setTimeout(() => void syncPayment(), 700),
+        window.setTimeout(() => void syncPayment(), 1800),
+        window.setTimeout(() => void syncPayment(), 3800),
+      ]
+    }
+
     const handler = (event: MouseEvent) => {
       const target = event.target as HTMLElement | null
       const button = target?.closest<HTMLButtonElement>('button')
       if (!button) return
       const text = (button.textContent || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim()
-      if (!(text === 'commander' || text === 'mande' || text.includes('commander'))) return
-
-      timers.forEach((id) => window.clearTimeout(id))
-      timers = [
-        window.setTimeout(() => void syncPayment(), 900),
-        window.setTimeout(() => void syncPayment(), 2200),
-        window.setTimeout(() => void syncPayment(), 4500),
-      ]
+      if (!(text === 'commander' || text === 'mande' || text.includes('commander') || text.includes('mande'))) return
+      scheduleSync()
     }
 
+    const onRideRequested = () => scheduleSync()
+
     document.addEventListener('click', handler, true)
+    window.addEventListener('taxi-ride-requested', onRideRequested)
     return () => {
       document.removeEventListener('click', handler, true)
+      window.removeEventListener('taxi-ride-requested', onRideRequested)
       timers.forEach((id) => window.clearTimeout(id))
     }
   }, [])
