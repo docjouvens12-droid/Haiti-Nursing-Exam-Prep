@@ -13,9 +13,10 @@ export default function PassengerDashboardHardV2(){
       const greeting=document.querySelector<HTMLElement>('.greeting-row')
       if(greeting) greeting.style.setProperty('display','none','important')
 
+      const ht=localStorage.getItem('taxi-language')==='ht'
+
       const routeCard=booking.querySelector<HTMLElement>('.route-card')
       if(routeCard && !booking.querySelector('.passenger-booking-head')){
-        const ht=localStorage.getItem('taxi-language')==='ht'
         const head=document.createElement('div')
         head.className='passenger-booking-head'
         head.innerHTML=`<div><small>${ht?'NOUVO TRAJÈ':'NOUVEAU TRAJET'}</small><strong>${ht?'Ki kote ou prale?':'Où allez-vous ?'}</strong><span>${ht?'Chwazi kote pou pran ou ak destinasyon an':'Choisissez le départ et la destination'}</span></div><div class="passenger-booking-head-icon">📍</div>`
@@ -28,7 +29,6 @@ export default function PassengerDashboardHardV2(){
         line.classList.toggle('passenger-destination-line',index===1)
       })
 
-      const ht=localStorage.getItem('taxi-language')==='ht'
       document.querySelectorAll<HTMLElement>('.ride-option').forEach((el)=>{
         const text=(el.textContent||'').toLowerCase()
         if(text.includes('comfort')||text.includes('plus d’espace')||text.includes("plus d'espace")||text.includes('plis espas')){
@@ -63,11 +63,41 @@ export default function PassengerDashboardHardV2(){
       const mark=document.querySelector<HTMLElement>('.brand-chip .brand-mark')
       if(mark && mark.textContent!=='🚕') mark.textContent='🚕'
 
-      const payment=document.querySelector<HTMLElement>('.payment-row strong')
+      const paymentRow=booking.querySelector<HTMLElement>('.payment-row')
+      const payment=paymentRow?.querySelector<HTMLElement>('strong')
       if(payment){
         const method=localStorage.getItem('taxi-payment-method')
         const next=method==='moncash'?'MonCash':method==='natcash'?'NatCash':'MonCash / NatCash'
         if(payment.textContent!==next) payment.textContent=next
+      }
+      if(paymentRow && !paymentRow.querySelector('.passenger-payment-note')){
+        const note=document.createElement('small')
+        note.className='passenger-payment-note'
+        note.textContent=ht?'Verifye metòd peman an anvan ou mande trajè a':'Vérifiez le mode de paiement avant de commander'
+        const left=paymentRow.querySelector(':scope > div > div')
+        left?.appendChild(note)
+      }
+
+      const requestButton=booking.querySelector<HTMLButtonElement>('.request-button')
+      if(requestButton){
+        requestButton.classList.toggle('passenger-request-disabled',requestButton.disabled)
+        if(!requestButton.querySelector('.passenger-request-arrow')){
+          const arrow=document.createElement('span')
+          arrow.className='passenger-request-arrow'
+          arrow.textContent='→'
+          requestButton.appendChild(arrow)
+        }
+      }
+
+      const searching=booking.querySelector<HTMLElement>('.searching-card')
+      if(searching && !searching.querySelector('.passenger-searching-note')){
+        const copy=searching.querySelector('div:last-child')
+        if(copy){
+          const note=document.createElement('small')
+          note.className='passenger-searching-note'
+          note.textContent=ht?'Rete sou ekran sa a pandan n ap chèche yon chofè toupre ou.':'Restez sur cet écran pendant la recherche d’un chauffeur proche.'
+          copy.appendChild(note)
+        }
       }
     }
 
@@ -131,10 +161,24 @@ export default function PassengerDashboardHardV2(){
     body.passenger-hard-v2 .ride-copy strong{font-size:12px!important;color:#182b3d!important}
     body.passenger-hard-v2 .ride-copy small{font-size:8.5px!important;line-height:1.3!important;color:#7b8983!important}
     body.passenger-hard-v2 .ride-price{grid-column:1 / -1!important;margin-top:8px!important;padding-top:7px!important;border-top:1px solid #e8efec!important;font-size:12px!important;text-align:right!important;color:#0f705a!important;font-weight:900!important}
-    body.passenger-hard-v2 .payment-row{margin-top:10px!important;padding:10px 11px!important;border-radius:15px!important;background:#f5faf8!important;border:1px solid #d9e9e3!important}
-    body.passenger-hard-v2 .payment-row button{font-size:10px!important;font-weight:850!important;color:#0f705a!important}
-    body.passenger-hard-v2 .request-button{margin-top:10px!important;min-height:56px!important;border-radius:17px!important;background:#0F705A!important;box-shadow:0 10px 22px rgba(15,112,90,.18)!important;font-size:13px!important}
-    body.passenger-hard-v2 .searching-card{border-radius:17px!important;min-height:56px!important}
+    body.passenger-hard-v2 .payment-row{margin-top:12px!important;padding:11px 12px!important;border-radius:17px!important;background:linear-gradient(180deg,#f7fbf9 0%,#f1f8f5 100%)!important;border:1px solid #d7e7e1!important;box-shadow:0 5px 16px rgba(16,32,51,.04)!important}
+    body.passenger-hard-v2 .payment-row>div{align-items:center!important}
+    body.passenger-hard-v2 .payment-icon{width:36px!important;height:36px!important;border-radius:12px!important;display:grid!important;place-items:center!important;background:#e6f3ee!important;font-size:17px!important}
+    body.passenger-hard-v2 .payment-row small{font-size:8px!important;color:#7b8883!important;font-weight:800!important}
+    body.passenger-hard-v2 .payment-row strong{font-size:12px!important;color:#18302a!important}
+    body.passenger-hard-v2 .passenger-payment-note{display:block!important;margin-top:2px!important;font-size:7.6px!important;line-height:1.2!important;color:#8b9893!important;font-weight:600!important}
+    body.passenger-hard-v2 .payment-row button{font-size:9px!important;font-weight:900!important;color:#0f705a!important;background:#fff!important;border:1px solid #d8e7e1!important;border-radius:999px!important;padding:6px 9px!important}
+    body.passenger-hard-v2 .request-button{position:relative!important;margin-top:11px!important;min-height:60px!important;border-radius:18px!important;background:linear-gradient(180deg,#117b63 0%,#0f705a 100%)!important;box-shadow:0 12px 24px rgba(15,112,90,.21)!important;font-size:13px!important;padding:12px 46px 12px 15px!important;text-align:left!important}
+    body.passenger-hard-v2 .request-button>span:first-child{font-weight:900!important}
+    body.passenger-hard-v2 .request-button>strong{font-size:12px!important}
+    body.passenger-hard-v2 .passenger-request-arrow{position:absolute!important;right:13px!important;top:50%!important;transform:translateY(-50%)!important;width:30px!important;height:30px!important;border-radius:10px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.14)!important;color:#fff!important;font-size:16px!important;font-weight:900!important}
+    body.passenger-hard-v2 .request-button.passenger-request-disabled{background:#aebbb6!important;box-shadow:none!important;opacity:.72!important}
+    body.passenger-hard-v2 .request-button.passenger-request-disabled .passenger-request-arrow{background:rgba(255,255,255,.1)!important}
+    body.passenger-hard-v2 .searching-card{margin-top:11px!important;border-radius:18px!important;min-height:78px!important;padding:12px 13px!important;border:1px solid #cfe2db!important;background:linear-gradient(180deg,#f2faf7 0%,#edf7f3 100%)!important;box-shadow:0 8px 20px rgba(15,112,90,.08)!important}
+    body.passenger-hard-v2 .searching-card strong{font-size:12px!important;color:#17392f!important}
+    body.passenger-hard-v2 .searching-card small{font-size:8.5px!important;color:#6f8079!important}
+    body.passenger-hard-v2 .passenger-searching-note{display:block!important;margin-top:3px!important;max-width:250px!important;font-size:7.8px!important;line-height:1.25!important;color:#87948f!important}
+    body.passenger-hard-v2 .spinner{width:34px!important;height:34px!important;border-width:3px!important;border-color:#b9dacf!important;border-top-color:#0f705a!important}
     body.passenger-hard-v2 .fine-print{display:none!important}
     @media(max-width:420px){
       body.passenger-hard-v2 .map-panel.real-map-panel{height:41dvh!important;min-height:300px!important}
