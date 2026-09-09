@@ -3,6 +3,9 @@ import './globals.css'
 import './menu.css'
 import './completion.css'
 import './passenger-secondary.css'
+import PassengerActiveDriver from '../components/PassengerActiveDriver'
+import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
+import PassengerRideCompletion from '../components/PassengerRideCompletion'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -12,7 +15,12 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
-      <body>{children}</body>
+      <body>
+        <PassengerActiveDriver />
+        <PassengerPendingRideCancel />
+        <PassengerRideCompletion />
+        {children}
+      </body>
     </html>
   )
 }
