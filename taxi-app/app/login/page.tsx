@@ -74,8 +74,6 @@ export default function UnifiedLoginPage() {
     }
 
     if (target.path === '/passenger/dashboard') {
-      // Keep the verified Supabase client/session alive in the same WebKit page.
-      // This avoids iPhone/Safari losing the just-created session during a hard navigation.
       window.history.replaceState({}, '', '/passenger/dashboard')
       setPassengerTransition(true)
       setPassengerReady(true)
@@ -103,9 +101,8 @@ export default function UnifiedLoginPage() {
   return (
     <main style={{position:'fixed',inset:0,zIndex:2147483647,background:'linear-gradient(160deg,#e3f1ed,#eef2f7 48%,#e7edf3)',padding:'28px 20px',overflow:'auto',fontFamily:'system-ui,sans-serif',pointerEvents:'auto',touchAction:'auto'}}>
       <section style={{maxWidth:430,margin:'56px auto',background:'#fff',borderRadius:28,padding:'28px 24px',boxShadow:'0 24px 70px rgba(18,36,61,.15)',position:'relative',zIndex:2147483647}}>
-        <div style={{display:'flex',alignItems:'center',gap:12,marginBottom:28}}>
+        <div style={{display:'flex',alignItems:'center',marginBottom:28}}>
           <div style={{width:52,height:52,borderRadius:16,display:'grid',placeItems:'center',background:'#0f6f59',color:'#fff',fontSize:24,fontWeight:900}}>T</div>
-          <div><strong style={{fontSize:22,color:'#102033'}}>Taxi Platform Haiti</strong><div style={{color:'#7b8999',fontSize:14,marginTop:2}}>Une seule connexion pour tous les espaces</div></div>
         </div>
         <div style={{fontSize:13,fontWeight:900,letterSpacing:1.5,color:'#0f7a62',marginBottom:6}}>BON RETOUR</div>
         <h1 style={{fontSize:36,lineHeight:1.05,margin:'0 0 24px',color:'#102033'}}>Connectez-vous</h1>
