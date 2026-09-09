@@ -18,7 +18,7 @@ export default function DriverFinalMenuStable(){
   const [profileEditing,setProfileEditing]=useState(false)
   const [vehicleEditing,setVehicleEditing]=useState(false)
   const [status,setStatus]=useState('')
-  const [profile,setProfile]=useState({fullName:'',birthDate:'',sex:'',license:'',phone:''})
+  const [profile,setProfile]=useState({fullName:'',birthDate:'',sex:'',maritalStatus:'',address:'',license:'',nationalId:'',phone:''})
   const [vehicleId,setVehicleId]=useState('')
   const [vehicle,setVehicle]=useState({type:'standard',make:'',model:'',color:'',year:'',plate:'',seats:''})
   const [payout,setPayout]=useState({selected:'' as ''|'moncash'|'natcash',moncashName:'',moncashPhone:'',natcashName:'',natcashPhone:''})
@@ -53,12 +53,21 @@ export default function DriverFinalMenuStable(){
     setUserId(user.id); setEmail(user.email||'')
     const [{data:p},{data:d},{data:v},{data:r}]=await Promise.all([
       supabase.from('profiles').select('full_name,phone').eq('id',user.id).maybeSingle(),
-      supabase.from('driver_profiles').select('license_number,moncash_name,moncash_phone,natcash_name,natcash_phone,preferred_payout_provider').eq('user_id',user.id).maybeSingle(),
+      supabase.from('driver_profiles').select('license_number,national_id_number,moncash_name,moncash_phone,natcash_name,natcash_phone,preferred_payout_provider').eq('user_id',user.id).maybeSingle(),
       supabase.from('vehicles').select('id,vehicle_type,make,model,color,year,plate_number,seats').eq('driver_id',user.id).order('created_at',{ascending:true}).limit(1).maybeSingle(),
       supabase.from('rides').select('id,pickup_address,destination_address,final_fare_htg,completed_at').eq('driver_id',user.id).eq('status','completed').order('completed_at',{ascending:false}).limit(10)
     ])
     const m=user.user_metadata||{}
-    setProfile({fullName:p?.full_name||m.full_name||'',birthDate:m.birth_date||m.date_of_birth||'',sex:m.gender||m.sex||'',license:d?.license_number||'',phone:p?.phone||''})
+    setProfile({
+      fullName:p?.full_name||m.full_name||'',
+      birthDate:m.birth_date||m.date_of_birth||'',
+      sex:m.gender||m.sex||'',
+      maritalStatus:m.marital_status||'',
+      address:m.address||m.driver_address||'',
+      license:d?.license_number||'',
+      nationalId:d?.national_id_number||'',
+      phone:p?.phone||m.phone||''
+    })
     if(v){setVehicleId(v.id);setVehicle({type:v.vehicle_type||'standard',make:v.make||'',model:v.model||'',color:v.color||'',year:v.year?String(v.year):'',plate:v.plate_number||'',seats:v.seats?String(v.seats):''})}
     const selected=d?.preferred_payout_provider==='moncash'||d?.preferred_payout_provider==='natcash'?d.preferred_payout_provider:''
     setPayout({selected,moncashName:d?.moncash_name||'',moncashPhone:d?.moncash_phone||'',natcashName:d?.natcash_name||'',natcashPhone:d?.natcash_phone||''})
@@ -75,19 +84,21 @@ export default function DriverFinalMenuStable(){
 
   async function saveProfile(){
     if(!userId)return
-    if(!profile.fullName.trim()||!profile.birthDate||!profile.sex||!profile.license.trim()||!profile.phone.trim()){setStatus(ht?'Tout enfòmasyon yo obligatwa sof imèl la.':'Toutes les informations sont obligatoires sauf l’e-mail.');return}
+    if(!profile.fullName.trim()||!profile.birthDate||!profile.sex||!profile.maritalStatus||!profile.address.trim()||!profile.license.trim()||!profile.nationalId.trim()||!profile.phone.trim()){
+      setStatus(ht?'Tout chan Pwofil yo obligatwa sof imèl la.':'Tous les champs du Profil sont obligatoires sauf l’e-mail.');return
+    }
     const [{error:a},{error:b},{error:c}]=await Promise.all([
       supabase.from('profiles').upsert({id:userId,full_name:profile.fullName.trim(),phone:profile.phone.trim()},{onConflict:'id'}),
-      supabase.from('driver_profiles').update({license_number:profile.license.trim()}).eq('user_id',userId),
-      supabase.auth.updateUser({data:{full_name:profile.fullName.trim(),birth_date:profile.birthDate,gender:profile.sex,phone:profile.phone.trim()}})
+      supabase.from('driver_profiles').update({license_number:profile.license.trim(),national_id_number:profile.nationalId.trim()}).eq('user_id',userId),
+      supabase.auth.updateUser({data:{full_name:profile.fullName.trim(),birth_date:profile.birthDate,gender:profile.sex,marital_status:profile.maritalStatus,address:profile.address.trim(),driver_address:profile.address.trim(),phone:profile.phone.trim()}})
     ])
     if(a||b||c){setStatus(ht?'Gen yon erè pandan anrejistreman an.':'Erreur pendant l’enregistrement.');return}
     setStatus(ht?'✓ Anrejistre':'✓ Enregistré');setProfileEditing(false)
   }
 
   async function saveVehicle(){
-    if(!vehicleId)return
-    if(!vehicle.type||!vehicle.make.trim()||!vehicle.model.trim()||!vehicle.color.trim()||!vehicle.year||!vehicle.plate.trim()||!vehicle.seats){setStatus(ht?'Tout enfòmasyon veyikil yo obligatwa.':'Toutes les informations du véhicule sont obligatoires.');return}
+    if(!vehicleId){setStatus(ht?'Ou dwe gen yon veyikil anrejistre.':'Vous devez avoir un véhicule enregistré.');return}
+    if(!vehicle.type||!vehicle.make.trim()||!vehicle.model.trim()||!vehicle.color.trim()||!vehicle.year||!vehicle.plate.trim()||!vehicle.seats){setStatus(ht?'Tout chan Veyikil yo obligatwa.':'Tous les champs du Véhicule sont obligatoires.');return}
     const {error}=await supabase.from('vehicles').update({vehicle_type:vehicle.type,make:vehicle.make.trim(),model:vehicle.model.trim(),color:vehicle.color.trim(),year:Number(vehicle.year),plate_number:vehicle.plate.trim(),seats:Number(vehicle.seats)}).eq('id',vehicleId)
     if(error){setStatus(error.message);return} setStatus(ht?'✓ Anrejistre':'✓ Enregistré');setVehicleEditing(false)
   }
@@ -106,12 +117,7 @@ export default function DriverFinalMenuStable(){
 
   const Section=({id,label,plus=false,children}:{id:SectionKey;label:string;plus?:boolean;children:React.ReactNode})=>{
     const open=openSection===id
-    return <div className="dfm-section">
-      <button type="button" className="dfm-trigger" onClick={()=>setOpenSection(open?null:id)} aria-expanded={open}>
-        <span>{label}</span><b>{open?'−':plus?'+':'›'}</b>
-      </button>
-      {open&&<div className="dfm-body">{children}</div>}
-    </div>
+    return <div className="dfm-section"><button type="button" className="dfm-trigger" onClick={()=>setOpenSection(open?null:id)} aria-expanded={open}><span>{label}</span><b>{open?'−':plus?'+':'›'}</b></button>{open&&<div className="dfm-body">{children}</div>}</div>
   }
 
   return createPortal(<div className="dfm-wrap" onClick={e=>e.stopPropagation()}>
@@ -120,21 +126,29 @@ export default function DriverFinalMenuStable(){
     `}</style>
 
     <Section id="profile" label={ht?'Pwofil':'Profil'}>{profileEditing?<>
-      <label className="dfm-field">{ht?'Non':'Nom'}<input value={profile.fullName} onChange={e=>setProfile({...profile,fullName:e.target.value})}/></label>
-      <label className="dfm-field">{ht?'Dat nesans':'Date de naissance'}<input type="date" value={profile.birthDate} onChange={e=>setProfile({...profile,birthDate:e.target.value})}/></label>
-      <label className="dfm-field">{ht?'Sèks':'Sexe'}<select value={profile.sex} onChange={e=>setProfile({...profile,sex:e.target.value})}><option value="">—</option><option value="male">{ht?'Gason':'Homme'}</option><option value="female">{ht?'Fi':'Femme'}</option></select></label>
-      <label className="dfm-field">{ht?'Nimewo lisans':'N° de permis'}<input value={profile.license} onChange={e=>setProfile({...profile,license:e.target.value})}/></label>
-      <label className="dfm-field">{ht?'Telefòn':'Téléphone'}<input value={profile.phone} onChange={e=>setProfile({...profile,phone:e.target.value})}/></label>
-      <label className="dfm-field">{ht?'Imèl':'E-mail'}<input value={email} disabled/></label><button className="dfm-primary" onClick={()=>void saveProfile()}>{ht?'Anrejistre':'Enregistrer'}</button>
-    </>:<>{row(ht?'Non':'Nom',profile.fullName)}{row(ht?'Dat nesans':'Date de naissance',profile.birthDate)}{row(ht?'Sèks':'Sexe',profile.sex)}{row(ht?'Nimewo lisans':'N° de permis',profile.license)}{row(ht?'Telefòn':'Téléphone',profile.phone)}{row(ht?'Imèl':'E-mail',email)}<button className="dfm-primary" onClick={()=>setProfileEditing(true)}>{ht?'Modifye':'Modifier'}</button></>}<div className="dfm-status">{status}</div></Section>
+      <label className="dfm-field">{ht?'Non':'Nom'}<input required value={profile.fullName} onChange={e=>setProfile({...profile,fullName:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Dat nesans':'Date de naissance'}<input required type="date" value={profile.birthDate} onChange={e=>setProfile({...profile,birthDate:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Sèks':'Sexe'}<select required value={profile.sex} onChange={e=>setProfile({...profile,sex:e.target.value})}><option value="">—</option><option value="male">{ht?'Gason':'Homme'}</option><option value="female">{ht?'Fi':'Femme'}</option></select></label>
+      <label className="dfm-field">{ht?'Eta sivil':'État civil'}<select required value={profile.maritalStatus} onChange={e=>setProfile({...profile,maritalStatus:e.target.value})}><option value="">—</option><option value="single">{ht?'Selibatè':'Célibataire'}</option><option value="married">{ht?'Marye':'Marié(e)'}</option><option value="divorced">{ht?'Divòse':'Divorcé(e)'}</option><option value="widowed">{ht?'Vèf/Vèv':'Veuf/Veuve'}</option></select></label>
+      <label className="dfm-field">{ht?'Adrès':'Adresse'}<input required value={profile.address} onChange={e=>setProfile({...profile,address:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Nimewo lisans':'N° de permis'}<input required value={profile.license} onChange={e=>setProfile({...profile,license:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Nimewo idantifikasyon':'N° d’identification'}<input required value={profile.nationalId} onChange={e=>setProfile({...profile,nationalId:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Telefòn':'Téléphone'}<input required value={profile.phone} onChange={e=>setProfile({...profile,phone:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Imèl (opsyonèl)':'E-mail (facultatif)'}<input value={email} disabled/></label>
+      <button className="dfm-primary" onClick={()=>void saveProfile()}>{ht?'Anrejistre':'Enregistrer'}</button>
+    </>:<>{row(ht?'Non':'Nom',profile.fullName)}{row(ht?'Dat nesans':'Date de naissance',profile.birthDate)}{row(ht?'Sèks':'Sexe',profile.sex)}{row(ht?'Eta sivil':'État civil',profile.maritalStatus)}{row(ht?'Adrès':'Adresse',profile.address)}{row(ht?'Nimewo lisans':'N° de permis',profile.license)}{row(ht?'Nimewo idantifikasyon':'N° d’identification',profile.nationalId)}{row(ht?'Telefòn':'Téléphone',profile.phone)}{row(ht?'Imèl (opsyonèl)':'E-mail (facultatif)',email)}<button className="dfm-primary" onClick={()=>setProfileEditing(true)}>{ht?'Modifye':'Modifier'}</button></>}<div className="dfm-status">{status}</div></Section>
 
-    <Section id="application" label={ht?'Demand devni chofè':'Demande devenir chauffeur'}>
-      <p className="dfm-note">{ht?'Tanpri ranpli seksyon Pwofil la ak seksyon Veyikil la anvan ou voye demand pou vin chofè a.':'Veuillez remplir les sections Profil et Véhicule avant d’envoyer votre demande pour devenir chauffeur.'}</p>
-    </Section>
+    <Section id="application" label={ht?'Demand devni chofè':'Demande devenir chauffeur'}><p className="dfm-note">{ht?'Tanpri ranpli tout chan obligatwa nan Pwofil la ak tout chan nan Veyikil la anvan ou voye demand lan. Imèl la sèlman opsyonèl.':'Veuillez remplir tous les champs obligatoires du Profil et tous les champs du Véhicule avant d’envoyer la demande. Seul l’e-mail est facultatif.'}</p></Section>
 
     <Section id="vehicle" label={ht?'Veyikil':'Véhicule'}>{vehicleEditing?<>
-      <label className="dfm-field">{ht?'Kalite':'Type'}<select value={vehicle.type} onChange={e=>setVehicle({...vehicle,type:e.target.value})}><option value="standard">Standard</option><option value="moto">Moto</option></select></label>
-      <label className="dfm-field">{ht?'Mak':'Marque'}<input value={vehicle.make} onChange={e=>setVehicle({...vehicle,make:e.target.value})}/></label><label className="dfm-field">{ht?'Modèl':'Modèle'}<input value={vehicle.model} onChange={e=>setVehicle({...vehicle,model:e.target.value})}/></label><label className="dfm-field">{ht?'Koulè':'Couleur'}<input value={vehicle.color} onChange={e=>setVehicle({...vehicle,color:e.target.value})}/></label><label className="dfm-field">{ht?'Ane':'Année'}<input type="number" value={vehicle.year} onChange={e=>setVehicle({...vehicle,year:e.target.value})}/></label><label className="dfm-field">{ht?'Plak':'Plaque'}<input value={vehicle.plate} onChange={e=>setVehicle({...vehicle,plate:e.target.value})}/></label><label className="dfm-field">{ht?'Kantite plas':'Nombre de places'}<input type="number" value={vehicle.seats} onChange={e=>setVehicle({...vehicle,seats:e.target.value})}/></label><button className="dfm-primary" onClick={()=>void saveVehicle()}>{ht?'Anrejistre':'Enregistrer'}</button>
+      <label className="dfm-field">{ht?'Kalite':'Type'}<select required value={vehicle.type} onChange={e=>setVehicle({...vehicle,type:e.target.value})}><option value="standard">Standard</option><option value="moto">Moto</option></select></label>
+      <label className="dfm-field">{ht?'Mak':'Marque'}<input required value={vehicle.make} onChange={e=>setVehicle({...vehicle,make:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Modèl':'Modèle'}<input required value={vehicle.model} onChange={e=>setVehicle({...vehicle,model:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Koulè':'Couleur'}<input required value={vehicle.color} onChange={e=>setVehicle({...vehicle,color:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Ane':'Année'}<input required type="number" value={vehicle.year} onChange={e=>setVehicle({...vehicle,year:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Plak':'Plaque'}<input required value={vehicle.plate} onChange={e=>setVehicle({...vehicle,plate:e.target.value})}/></label>
+      <label className="dfm-field">{ht?'Kantite plas':'Nombre de places'}<input required type="number" value={vehicle.seats} onChange={e=>setVehicle({...vehicle,seats:e.target.value})}/></label>
+      <button className="dfm-primary" onClick={()=>void saveVehicle()}>{ht?'Anrejistre':'Enregistrer'}</button>
     </>:<>{row(ht?'Kalite':'Type',vehicle.type)}{row(ht?'Mak':'Marque',vehicle.make)}{row(ht?'Modèl':'Modèle',vehicle.model)}{row(ht?'Koulè':'Couleur',vehicle.color)}{row(ht?'Ane':'Année',vehicle.year)}{row(ht?'Plak':'Plaque',vehicle.plate)}{row(ht?'Plas':'Places',vehicle.seats)}<button className="dfm-primary" onClick={()=>setVehicleEditing(true)}>{ht?'Modifye':'Modifier'}</button></>}<div className="dfm-status">{status}</div></Section>
 
     <Section id="payments" label={ht?'Peman':'Paiements'}>{(['moncash','natcash'] as const).map(provider=>{const active=payout.selected===provider;const name=provider==='moncash'?payout.moncashName:payout.natcashName;const phone=provider==='moncash'?payout.moncashPhone:payout.natcashPhone;return <div key={provider} className={`dfm-method ${active?'active':''}`}><div className="dfm-method-head"><span>{provider==='moncash'?'MonCash':'NatCash'}</span><button className="dfm-switch" onClick={()=>setPayout(x=>({...x,selected:provider}))}><i/></button></div>{active&&<><label className="dfm-field">{ht?'Non':'Nom'}<input value={name} onChange={e=>setPayout(x=>provider==='moncash'?{...x,moncashName:e.target.value}:{...x,natcashName:e.target.value})}/></label><label className="dfm-field">{ht?'Telefòn kont lan':'Téléphone du compte'}<input value={phone} onChange={e=>setPayout(x=>provider==='moncash'?{...x,moncashPhone:e.target.value}:{...x,natcashPhone:e.target.value})}/></label><button className="dfm-primary" onClick={()=>void savePayout(provider)}>{ht?'Anrejistre':'Enregistrer'}</button></>}</div>})}<div className="dfm-status">{status}</div></Section>
