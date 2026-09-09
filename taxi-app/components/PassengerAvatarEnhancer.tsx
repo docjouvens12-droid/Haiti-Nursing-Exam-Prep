@@ -76,10 +76,10 @@ export default function PassengerAvatarEnhancer() {
         }) || null
 
         const homeButton = byText(['accueil', 'akèy'])
-        if (homeButton) homeButton.style.display = 'none'
+        if (homeButton) homeButton.style.setProperty('display', 'none', 'important')
 
         const becomeDriverButton = byText(['devenir chauffeur', 'vin chofè', 'vin chofe'])
-        if (becomeDriverButton) becomeDriverButton.style.display = 'none'
+        if (becomeDriverButton) becomeDriverButton.style.setProperty('display', 'none', 'important')
 
         const profileButton = byText(['profil', 'pwofil'])
         const tripsButton = byText(['mes trajets', 'trajè mwen yo'])
