@@ -30,6 +30,7 @@ import PassengerRestoredVersionPolish from '../components/PassengerRestoredVersi
 import PassengerHomeDashboardPolish from '../components/PassengerHomeDashboardPolish'
 import PassengerDashboardV2Polish from '../components/PassengerDashboardV2Polish'
 import PassengerDashboardHardV2 from '../components/PassengerDashboardHardV2'
+import PassengerDashboardFinalReview from '../components/PassengerDashboardFinalReview'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from '../components/DriverDashboardTitleHide'
 import DriverOnlineSwitchPolish from '../components/DriverOnlineSwitchPolish'
@@ -84,6 +85,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerHomeDashboardPolish />
         <PassengerDashboardV2Polish />
         <PassengerDashboardHardV2 />
+        <PassengerDashboardFinalReview />
         <DriverAccessGate />
         <DriverAvatarUploadPolish />
         <DriverDashboardTitleHide />
