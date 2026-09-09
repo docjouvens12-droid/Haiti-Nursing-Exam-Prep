@@ -47,9 +47,11 @@ export default function PassengerAvatarEnhancer() {
 
   useEffect(() => {
     const decorate = () => {
+      if (window.location.pathname !== '/passenger/dashboard') return
       const drawer = document.querySelector('.nav-drawer') as HTMLElement | null
       if (!drawer) return
 
+      const ht = localStorage.getItem('taxi-language') === 'ht'
       const brand = drawer.querySelector('.drawer-brand') as HTMLElement | null
       if (brand) brand.style.display = 'none'
 
@@ -62,9 +64,33 @@ export default function PassengerAvatarEnhancer() {
 
       const user = drawer.querySelector('.drawer-user') as HTMLElement | null
       if (user) {
-        user.classList.add('avatar-only-user')
+        user.classList.add('passenger-premium-user')
         const details = user.querySelector(':scope > div:last-child') as HTMLElement | null
-        if (details) details.style.display = 'none'
+        if (details) {
+          details.style.display = 'flex'
+          details.classList.add('passenger-premium-user-details')
+          const name = details.querySelector('strong') as HTMLElement | null
+          const email = details.querySelector('small') as HTMLElement | null
+          if (name) name.classList.add('passenger-premium-name')
+          if (email) email.classList.add('passenger-premium-email')
+
+          let accountLabel = details.querySelector('.passenger-account-label') as HTMLElement | null
+          if (!accountLabel) {
+            accountLabel = document.createElement('span')
+            accountLabel.className = 'passenger-account-label'
+            if (name) name.insertAdjacentElement('afterend', accountLabel)
+            else details.prepend(accountLabel)
+          }
+          accountLabel.textContent = ht ? 'Kont pasaje' : 'Compte passager'
+
+          let status = details.querySelector('.passenger-account-status') as HTMLElement | null
+          if (!status) {
+            status = document.createElement('span')
+            status.className = 'passenger-account-status'
+            details.appendChild(status)
+          }
+          status.innerHTML = `<i></i>${ht ? 'Aktif' : 'Actif'}`
+        }
       }
 
       const nav = drawer.querySelector('.drawer-nav') as HTMLElement | null
@@ -102,15 +128,21 @@ export default function PassengerAvatarEnhancer() {
       if (circle) {
         circle.classList.add('passenger-photo-avatar')
         circle.setAttribute('role', 'button')
-        circle.setAttribute('aria-label', 'Ajouter une photo de profil')
-        circle.setAttribute('title', 'Ajouter une photo')
+        circle.setAttribute('aria-label', ht ? 'Ajoute oswa chanje foto pwofil' : 'Ajouter ou changer la photo de profil')
+        circle.setAttribute('title', ht ? 'Chanje foto' : 'Changer la photo')
         circle.onclick = () => inputRef.current?.click()
         if (avatar) {
           circle.innerHTML = ''
           const img = document.createElement('img')
           img.src = avatar
-          img.alt = 'Photo de profil'
+          img.alt = ht ? 'Foto pwofil' : 'Photo de profil'
           circle.appendChild(img)
+        }
+        if (!circle.querySelector('.passenger-avatar-camera')) {
+          const camera = document.createElement('span')
+          camera.className = 'passenger-avatar-camera'
+          camera.textContent = '📷'
+          circle.appendChild(camera)
         }
       }
     }
@@ -118,7 +150,11 @@ export default function PassengerAvatarEnhancer() {
     decorate()
     const observer = new MutationObserver(decorate)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+    window.addEventListener('storage', decorate)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('storage', decorate)
+    }
   }, [avatar])
 
   async function onPick(event: ChangeEvent<HTMLInputElement>) {
@@ -133,5 +169,60 @@ export default function PassengerAvatarEnhancer() {
     }
   }
 
-  return <input ref={inputRef} type="file" accept="image/*" onChange={onPick} style={{ display: 'none' }} />
+  return <>
+    <input ref={inputRef} type="file" accept="image/*" onChange={onPick} style={{ display: 'none' }} />
+    <style>{`
+      .nav-drawer .drawer-user.passenger-premium-user{
+        display:flex!important;
+        flex-direction:column!important;
+        align-items:center!important;
+        justify-content:center!important;
+        gap:9px!important;
+        margin:6px 2px 14px!important;
+        padding:14px 12px 15px!important;
+        border:1px solid #e2ebe7!important;
+        border-radius:20px!important;
+        background:linear-gradient(180deg,#ffffff 0%,#f5faf8 100%)!important;
+        box-shadow:0 8px 24px rgba(16,32,51,.06)!important;
+        text-align:center!important;
+      }
+      .nav-drawer .drawer-avatar.passenger-photo-avatar{
+        position:relative!important;
+        width:76px!important;
+        height:76px!important;
+        min-width:76px!important;
+        border-radius:24px!important;
+        display:grid!important;
+        place-items:center!important;
+        overflow:visible!important;
+        background:#0f705a!important;
+        color:#fff!important;
+        font-size:27px!important;
+        font-weight:900!important;
+        border:4px solid #fff!important;
+        box-shadow:0 8px 22px rgba(15,112,90,.2)!important;
+        cursor:pointer!important;
+      }
+      .nav-drawer .drawer-avatar.passenger-photo-avatar img{
+        width:100%!important;height:100%!important;object-fit:cover!important;border-radius:20px!important;display:block!important;
+      }
+      .nav-drawer .passenger-avatar-camera{
+        position:absolute!important;right:-6px!important;bottom:-5px!important;
+        width:27px!important;height:27px!important;border-radius:10px!important;
+        display:grid!important;place-items:center!important;background:#fff!important;border:1px solid #dce7e2!important;
+        box-shadow:0 5px 12px rgba(16,32,51,.14)!important;font-size:12px!important;
+      }
+      .nav-drawer .passenger-premium-user-details{
+        display:flex!important;flex-direction:column!important;align-items:center!important;min-width:0!important;width:100%!important;
+      }
+      .nav-drawer .passenger-premium-name{font-size:16px!important;line-height:1.2!important;color:#102033!important;font-weight:900!important}
+      .nav-drawer .passenger-account-label{margin-top:3px!important;font-size:10px!important;color:#6e8079!important;font-weight:750!important}
+      .nav-drawer .passenger-premium-email{display:block!important;max-width:220px!important;margin-top:4px!important;font-size:9px!important;color:#87958f!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+      .nav-drawer .passenger-account-status{
+        display:inline-flex!important;align-items:center!important;gap:5px!important;margin-top:8px!important;padding:5px 9px!important;
+        border-radius:999px!important;background:#eaf5f1!important;color:#0f705a!important;font-size:9px!important;font-weight:850!important;
+      }
+      .nav-drawer .passenger-account-status i{width:7px!important;height:7px!important;border-radius:50%!important;background:#58ad98!important;display:block!important}
+    `}</style>
+  </>
 }
