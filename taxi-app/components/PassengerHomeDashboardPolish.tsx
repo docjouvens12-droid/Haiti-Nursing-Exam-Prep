@@ -23,6 +23,7 @@ export default function PassengerHomeDashboardPolish(){
       overflow:hidden!important;
       border-radius:0 0 28px 28px!important;
       background:#dfe9e5!important;
+      isolation:isolate!important;
     }
 
     body.passenger-home-premium .map-panel .topbar{
@@ -30,14 +31,22 @@ export default function PassengerHomeDashboardPolish(){
       top:max(14px,env(safe-area-inset-top))!important;
       left:14px!important;
       right:14px!important;
-      z-index:20!important;
+      z-index:2147483000!important;
       display:grid!important;
       grid-template-columns:48px 1fr 48px!important;
       align-items:center!important;
       gap:10px!important;
-      pointer-events:none!important;
+      pointer-events:auto!important;
+      touch-action:manipulation!important;
     }
     body.passenger-home-premium .map-panel .topbar>*{pointer-events:auto!important}
+    body.passenger-home-premium .map-panel .topbar>.round-button:first-child{
+      position:relative!important;
+      z-index:2147483001!important;
+      pointer-events:auto!important;
+      touch-action:manipulation!important;
+      -webkit-tap-highlight-color:transparent!important;
+    }
     body.passenger-home-premium .round-button{
       width:46px!important;height:46px!important;border:0!important;border-radius:15px!important;
       background:#fff!important;color:#102033!important;box-shadow:0 8px 24px rgba(16,32,51,.14)!important;
@@ -62,6 +71,18 @@ export default function PassengerHomeDashboardPolish(){
       position:relative!important;z-index:30!important;margin:-30px 12px 18px!important;padding:18px 14px 18px!important;
       background:#fff!important;border:1px solid #e3ebe7!important;border-radius:26px!important;
       box-shadow:0 16px 42px rgba(16,32,51,.11)!important;
+    }
+    body.passenger-home-premium .drawer-backdrop{
+      position:fixed!important;
+      inset:0!important;
+      z-index:2147483600!important;
+      pointer-events:auto!important;
+    }
+    body.passenger-home-premium .nav-drawer{
+      position:fixed!important;
+      z-index:2147483640!important;
+      pointer-events:auto!important;
+      transform:translateZ(0)!important;
     }
     body.passenger-home-premium .grabber{width:38px!important;height:4px!important;border-radius:999px!important;background:#d9e2de!important;margin:0 auto 14px!important}
 
