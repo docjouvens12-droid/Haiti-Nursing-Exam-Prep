@@ -60,43 +60,59 @@ export default function DriverDrawerHeaderPolish(){
         const lower=text.toLowerCase()
         const looksLikeEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)
         const isDriverTitle=lower==='espace chauffeur'||lower==='espas chofè'
-        if(isDriverTitle||looksLikeEmail||lower==='jouvens') el.style.display='none'
+        if(isDriverTitle||looksLikeEmail||lower==='jouvens'){
+          if(el.style.display!=='none') el.style.display='none'
+        }
       })
     }
 
     const apply=()=>{
       const drawer=document.querySelector<HTMLElement>('.drawer')
       if(!drawer)return
-      drawer.classList.add('driver-premium-drawer')
+      if(!drawer.classList.contains('driver-premium-drawer')) drawer.classList.add('driver-premium-drawer')
       hideIdentityText(drawer)
 
       drawer.querySelectorAll<HTMLButtonElement>('.dfm-trigger').forEach(btn=>{
         const label=btn.querySelector('span')
         if(!label)return
         let icon=btn.querySelector<HTMLElement>('.dfm-menu-icon')
-        if(!icon){icon=document.createElement('i');icon.className='dfm-menu-icon';label.insertAdjacentElement('beforebegin',icon)}
-        icon.textContent=iconFor(label.textContent||'')
+        if(!icon){
+          icon=document.createElement('i')
+          icon.className='dfm-menu-icon'
+          label.insertAdjacentElement('beforebegin',icon)
+        }
+        const nextIcon=iconFor(label.textContent||'')
+        if(icon.textContent!==nextIcon) icon.textContent=nextIcon
       })
 
       const langBox=drawer.querySelector<HTMLElement>('.dfm-lang')
       if(langBox&&!langBox.querySelector('.dfm-menu-icon')){
-        const icon=document.createElement('i');icon.className='dfm-menu-icon';icon.textContent='🌐';langBox.insertBefore(icon,langBox.firstChild)
+        const icon=document.createElement('i')
+        icon.className='dfm-menu-icon'
+        icon.textContent='🌐'
+        langBox.insertBefore(icon,langBox.firstChild)
       }
 
       const profile=drawer.querySelector<HTMLElement>('.profile')
       if(profile){
         let badge=profile.querySelector<HTMLElement>('.premium-driver-status')
-        if(!badge){badge=document.createElement('div');badge.className='premium-driver-status';profile.appendChild(badge)}
+        if(!badge){
+          badge=document.createElement('div')
+          badge.className='premium-driver-status'
+          profile.appendChild(badge)
+        }
         const online=Boolean(document.querySelector('.online-card .dot.on'))
         const ht=localStorage.getItem('taxi-language')==='ht'
-        badge.innerHTML=`<span></span>${online?(ht?'Sou liy':'En ligne'):(ht?'Pa sou liy':'Hors ligne')}`
-        badge.classList.toggle('on',online)
+        const label=online?(ht?'Sou liy':'En ligne'):(ht?'Pa sou liy':'Hors ligne')
+        const wanted=`<span></span>${label}`
+        if(badge.innerHTML!==wanted) badge.innerHTML=wanted
+        if(badge.classList.contains('on')!==online) badge.classList.toggle('on',online)
       }
     }
 
     apply()
-    const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true,characterData:true,attributes:true})
+    const observer=new MutationObserver(()=>apply())
+    observer.observe(document.body,{childList:true,subtree:true})
     return()=>observer.disconnect()
   },[])
 
