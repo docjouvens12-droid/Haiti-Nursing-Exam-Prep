@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase'
 
 export default function PassengerProfileDetails() {
   const [target, setTarget] = useState<Element | null>(null)
+  const [expanded, setExpanded] = useState(false)
   const [name, setName] = useState('')
   const [birthDate, setBirthDate] = useState('')
   const [gender, setGender] = useState('')
@@ -16,40 +17,79 @@ export default function PassengerProfileDetails() {
   const [editing, setEditing] = useState(false)
 
   useEffect(() => {
+    let currentButton: HTMLButtonElement | null = null
+    let currentHandler: ((event: MouseEvent) => void) | null = null
+
     const syncTarget = () => {
-      const panels = Array.from(document.querySelectorAll('.account-panel .panel-body'))
-      const profile = panels.find((el) => {
-        const h2 = el.querySelector('h2')?.textContent?.toLowerCase() || ''
-        return h2.includes('profil') || h2.includes('pwofil')
-      })
-      setTarget(profile || null)
+      const drawer = document.querySelector('.nav-drawer')
+      if (!drawer) {
+        setTarget(null)
+        return
+      }
+
+      const buttons = Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
+      const profileButton = buttons.find((button) => {
+        const text = (button.textContent || '').toLowerCase()
+        return text.includes('profil') || text.includes('pwofil')
+      }) || null
+
+      if (!profileButton) {
+        setTarget(null)
+        return
+      }
+
+      if (currentButton !== profileButton) {
+        if (currentButton && currentHandler) currentButton.removeEventListener('click', currentHandler, true)
+        currentButton = profileButton
+        currentHandler = (event: MouseEvent) => {
+          event.preventDefault()
+          event.stopPropagation()
+          event.stopImmediatePropagation()
+          setExpanded((value) => !value)
+          setEditing(false)
+          setMessage('')
+        }
+        profileButton.addEventListener('click', currentHandler, true)
+      }
+
+      let mount = drawer.querySelector('.drawer-profile-inline-target') as HTMLElement | null
+      if (!mount) {
+        mount = document.createElement('div')
+        mount.className = 'drawer-profile-inline-target'
+        profileButton.insertAdjacentElement('afterend', mount)
+      }
+      setTarget(mount)
     }
+
     syncTarget()
     const observer = new MutationObserver(syncTarget)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+
+    return () => {
+      observer.disconnect()
+      if (currentButton && currentHandler) currentButton.removeEventListener('click', currentHandler, true)
+    }
   }, [])
 
   useEffect(() => {
-    if (!target) return
-    supabase.auth.getUser().then(({ data }) => {
-      const u = data.user
-      if (!u) return
-      const m = u.user_metadata || {}
-      setName(m.full_name || '')
-      setBirthDate(m.birth_date || '')
-      setGender(m.gender || '')
-      setPhone(m.phone || '')
-      setEmail(u.email || '')
-      setEditing(false)
-      setMessage('')
+    if (!target || !expanded) return
+    void supabase.auth.getUser().then(({ data }) => {
+      const user = data.user
+      if (!user) return
+      const metadata = user.user_metadata || {}
+      setName(metadata.full_name || '')
+      setBirthDate(metadata.birth_date || '')
+      setGender(metadata.gender || '')
+      setPhone(metadata.phone || '')
+      setEmail(user.email || '')
     })
-  }, [target])
+  }, [target, expanded])
 
   async function saveProfile(e: React.FormEvent) {
     e.preventDefault()
     setBusy(true)
     setMessage('')
+
     const { data, error } = await supabase.auth.updateUser({
       data: {
         full_name: name.trim(),
@@ -58,49 +98,51 @@ export default function PassengerProfileDetails() {
         phone: phone.trim(),
       },
     })
+
     setBusy(false)
     if (error) {
       setMessage(error.message)
       return
     }
-    const m = data.user?.user_metadata || {}
-    setName(m.full_name || name.trim())
-    setBirthDate(m.birth_date || birthDate)
-    setGender(m.gender || gender)
-    setPhone(m.phone || phone.trim())
-    setMessage('Profil enregistré ✓')
+
+    const metadata = data.user?.user_metadata || {}
+    setName(metadata.full_name || name.trim())
+    setBirthDate(metadata.birth_date || birthDate)
+    setGender(metadata.gender || gender)
+    setPhone(metadata.phone || phone.trim())
     setEditing(false)
+    setMessage('Profil enregistré ✓')
   }
 
-  if (!target) return null
+  if (!target || !expanded) return null
 
   const genderLabel = gender === 'homme' ? 'Homme' : gender === 'femme' ? 'Femme' : gender === 'autre' ? 'Autre / Non précisé' : '—'
   const displayBirthDate = birthDate ? new Date(`${birthDate}T00:00:00`).toLocaleDateString('fr-FR') : '—'
 
   return createPortal(
-    editing ? (
-      <form className="passenger-profile-details" onSubmit={saveProfile}>
-        <label><span>Nom</span><input value={name} onChange={(e) => setName(e.target.value)} placeholder="Nom complet" autoComplete="name" /></label>
-        <label><span>Date de naissance</span><input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} /></label>
-        <label><span>Sexe</span><select value={gender} onChange={(e) => setGender(e.target.value)}><option value="">Sélectionner</option><option value="homme">Homme</option><option value="femme">Femme</option><option value="autre">Autre / Préfère ne pas préciser</option></select></label>
-        <label><span>Téléphone</span><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+509 ..." autoComplete="tel" inputMode="tel" /></label>
-        <label><span>E-mail</span><input type="email" value={email} readOnly className="profile-readonly" /></label>
-        {message && <div className={message.includes('✓') ? 'profile-save-ok' : 'profile-save-error'}>{message}</div>}
-        <div className="profile-edit-actions"><button type="button" className="profile-cancel-button" onClick={() => { setEditing(false); setMessage('') }} disabled={busy}>Annuler</button><button type="submit" className="profile-save-button" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer'}</button></div>
-      </form>
-    ) : (
-      <section className="passenger-profile-view">
-        {message && <div className="profile-save-ok">{message}</div>}
-        <div className="profile-view-card">
-          <div className="profile-view-row"><span>Nom</span><strong>{name || '—'}</strong></div>
-          <div className="profile-view-row"><span>Date de naissance</span><strong>{displayBirthDate}</strong></div>
-          <div className="profile-view-row"><span>Sexe</span><strong>{genderLabel}</strong></div>
-          <div className="profile-view-row"><span>Téléphone</span><strong>{phone || '—'}</strong></div>
-          <div className="profile-view-row"><span>E-mail</span><strong>{email || '—'}</strong></div>
+    <section className="drawer-profile-inline">
+      {editing ? (
+        <form className="drawer-profile-form" onSubmit={saveProfile}>
+          <label><span>Nom</span><input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
+          <label><span>Date de naissance</span><input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} /></label>
+          <label><span>Sexe</span><select value={gender} onChange={(e) => setGender(e.target.value)}><option value="">Sélectionner</option><option value="homme">Homme</option><option value="femme">Femme</option><option value="autre">Autre / Non précisé</option></select></label>
+          <label><span>Téléphone</span><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+509 ..." inputMode="tel" autoComplete="tel" /></label>
+          <label><span>E-mail</span><input value={email} readOnly className="drawer-profile-readonly" /></label>
+          {message && <div className="drawer-profile-message">{message}</div>}
+          <div className="drawer-profile-actions"><button type="button" onClick={() => { setEditing(false); setMessage('') }}>Annuler</button><button type="submit" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer'}</button></div>
+        </form>
+      ) : (
+        <div className="drawer-profile-saved">
+          {message && <div className="drawer-profile-message success">{message}</div>}
+          <div><span>Non</span><strong>{name || '—'}</strong></div>
+          <div><span>Dat nesans</span><strong>{displayBirthDate}</strong></div>
+          <div><span>Sèks</span><strong>{genderLabel}</strong></div>
+          <div><span>Tel</span><strong>{phone || '—'}</strong></div>
+          <div><span>Imèl</span><strong>{email || '—'}</strong></div>
+          <button type="button" className="drawer-profile-edit" onClick={() => { setEditing(true); setMessage('') }}>Modifier le profil</button>
         </div>
-        <button type="button" className="profile-modify-button" onClick={() => { setEditing(true); setMessage('') }}>Modifier le profil</button>
-      </section>
-    ),
-    target
+      )}
+    </section>,
+    target,
   )
 }
