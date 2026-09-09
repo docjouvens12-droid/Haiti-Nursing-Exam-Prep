@@ -13,6 +13,15 @@ export default function PassengerDashboardHardV2(){
       const greeting=document.querySelector<HTMLElement>('.greeting-row')
       if(greeting) greeting.style.setProperty('display','none','important')
 
+      const routeCard=booking.querySelector<HTMLElement>('.route-card')
+      if(routeCard && !booking.querySelector('.passenger-booking-head')){
+        const ht=localStorage.getItem('taxi-language')==='ht'
+        const head=document.createElement('div')
+        head.className='passenger-booking-head'
+        head.innerHTML=`<div><small>${ht?'NOUVO TRAJÈ':'NOUVEAU TRAJET'}</small><strong>${ht?'Ki kote ou prale?':'Où allez-vous ?'}</strong><span>${ht?'Chwazi kote pou pran ou ak destinasyon an':'Choisissez le départ et la destination'}</span></div><div class="passenger-booking-head-icon">📍</div>`
+        routeCard.insertAdjacentElement('beforebegin',head)
+      }
+
       document.querySelectorAll<HTMLElement>('.ride-option').forEach((el)=>{
         const text=(el.textContent||'').toLowerCase()
         if(text.includes('comfort')||text.includes('plus d’espace')||text.includes("plus d'espace")||text.includes('plis espas')){
@@ -36,7 +45,7 @@ export default function PassengerDashboardHardV2(){
     apply()
     const observer=new MutationObserver(apply)
     observer.observe(document.body,{childList:true,subtree:true})
-    const timer=window.setInterval(apply,500)
+    const timer=window.setInterval(apply,700)
 
     return()=>{
       observer.disconnect()
@@ -46,17 +55,42 @@ export default function PassengerDashboardHardV2(){
   },[])
 
   return <style>{`
+    body.passenger-hard-v2{background:#eef3f1!important}
     body.passenger-hard-v2 .greeting-row{display:none!important}
-    body.passenger-hard-v2 .map-panel.real-map-panel{height:48dvh!important;min-height:350px!important}
-    body.passenger-hard-v2 .booking-sheet{margin-top:-54px!important;padding-top:14px!important;border-radius:28px!important}
-    body.passenger-hard-v2 .ride-list{grid-template-columns:1fr 1fr!important;gap:10px!important}
-    body.passenger-hard-v2 .ride-option{min-height:92px!important}
-    body.passenger-hard-v2 .payment-row{background:#f5faf8!important;border-color:#d9e9e3!important}
-    body.passenger-hard-v2 .request-button{min-height:58px!important;border-radius:18px!important;background:#0F705A!important}
-    body.passenger-hard-v2 .brand-chip{min-width:132px!important;justify-content:center!important}
+    body.passenger-hard-v2 .map-panel.real-map-panel{height:43dvh!important;min-height:315px!important;max-height:430px!important}
+    body.passenger-hard-v2 .topbar{top:14px!important;left:14px!important;right:14px!important}
+    body.passenger-hard-v2 .round-button{box-shadow:0 8px 22px rgba(16,32,51,.12)!important;border:1px solid rgba(220,231,226,.95)!important}
+    body.passenger-hard-v2 .brand-chip{min-width:126px!important;justify-content:center!important;box-shadow:0 8px 22px rgba(16,32,51,.10)!important;border:1px solid rgba(220,231,226,.92)!important}
+    body.passenger-hard-v2 .booking-sheet{margin-top:-42px!important;padding:13px 15px calc(102px + env(safe-area-inset-bottom))!important;border-radius:28px 28px 0 0!important;box-shadow:0 -10px 34px rgba(16,32,51,.08)!important;background:#fff!important}
+    body.passenger-hard-v2 .grabber{width:38px!important;height:4px!important;margin-bottom:10px!important;background:#d8e1dd!important}
+    body.passenger-hard-v2 .passenger-booking-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 1px 11px;padding:2px 2px 0}
+    body.passenger-hard-v2 .passenger-booking-head small{display:block;font-size:9px;font-weight:900;letter-spacing:.08em;color:#0f705a;margin-bottom:2px}
+    body.passenger-hard-v2 .passenger-booking-head strong{display:block;font-size:20px;line-height:1.12;color:#13263a;font-weight:900}
+    body.passenger-hard-v2 .passenger-booking-head span{display:block;margin-top:3px;font-size:10px;color:#75827d}
+    body.passenger-hard-v2 .passenger-booking-head-icon{width:40px;height:40px;border-radius:13px;background:#eaf5f1;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+    body.passenger-hard-v2 .route-card{margin-top:0!important;border-radius:18px!important;padding:4px 13px!important;border:1px solid #dfe9e5!important;box-shadow:0 6px 18px rgba(16,32,51,.04)!important}
+    body.passenger-hard-v2 .input-wrap{padding:9px 0!important}
+    body.passenger-hard-v2 .input-wrap label{font-size:9px!important;color:#73827c!important;font-weight:800!important}
+    body.passenger-hard-v2 .input-wrap input{font-size:13px!important;font-weight:700!important;color:#1b2d3d!important}
+    body.passenger-hard-v2 .section-heading{margin-top:13px!important;align-items:end!important}
+    body.passenger-hard-v2 .section-heading h2{font-size:15px!important}
+    body.passenger-hard-v2 .section-heading>span{font-size:9px!important;color:#718078!important}
+    body.passenger-hard-v2 .ride-list{grid-template-columns:1fr 1fr!important;gap:9px!important;margin-top:8px!important}
+    body.passenger-hard-v2 .ride-option{min-height:84px!important;padding:10px!important;border-radius:16px!important;display:grid!important;grid-template-columns:40px 1fr!important;grid-template-rows:auto auto!important;align-items:center!important;text-align:left!important;position:relative!important}
+    body.passenger-hard-v2 .ride-option.selected{border-color:#75b7a4!important;background:#eff8f5!important;box-shadow:0 5px 16px rgba(15,112,90,.08)!important}
+    body.passenger-hard-v2 .ride-icon{width:38px!important;height:38px!important;margin-right:7px!important}
+    body.passenger-hard-v2 .ride-copy strong{font-size:12px!important}
+    body.passenger-hard-v2 .ride-copy small{font-size:8.5px!important;line-height:1.25!important}
+    body.passenger-hard-v2 .ride-price{grid-column:1 / -1!important;margin-top:6px!important;padding-top:6px!important;border-top:1px solid #edf1ef!important;font-size:11px!important;text-align:right!important;color:#0f705a!important}
+    body.passenger-hard-v2 .payment-row{margin-top:10px!important;padding:10px 11px!important;border-radius:15px!important;background:#f5faf8!important;border:1px solid #d9e9e3!important}
+    body.passenger-hard-v2 .payment-row button{font-size:10px!important;font-weight:850!important;color:#0f705a!important}
+    body.passenger-hard-v2 .request-button{margin-top:10px!important;min-height:56px!important;border-radius:17px!important;background:#0F705A!important;box-shadow:0 10px 22px rgba(15,112,90,.18)!important;font-size:13px!important}
+    body.passenger-hard-v2 .searching-card{border-radius:17px!important;min-height:56px!important}
+    body.passenger-hard-v2 .fine-print{display:none!important}
     @media(max-width:420px){
-      body.passenger-hard-v2 .map-panel.real-map-panel{height:46dvh!important;min-height:335px!important}
-      body.passenger-hard-v2 .booking-sheet{margin-top:-48px!important}
+      body.passenger-hard-v2 .map-panel.real-map-panel{height:41dvh!important;min-height:300px!important}
+      body.passenger-hard-v2 .booking-sheet{margin-top:-38px!important}
+      body.passenger-hard-v2 .passenger-booking-head strong{font-size:18px!important}
     }
   `}</style>
 }
