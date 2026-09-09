@@ -7,47 +7,94 @@ export default function DriverCompactBrandPolish() {
     if (location.pathname !== '/driver/dashboard') return
 
     const apply = () => {
+      const topbar = document.querySelector('.topbar') as HTMLElement | null
       const brand = document.querySelector('.brand') as HTMLElement | null
-      if (!brand) return
+      if (!topbar || !brand) return
 
+      const logo = brand.querySelector(':scope > span') as HTMLElement | null
       const textWrap = brand.querySelector('div') as HTMLElement | null
       const title = textWrap?.querySelector('strong') as HTMLElement | null
       const subtitle = textWrap?.querySelector('small') as HTMLElement | null
       const wantedSubtitle = localStorage.getItem('taxi-language') === 'ht' ? 'Chofè' : 'Chauffeur'
 
+      if (logo && logo.textContent !== '🚕') logo.textContent = '🚕'
       if (title && title.textContent !== 'Taxi Haiti') title.textContent = 'Taxi Haiti'
       if (subtitle && subtitle.textContent !== wantedSubtitle) subtitle.textContent = wantedSubtitle
 
-      if (brand.dataset.compactBrandPolished !== 'true') {
-        brand.dataset.compactBrandPolished = 'true'
-        Object.assign(brand.style, {
-          minWidth: '0',
-          flex: '1 1 auto',
-          gap: '8px'
-        })
-        if (textWrap) Object.assign(textWrap.style, { minWidth: '0' })
-        if (title) Object.assign(title.style, {
-          whiteSpace: 'nowrap',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          fontSize: '15px',
-          lineHeight: '1.15'
-        })
-        if (subtitle) Object.assign(subtitle.style, {
-          fontSize: '10px',
-          lineHeight: '1.1',
-          marginTop: '1px'
-        })
-      }
+      Object.assign(topbar.style, {
+        position: 'relative',
+        minHeight: '62px',
+        display: 'flex',
+        alignItems: 'center'
+      })
+
+      Object.assign(brand.style, {
+        position: 'absolute',
+        left: '50%',
+        transform: 'translateX(-50%)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '9px',
+        width: 'max-content',
+        maxWidth: 'calc(100% - 120px)',
+        minWidth: '0'
+      })
+
+      if (logo) Object.assign(logo.style, {
+        width: '42px',
+        height: '42px',
+        minWidth: '42px',
+        borderRadius: '50%',
+        display: 'grid',
+        placeItems: 'center',
+        background: '#0F705A',
+        color: '#fff',
+        fontSize: '20px',
+        lineHeight: '1',
+        boxShadow: '0 5px 16px rgba(15,112,90,.22)'
+      })
+
+      if (textWrap) Object.assign(textWrap.style, {
+        minWidth: '0',
+        textAlign: 'left'
+      })
+
+      if (title) Object.assign(title.style, {
+        display: 'block',
+        color: '#102033',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        fontSize: '19px',
+        fontWeight: '900',
+        letterSpacing: '-0.02em',
+        lineHeight: '1.05'
+      })
+
+      if (subtitle) Object.assign(subtitle.style, {
+        display: 'inline-block',
+        width: 'fit-content',
+        marginTop: '5px',
+        padding: '3px 8px',
+        borderRadius: '999px',
+        background: '#E9F6F1',
+        color: '#0F705A',
+        fontSize: '9px',
+        fontWeight: '900',
+        lineHeight: '1.2',
+        letterSpacing: '.03em'
+      })
     }
 
     apply()
-    const observer = new MutationObserver(() => {
-      if (!document.querySelector('.brand')) return
-      apply()
-    })
+    const observer = new MutationObserver(apply)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+    window.addEventListener('taxi-language-change', apply)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('taxi-language-change', apply)
+    }
   }, [])
 
   return null
