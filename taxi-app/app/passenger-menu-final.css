@@ -56,26 +56,7 @@
     box-shadow:inset 0 0 0 1px rgba(15,107,86,.05);
   }
 
-  /* Accueil toujou kache. Si ansyen bouton Devenir chauffeur toujou prezan nan DOM la, kache li tou. */
-  .drawer-nav>button:nth-child(1),
-  .drawer-nav>button:nth-child(5){
-    display:none!important;
-  }
-
-  /* Lòd final: Profil, Mes trajets, Paiement, Langue, Aide. */
-  .drawer-nav>button:nth-child(4){order:1}
-  .drawer-nav>button:nth-child(2){order:2}
-  .drawer-nav>button:nth-child(3){order:3}
-  .drawer-nav>.drawer-language{order:4}
-  .drawer-nav>button:nth-child(6),
-  .drawer-nav>button:nth-child(7){order:5}
-
-  .drawer-nav>button:nth-child(4){
-    background:#edf8f4!important;
-    color:#0f6b56!important;
-    box-shadow:inset 0 0 0 1px rgba(15,107,86,.05);
-  }
-
+  /* Pa itilize nth-child/order ankò: PassengerAvatarEnhancer kontwole lòd final la. */
   .drawer-language{
     display:grid!important;
     grid-template-columns:30px 1fr!important;
