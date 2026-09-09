@@ -36,7 +36,9 @@ import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary
 import DriverFinalMenu from '../components/DriverFinalMenu'
 import DriverApplicationProfileAddon from '../components/DriverApplicationProfileAddon'
 import DriverProfileRequiredFields from '../components/DriverProfileRequiredFields'
+import DriverVehicleRequiredFieldsGuard from '../components/DriverVehicleRequiredFieldsGuard'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
+import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -73,7 +75,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverFinalMenu />
         <DriverApplicationProfileAddon />
         <DriverProfileRequiredFields />
+        <DriverVehicleRequiredFieldsGuard />
         <AdminDriverApplicationProfileSnapshot />
+        <AdminDriverVehicleSnapshot />
         {children}
       </body>
     </html>
