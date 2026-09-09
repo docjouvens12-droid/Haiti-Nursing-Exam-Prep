@@ -30,38 +30,59 @@ export default function DriverDrawerHeaderPolish(){
         .drawer .driverIdentity strong,
         .drawer .driverIdentity small,
         .drawer .driver-identity strong,
-        .drawer .driver-identity small {
+        .drawer .driver-identity small,
+        .drawer .drawerProfile strong,
+        .drawer .drawerProfile small,
+        .drawer .drawer-profile strong,
+        .drawer .drawer-profile small {
           display:none !important;
         }
         .drawer .drawerUser,
-        .drawer .drawer-user {
+        .drawer .drawer-user,
+        .drawer .driverIdentity,
+        .drawer .driver-identity,
+        .drawer .drawerProfile,
+        .drawer .drawer-profile {
           justify-content:flex-start !important;
         }
       `
       document.head.appendChild(style)
     }
 
+    const hideIdentityText=(drawer:HTMLElement)=>{
+      const candidates=Array.from(drawer.querySelectorAll<HTMLElement>('strong,small,p,span,div'))
+      candidates.forEach(el=>{
+        if(el.closest('.driver-final-menu-root')) return
+        const text=(el.textContent||'').trim()
+        const lower=text.toLowerCase()
+        const looksLikeEmail=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text)
+        const isDriverTitle=lower==='espace chauffeur'||lower==='espas chofè'
+        if(isDriverTitle||looksLikeEmail){
+          el.style.display='none'
+          return
+        }
+        if(lower==='jouvens') el.style.display='none'
+      })
+
+      const topBlocks=Array.from(drawer.children).slice(0,4) as HTMLElement[]
+      topBlocks.forEach(block=>{
+        if(block.classList.contains('driver-final-menu-root')) return
+        const email=Array.from(block.querySelectorAll<HTMLElement>('small,p,span,strong,div')).find(el=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((el.textContent||'').trim()))
+        if(email){
+          block.querySelectorAll<HTMLElement>('strong,small,p').forEach(el=>el.style.display='none')
+        }
+      })
+    }
+
     const apply=()=>{
       const drawer=document.querySelector<HTMLElement>('.drawer')
       if(!drawer) return
-
-      const all=Array.from(drawer.querySelectorAll<HTMLElement>('h1,h2,h3,strong,small,p,span,div'))
-      all.forEach(el=>{
-        const text=(el.textContent||'').trim().toLowerCase()
-        if(text==='espace chauffeur'||text==='espas chofè'){
-          el.style.display='none'
-        }
-      })
-
-      const userBlocks=Array.from(drawer.querySelectorAll<HTMLElement>('.drawerUser,.drawer-user,.driverIdentity,.driver-identity'))
-      userBlocks.forEach(block=>{
-        block.querySelectorAll<HTMLElement>('strong,small').forEach(el=>el.style.display='none')
-      })
+      hideIdentityText(drawer)
     }
 
     apply()
     const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true})
+    observer.observe(document.body,{childList:true,subtree:true,characterData:true})
     return()=>observer.disconnect()
   },[])
 
