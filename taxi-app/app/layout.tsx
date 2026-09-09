@@ -16,6 +16,7 @@ import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
+import PassengerRidePhasePolish from '../components/PassengerRidePhasePolish'
 import PassengerAvatarEnhancer from '../components/PassengerAvatarEnhancer'
 import PassengerProfileDetails from '../components/PassengerProfileDetails'
 import PassengerDriverApplicationMenuItem from '../components/PassengerDriverApplicationMenuItem'
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerActiveDriver />
         <PassengerPendingRideCancel />
         <PassengerRideCompletion />
+        <PassengerRidePhasePolish />
         <PassengerAvatarEnhancer />
         <PassengerProfileDetails />
         <PassengerDriverApplicationMenuItem />
