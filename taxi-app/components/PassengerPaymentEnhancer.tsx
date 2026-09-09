@@ -2,19 +2,35 @@
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { supabase } from '../lib/supabase'
 
-type Method = 'cash' | 'moncash' | 'natcash'
+type Method = 'moncash' | 'natcash'
 
 export default function PassengerPaymentEnhancer() {
   const [target, setTarget] = useState<Element | null>(null)
   const [open, setOpen] = useState(false)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
-  const [method, setMethod] = useState<Method>('cash')
+  const [method, setMethod] = useState<Method>('moncash')
+  const [name, setName] = useState('')
+  const [phone, setPhone] = useState('')
 
   useEffect(() => {
-    const savedMethod = window.localStorage.getItem('taxi-payment-method') as Method | null
-    if (savedMethod === 'cash' || savedMethod === 'moncash' || savedMethod === 'natcash') setMethod(savedMethod)
+    const savedMethod = window.localStorage.getItem('taxi-payment-method') as Method | 'cash' | null
+    const normalized: Method = savedMethod === 'natcash' ? 'natcash' : 'moncash'
+    setMethod(normalized)
+    window.localStorage.setItem('taxi-payment-method', normalized)
   }, [])
+
+  useEffect(() => {
+    if (!open) return
+    void supabase.auth.getUser().then(({ data }) => {
+      const user = data.user
+      if (!user) return
+      const metadata = user.user_metadata || {}
+      setName(String(metadata.full_name || ''))
+      setPhone(String(metadata.phone || ''))
+    })
+  }, [open])
 
   useEffect(() => {
     let currentButton: HTMLButtonElement | null = null
@@ -81,11 +97,12 @@ export default function PassengerPaymentEnhancer() {
 
   if (!target || !open) return null
   const ht = lang === 'ht'
+  const accountName = name || (ht ? 'Non pa anrejistre' : 'Nom non enregistré')
+  const accountPhone = phone || (ht ? 'Telefòn pa anrejistre' : 'Téléphone non enregistré')
 
-  const options: Array<{ id: Method; icon: string; label: string; sub: string }> = [
-    { id: 'cash', icon: '💵', label: ht ? 'Lajan kach' : 'Espèces', sub: ht ? 'Peye chofè a an kach' : 'Payer le chauffeur en espèces' },
-    { id: 'moncash', icon: '📱', label: 'MonCash', sub: ht ? 'Peman mobil MonCash' : 'Paiement mobile MonCash' },
-    { id: 'natcash', icon: '📲', label: 'NatCash', sub: ht ? 'Peman mobil NatCash' : 'Paiement mobile NatCash' },
+  const options: Array<{ id: Method; icon: string; label: string }> = [
+    { id: 'moncash', icon: '📱', label: 'MonCash' },
+    { id: 'natcash', icon: '📲', label: 'NatCash' },
   ]
 
   return createPortal(
@@ -99,12 +116,16 @@ export default function PassengerPaymentEnhancer() {
           const active = method === option.id
           return <button key={option.id} type="button" className={`drawer-payment-method ${active ? 'active' : ''}`} onClick={() => choose(option.id)}>
             <span className="drawer-payment-icon">{option.icon}</span>
-            <span className="drawer-payment-copy"><strong>{option.label}</strong><small>{option.sub}</small></span>
+            <span className="drawer-payment-copy">
+              <strong>{option.label}</strong>
+              <small>{accountName}</small>
+              <small>{accountPhone}</small>
+            </span>
             <span className={`drawer-payment-switch ${active ? 'on' : ''}`} aria-hidden="true"><i /></span>
           </button>
         })}
       </div>
-      <p className="drawer-payment-note">{ht ? 'Chwazi yon sèl metòd peman pou pwochen trajè ou.' : 'Choisissez un seul mode de paiement pour votre prochain trajet.'}</p>
+      <p className="drawer-payment-note">{ht ? 'Non ak telefòn yo soti dirèkteman nan pwofil kliyan an.' : 'Le nom et le téléphone proviennent directement du profil du client.'}</p>
     </section>,
     target,
   )
