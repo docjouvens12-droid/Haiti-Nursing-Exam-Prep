@@ -47,17 +47,21 @@ export default function PassengerAvatarEnhancer() {
 
   useEffect(() => {
     const decorate = () => {
-      if (window.location.pathname !== '/passenger/dashboard') return
       const drawer = document.querySelector('.nav-drawer') as HTMLElement | null
       if (!drawer) return
 
       const ht = localStorage.getItem('taxi-language') === 'ht'
       const brand = drawer.querySelector('.drawer-brand') as HTMLElement | null
-      if (brand) brand.style.setProperty('display', 'none', 'important')
+      if (brand) {
+        brand.style.setProperty('display', 'flex', 'important')
+        Array.from(brand.children).forEach((child, index) => {
+          if (index > 0) (child as HTMLElement).style.setProperty('display', 'none', 'important')
+        })
+      }
 
       const head = drawer.querySelector('.drawer-head') as HTMLElement | null
       if (head) {
-        head.style.justifyContent = 'flex-end'
+        head.style.justifyContent = 'space-between'
         head.style.borderBottom = '0'
         head.style.paddingBottom = '2px'
       }
@@ -148,6 +152,9 @@ export default function PassengerAvatarEnhancer() {
   return <>
     <input ref={inputRef} type="file" accept="image/*" onChange={onPick} style={{ display: 'none' }} />
     <style>{`
+      .nav-drawer .drawer-brand>div:not(:first-child),
+      .nav-drawer .drawer-brand>span:not(:first-child),
+      .nav-drawer .drawer-brand>section:not(:first-child){display:none!important}
       .nav-drawer .drawer-user.passenger-premium-user{
         display:flex!important;
         flex-direction:column!important;
