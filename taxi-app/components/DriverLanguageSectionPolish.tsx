@@ -13,8 +13,7 @@ export default function DriverLanguageSectionPolish(){
       style.textContent=`
         .dfm-lang.driver-language-polish{padding:14px 0 16px!important}
         .driver-language-card{background:#f8faf9;border:1px solid #e3ebe7;border-radius:18px;padding:12px}
-        .driver-language-head{display:flex;align-items:center;gap:11px;margin-bottom:12px}
-        .driver-language-icon{width:42px;height:42px;border-radius:14px;background:#eaf5f1;color:#0f705a;display:grid;place-items:center;font-size:20px}
+        .driver-language-head{display:flex;align-items:center;margin-bottom:12px}
         .driver-language-head strong{display:block;color:#102033!important;font-size:14px!important;margin:0!important}
         .driver-language-head small{display:block;margin-top:3px;color:#75837d;font-size:10px}
         .dfm-lang.driver-language-polish .dfm-lang-switch{width:100%!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:8px!important;padding:0!important;border:0!important;background:transparent!important}
@@ -43,7 +42,7 @@ export default function DriverLanguageSectionPolish(){
       card.className='driver-language-card'
       const head=document.createElement('div')
       head.className='driver-language-head'
-      head.innerHTML=`<div class="driver-language-icon">🌐</div><div><strong>${ht?'Lang aplikasyon an':'Langue de l’application'}</strong><small>${ht?'Chwazi lang ou prefere itilize':'Choisissez la langue que vous préférez'}</small></div>`
+      head.innerHTML=`<div><strong>${ht?'Lang aplikasyon an':'Langue de l’application'}</strong><small>${ht?'Chwazi lang ou prefere itilize':'Choisissez la langue que vous préférez'}</small></div>`
       card.appendChild(head)
       card.appendChild(switcher)
       if(currentTitle) currentTitle.remove()
