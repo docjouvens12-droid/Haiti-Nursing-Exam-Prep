@@ -37,7 +37,7 @@ export default function DriverRideHistoryMenuPolish() {
         .eq('driver_id', userId)
         .eq('status', 'completed')
         .order('completed_at', { ascending: false })
-        .limit(5)
+        .limit(10)
       return (data ?? []) as RideHistoryRow[]
     }
 
@@ -54,8 +54,8 @@ export default function DriverRideHistoryMenuPolish() {
       applying = true
 
       try {
-        const { data: auth } = await supabase.auth.getUser()
-        const user = auth.user
+        const { data: sessionData } = await supabase.auth.getSession()
+        const user = sessionData.session?.user
         if (!user || !drawer.isConnected || removeDuplicates(drawer)) return
 
         const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
@@ -136,7 +136,7 @@ export default function DriverRideHistoryMenuPolish() {
         const setOpen = (next: boolean) => {
           open = next
           content.style.display = next ? 'block' : 'none'
-          toggleMark.textContent = next ? '−' : '+'
+          toggleMark.textContent = '+'
           title.setAttribute('aria-expanded', String(next))
         }
         const toggle = () => setOpen(!open)
@@ -159,10 +159,12 @@ export default function DriverRideHistoryMenuPolish() {
     }
 
     void apply()
+    const retry = window.setInterval(() => { void apply() }, 2000)
     const observer = new MutationObserver(() => { void apply() })
     observer.observe(document.body, { childList: true, subtree: true })
 
     return () => {
+      window.clearInterval(retry)
       observer.disconnect()
       cleanups.forEach((fn) => fn())
     }
