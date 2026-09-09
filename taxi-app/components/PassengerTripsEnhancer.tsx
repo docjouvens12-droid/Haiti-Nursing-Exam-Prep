@@ -27,48 +27,75 @@ function label(status: string, ht: boolean) {
 }
 
 export default function PassengerTripsEnhancer() {
-  const [host, setHost] = useState<HTMLElement | null>(null)
+  const [target, setTarget] = useState<Element | null>(null)
+  const [open, setOpen] = useState(false)
   const [rides, setRides] = useState<Ride[]>([])
   const [busy, setBusy] = useState(false)
   const [filter, setFilter] = useState<Filter>('all')
-  const [expanded, setExpanded] = useState<string | null>(null)
+  const [expandedRide, setExpandedRide] = useState<string | null>(null)
   const [lang, setLang] = useState<'fr' | 'ht'>('fr')
 
   useEffect(() => {
-    const saved = window.localStorage.getItem('taxi-language')
-    if (saved === 'ht') setLang('ht')
+    let currentButton: HTMLButtonElement | null = null
+    let currentHandler: ((event: MouseEvent) => void) | null = null
 
-    const scan = () => {
-      const panels = [...document.querySelectorAll<HTMLElement>('.account-panel')]
-      const ridesPanel = panels.find((panel) => {
-        const text = panel.textContent || ''
-        return text.includes('Mes trajets') || text.includes('Trajè mwen yo')
-      })
-      if (!ridesPanel) {
-        setHost(null)
+    const syncTarget = () => {
+      const drawer = document.querySelector('.nav-drawer')
+      if (!drawer) {
+        setTarget(null)
+        setOpen(false)
         return
       }
-      let target = ridesPanel.querySelector<HTMLElement>('[data-passenger-trips-host]')
-      if (!target) {
-        const oldBody = ridesPanel.querySelector<HTMLElement>('.panel-body')
-        if (oldBody) oldBody.style.display = 'none'
-        target = document.createElement('div')
-        target.dataset.passengerTripsHost = 'true'
-        ridesPanel.appendChild(target)
+
+      const buttons = Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
+      const ridesButton = buttons.find((button) => {
+        const text = (button.textContent || '').toLowerCase()
+        return text.includes('mes trajets') || text.includes('trajè mwen yo')
+      }) || null
+
+      if (!ridesButton) {
+        setTarget(null)
+        setOpen(false)
+        return
       }
-      setHost(target)
+
+      if (currentButton !== ridesButton) {
+        if (currentButton && currentHandler) currentButton.removeEventListener('click', currentHandler, true)
+        currentButton = ridesButton
+        currentHandler = (event: MouseEvent) => {
+          event.preventDefault()
+          event.stopPropagation()
+          event.stopImmediatePropagation()
+          const saved = window.localStorage.getItem('taxi-language')
+          setLang(saved === 'ht' ? 'ht' : 'fr')
+          setOpen((value) => !value)
+          setExpandedRide(null)
+        }
+        ridesButton.addEventListener('click', currentHandler, true)
+      }
+
+      let mount = drawer.querySelector('.drawer-trips-inline-target') as HTMLElement | null
+      if (!mount) {
+        mount = document.createElement('div')
+        mount.className = 'drawer-trips-inline-target'
+        ridesButton.insertAdjacentElement('afterend', mount)
+      }
+      setTarget(mount)
     }
 
-    scan()
-    const observer = new MutationObserver(scan)
+    syncTarget()
+    const observer = new MutationObserver(syncTarget)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+
+    return () => {
+      observer.disconnect()
+      if (currentButton && currentHandler) currentButton.removeEventListener('click', currentHandler, true)
+    }
   }, [])
 
   useEffect(() => {
-    if (!host) return
+    if (!target || !open) return
     let active = true
-
     const load = async () => {
       setBusy(true)
       try {
@@ -76,69 +103,73 @@ export default function PassengerTripsEnhancer() {
           .from('rides')
           .select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at')
           .order('requested_at', { ascending: false })
-          .limit(50)
+          .limit(30)
         if (active) setRides((data ?? []) as Ride[])
       } finally {
         if (active) setBusy(false)
       }
     }
-
     void load()
     return () => { active = false }
-  }, [host])
+  }, [target, open])
 
   const shown = useMemo(() => rides.filter((r) => filter === 'all' || r.status === filter), [rides, filter])
   const completed = rides.filter((r) => r.status === 'completed').length
   const cancelled = rides.filter((r) => r.status === 'cancelled').length
 
-  if (!host) return null
+  if (!target || !open) return null
   const ht = lang === 'ht'
 
   return createPortal(
-    <div className="pt-page">
-      <div className="pt-summary">
-        <div><strong>{rides.length}</strong><span>{ht ? 'Tout trajè' : 'Tous les trajets'}</span></div>
+    <section className="drawer-trips-inline">
+      <div className="drawer-trips-inline-head">
+        <strong>{ht ? 'Trajè mwen yo' : 'Mes trajets'}</strong>
+        <button type="button" onClick={() => { setOpen(false); setExpandedRide(null) }}>{ht ? 'Fèmen' : 'Fermer'}</button>
+      </div>
+
+      <div className="drawer-trips-summary">
+        <div><strong>{rides.length}</strong><span>{ht ? 'Tout' : 'Tous'}</span></div>
         <div><strong>{completed}</strong><span>{ht ? 'Fini' : 'Terminés'}</span></div>
         <div><strong>{cancelled}</strong><span>{ht ? 'Anile' : 'Annulés'}</span></div>
       </div>
 
-      <div className="pt-tabs" role="tablist">
+      <div className="drawer-trips-tabs">
         <button className={filter === 'all' ? 'active' : ''} onClick={() => setFilter('all')}>{ht ? 'Tout' : 'Tous'}</button>
         <button className={filter === 'completed' ? 'active' : ''} onClick={() => setFilter('completed')}>{ht ? 'Fini' : 'Terminés'}</button>
         <button className={filter === 'cancelled' ? 'active' : ''} onClick={() => setFilter('cancelled')}>{ht ? 'Anile' : 'Annulés'}</button>
       </div>
 
-      {busy ? <div className="pt-loading">{ht ? 'N ap chaje trajè yo…' : 'Chargement des trajets…'}</div> : shown.length === 0 ? (
-        <div className="pt-empty">🚕<strong>{ht ? 'Pa gen trajè nan kategori sa a.' : 'Aucun trajet dans cette catégorie.'}</strong></div>
+      {busy ? <div className="drawer-trips-state">{ht ? 'N ap chaje trajè yo…' : 'Chargement…'}</div> : shown.length === 0 ? (
+        <div className="drawer-trips-state">🚕 {ht ? 'Pa gen trajè.' : 'Aucun trajet.'}</div>
       ) : (
-        <div className="pt-list">
-          {shown.map((ride) => {
-            const open = expanded === ride.id
+        <div className="drawer-trips-list">
+          {shown.slice(0, 10).map((ride) => {
+            const detailOpen = expandedRide === ride.id
             const fare = Number(ride.final_fare_htg ?? ride.estimated_fare_htg ?? 0)
-            return <article className="pt-card" key={ride.id}>
-              <div className="pt-card-top">
-                <time>{new Date(ride.requested_at).toLocaleDateString(ht ? 'fr-HT' : 'fr-FR', { day: '2-digit', month: 'short', year: 'numeric' })}</time>
-                <span className={`pt-status ${ride.status}`}>{label(ride.status, ht)}</span>
+            return <article className="drawer-trip-card" key={ride.id}>
+              <div className="drawer-trip-top">
+                <time>{new Date(ride.requested_at).toLocaleDateString(ht ? 'fr-HT' : 'fr-FR', { day: '2-digit', month: 'short' })}</time>
+                <span>{label(ride.status, ht)}</span>
               </div>
-              <div className="pt-route">
-                <div><i className="from" /><span><small>{ht ? 'Depa' : 'Départ'}</small><strong>{ride.pickup_address}</strong></span></div>
-                <div><i className="to" /><span><small>{ht ? 'Destinasyon' : 'Destination'}</small><strong>{ride.destination_address}</strong></span></div>
+              <div className="drawer-trip-route">
+                <strong>{ride.pickup_address}</strong>
+                <b>→</b>
+                <strong>{ride.destination_address}</strong>
               </div>
-              <div className="pt-card-bottom">
-                <div><small>{ht ? 'Pri' : 'Prix'}</small><strong>{fare.toLocaleString('fr-FR')} HTG</strong></div>
-                <button onClick={() => setExpanded(open ? null : ride.id)}>{open ? (ht ? 'Fèmen' : 'Fermer') : (ht ? 'Gade detay' : 'Voir les détails')}</button>
+              <div className="drawer-trip-bottom">
+                <strong>{fare.toLocaleString('fr-FR')} HTG</strong>
+                <button type="button" onClick={() => setExpandedRide(detailOpen ? null : ride.id)}>{detailOpen ? (ht ? 'Fèmen' : 'Fermer') : (ht ? 'Detay' : 'Détails')}</button>
               </div>
-              {open && <div className="pt-details">
-                <div><span>{ht ? 'Nimewo trajè' : 'N° trajet'}</span><b>#{ride.id.slice(0, 8).toUpperCase()}</b></div>
-                <div><span>{ht ? 'Dat ak lè' : 'Date et heure'}</span><b>{new Date(ride.requested_at).toLocaleString(ht ? 'fr-HT' : 'fr-FR')}</b></div>
+              {detailOpen && <div className="drawer-trip-details">
+                <div><span>{ht ? 'Nimewo' : 'N°'}</span><b>#{ride.id.slice(0, 8).toUpperCase()}</b></div>
+                <div><span>{ht ? 'Dat/lè' : 'Date/heure'}</span><b>{new Date(ride.requested_at).toLocaleString(ht ? 'fr-HT' : 'fr-FR')}</b></div>
                 <div><span>{ht ? 'Peman' : 'Paiement'}</span><b>{ht ? 'Lajan kach' : 'Espèces'}</b></div>
-                <div><span>{ht ? 'Estati' : 'Statut'}</span><b>{label(ride.status, ht)}</b></div>
               </div>}
             </article>
           })}
         </div>
       )}
-    </div>,
-    host,
+    </section>,
+    target,
   )
 }
