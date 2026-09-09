@@ -24,26 +24,16 @@ import PassengerDashboardDriverStyle from '../components/PassengerDashboardDrive
 import PassengerMainPaymentPolish from '../components/PassengerMainPaymentPolish'
 import PassengerDashboardQuickInfo from '../components/PassengerDashboardQuickInfo'
 import PassengerRestoredVersionPolish from '../components/PassengerRestoredVersionPolish'
-import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
-import DriverPersonalInfoEditorPolish from '../components/DriverPersonalInfoEditorPolish'
-import DriverVehicleMenuPolish from '../components/DriverVehicleMenuPolish'
-import DriverLanguageSwitchPolish from '../components/DriverLanguageSwitchPolish'
 import DriverDashboardTitleHide from '../components/DriverDashboardTitleHide'
 import DriverOnlineSwitchPolish from '../components/DriverOnlineSwitchPolish'
 import DriverBrandTaxiPolish from '../components/DriverBrandTaxiPolish'
 import DriverCompactBrandPolish from '../components/DriverCompactBrandPolish'
-import DriverEarningsMenuPolish from '../components/DriverEarningsMenuPolish'
-import DriverNetEarningsPolish from '../components/DriverNetEarningsPolish'
-import DriverRideHistoryMenuPolish from '../components/DriverRideHistoryMenuPolish'
-import DriverMenuVisualConsistency from '../components/DriverMenuVisualConsistency'
 import DriverLogoutPolish from '../components/DriverLogoutPolish'
 import DriverAutoRequestSearch from '../components/DriverAutoRequestSearch'
 import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish'
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
-import DriverPaymentMethodPolish from '../components/DriverPaymentMethodPolish'
-import DriverPaymentMenuPolish from '../components/DriverPaymentMenuPolish'
-import DriverHelpAndPlusPolish from '../components/DriverHelpAndPlusPolish'
+import DriverFinalMenu from '../components/DriverFinalMenu'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -68,26 +58,16 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerMainPaymentPolish />
         <PassengerDashboardQuickInfo />
         <PassengerRestoredVersionPolish />
-        <DriverMenuAccordionPolish />
         <DriverAvatarUploadPolish />
-        <DriverPersonalInfoEditorPolish />
-        <DriverVehicleMenuPolish />
-        <DriverLanguageSwitchPolish />
         <DriverDashboardTitleHide />
         <DriverOnlineSwitchPolish />
         <DriverBrandTaxiPolish />
         <DriverCompactBrandPolish />
-        <DriverEarningsMenuPolish />
-        <DriverNetEarningsPolish />
-        <DriverRideHistoryMenuPolish />
-        <DriverMenuVisualConsistency />
         <DriverLogoutPolish />
         <DriverAutoRequestSearch />
         <DriverRideExperiencePolish />
         <DriverCompletedRideSummary />
-        <DriverPaymentMethodPolish />
-        <DriverPaymentMenuPolish />
-        <DriverHelpAndPlusPolish />
+        <DriverFinalMenu />
         {children}
       </body>
     </html>
