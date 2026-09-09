@@ -43,6 +43,7 @@ import DriverDrawerHeaderPolish from '../components/DriverDrawerHeaderPolish'
 import DriverProfileSectionPolish from '../components/DriverProfileSectionPolish'
 import DriverVehicleSectionPolish from '../components/DriverVehicleSectionPolish'
 import DriverPaymentsSectionPolish from '../components/DriverPaymentsSectionPolish'
+import DriverHistorySectionPolish from '../components/DriverHistorySectionPolish'
 import DriverAccessGate from '../components/DriverAccessGate'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
@@ -90,6 +91,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverProfileSectionPolish />
         <DriverVehicleSectionPolish />
         <DriverPaymentsSectionPolish />
+        <DriverHistorySectionPolish />
         <AdminDriverApplicationProfileSnapshot />
         <AdminDriverVehicleSnapshot />
         {children}
