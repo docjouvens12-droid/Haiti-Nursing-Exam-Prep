@@ -11,6 +11,7 @@ export default function DriverCompactBrandPolish() {
       const brand = document.querySelector('.brand') as HTMLElement | null
       if (!topbar || !brand) return
 
+      const menuButton = topbar.querySelector('.menuButton') as HTMLElement | null
       const logo = brand.querySelector(':scope > span') as HTMLElement | null
       const textWrap = brand.querySelector('div') as HTMLElement | null
       const title = textWrap?.querySelector('strong') as HTMLElement | null
@@ -28,6 +29,13 @@ export default function DriverCompactBrandPolish() {
         alignItems: 'center'
       })
 
+      if (menuButton) Object.assign(menuButton.style, {
+        position: 'relative',
+        zIndex: '20',
+        pointerEvents: 'auto',
+        flex: '0 0 auto'
+      })
+
       Object.assign(brand.style, {
         position: 'absolute',
         left: '50%',
@@ -38,7 +46,9 @@ export default function DriverCompactBrandPolish() {
         gap: '9px',
         width: 'max-content',
         maxWidth: 'calc(100% - 120px)',
-        minWidth: '0'
+        minWidth: '0',
+        pointerEvents: 'none',
+        zIndex: '1'
       })
 
       if (logo) Object.assign(logo.style, {
