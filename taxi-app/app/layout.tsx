@@ -26,6 +26,7 @@ import PassengerDashboardQuickInfo from '../components/PassengerDashboardQuickIn
 import PassengerRestoredVersionPolish from '../components/PassengerRestoredVersionPolish'
 import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
+import DriverPersonalInfoEditorPolish from '../components/DriverPersonalInfoEditorPolish'
 import DriverVehicleMenuPolish from '../components/DriverVehicleMenuPolish'
 import DriverLanguageSwitchPolish from '../components/DriverLanguageSwitchPolish'
 import DriverDashboardTitleHide from '../components/DriverDashboardTitleHide'
@@ -68,6 +69,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerRestoredVersionPolish />
         <DriverMenuAccordionPolish />
         <DriverAvatarUploadPolish />
+        <DriverPersonalInfoEditorPolish />
         <DriverVehicleMenuPolish />
         <DriverLanguageSwitchPolish />
         <DriverDashboardTitleHide />
