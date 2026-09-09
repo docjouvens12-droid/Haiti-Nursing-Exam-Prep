@@ -7,11 +7,13 @@ import './passenger-dashboard-mobile.css'
 import './passenger-menu-final.css'
 import './passenger-avatar.css'
 import './passenger-profile-details.css'
+import './passenger-trips-page.css'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
 import PassengerAvatarEnhancer from '../components/PassengerAvatarEnhancer'
 import PassengerProfileDetails from '../components/PassengerProfileDetails'
+import PassengerTripsEnhancer from '../components/PassengerTripsEnhancer'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -27,6 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerRideCompletion />
         <PassengerAvatarEnhancer />
         <PassengerProfileDetails />
+        <PassengerTripsEnhancer />
         {children}
       </body>
     </html>
