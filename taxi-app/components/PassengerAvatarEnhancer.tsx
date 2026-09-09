@@ -69,21 +69,36 @@ export default function PassengerAvatarEnhancer() {
 
       const nav = drawer.querySelector('.drawer-nav') as HTMLElement | null
       if (nav) {
-        const navButtons = Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button'))
-        const becomeDriverButton = navButtons.find((button) => {
+        const allButtons = () => Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button'))
+        const byText = (terms: string[]) => allButtons().find((button) => {
           const text = (button.textContent || '').toLowerCase()
-          return text.includes('devenir chauffeur') || text.includes('vin chofè') || text.includes('vin chofe')
-        })
+          return terms.some((term) => text.includes(term))
+        }) || null
+
+        const homeButton = byText(['accueil', 'akèy'])
+        if (homeButton) homeButton.remove()
+
+        const becomeDriverButton = byText(['devenir chauffeur', 'vin chofè', 'vin chofe'])
         if (becomeDriverButton) becomeDriverButton.remove()
 
-        const helpButton = Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button')).find((button) => {
-          const text = (button.textContent || '').toLowerCase().trim()
-          return text.includes('aide') || text.includes('èd')
-        })
+        const profileButton = byText(['profil', 'pwofil'])
+        const tripsButton = byText(['mes trajets', 'trajè mwen yo'])
+        const paymentButton = byText(['paiement', 'peman'])
+        const helpButton = byText(['aide', 'èd'])
         const languageBlock = nav.querySelector(':scope > .drawer-language') as HTMLElement | null
-        if (helpButton && languageBlock && languageBlock.nextElementSibling !== helpButton) {
-          languageBlock.insertAdjacentElement('afterend', helpButton)
-        }
+        const profileTarget = nav.querySelector(':scope > .drawer-profile-inline-target') as HTMLElement | null
+        const tripsTarget = nav.querySelector(':scope > .drawer-trips-inline-target') as HTMLElement | null
+
+        const ordered: HTMLElement[] = []
+        if (profileButton) ordered.push(profileButton)
+        if (profileTarget) ordered.push(profileTarget)
+        if (tripsButton) ordered.push(tripsButton)
+        if (tripsTarget) ordered.push(tripsTarget)
+        if (paymentButton) ordered.push(paymentButton)
+        if (languageBlock) ordered.push(languageBlock)
+        if (helpButton) ordered.push(helpButton)
+
+        for (const element of ordered) nav.appendChild(element)
       }
 
       const circle = drawer.querySelector('.drawer-avatar') as HTMLElement | null
