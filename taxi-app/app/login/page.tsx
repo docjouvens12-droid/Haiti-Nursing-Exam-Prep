@@ -30,6 +30,27 @@ export default function UnifiedLoginPage() {
       return
     }
 
+    // Safari/iPhone can navigate before the auth client has fully written the
+    // new session to local storage. Explicitly persist the returned tokens,
+    // then read them back before leaving this page.
+    const { error: persistError } = await supabase.auth.setSession({
+      access_token: data.session.access_token,
+      refresh_token: data.session.refresh_token,
+    })
+
+    if (persistError) {
+      setMessage('La connexion a réussi, mais la session n’a pas pu être enregistrée. Réessayez.')
+      setBusy(false)
+      return
+    }
+
+    const { data: verified, error: verifyError } = await supabase.auth.getSession()
+    if (verifyError || !verified.session?.user || verified.session.user.id !== data.user.id) {
+      setMessage('La session n’a pas pu être vérifiée. Réessayez.')
+      setBusy(false)
+      return
+    }
+
     let target: Target = {
       path: '/passenger/dashboard',
     }
@@ -58,8 +79,9 @@ export default function UnifiedLoginPage() {
       }
     }
 
-    // signInWithPassword already persisted the single shared session
-    // under taxi-auth-default. Do not create role-specific sessions.
+    // Give WebKit one event-loop turn after the verified storage write before
+    // replacing the page. This prevents login -> dashboard -> login loops.
+    await new Promise((resolve) => window.setTimeout(resolve, 120))
     window.location.replace(target.path)
   }
 
