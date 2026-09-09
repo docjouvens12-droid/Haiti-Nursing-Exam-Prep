@@ -138,11 +138,11 @@ export default function DriverEarningsMenuPolish() {
         title.setAttribute('tabindex', '0')
         title.setAttribute('aria-expanded', 'false')
 
-        const arrow = document.createElement('span')
-        arrow.textContent = '›'
-        arrow.setAttribute('aria-hidden', 'true')
-        Object.assign(arrow.style, { marginLeft: 'auto', fontSize: '22px', lineHeight: '1', transition: 'transform .18s ease' })
-        title.appendChild(arrow)
+        const toggleMark = document.createElement('span')
+        toggleMark.textContent = '+'
+        toggleMark.setAttribute('aria-hidden', 'true')
+        Object.assign(toggleMark.style, { marginLeft: 'auto', fontSize: '24px', fontWeight: '700', lineHeight: '1' })
+        title.appendChild(toggleMark)
 
         const makeRow = (label: string, value: string, key: string) => {
           const row = document.createElement('p')
@@ -182,7 +182,7 @@ export default function DriverEarningsMenuPolish() {
         const setOpen = (next: boolean) => {
           open = next
           rows.forEach((row) => { row.style.display = next ? '' : 'none' })
-          arrow.style.transform = next ? 'rotate(90deg)' : 'rotate(0deg)'
+          toggleMark.textContent = next ? '−' : '+'
           title.setAttribute('aria-expanded', String(next))
           section.style.paddingBottom = next ? '16px' : '12px'
           if (next) void refreshVisibleEarnings()
