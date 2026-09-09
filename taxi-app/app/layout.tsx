@@ -33,7 +33,7 @@ import DriverLogoutPolish from '../components/DriverLogoutPolish'
 import DriverAutoRequestSearch from '../components/DriverAutoRequestSearch'
 import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish'
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
-import DriverFinalMenu from '../components/DriverFinalMenu'
+import DriverFinalMenuStable from '../components/DriverFinalMenuStable'
 import DriverApplicationProfileAddon from '../components/DriverApplicationProfileAddon'
 import DriverProfileRequiredFields from '../components/DriverProfileRequiredFields'
 import DriverVehicleRequiredFieldsGuard from '../components/DriverVehicleRequiredFieldsGuard'
@@ -72,7 +72,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverAutoRequestSearch />
         <DriverRideExperiencePolish />
         <DriverCompletedRideSummary />
-        <DriverFinalMenu />
+        <DriverFinalMenuStable />
         <DriverApplicationProfileAddon />
         <DriverProfileRequiredFields />
         <DriverVehicleRequiredFieldsGuard />
