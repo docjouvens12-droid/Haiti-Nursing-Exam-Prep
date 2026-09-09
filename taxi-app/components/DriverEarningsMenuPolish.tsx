@@ -114,8 +114,8 @@ export default function DriverEarningsMenuPolish() {
       applying = true
 
       try {
-        const { data: auth } = await supabase.auth.getUser()
-        const user = auth.user
+        const { data: sessionData } = await supabase.auth.getSession()
+        const user = sessionData.session?.user
         if (!user || !drawer.isConnected) return
         driverId = user.id
         if (removeDuplicateSections(drawer)) return
@@ -161,8 +161,8 @@ export default function DriverEarningsMenuPolish() {
           makeRow(lang === 'ht' ? 'Net chofè dènye trajè' : 'Net chauffeur du dernier trajet', formatHtg(values.latestNet), 'net'),
           makeRow(lang === 'ht' ? 'Estati peman' : 'Statut du paiement', values.latestStatus ? values.latestStatus.toUpperCase() : '—', 'status'),
           makeRow(lang === 'ht' ? 'Kantite trajè total' : 'Nombre total de trajets', String(values.rideCount), 'count'),
-          makeRow(lang === 'ht' ? 'Trajè jodi a' : "Trajets aujourd’hui", String(values.todayRideCount), 'today-count'),
-          makeRow(lang === 'ht' ? 'Net jodi a' : "Net aujourd’hui", formatHtg(values.todayNet), 'today-net'),
+          makeRow(lang === 'ht' ? 'Trajè jodi a' : 'Trajets aujourd’hui', String(values.todayRideCount), 'today-count'),
+          makeRow(lang === 'ht' ? 'Net jodi a' : 'Net aujourd’hui', formatHtg(values.todayNet), 'today-net'),
           makeRow(lang === 'ht' ? 'Net 7 dènye jou yo' : 'Net sur 7 jours', formatHtg(values.weeklyNet), 'weekly-net'),
         ]
 
@@ -182,7 +182,7 @@ export default function DriverEarningsMenuPolish() {
         const setOpen = (next: boolean) => {
           open = next
           rows.forEach((row) => { row.style.display = next ? '' : 'none' })
-          toggleMark.textContent = next ? '−' : '+'
+          toggleMark.textContent = '+'
           title.setAttribute('aria-expanded', String(next))
           section.style.paddingBottom = next ? '16px' : '12px'
           if (next) void refreshVisibleEarnings()
@@ -205,9 +205,10 @@ export default function DriverEarningsMenuPolish() {
     }
 
     const setupRealtime = async () => {
-      const { data: auth } = await supabase.auth.getUser()
-      if (!auth.user) return
-      driverId = auth.user.id
+      const { data: sessionData } = await supabase.auth.getSession()
+      const user = sessionData.session?.user
+      if (!user) return
+      driverId = user.id
 
       const rideChannel = supabase
         .channel(`driver-earnings-rides-${driverId}`)
@@ -236,8 +237,11 @@ export default function DriverEarningsMenuPolish() {
     })
     observer.observe(document.body, { childList: true, subtree: true })
 
-    const fallbackRefresh = window.setInterval(() => { void refreshVisibleEarnings() }, 15000)
-    const onVisible = () => { if (document.visibilityState === 'visible') void refreshVisibleEarnings() }
+    const fallbackRefresh = window.setInterval(() => {
+      void apply()
+      void refreshVisibleEarnings()
+    }, 2000)
+    const onVisible = () => { if (document.visibilityState === 'visible') void apply() }
     document.addEventListener('visibilitychange', onVisible)
 
     return () => {
