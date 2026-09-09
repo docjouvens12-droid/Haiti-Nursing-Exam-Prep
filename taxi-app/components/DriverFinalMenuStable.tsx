@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
 
 type Lang = 'fr' | 'ht'
-type SectionKey = 'profile' | 'vehicle' | 'payments' | 'history' | 'earnings' | 'help'
+type SectionKey = 'profile' | 'application' | 'vehicle' | 'payments' | 'history' | 'earnings' | 'help'
 type RideRow = { id:string; pickup_address:string|null; destination_address:string|null; final_fare_htg:number|null; completed_at:string|null }
 type PaymentRow = { ride_id:string; amount_htg:number|string; platform_fee_htg:number|string|null; driver_net_htg:number|string|null }
 
@@ -18,6 +18,8 @@ export default function DriverFinalMenuStable(){
   const [profileEditing,setProfileEditing]=useState(false)
   const [vehicleEditing,setVehicleEditing]=useState(false)
   const [status,setStatus]=useState('')
+  const [applicationStatus,setApplicationStatus]=useState('')
+  const [applicationProfile,setApplicationProfile]=useState({maritalStatus:'',address:'',nationalId:''})
   const [profile,setProfile]=useState({fullName:'',birthDate:'',sex:'',license:'',phone:''})
   const [vehicleId,setVehicleId]=useState('')
   const [vehicle,setVehicle]=useState({type:'standard',make:'',model:'',color:'',year:'',plate:'',seats:''})
@@ -53,12 +55,14 @@ export default function DriverFinalMenuStable(){
     setUserId(user.id); setEmail(user.email||'')
     const [{data:p},{data:d},{data:v},{data:r}]=await Promise.all([
       supabase.from('profiles').select('full_name,phone').eq('id',user.id).maybeSingle(),
-      supabase.from('driver_profiles').select('license_number,moncash_name,moncash_phone,natcash_name,natcash_phone,preferred_payout_provider').eq('user_id',user.id).maybeSingle(),
+      supabase.from('driver_profiles').select('status,license_number,national_id_number,moncash_name,moncash_phone,natcash_name,natcash_phone,preferred_payout_provider').eq('user_id',user.id).maybeSingle(),
       supabase.from('vehicles').select('id,vehicle_type,make,model,color,year,plate_number,seats').eq('driver_id',user.id).order('created_at',{ascending:true}).limit(1).maybeSingle(),
       supabase.from('rides').select('id,pickup_address,destination_address,final_fare_htg,completed_at').eq('driver_id',user.id).eq('status','completed').order('completed_at',{ascending:false}).limit(10)
     ])
     const m=user.user_metadata||{}
     setProfile({fullName:p?.full_name||m.full_name||'',birthDate:m.birth_date||m.date_of_birth||'',sex:m.gender||m.sex||'',license:d?.license_number||'',phone:p?.phone||''})
+    setApplicationStatus(d?.status||'')
+    setApplicationProfile({maritalStatus:m.marital_status||'',address:m.address||m.driver_address||'',nationalId:d?.national_id_number||''})
     if(v){setVehicleId(v.id);setVehicle({type:v.vehicle_type||'standard',make:v.make||'',model:v.model||'',color:v.color||'',year:v.year?String(v.year):'',plate:v.plate_number||'',seats:v.seats?String(v.seats):''})}
     const selected=d?.preferred_payout_provider==='moncash'||d?.preferred_payout_provider==='natcash'?d.preferred_payout_provider:''
     setPayout({selected,moncashName:d?.moncash_name||'',moncashPhone:d?.moncash_phone||'',natcashName:d?.natcash_name||'',natcashPhone:d?.natcash_phone||''})
@@ -104,6 +108,8 @@ export default function DriverFinalMenuStable(){
   function changeLanguage(next:Lang){localStorage.setItem('taxi-language',next);setLang(next);const drawer=document.querySelector<HTMLElement>('.drawer');const buttons=Array.from(drawer?.querySelectorAll<HTMLButtonElement>('.langBtns button,.langButtons button')||[]);buttons.find(b=>next==='ht'?(b.textContent||'').toLowerCase().includes('krey'):(b.textContent||'').toLowerCase().includes('fran'))?.click()}
   if(!target)return null
 
+  const applicationStatusText=applicationStatus==='pending'?(ht?'An attente':'En attente'):applicationStatus==='approved'?(ht?'Apwouve':'Approuvé'):applicationStatus==='suspended'?(ht?'Sispann':'Suspendu'):applicationStatus==='rejected'?(ht?'Refize':'Refusé'):applicationStatus==='cancelled'?(ht?'Anile':'Annulé'):(ht?'Pa gen demann':'Aucune demande')
+
   const Section=({id,label,plus=false,children}:{id:SectionKey;label:string;plus?:boolean;children:React.ReactNode})=>{
     const open=openSection===id
     return <div className="dfm-section">
@@ -116,7 +122,7 @@ export default function DriverFinalMenuStable(){
 
   return createPortal(<div className="dfm-wrap" onClick={e=>e.stopPropagation()}>
     <style>{`
-      .dfm-wrap{font-family:Inter,system-ui,sans-serif;color:#102033;position:relative;z-index:60;pointer-events:auto}.dfm-section{border-bottom:1px solid #e5eaee}.dfm-trigger{appearance:none;-webkit-appearance:none;border:0;background:transparent;width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 0;color:#0f6f59;font-size:15px;font-weight:850;cursor:pointer;touch-action:manipulation;user-select:none;text-align:left}.dfm-trigger b{font-size:23px;line-height:1}.dfm-body{display:block;padding:0 0 14px}.dfm-row{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:12px}.dfm-row span{color:#778697}.dfm-row b{text-align:right;color:#173246}.dfm-field{display:grid;gap:4px;margin:9px 0;font-size:11px;font-weight:750;color:#657483}.dfm-field input,.dfm-field select{width:100%;box-sizing:border-box;border:1px solid #d9e1e7;border-radius:10px;padding:9px 10px;font-size:13px;background:#fff;color:#102033}.dfm-primary{width:100%;border:0;border-radius:10px;background:#0f6f59;color:#fff;padding:10px 12px;font-weight:850;font-size:12px;margin-top:8px}.dfm-method{border:1px solid #e0e7eb;border-radius:13px;padding:11px;margin:8px 0;background:#f8fafb}.dfm-method.active{border-color:#9fd1c1;background:#f2faf7}.dfm-method-head{display:flex;justify-content:space-between;align-items:center;font-weight:850}.dfm-switch{width:44px;height:25px;border:0;border-radius:999px;background:#c2cbd1;padding:3px}.dfm-switch i{display:block;width:19px;height:19px;border-radius:50%;background:#fff}.dfm-method.active .dfm-switch{background:#0f6f59}.dfm-method.active .dfm-switch i{margin-left:19px}.dfm-trip{border:1px solid #e4eaee;border-radius:12px;padding:9px;margin:8px 0;background:#f8fafb;font-size:11px}.dfm-trip strong{display:block;color:#0f6f59;margin-bottom:5px}.dfm-lang{border-bottom:1px solid #e5eaee;padding:15px 0}.dfm-lang>strong{display:block;color:#0f6f59;font-size:15px;margin-bottom:10px}.dfm-lang-switch{width:156px;border:1px solid #d7e1e8;border-radius:999px;background:#eef3f5;padding:3px;display:grid;grid-template-columns:1fr 1fr}.dfm-lang-switch button{border:0;border-radius:999px;padding:8px 10px;background:transparent;font-size:11px;font-weight:850;color:#657483}.dfm-lang-switch button.active{background:#0f6f59;color:#fff}.dfm-help-card{padding:8px 0;border-bottom:1px solid #edf1f3}.dfm-help-card strong{display:block;font-size:11px;color:#173246;margin-bottom:3px}.dfm-help-card p{margin:0;font-size:10px;line-height:1.4;color:#71808f}.dfm-status{min-height:14px;font-size:10px;font-weight:800;color:#0f6f59;margin-top:6px}
+      .dfm-wrap{font-family:Inter,system-ui,sans-serif;color:#102033;position:relative;z-index:60;pointer-events:auto}.dfm-section{border-bottom:1px solid #e5eaee}.dfm-trigger{appearance:none;-webkit-appearance:none;border:0;background:transparent;width:100%;display:flex;align-items:center;justify-content:space-between;padding:16px 0;color:#0f6f59;font-size:15px;font-weight:850;cursor:pointer;touch-action:manipulation;user-select:none;text-align:left}.dfm-trigger b{font-size:23px;line-height:1}.dfm-body{display:block;padding:0 0 14px}.dfm-row{display:flex;justify-content:space-between;gap:12px;margin:8px 0;font-size:12px}.dfm-row span{color:#778697}.dfm-row b{text-align:right;color:#173246}.dfm-field{display:grid;gap:4px;margin:9px 0;font-size:11px;font-weight:750;color:#657483}.dfm-field input,.dfm-field select{width:100%;box-sizing:border-box;border:1px solid #d9e1e7;border-radius:10px;padding:9px 10px;font-size:13px;background:#fff;color:#102033}.dfm-primary{width:100%;border:0;border-radius:10px;background:#0f6f59;color:#fff;padding:10px 12px;font-weight:850;font-size:12px;margin-top:8px}.dfm-method{border:1px solid #e0e7eb;border-radius:13px;padding:11px;margin:8px 0;background:#f8fafb}.dfm-method.active{border-color:#9fd1c1;background:#f2faf7}.dfm-method-head{display:flex;justify-content:space-between;align-items:center;font-weight:850}.dfm-switch{width:44px;height:25px;border:0;border-radius:999px;background:#c2cbd1;padding:3px}.dfm-switch i{display:block;width:19px;height:19px;border-radius:50%;background:#fff}.dfm-method.active .dfm-switch{background:#0f6f59}.dfm-method.active .dfm-switch i{margin-left:19px}.dfm-trip{border:1px solid #e4eaee;border-radius:12px;padding:9px;margin:8px 0;background:#f8fafb;font-size:11px}.dfm-trip strong{display:block;color:#0f6f59;margin-bottom:5px}.dfm-lang{border-bottom:1px solid #e5eaee;padding:15px 0}.dfm-lang>strong{display:block;color:#0f6f59;font-size:15px;margin-bottom:10px}.dfm-lang-switch{width:156px;border:1px solid #d7e1e8;border-radius:999px;background:#eef3f5;padding:3px;display:grid;grid-template-columns:1fr 1fr}.dfm-lang-switch button{border:0;border-radius:999px;padding:8px 10px;background:transparent;font-size:11px;font-weight:850;color:#657483}.dfm-lang-switch button.active{background:#0f6f59;color:#fff}.dfm-help-card{padding:8px 0;border-bottom:1px solid #edf1f3}.dfm-help-card strong{display:block;font-size:11px;color:#173246;margin-bottom:3px}.dfm-help-card p{margin:0;font-size:10px;line-height:1.4;color:#71808f}.dfm-status{min-height:14px;font-size:10px;font-weight:800;color:#0f6f59;margin-top:6px}.dfm-subtitle{font-size:12px;font-weight:900;color:#173246;margin:12px 0 6px}
     `}</style>
 
     <Section id="profile" label={ht?'Pwofil':'Profil'}>{profileEditing?<>
@@ -127,6 +133,28 @@ export default function DriverFinalMenuStable(){
       <label className="dfm-field">{ht?'Telefòn':'Téléphone'}<input value={profile.phone} onChange={e=>setProfile({...profile,phone:e.target.value})}/></label>
       <label className="dfm-field">{ht?'Imèl':'E-mail'}<input value={email} disabled/></label><button className="dfm-primary" onClick={()=>void saveProfile()}>{ht?'Anrejistre':'Enregistrer'}</button>
     </>:<>{row(ht?'Non':'Nom',profile.fullName)}{row(ht?'Dat nesans':'Date de naissance',profile.birthDate)}{row(ht?'Sèks':'Sexe',profile.sex)}{row(ht?'Nimewo lisans':'N° de permis',profile.license)}{row(ht?'Telefòn':'Téléphone',profile.phone)}{row(ht?'Imèl':'E-mail',email)}<button className="dfm-primary" onClick={()=>setProfileEditing(true)}>{ht?'Modifye':'Modifier'}</button></>}<div className="dfm-status">{status}</div></Section>
+
+    <Section id="application" label={ht?'Demand devni chofè':'Demande devenir chauffeur'}>
+      {row(ht?'Estati demann':'Statut de la demande',applicationStatusText)}
+      <div className="dfm-subtitle">{ht?'Enfòmasyon pwofil':'Informations du profil'}</div>
+      {row(ht?'Non':'Nom',profile.fullName)}
+      {row(ht?'Dat nesans':'Date de naissance',profile.birthDate)}
+      {row(ht?'Sèks':'Sexe',profile.sex)}
+      {row(ht?'Eta sivil':'État civil',applicationProfile.maritalStatus)}
+      {row(ht?'Adrès':'Adresse',applicationProfile.address)}
+      {row(ht?'Telefòn':'Téléphone',profile.phone)}
+      {row(ht?'Imèl':'E-mail',email)}
+      {row(ht?'Nimewo lisans':'N° de permis',profile.license)}
+      {row(ht?'Nimewo idantifikasyon':'N° d’identification',applicationProfile.nationalId)}
+      <div className="dfm-subtitle">{ht?'Enfòmasyon veyikil':'Informations du véhicule'}</div>
+      {row(ht?'Kalite':'Type',vehicle.type)}
+      {row(ht?'Mak':'Marque',vehicle.make)}
+      {row(ht?'Modèl':'Modèle',vehicle.model)}
+      {row(ht?'Koulè':'Couleur',vehicle.color)}
+      {row(ht?'Ane':'Année',vehicle.year)}
+      {row(ht?'Plak':'Plaque',vehicle.plate)}
+      {row(ht?'Kantite plas':'Nombre de places',vehicle.seats)}
+    </Section>
 
     <Section id="vehicle" label={ht?'Veyikil':'Véhicule'}>{vehicleEditing?<>
       <label className="dfm-field">{ht?'Kalite':'Type'}<select value={vehicle.type} onChange={e=>setVehicle({...vehicle,type:e.target.value})}><option value="standard">Standard</option><option value="moto">Moto</option></select></label>
