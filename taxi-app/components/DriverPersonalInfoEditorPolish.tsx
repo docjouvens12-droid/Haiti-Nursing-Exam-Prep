@@ -16,13 +16,17 @@ export default function DriverPersonalInfoEditorPolish() {
       const sections = Array.from(drawer.querySelectorAll('.menuSection')) as HTMLElement[]
       const section = sections.find((s) => {
         const text = (s.querySelector('h3')?.textContent || '').toLowerCase()
-        return text.includes('person') || text.includes('pèson')
+        return text.includes('person') || text.includes('pèson') || text.includes('profil') || text.includes('pwofil')
       })
       if (!section) return
       if (section.querySelector('[data-driver-personal-editor="true"]')) return
 
       const title = section.querySelector('h3') as HTMLElement | null
       if (!title) return
+      const htNow = localStorage.getItem('taxi-language') === 'ht'
+      title.childNodes.forEach((node) => {
+        if (node.nodeType === Node.TEXT_NODE) node.textContent = htNow ? 'Pwofil' : 'Profil'
+      })
 
       const { data: auth } = await supabase.auth.getUser()
       const user = auth.user
