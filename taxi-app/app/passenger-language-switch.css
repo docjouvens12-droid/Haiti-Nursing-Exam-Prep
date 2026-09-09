@@ -1,0 +1,7 @@
+@media (max-width:600px){
+  .drawer-language .language-menu{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+  .drawer-language-switch-target{grid-column:2;width:100%}
+  .drawer-language-switch{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:100%;padding:3px;border-radius:999px;background:#edf2f4}
+  .drawer-language-switch button{border:0;border-radius:999px;background:transparent;color:#60717e;font-size:10px;font-weight:850;padding:7px 9px;min-height:32px}
+  .drawer-language-switch button.active{background:#0f765e;color:#fff;box-shadow:0 2px 6px rgba(15,118,94,.18)}
+}
