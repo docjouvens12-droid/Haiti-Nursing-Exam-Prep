@@ -12,20 +12,15 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   },
 })
 
-// Safari/iOS can occasionally fail the network-backed getUser() check
-// immediately after a successful sign-in/navigation even though the local
-// Supabase session is already present. Keep RLS as the security boundary,
-// but let client UI recover from the persisted session instead of flashing
-// the signed-out screen.
+// On iPhone/Safari, use the already-persisted local session first so a
+// transient network validation cannot make the passenger UI flash back to
+// the signed-out screen immediately after a successful login.
 const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
 supabase.auth.getUser = (async (...args: Parameters<typeof originalGetUser>) => {
-  const result = await originalGetUser(...args)
-  if (result.data.user) return result
-
   const { data: { session } } = await supabase.auth.getSession()
   if (session?.user) {
     return { data: { user: session.user }, error: null }
   }
 
-  return result
+  return originalGetUser(...args)
 }) as typeof supabase.auth.getUser
