@@ -67,6 +67,13 @@ export default function PassengerAvatarEnhancer() {
         if (details) details.style.display = 'none'
       }
 
+      const navButtons = Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
+      const becomeDriverButton = navButtons.find((button) => {
+        const text = (button.textContent || '').toLowerCase()
+        return text.includes('devenir chauffeur') || text.includes('vin chofè')
+      })
+      if (becomeDriverButton) becomeDriverButton.style.display = 'none'
+
       const circle = drawer.querySelector('.drawer-avatar') as HTMLElement | null
       if (circle) {
         circle.classList.add('passenger-photo-avatar')
