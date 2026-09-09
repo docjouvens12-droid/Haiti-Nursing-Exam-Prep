@@ -35,6 +35,7 @@ import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
 import DriverFinalMenuStable from '../components/DriverFinalMenuStable'
 import DriverFinalHelpTopics from '../components/DriverFinalHelpTopics'
+import DriverDrawerHeaderPolish from '../components/DriverDrawerHeaderPolish'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
@@ -72,6 +73,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverCompletedRideSummary />
         <DriverFinalMenuStable />
         <DriverFinalHelpTopics />
+        <DriverDrawerHeaderPolish />
         <AdminDriverApplicationProfileSnapshot />
         <AdminDriverVehicleSnapshot />
         {children}
