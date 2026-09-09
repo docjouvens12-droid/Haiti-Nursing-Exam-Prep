@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
 
-type DriverStatus = 'pending' | 'approved' | 'suspended' | 'rejected' | 'cancelled' | null
-
 export default function PassengerProfileDetails() {
   const [target, setTarget] = useState<Element | null>(null)
   const [expanded, setExpanded] = useState(false)
@@ -17,8 +15,6 @@ export default function PassengerProfileDetails() {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const [editing, setEditing] = useState(false)
-  const [driverStatus, setDriverStatus] = useState<DriverStatus>(null)
-  const [driverBusy, setDriverBusy] = useState(false)
 
   useEffect(() => {
     let currentButton: HTMLButtonElement | null = null
@@ -89,8 +85,6 @@ export default function PassengerProfileDetails() {
       setGender(metadata.gender || '')
       setPhone(metadata.phone || '')
       setEmail(user.email || '')
-      const { data: driver } = await supabase.from('driver_profiles').select('status').eq('user_id', user.id).maybeSingle()
-      setDriverStatus((driver?.status as DriverStatus) || null)
     })()
   }, [target, expanded])
 
@@ -123,37 +117,10 @@ export default function PassengerProfileDetails() {
     setMessage('Profil enregistré ✓')
   }
 
-  async function cancelDriverApplication() {
-    if (driverStatus !== 'pending' || driverBusy) return
-    const confirmed = window.confirm('Annuler votre demande pour devenir chauffeur ?')
-    if (!confirmed) return
-    setDriverBusy(true)
-    setMessage('')
-    const { error } = await supabase.rpc('cancel_driver_application')
-    setDriverBusy(false)
-    if (error) {
-      setMessage(error.message)
-      return
-    }
-    setDriverStatus('cancelled')
-    setMessage('Demande chauffeur annulée ✓')
-  }
-
   if (!target || !expanded) return null
 
   const genderLabel = gender === 'homme' ? 'Homme' : gender === 'femme' ? 'Femme' : gender === 'autre' ? 'Autre / Non précisé' : '—'
   const displayBirthDate = birthDate ? new Date(`${birthDate}T00:00:00`).toLocaleDateString('fr-FR') : '—'
-  const applicationText = driverStatus === 'pending'
-    ? 'Demande chauffeur : En attente'
-    : driverStatus === 'approved'
-      ? 'Chauffeur approuvé ✓'
-      : driverStatus === 'suspended'
-        ? 'Compte chauffeur suspendu'
-        : driverStatus === 'rejected'
-          ? 'Demande chauffeur refusée'
-          : driverStatus === 'cancelled'
-            ? 'Demande chauffeur annulée'
-            : 'Demande devenir chauffeur'
 
   return createPortal(
     <section className="drawer-profile-inline">
@@ -180,16 +147,6 @@ export default function PassengerProfileDetails() {
           <div><span>Tel</span><strong>{phone || '—'}</strong></div>
           <div><span>Imèl</span><strong>{email || '—'}</strong></div>
           <button type="button" className="drawer-profile-edit" onClick={() => { setEditing(true); setMessage('') }}>Modifier le profil</button>
-          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid #e5eaee' }}>
-            <strong style={{ display: 'block', fontSize: 12, color: '#173246', marginBottom: 8 }}>{applicationText}</strong>
-            {driverStatus === 'pending' ? (
-              <button type="button" className="drawer-profile-edit" onClick={() => void cancelDriverApplication()} disabled={driverBusy} style={{ background: '#fff0f0', color: '#a83232' }}>
-                {driverBusy ? 'Annulation…' : 'Annuler la demande'}
-              </button>
-            ) : driverStatus !== 'approved' && driverStatus !== 'suspended' ? (
-              <button type="button" className="drawer-profile-edit" onClick={() => { window.location.href = '/driver' }}>Demande devenir chauffeur</button>
-            ) : null}
-          </div>
         </div>
       )}
     </section>,
