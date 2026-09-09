@@ -135,7 +135,27 @@ export default function PassengerActiveDriver() {
     }
 
     void load()
-    const timer = window.setInterval(() => void load(), 2500)
+
+    const rideChannel = supabase
+      .channel(`passenger-active-ride-${Math.random().toString(36).slice(2)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'rides' }, () => {
+        window.setTimeout(() => void load(), 40)
+      })
+      .subscribe()
+
+    const locationChannel = supabase
+      .channel(`passenger-driver-location-${Math.random().toString(36).slice(2)}`)
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'driver_locations' }, () => {
+        window.setTimeout(() => void load(), 40)
+      })
+      .subscribe()
+
+    const onRideChanged = () => window.setTimeout(() => void load(), 40)
+    window.addEventListener('taxi-ride-status-changed', onRideChanged)
+    window.addEventListener('taxi-ride-requested', onRideChanged)
+    window.addEventListener('taxi-ride-cancelled', onRideChanged)
+
+    const timer = window.setInterval(() => void load(), 6000)
     const { data: authListener } = supabase.auth.onAuthStateChange(() => {
       window.setTimeout(() => void load(), 80)
     })
@@ -149,7 +169,12 @@ export default function PassengerActiveDriver() {
       active = false
       window.clearInterval(timer)
       window.clearInterval(languageTimer)
+      window.removeEventListener('taxi-ride-status-changed', onRideChanged)
+      window.removeEventListener('taxi-ride-requested', onRideChanged)
+      window.removeEventListener('taxi-ride-cancelled', onRideChanged)
       authListener.subscription.unsubscribe()
+      void supabase.removeChannel(rideChannel)
+      void supabase.removeChannel(locationChannel)
     }
   }, [isPassengerDashboard])
 
