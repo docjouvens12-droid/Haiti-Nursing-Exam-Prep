@@ -71,6 +71,10 @@ export default function DriverPaymentMenuPolish() {
 
         if (drawer.querySelector('[data-driver-payment-menu="true"]')) return
 
+        const preferred = payout?.preferred_payout_provider === 'natcash' ? 'natcash' : payout?.preferred_payout_provider === 'moncash' ? 'moncash' : null
+        const moncashEnabled = preferred ? preferred === 'moncash' : Boolean(payout?.moncash_enabled) && !Boolean(payout?.natcash_enabled)
+        const natcashEnabled = preferred ? preferred === 'natcash' : Boolean(payout?.natcash_enabled)
+
         const section = document.createElement('div')
         section.className = 'driver-payment-menu-section'
         section.dataset.driverPaymentMenu = 'true'
@@ -80,8 +84,8 @@ export default function DriverPaymentMenuPolish() {
             <span class="arrow" aria-hidden="true">›</span>
           </button>
           <div class="driver-payment-menu-content">
-            ${providerMarkup('moncash', 'MonCash', Boolean(payout?.moncash_enabled), payout?.moncash_name ?? '', payout?.moncash_phone ?? '', payout?.preferred_payout_provider === 'moncash', lang)}
-            ${providerMarkup('natcash', 'NatCash', Boolean(payout?.natcash_enabled), payout?.natcash_name ?? '', payout?.natcash_phone ?? '', payout?.preferred_payout_provider === 'natcash', lang)}
+            ${providerMarkup('moncash', 'MonCash', moncashEnabled, payout?.moncash_name ?? '', payout?.moncash_phone ?? '', preferred === 'moncash', lang)}
+            ${providerMarkup('natcash', 'NatCash', natcashEnabled, payout?.natcash_name ?? '', payout?.natcash_phone ?? '', preferred === 'natcash', lang)}
           </div>
         `
 
@@ -90,15 +94,27 @@ export default function DriverPaymentMenuPolish() {
           section.querySelector<HTMLButtonElement>('.driver-payment-menu-trigger')?.setAttribute('aria-expanded', String(open))
         })
 
-        const setPreferredUi = (provider: 'moncash' | 'natcash') => {
+        const setSelectedUi = (provider: 'moncash' | 'natcash' | null) => {
           for (const candidate of ['moncash', 'natcash'] as const) {
             const candidateBox = section.querySelector<HTMLElement>(`[data-provider="${candidate}"]`)
-            candidateBox?.classList.toggle('preferred', candidate === provider)
+            const active = candidate === provider
+            candidateBox?.classList.toggle('enabled', active)
+            candidateBox?.classList.toggle('preferred', active)
+            candidateBox?.querySelector<HTMLButtonElement>('.driver-payout-switch')?.setAttribute('aria-pressed', String(active))
             const prefer = candidateBox?.querySelector<HTMLButtonElement>('.driver-payout-prefer')
-            if (prefer) prefer.textContent = candidate === provider
+            if (prefer) prefer.textContent = active
               ? (lang === 'ht' ? '✓ Metòd payout mwen' : '✓ Mon mode de versement')
               : (lang === 'ht' ? 'Chwazi pou resevwa payout' : 'Choisir pour recevoir mes versements')
           }
+        }
+
+        const saveSelection = async (provider: 'moncash' | 'natcash') => {
+          const update = provider === 'moncash'
+            ? { moncash_enabled: true, natcash_enabled: false, preferred_payout_provider: 'moncash' }
+            : { moncash_enabled: false, natcash_enabled: true, preferred_payout_provider: 'natcash' }
+          const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
+          if (!error) setSelectedUi(provider)
+          return error
         }
 
         for (const provider of ['moncash', 'natcash'] as const) {
@@ -112,12 +128,22 @@ export default function DriverPaymentMenuPolish() {
 
           toggle?.addEventListener('click', async () => {
             if (!box) return
-            const enabled = !box.classList.contains('enabled')
-            box.classList.toggle('enabled', enabled)
-            toggle.setAttribute('aria-pressed', String(enabled))
-            const update = provider === 'moncash' ? { moncash_enabled: enabled } : { natcash_enabled: enabled }
-            const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
-            if (status) status.textContent = error ? (lang === 'ht' ? 'Pa ka anrejistre chanjman an.' : 'Impossible d’enregistrer ce changement.') : ''
+            const currentlyEnabled = box.classList.contains('enabled')
+            if (currentlyEnabled) {
+              const { error } = await supabase.from('driver_profiles').update({
+                moncash_enabled: false,
+                natcash_enabled: false,
+                preferred_payout_provider: null,
+              }).eq('user_id', auth.user.id)
+              if (!error) setSelectedUi(null)
+              if (status) status.textContent = error ? (lang === 'ht' ? 'Pa ka anrejistre chanjman an.' : 'Impossible d’enregistrer ce changement.') : ''
+              return
+            }
+
+            const error = await saveSelection(provider)
+            if (status) status.textContent = error
+              ? (lang === 'ht' ? 'Pa ka chwazi metòd sa a.' : 'Impossible de sélectionner ce mode.')
+              : (lang === 'ht' ? `${provider === 'moncash' ? 'MonCash' : 'NatCash'} chwazi.` : `${provider === 'moncash' ? 'MonCash' : 'NatCash'} sélectionné.`)
           })
 
           save?.addEventListener('click', async () => {
@@ -130,29 +156,28 @@ export default function DriverPaymentMenuPolish() {
             save.disabled = true
             if (status) status.textContent = lang === 'ht' ? 'N ap anrejistre…' : 'Enregistrement…'
             const update = provider === 'moncash'
-              ? { moncash_name: accountName, moncash_phone: accountPhone, moncash_enabled: true }
-              : { natcash_name: accountName, natcash_phone: accountPhone, natcash_enabled: true }
+              ? { moncash_name: accountName, moncash_phone: accountPhone, moncash_enabled: true, natcash_enabled: false, preferred_payout_provider: 'moncash' }
+              : { natcash_name: accountName, natcash_phone: accountPhone, moncash_enabled: false, natcash_enabled: true, preferred_payout_provider: 'natcash' }
             const { error } = await supabase.from('driver_profiles').update(update).eq('user_id', auth.user.id)
-            if (!error) box?.classList.add('enabled')
+            if (!error) setSelectedUi(provider)
             if (status) status.textContent = error
               ? (lang === 'ht' ? 'Nou pa ka anrejistre enfòmasyon yo.' : 'Impossible d’enregistrer les informations.')
-              : (lang === 'ht' ? 'Enfòmasyon yo anrejistre.' : 'Informations enregistrées.')
+              : (lang === 'ht' ? 'Enfòmasyon yo anrejistre epi metòd la chwazi.' : 'Informations enregistrées et mode sélectionné.')
             save.disabled = false
           })
 
           prefer?.addEventListener('click', async () => {
             const accountName = name?.value.trim() ?? ''
             const accountPhone = phone?.value.trim() ?? ''
-            if (!box?.classList.contains('enabled') || !accountName || !accountPhone) {
+            if (!accountName || !accountPhone) {
               if (status) status.textContent = lang === 'ht'
-                ? `Aktive ${provider === 'moncash' ? 'MonCash' : 'NatCash'} epi anrejistre non ak telefòn lan anvan.`
-                : `Activez ${provider === 'moncash' ? 'MonCash' : 'NatCash'} et enregistrez le nom et le téléphone d’abord.`
+                ? `Anrejistre non ak telefòn ${provider === 'moncash' ? 'MonCash' : 'NatCash'} la anvan.`
+                : `Enregistrez d’abord le nom et le téléphone ${provider === 'moncash' ? 'MonCash' : 'NatCash'}.`
               return
             }
             prefer.disabled = true
             if (status) status.textContent = lang === 'ht' ? 'N ap chwazi metòd payout la…' : 'Sélection du mode de versement…'
-            const { error } = await supabase.rpc('set_driver_preferred_payout_provider', { p_provider: provider })
-            if (!error) setPreferredUi(provider)
+            const error = await saveSelection(provider)
             if (status) status.textContent = error
               ? (lang === 'ht' ? 'Nou pa ka chwazi metòd payout la.' : 'Impossible de sélectionner ce mode de versement.')
               : (lang === 'ht' ? 'Metòd payout la chwazi.' : 'Mode de versement sélectionné.')
