@@ -109,7 +109,7 @@ export default function HomePage() {
   useEffect(() => {
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
     if (saved === 'fr' || saved === 'ht') { setLang(saved); setPickup(copy[saved].current) }
-    supabase.auth.getUser().then(({ data }) => setUser(data.user ?? null))
+    supabase.auth.getSession().then(({ data }) => setUser(data.session?.user ?? null))
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => setUser(session?.user ?? null))
     return () => listener.subscription.unsubscribe()
   }, [])
@@ -266,8 +266,14 @@ export default function HomePage() {
     e.preventDefault(); setAuthBusy(true); setAuthMessage('')
     if (authMode === 'signup') {
       const { data, error } = await supabase.auth.signUp({ email, password, options: { data: { full_name: fullName } } })
-      if (error) setAuthMessage(error.message); else if (!data.session) setAuthMessage(t.accountCreated)
-    } else { const { error } = await supabase.auth.signInWithPassword({ email, password }); if (error) setAuthMessage(error.message) }
+      if (error) setAuthMessage(error.message)
+      else if (data.user && data.session) setUser(data.user)
+      else if (!data.session) setAuthMessage(t.accountCreated)
+    } else {
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) setAuthMessage(error.message)
+      else if (data.user) setUser(data.user)
+    }
     setAuthBusy(false)
   }
 
