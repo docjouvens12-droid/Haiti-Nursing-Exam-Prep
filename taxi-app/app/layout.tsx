@@ -40,6 +40,7 @@ import DriverApplicationSubmitButton from '../components/DriverApplicationSubmit
 import DriverPayoutEditPolish from '../components/DriverPayoutEditPolish'
 import DriverFinalHelpTopics from '../components/DriverFinalHelpTopics'
 import DriverDrawerHeaderPolish from '../components/DriverDrawerHeaderPolish'
+import DriverAccessGate from '../components/DriverAccessGate'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
@@ -67,6 +68,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerMainPaymentPolish />
         <PassengerDashboardQuickInfo />
         <PassengerRestoredVersionPolish />
+        <DriverAccessGate />
         <DriverAvatarUploadPolish />
         <DriverDashboardTitleHide />
         <DriverOnlineSwitchPolish />
