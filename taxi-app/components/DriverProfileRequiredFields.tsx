@@ -38,7 +38,24 @@ export default function DriverProfileRequiredFields() {
       if (!target) {
         target = document.createElement('div')
         target.className = 'driver-required-profile-fields-target'
-        const emailLabel = Array.from(body.querySelectorAll('label')).find((label) => {
+      }
+
+      const labels = Array.from(body.querySelectorAll<HTMLLabelElement>('label'))
+      const rows = Array.from(body.querySelectorAll<HTMLElement>('.dfm-row'))
+      const sexElement = isEditing
+        ? labels.find((label) => {
+            const text = (label.textContent || '').toLowerCase()
+            return text.includes('sexe') || text.includes('sèks') || text.includes('seks')
+          })
+        : rows.find((row) => {
+            const text = (row.textContent || '').toLowerCase()
+            return text.includes('sexe') || text.includes('sèks') || text.includes('seks')
+          })
+
+      if (sexElement) {
+        sexElement.insertAdjacentElement('afterend', target)
+      } else if (!target.parentElement) {
+        const emailLabel = labels.find((label) => {
           const text = (label.textContent || '').toLowerCase()
           return text.includes('e-mail') || text.includes('imèl') || text.includes('imel')
         })
@@ -119,11 +136,11 @@ export default function DriverProfileRequiredFields() {
   return createPortal(
     <div className="driver-required-profile-fields">
       {editing ? <>
-        <label className="dfm-field">{ht ? 'Adrès' : 'Adresse'}<input required value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" /></label>
         <label className="dfm-field">{ht ? 'Eta sivil' : 'État civil'}<select required value={maritalStatus} onChange={(e) => setMaritalStatus(e.target.value)}><option value="">—</option><option value="single">{ht ? 'Selibatè' : 'Célibataire'}</option><option value="married">{ht ? 'Marye' : 'Marié(e)'}</option><option value="divorced">{ht ? 'Divòse' : 'Divorcé(e)'}</option><option value="widowed">{ht ? 'Vèf/Vèv' : 'Veuf/Veuve'}</option></select></label>
+        <label className="dfm-field">{ht ? 'Adrès' : 'Adresse'}<input required value={address} onChange={(e) => setAddress(e.target.value)} autoComplete="street-address" /></label>
       </> : <>
-        <p className="dfm-row"><span>{ht ? 'Adrès' : 'Adresse'}</span><b>{address || '—'}</b></p>
         <p className="dfm-row"><span>{ht ? 'Eta sivil' : 'État civil'}</span><b>{maritalLabel}</b></p>
+        <p className="dfm-row"><span>{ht ? 'Adrès' : 'Adresse'}</span><b>{address || '—'}</b></p>
       </>}
       {message && <div className="dfm-status" style={{ color: '#b42318' }}>{message}</div>}
     </div>,
