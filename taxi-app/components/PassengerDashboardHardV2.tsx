@@ -21,21 +21,22 @@ export default function PassengerDashboardHardV2(){
       })
 
       const brand=document.querySelector<HTMLElement>('.brand-chip strong')
-      if(brand) brand.textContent='Taxi Haiti'
+      if(brand && brand.textContent!=='Taxi Haiti') brand.textContent='Taxi Haiti'
       const mark=document.querySelector<HTMLElement>('.brand-chip .brand-mark')
-      if(mark) mark.textContent='🚕'
+      if(mark && mark.textContent!=='🚕') mark.textContent='🚕'
 
       const payment=document.querySelector<HTMLElement>('.payment-row strong')
       if(payment){
         const method=localStorage.getItem('taxi-payment-method')
-        payment.textContent=method==='moncash'?'MonCash':method==='natcash'?'NatCash':'MonCash / NatCash'
+        const next=method==='moncash'?'MonCash':method==='natcash'?'NatCash':'MonCash / NatCash'
+        if(payment.textContent!==next) payment.textContent=next
       }
     }
 
     apply()
     const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true,characterData:true})
-    const timer=window.setInterval(apply,300)
+    observer.observe(document.body,{childList:true,subtree:true})
+    const timer=window.setInterval(apply,500)
 
     return()=>{
       observer.disconnect()
