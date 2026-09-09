@@ -46,6 +46,12 @@ export default function PassengerProfileDetails() {
     })
   }, [target])
 
+  function returnToDashboard() {
+    const panel = target?.closest('.account-panel')
+    const backButton = panel?.querySelector<HTMLButtonElement>('.panel-header button')
+    backButton?.click()
+  }
+
   async function saveProfile(e: React.FormEvent) {
     e.preventDefault()
     setBusy(true)
@@ -70,6 +76,7 @@ export default function PassengerProfileDetails() {
     setPhone(m.phone || phone.trim())
     setMessage('Profil enregistré ✓')
     setEditing(false)
+    window.setTimeout(returnToDashboard, 500)
   }
 
   if (!target) return null
