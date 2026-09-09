@@ -11,13 +11,14 @@ export default function DriverAvatarUploadPolish() {
 
     const apply = async () => {
       const drawer = document.querySelector('.drawer') as HTMLElement | null
-      const profile = drawer?.querySelector('.profileBlock') as HTMLElement | null
+      const profile = drawer?.querySelector('.profile, .profileBlock') as HTMLElement | null
       const avatar = profile?.querySelector('.avatar') as HTMLElement | null
       if (!drawer || !profile || !avatar || avatar.dataset.avatarUploadReady === 'true') return
       avatar.dataset.avatarUploadReady = 'true'
 
-      profile.style.justifyContent = 'flex-start'
-      profile.style.paddingLeft = '10px'
+      profile.style.justifyContent = 'center'
+      profile.style.paddingLeft = '0'
+      profile.style.paddingRight = '0'
       Object.assign(avatar.style, {
         cursor: 'pointer',
         flex: '0 0 auto',
@@ -42,6 +43,7 @@ export default function DriverAvatarUploadPolish() {
       const input = document.createElement('input')
       input.type = 'file'
       input.accept = 'image/jpeg,image/png,image/webp'
+      input.setAttribute('capture', 'environment')
       input.style.display = 'none'
       profile.appendChild(input)
 
