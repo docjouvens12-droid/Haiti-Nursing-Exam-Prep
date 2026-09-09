@@ -6,7 +6,6 @@ const iconFor=(text:string)=>{
   const s=text.toLowerCase()
   if(s.includes('pwofil')||s.includes('profil')) return '👤'
   if(s.includes('veyikil')||s.includes('véhicule')) return '🚗'
-  if(s.includes('demand')||s.includes('demande')) return '📝'
   if(s.includes('peman')||s.includes('paiement')) return '💳'
   if(s.includes('istorik')||s.includes('historique')) return '🕘'
   if(s.includes('revni')||s.includes('revenus')) return '💰'
@@ -75,6 +74,12 @@ export default function DriverDrawerHeaderPolish(){
       drawer.querySelectorAll<HTMLButtonElement>('.dfm-trigger').forEach(btn=>{
         const label=btn.querySelector('span')
         if(!label)return
+        const text=(label.textContent||'').toLowerCase()
+        if(text.includes('demand devni chofè')||text.includes('demande devenir chauffeur')){
+          const section=btn.closest<HTMLElement>('.dfm-section')
+          if(section) section.style.display='none'
+          return
+        }
         let icon=btn.querySelector<HTMLElement>('.dfm-menu-icon')
         if(!icon){
           icon=document.createElement('i')
