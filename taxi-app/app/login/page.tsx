@@ -1,26 +1,10 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
-import { createClient } from '@supabase/supabase-js'
 import { supabase } from '../../lib/supabase'
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
 type Target = {
   path: string
-  storageKey: 'taxi-auth-passenger' | 'taxi-auth-driver' | 'taxi-auth-admin'
-}
-
-function clientFor(storageKey: Target['storageKey']) {
-  return createClient(supabaseUrl, supabaseKey, {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: false,
-      storageKey,
-    },
-  })
 }
 
 export default function UnifiedLoginPage() {
@@ -48,7 +32,6 @@ export default function UnifiedLoginPage() {
 
     let target: Target = {
       path: '/passenger/dashboard',
-      storageKey: 'taxi-auth-passenger',
     }
 
     const { data: profile } = await supabase
@@ -60,7 +43,6 @@ export default function UnifiedLoginPage() {
     if (profile?.role === 'admin') {
       target = {
         path: '/admin/drivers',
-        storageKey: 'taxi-auth-admin',
       }
     } else {
       const { data: driver } = await supabase
@@ -72,23 +54,12 @@ export default function UnifiedLoginPage() {
       if (driver?.status === 'approved') {
         target = {
           path: '/driver/dashboard',
-          storageKey: 'taxi-auth-driver',
         }
       }
     }
 
-    const roleClient = clientFor(target.storageKey)
-    const { error: persistError } = await roleClient.auth.setSession({
-      access_token: data.session.access_token,
-      refresh_token: data.session.refresh_token,
-    })
-
-    if (persistError) {
-      setMessage(persistError.message)
-      setBusy(false)
-      return
-    }
-
+    // signInWithPassword already persisted the single shared session
+    // under taxi-auth-default. Do not create role-specific sessions.
     window.location.replace(target.path)
   }
 
