@@ -19,6 +19,7 @@ import PassengerTripsEnhancer from '../components/PassengerTripsEnhancer'
 import PassengerPaymentEnhancer from '../components/PassengerPaymentEnhancer'
 import PassengerLanguageSwitchEnhancer from '../components/PassengerLanguageSwitchEnhancer'
 import PassengerHelpDirectNavigation from '../components/PassengerHelpDirectNavigation'
+import PassengerRidePaymentSync from '../components/PassengerRidePaymentSync'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -38,6 +39,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerPaymentEnhancer />
         <PassengerLanguageSwitchEnhancer />
         <PassengerHelpDirectNavigation />
+        <PassengerRidePaymentSync />
         {children}
       </body>
     </html>
