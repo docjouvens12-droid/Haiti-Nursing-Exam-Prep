@@ -35,7 +35,7 @@ export default function PassengerDriverApplicationMenuItem() {
       }
 
       const currentLang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
-      row.innerHTML = `<span>🚗</span><span>${currentLang === 'ht' ? 'Vin chofè' : 'Devenir chauffeur'}</span><b>›</b>`
+      row.innerHTML = `<span>🚗</span><span>${currentLang === 'ht' ? 'Demand devni chofè' : 'Demande devenir chauffeur'}</span><b>›</b>`
       row.onclick = (event) => {
         event.preventDefault()
         event.stopPropagation()
@@ -101,7 +101,7 @@ export default function PassengerDriverApplicationMenuItem() {
   return createPortal(
     <section className="drawer-profile-inline">
       <div className="drawer-profile-inline-head">
-        <strong>{ht ? 'Vin chofè' : 'Devenir chauffeur'}</strong>
+        <strong>{ht ? 'Demand devni chofè' : 'Demande devenir chauffeur'}</strong>
         <button type="button" onClick={() => setExpanded(false)}>{ht ? 'Fèmen' : 'Fermer'}</button>
       </div>
       <div className="drawer-profile-saved">
