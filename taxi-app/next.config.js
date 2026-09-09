@@ -25,7 +25,7 @@ const nextConfig = {
       { source: '/', headers: noCache },
       { source: '/login', headers: noCache },
       { source: '/spaces', headers: noCache },
-      { source: '/passenger/login', headers: noCache },
+      { source: '/passenger/:path*', headers: noCache },
       { source: '/driver/login', headers: noCache },
       { source: '/admin/login', headers: noCache },
     ]
