@@ -121,7 +121,7 @@ export default function DriverDashboardPage() {
     const { data: mine } = await supabase.from('rides').select('*').eq('driver_id', userId).in('status', ['accepted','driver_arriving','in_progress']).order('requested_at', { ascending: false }).limit(1).maybeSingle()
     setActiveRide((mine ?? null) as Ride | null)
     if (!isOnline || mine) { setAvailable([]); return }
-    const { data: requests } = await supabase.from('rides').select('*').eq('status', 'requested').is('driver_id', null).order('requested_at', { ascending: true }).limit(20)
+    const { data: requests } = await supabase.from('rides').select('*').eq('status', 'requested').is('driver_id', null).neq('passenger_id', userId).order('requested_at', { ascending: true }).limit(20)
     setAvailable((requests ?? []) as Ride[])
   }
 
