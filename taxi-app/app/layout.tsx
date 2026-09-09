@@ -43,6 +43,7 @@ import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
 import DriverPaymentMethodPolish from '../components/DriverPaymentMethodPolish'
 import DriverPaymentMenuPolish from '../components/DriverPaymentMenuPolish'
+import DriverHelpAndPlusPolish from '../components/DriverHelpAndPlusPolish'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -86,6 +87,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverCompletedRideSummary />
         <DriverPaymentMethodPolish />
         <DriverPaymentMenuPolish />
+        <DriverHelpAndPlusPolish />
         {children}
       </body>
     </html>
