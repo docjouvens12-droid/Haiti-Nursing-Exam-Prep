@@ -21,6 +21,7 @@ import PassengerLanguageSwitchEnhancer from '../components/PassengerLanguageSwit
 import PassengerHelpDirectNavigation from '../components/PassengerHelpDirectNavigation'
 import PassengerRidePaymentSync from '../components/PassengerRidePaymentSync'
 import PassengerDashboardDriverStyle from '../components/PassengerDashboardDriverStyle'
+import PassengerMainPaymentPolish from '../components/PassengerMainPaymentPolish'
 import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
 import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
 import DriverVehicleMenuPolish from '../components/DriverVehicleMenuPolish'
@@ -60,6 +61,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerHelpDirectNavigation />
         <PassengerRidePaymentSync />
         <PassengerDashboardDriverStyle />
+        <PassengerMainPaymentPolish />
         <DriverMenuAccordionPolish />
         <DriverAvatarUploadPolish />
         <DriverVehicleMenuPolish />
