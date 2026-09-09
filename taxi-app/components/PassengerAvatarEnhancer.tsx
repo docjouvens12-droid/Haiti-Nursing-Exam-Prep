@@ -53,7 +53,7 @@ export default function PassengerAvatarEnhancer() {
 
       const ht = localStorage.getItem('taxi-language') === 'ht'
       const brand = drawer.querySelector('.drawer-brand') as HTMLElement | null
-      if (brand) brand.style.display = 'none'
+      if (brand) brand.style.setProperty('display', 'none', 'important')
 
       const head = drawer.querySelector('.drawer-head') as HTMLElement | null
       if (head) {
@@ -66,31 +66,7 @@ export default function PassengerAvatarEnhancer() {
       if (user) {
         user.classList.add('passenger-premium-user')
         const details = user.querySelector(':scope > div:last-child') as HTMLElement | null
-        if (details) {
-          details.style.display = 'flex'
-          details.classList.add('passenger-premium-user-details')
-          const name = details.querySelector('strong') as HTMLElement | null
-          const email = details.querySelector('small') as HTMLElement | null
-          if (name) name.classList.add('passenger-premium-name')
-          if (email) email.classList.add('passenger-premium-email')
-
-          let accountLabel = details.querySelector('.passenger-account-label') as HTMLElement | null
-          if (!accountLabel) {
-            accountLabel = document.createElement('span')
-            accountLabel.className = 'passenger-account-label'
-            if (name) name.insertAdjacentElement('afterend', accountLabel)
-            else details.prepend(accountLabel)
-          }
-          accountLabel.textContent = ht ? 'Kont pasaje' : 'Compte passager'
-
-          let status = details.querySelector('.passenger-account-status') as HTMLElement | null
-          if (!status) {
-            status = document.createElement('span')
-            status.className = 'passenger-account-status'
-            details.appendChild(status)
-          }
-          status.innerHTML = `<i></i>${ht ? 'Aktif' : 'Actif'}`
-        }
+        if (details) details.style.setProperty('display', 'none', 'important')
       }
 
       const nav = drawer.querySelector('.drawer-nav') as HTMLElement | null
@@ -177,15 +153,16 @@ export default function PassengerAvatarEnhancer() {
         flex-direction:column!important;
         align-items:center!important;
         justify-content:center!important;
-        gap:9px!important;
+        gap:0!important;
         margin:6px 2px 14px!important;
-        padding:14px 12px 15px!important;
+        padding:12px!important;
         border:1px solid #e2ebe7!important;
         border-radius:20px!important;
         background:linear-gradient(180deg,#ffffff 0%,#f5faf8 100%)!important;
         box-shadow:0 8px 24px rgba(16,32,51,.06)!important;
         text-align:center!important;
       }
+      .nav-drawer .drawer-user.passenger-premium-user>div:last-child{display:none!important}
       .nav-drawer .drawer-avatar.passenger-photo-avatar{
         position:relative!important;
         width:76px!important;
@@ -212,17 +189,6 @@ export default function PassengerAvatarEnhancer() {
         display:grid!important;place-items:center!important;background:#fff!important;border:1px solid #dce7e2!important;
         box-shadow:0 5px 12px rgba(16,32,51,.14)!important;font-size:12px!important;
       }
-      .nav-drawer .passenger-premium-user-details{
-        display:flex!important;flex-direction:column!important;align-items:center!important;min-width:0!important;width:100%!important;
-      }
-      .nav-drawer .passenger-premium-name{font-size:16px!important;line-height:1.2!important;color:#102033!important;font-weight:900!important}
-      .nav-drawer .passenger-account-label{margin-top:3px!important;font-size:10px!important;color:#6e8079!important;font-weight:750!important}
-      .nav-drawer .passenger-premium-email{display:block!important;max-width:220px!important;margin-top:4px!important;font-size:9px!important;color:#87958f!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
-      .nav-drawer .passenger-account-status{
-        display:inline-flex!important;align-items:center!important;gap:5px!important;margin-top:8px!important;padding:5px 9px!important;
-        border-radius:999px!important;background:#eaf5f1!important;color:#0f705a!important;font-size:9px!important;font-weight:850!important;
-      }
-      .nav-drawer .passenger-account-status i{width:7px!important;height:7px!important;border-radius:50%!important;background:#58ad98!important;display:block!important}
     `}</style>
   </>
 }
