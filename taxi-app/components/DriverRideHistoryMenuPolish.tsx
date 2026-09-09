@@ -76,11 +76,11 @@ export default function DriverRideHistoryMenuPolish() {
         title.setAttribute('tabindex', '0')
         title.setAttribute('aria-expanded', 'false')
 
-        const arrow = document.createElement('span')
-        arrow.textContent = '›'
-        arrow.setAttribute('aria-hidden', 'true')
-        Object.assign(arrow.style, { marginLeft: 'auto', fontSize: '22px', lineHeight: '1', transition: 'transform .18s ease' })
-        title.appendChild(arrow)
+        const toggleMark = document.createElement('span')
+        toggleMark.textContent = '+'
+        toggleMark.setAttribute('aria-hidden', 'true')
+        Object.assign(toggleMark.style, { marginLeft: 'auto', fontSize: '24px', fontWeight: '700', lineHeight: '1' })
+        title.appendChild(toggleMark)
 
         const content = document.createElement('div')
         content.style.display = 'none'
@@ -97,7 +97,6 @@ export default function DriverRideHistoryMenuPolish() {
             Object.assign(card.style, {
               border: '1px solid #e3e9ed', borderRadius: '13px', padding: '10px', marginBottom: '8px', background: '#f8fafb'
             })
-
             const top = document.createElement('div')
             Object.assign(top.style, { display: 'flex', justifyContent: 'space-between', gap: '8px', alignItems: 'center', marginBottom: '7px' })
             const date = document.createElement('span')
@@ -107,7 +106,6 @@ export default function DriverRideHistoryMenuPolish() {
             fare.textContent = formatFare(ride.final_fare_htg)
             Object.assign(fare.style, { fontSize: '12px', color: '#0f6f59' })
             top.append(date, fare)
-
             const route = document.createElement('div')
             Object.assign(route.style, { fontSize: '11px', lineHeight: '1.4', color: '#34485a' })
             const pickup = document.createElement('div')
@@ -115,14 +113,12 @@ export default function DriverRideHistoryMenuPolish() {
             const destination = document.createElement('div')
             destination.textContent = `🏁 ${ride.destination_address || '—'}`
             route.append(pickup, destination)
-
             card.append(top, route)
             content.appendChild(card)
           })
         }
 
         section.append(title, content)
-
         const earnings = drawer.querySelector('[data-driver-earnings="true"]')
         const languageSection = Array.from(drawer.querySelectorAll('.menuSection')).find((el) => {
           const h = el.querySelector('h3')?.textContent?.toLowerCase() || ''
@@ -140,7 +136,7 @@ export default function DriverRideHistoryMenuPolish() {
         const setOpen = (next: boolean) => {
           open = next
           content.style.display = next ? 'block' : 'none'
-          arrow.style.transform = next ? 'rotate(90deg)' : 'rotate(0deg)'
+          toggleMark.textContent = next ? '−' : '+'
           title.setAttribute('aria-expanded', String(next))
         }
         const toggle = () => setOpen(!open)
