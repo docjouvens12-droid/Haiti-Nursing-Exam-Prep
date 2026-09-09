@@ -56,17 +56,18 @@
     box-shadow:inset 0 0 0 1px rgba(15,107,86,.05);
   }
 
-  /* Retire Accueil ak Devenir chauffeur nan meni kliyan an. */
+  /* Accueil toujou kache. Si ansyen bouton Devenir chauffeur toujou prezan nan DOM la, kache li tou. */
   .drawer-nav>button:nth-child(1),
   .drawer-nav>button:nth-child(5){
     display:none!important;
   }
 
-  /* Nouvo lòd: Profil, Mes trajets, Paiement, Langue, Aide. */
+  /* Lòd final: Profil, Mes trajets, Paiement, Langue, Aide. */
   .drawer-nav>button:nth-child(4){order:1}
   .drawer-nav>button:nth-child(2){order:2}
   .drawer-nav>button:nth-child(3){order:3}
   .drawer-nav>.drawer-language{order:4}
+  .drawer-nav>button:nth-child(6),
   .drawer-nav>button:nth-child(7){order:5}
 
   .drawer-nav>button:nth-child(4){
