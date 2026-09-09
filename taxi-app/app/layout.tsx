@@ -10,6 +10,7 @@ import './passenger-profile-details.css'
 import './passenger-trips-page.css'
 import './passenger-payment-inline.css'
 import './passenger-language-switch.css'
+import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fr">
       <body>
+        <AuthRoleRedirector />
         <PassengerActiveDriver />
         <PassengerPendingRideCancel />
         <PassengerRideCompletion />
