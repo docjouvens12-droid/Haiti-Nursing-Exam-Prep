@@ -68,16 +68,22 @@ export default function PassengerTripsEnhancer() {
   useEffect(() => {
     if (!host) return
     let active = true
-    setBusy(true)
-    supabase
-      .from('rides')
-      .select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at')
-      .order('requested_at', { ascending: false })
-      .limit(50)
-      .then(({ data }) => {
+
+    const load = async () => {
+      setBusy(true)
+      try {
+        const { data } = await supabase
+          .from('rides')
+          .select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at')
+          .order('requested_at', { ascending: false })
+          .limit(50)
         if (active) setRides((data ?? []) as Ride[])
-      })
-      .finally(() => active && setBusy(false))
+      } finally {
+        if (active) setBusy(false)
+      }
+    }
+
+    void load()
     return () => { active = false }
   }, [host])
 
