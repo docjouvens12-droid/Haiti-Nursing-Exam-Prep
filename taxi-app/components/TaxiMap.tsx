@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 
 type Point = { lat: number; lng: number }
 type RouteGeometry = { type: 'LineString'; coordinates: number[][] }
+type Lang = 'fr' | 'ht'
 
 type Props = {
   pickup: Point | null
@@ -67,6 +68,17 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
   const [driverEtaMin, setDriverEtaMin] = useState<number | null>(null)
   const [driverRoutePolyline, setDriverRoutePolyline] = useState<string | null>(null)
   const [mapFailed, setMapFailed] = useState(false)
+  const [lang, setLang] = useState<Lang>('fr')
+
+  useEffect(() => {
+    const syncLanguage = () => {
+      const saved = window.localStorage.getItem('taxi-language')
+      setLang(saved === 'ht' ? 'ht' : 'fr')
+    }
+    syncLanguage()
+    window.addEventListener('storage', syncLanguage)
+    return () => window.removeEventListener('storage', syncLanguage)
+  }, [])
 
   useEffect(() => {
     let active = true
@@ -138,8 +150,6 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
       if (encoded) return encoded
     }
 
-    // Keep a visible temporary route while Mapbox Directions is still loading.
-    // Once the real route geometry arrives, the map automatically switches to it.
     if (pickup && destination) {
       return encodePolyline([
         [pickup.lng, pickup.lat],
@@ -161,59 +171,87 @@ export default function TaxiMap({ pickup, destination, routeGeometry }: Props) {
 
     if (driverLat != null && driverLng != null && targetLat != null && targetLng != null) {
       const overlays = [
-        driverRoutePolyline ? `path-5+1479ff-0.9(${encodeURIComponent(driverRoutePolyline)})` : null,
-        `pin-s-a+1479ff(${driverLng},${driverLat})`,
-        `pin-s-b+0d7b61(${targetLng},${targetLat})`,
+        driverRoutePolyline ? `path-5+0f705a-0.92(${encodeURIComponent(driverRoutePolyline)})` : null,
+        `pin-s-a+0f705a(${driverLng},${driverLat})`,
+        `pin-s-b+ef6a5b(${targetLng},${targetLat})`,
       ].filter(Boolean).join(',')
-      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=70&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=92&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
 
     if (pickup && destination) {
       const overlays = [
-        passengerRoutePolyline ? `path-5+1479ff-0.88(${encodeURIComponent(passengerRoutePolyline)})` : null,
-        `pin-s-a+1479ff(${pickup.lng},${pickup.lat})`,
-        `pin-s-b+e11d48(${destination.lng},${destination.lat})`,
+        passengerRoutePolyline ? `path-5+0f705a-0.9(${encodeURIComponent(passengerRoutePolyline)})` : null,
+        `pin-s-a+0f705a(${pickup.lng},${pickup.lat})`,
+        `pin-s-b+ef6a5b(${destination.lng},${destination.lat})`,
       ].filter(Boolean).join(',')
-      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=70&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/900x650@2x?padding=92&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
 
     const center = pickup ?? { lat: 18.5392, lng: -72.3364 }
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${center.lng},${center.lat},11/900x650@2x?logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/pin-s-a+0f705a(${center.lng},${center.lat})/${center.lng},${center.lat},13/900x650@2x?logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [pickup, destination, tracking, driverRoutePolyline, passengerRoutePolyline])
 
   useEffect(() => setMapFailed(false), [mapUrl])
 
-  const trackingLabel = tracking?.ride_status === 'in_progress' ? 'Vers la destination' : 'Chauffeur en route'
+  const trackingLabel = tracking?.ride_status === 'in_progress'
+    ? (lang === 'ht' ? 'Sou wout pou destinasyon' : 'Vers la destination')
+    : (lang === 'ht' ? 'Chofè a sou wout' : 'Chauffeur en route')
+
+  const selectedTitle = lang === 'ht' ? 'Trajè chwazi' : 'Trajet sélectionné'
+  const selectedLegend = lang === 'ht' ? 'Vèt = depa · Wouj = destinasyon' : 'Vert = départ · Rouge = destination'
+  const positionLabel = lang === 'ht' ? 'Pozisyon ou' : 'Votre position'
+  const liveLabel = lang === 'ht' ? 'Pozisyon an dirèk' : 'Position en direct'
+  const unavailable = lang === 'ht' ? 'Kat la pa disponib pou kounye a' : 'Carte temporairement indisponible'
 
   return (
     <div className="safe-map-wrap">
       {mapUrl && !mapFailed ? (
-        <img className="safe-map" src={mapUrl} alt="Carte du trajet" onError={() => setMapFailed(true)} />
+        <img className="safe-map" src={mapUrl} alt={lang === 'ht' ? 'Kat trajè a' : 'Carte du trajet'} onError={() => setMapFailed(true)} />
       ) : (
-        <div className="safe-map-placeholder">Carte temporairement indisponible</div>
+        <div className="safe-map-placeholder"><span>🗺️</span><strong>{unavailable}</strong></div>
       )}
+
+      <div className="safe-map-shade" />
+
+      {pickup && !destination && !tracking && (
+        <div className="map-status-pill map-position-pill"><span>●</span><strong>{positionLabel}</strong></div>
+      )}
+
       {pickup && destination && !tracking && (
         <div className="route-map-badge">
-          <strong>📍 Trajet sélectionné</strong>
-          <span>Bleu = départ · Rouge = destination</span>
+          <div className="route-map-icon">↗</div>
+          <div><strong>{selectedTitle}</strong><span>{selectedLegend}</span></div>
         </div>
       )}
+
       {tracking && tracking.driver_latitude != null && tracking.driver_longitude != null && (
         <div className="live-tracking-badge">
-          <strong>🚕 {trackingLabel}</strong>
-          <span>{driverDistanceKm == null ? 'Position en direct' : `${driverDistanceKm.toFixed(1)} km`}{driverEtaMin == null ? '' : ` · ${driverEtaMin} min`}</span>
+          <div className="live-car">🚕</div>
+          <div><strong>{trackingLabel}</strong><span>{driverDistanceKm == null ? liveLabel : `${driverDistanceKm.toFixed(1)} km`}{driverEtaMin == null ? '' : ` · ${driverEtaMin} min`}</span></div>
         </div>
       )}
+
       <style jsx>{`
-        .safe-map-wrap{position:relative;width:100%;height:100%;min-height:300px;background:#eaf0f4;overflow:hidden}
-        .safe-map{display:block;width:100%;height:100%;min-height:300px;object-fit:cover}
-        .safe-map-placeholder{min-height:300px;display:grid;place-items:center;color:#66778a;font-weight:750;padding:20px;text-align:center}
-        .live-tracking-badge,.route-map-badge{position:absolute;left:14px;top:14px;z-index:8;background:rgba(16,32,51,.92);color:#fff;border-radius:14px;padding:9px 12px;box-shadow:0 8px 22px rgba(16,32,51,.2);font-family:Inter,system-ui,sans-serif;pointer-events:none}
-        .route-map-badge{background:rgba(255,255,255,.94);color:#17324d;border:1px solid rgba(20,121,255,.12)}
-        .live-tracking-badge strong,.live-tracking-badge span,.route-map-badge strong,.route-map-badge span{display:block}
-        .live-tracking-badge strong,.route-map-badge strong{font-size:13px}
-        .live-tracking-badge span,.route-map-badge span{font-size:12px;margin-top:2px}
-        .live-tracking-badge span{color:#dce7ef}.route-map-badge span{color:#607489}
+        .safe-map-wrap{position:relative;width:100%;height:100%;min-height:300px;background:#e8efec;overflow:hidden}
+        .safe-map{display:block;width:100%;height:100%;min-height:300px;object-fit:cover;transform:scale(1.01)}
+        .safe-map-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(13,34,30,.05) 0%,rgba(13,34,30,0) 42%,rgba(255,255,255,.05) 100%)}
+        .safe-map-placeholder{min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:#66778a;font-weight:750;padding:20px;text-align:center;background:linear-gradient(180deg,#edf3f1,#e4ece9)}
+        .safe-map-placeholder span{font-size:30px}.safe-map-placeholder strong{font-size:12px}
+        .route-map-badge,.live-tracking-badge{position:absolute;left:14px;right:14px;bottom:58px;z-index:8;min-height:54px;display:flex;align-items:center;gap:10px;border-radius:17px;padding:9px 11px;box-shadow:0 10px 28px rgba(16,32,51,.16);font-family:Inter,system-ui,sans-serif;pointer-events:none;backdrop-filter:blur(10px)}
+        .route-map-badge{background:rgba(255,255,255,.94);color:#17324d;border:1px solid rgba(15,112,90,.14)}
+        .live-tracking-badge{background:rgba(15,112,90,.94);color:#fff;border:1px solid rgba(255,255,255,.18)}
+        .route-map-icon,.live-car{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:0 0 36px;font-weight:950}
+        .route-map-icon{background:#eaf5f1;color:#0f705a;font-size:18px}.live-car{background:rgba(255,255,255,.16);font-size:18px}
+        .route-map-badge strong,.route-map-badge span,.live-tracking-badge strong,.live-tracking-badge span{display:block}
+        .route-map-badge strong,.live-tracking-badge strong{font-size:11px;line-height:1.2}
+        .route-map-badge span,.live-tracking-badge span{font-size:9px;margin-top:3px;line-height:1.3}
+        .route-map-badge span{color:#6c7d76}.live-tracking-badge span{color:#d9eee7}
+        .map-status-pill{position:absolute;left:14px;bottom:58px;z-index:8;display:flex;align-items:center;gap:7px;padding:8px 10px;border-radius:999px;background:rgba(255,255,255,.94);border:1px solid rgba(15,112,90,.14);box-shadow:0 8px 20px rgba(16,32,51,.12);font-family:Inter,system-ui,sans-serif;pointer-events:none}
+        .map-status-pill span{color:#0f705a;font-size:15px;line-height:1}.map-status-pill strong{font-size:9px;color:#314a42}
+        @media(max-width:420px){
+          .route-map-badge,.live-tracking-badge{left:12px;right:12px;bottom:52px;min-height:50px;border-radius:15px}
+          .map-status-pill{left:12px;bottom:52px}
+        }
       `}</style>
     </div>
   )
