@@ -15,6 +15,14 @@ export default function PassengerProfileDetails() {
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
   const [editing, setEditing] = useState(false)
+  const [ht, setHt] = useState(false)
+
+  useEffect(() => {
+    setHt(localStorage.getItem('taxi-language') === 'ht')
+    const onStorage = () => setHt(localStorage.getItem('taxi-language') === 'ht')
+    window.addEventListener('storage', onStorage)
+    return () => window.removeEventListener('storage', onStorage)
+  }, [])
 
   useEffect(() => {
     let currentButton: HTMLButtonElement | null = null
@@ -114,39 +122,49 @@ export default function PassengerProfileDetails() {
     setGender(metadata.gender || gender)
     setPhone(metadata.phone || phone.trim())
     setEditing(false)
-    setMessage('Profil enregistré ✓')
+    setMessage(ht ? 'Pwofil anrejistre ✓' : 'Profil enregistré ✓')
   }
 
   if (!target || !expanded) return null
 
-  const genderLabel = gender === 'homme' ? 'Homme' : gender === 'femme' ? 'Femme' : gender === 'autre' ? 'Autre / Non précisé' : '—'
-  const displayBirthDate = birthDate ? new Date(`${birthDate}T00:00:00`).toLocaleDateString('fr-FR') : '—'
+  const genderLabel = gender === 'homme' ? (ht ? 'Gason' : 'Homme') : gender === 'femme' ? (ht ? 'Fi' : 'Femme') : gender === 'autre' ? (ht ? 'Lòt / Pa presize' : 'Autre / Non précisé') : '—'
+  const displayBirthDate = birthDate ? new Date(`${birthDate}T00:00:00`).toLocaleDateString(ht ? 'fr-HT' : 'fr-FR') : '—'
 
   return createPortal(
-    <section className="drawer-profile-inline">
-      <div className="drawer-profile-inline-head">
-        <strong>Profil</strong>
-        <button type="button" onClick={() => { setExpanded(false); setEditing(false); setMessage('') }}>Fèmen</button>
+    <section className="drawer-profile-inline passenger-profile-card">
+      <div className="passenger-profile-hero">
+        <div className="passenger-profile-hero-icon">👤</div>
+        <div className="passenger-profile-hero-copy">
+          <strong>{ht ? 'Pwofil pasaje' : 'Profil passager'}</strong>
+          <small>{ht ? 'Enfòmasyon kont ou' : 'Informations de votre compte'}</small>
+        </div>
+        <span className="passenger-profile-active">{ht ? 'Aktif' : 'Actif'}</span>
       </div>
+
       {editing ? (
-        <form className="drawer-profile-form" onSubmit={saveProfile}>
-          <label><span>Nom</span><input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
-          <label><span>Date de naissance</span><input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} /></label>
-          <label><span>Sexe</span><select value={gender} onChange={(e) => setGender(e.target.value)}><option value="">Sélectionner</option><option value="homme">Homme</option><option value="femme">Femme</option><option value="autre">Autre / Non précisé</option></select></label>
-          <label><span>Téléphone</span><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+509 ..." inputMode="tel" autoComplete="tel" /></label>
-          <label><span>E-mail</span><input value={email} readOnly className="drawer-profile-readonly" /></label>
+        <form className="drawer-profile-form passenger-profile-form" onSubmit={saveProfile}>
+          <div className="passenger-profile-group-title">{ht ? 'Enfòmasyon pèsonèl' : 'Informations personnelles'}</div>
+          <label><span>{ht ? 'Non' : 'Nom'}</span><input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
+          <label><span>{ht ? 'Dat nesans' : 'Date de naissance'}</span><input type="date" value={birthDate} onChange={(e) => setBirthDate(e.target.value)} /></label>
+          <label><span>{ht ? 'Sèks' : 'Sexe'}</span><select value={gender} onChange={(e) => setGender(e.target.value)}><option value="">{ht ? 'Chwazi' : 'Sélectionner'}</option><option value="homme">{ht ? 'Gason' : 'Homme'}</option><option value="femme">{ht ? 'Fi' : 'Femme'}</option><option value="autre">{ht ? 'Lòt / Pa presize' : 'Autre / Non précisé'}</option></select></label>
+          <div className="passenger-profile-group-title">{ht ? 'Kontak' : 'Contact'}</div>
+          <label><span>{ht ? 'Telefòn' : 'Téléphone'}</span><input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+509 ..." inputMode="tel" autoComplete="tel" /></label>
+          <label><span>{ht ? 'Imèl' : 'E-mail'}</span><input value={email} readOnly className="drawer-profile-readonly" /></label>
           {message && <div className="drawer-profile-message">{message}</div>}
-          <div className="drawer-profile-actions"><button type="button" onClick={() => { setEditing(false); setMessage('') }}>Annuler</button><button type="submit" disabled={busy}>{busy ? 'Enregistrement…' : 'Enregistrer'}</button></div>
+          <div className="drawer-profile-actions"><button type="button" onClick={() => { setEditing(false); setMessage('') }}>{ht ? 'Anile' : 'Annuler'}</button><button type="submit" disabled={busy}>{busy ? (ht ? 'Ap anrejistre…' : 'Enregistrement…') : (ht ? 'Anrejistre' : 'Enregistrer')}</button></div>
         </form>
       ) : (
-        <div className="drawer-profile-saved">
+        <div className="drawer-profile-saved passenger-profile-saved">
           {message && <div className="drawer-profile-message success">{message}</div>}
-          <div><span>Non</span><strong>{name || '—'}</strong></div>
-          <div><span>Dat nesans</span><strong>{displayBirthDate}</strong></div>
-          <div><span>Sèks</span><strong>{genderLabel}</strong></div>
-          <div><span>Tel</span><strong>{phone || '—'}</strong></div>
-          <div><span>Imèl</span><strong>{email || '—'}</strong></div>
-          <button type="button" className="drawer-profile-edit" onClick={() => { setEditing(true); setMessage('') }}>Modifier le profil</button>
+          <div className="passenger-profile-group-title">{ht ? 'Enfòmasyon pèsonèl' : 'Informations personnelles'}</div>
+          <div className="passenger-profile-info"><span>{ht ? 'Non' : 'Nom'}</span><strong>{name || '—'}</strong></div>
+          <div className="passenger-profile-info"><span>{ht ? 'Dat nesans' : 'Date de naissance'}</span><strong>{displayBirthDate}</strong></div>
+          <div className="passenger-profile-info"><span>{ht ? 'Sèks' : 'Sexe'}</span><strong>{genderLabel}</strong></div>
+          <div className="passenger-profile-group-title">{ht ? 'Kontak' : 'Contact'}</div>
+          <div className="passenger-profile-info"><span>{ht ? 'Telefòn' : 'Téléphone'}</span><strong>{phone || '—'}</strong></div>
+          <div className="passenger-profile-info"><span>{ht ? 'Imèl' : 'E-mail'}</span><strong>{email || '—'}</strong></div>
+          <button type="button" className="drawer-profile-edit" onClick={() => { setEditing(true); setMessage('') }}>{ht ? 'Modifye pwofil' : 'Modifier le profil'}</button>
+          <button type="button" className="passenger-profile-close" onClick={() => { setExpanded(false); setEditing(false); setMessage('') }}>{ht ? 'Fèmen' : 'Fermer'}</button>
         </div>
       )}
     </section>,
