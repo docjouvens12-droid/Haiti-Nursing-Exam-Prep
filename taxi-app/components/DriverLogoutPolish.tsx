@@ -13,55 +13,73 @@ export default function DriverLogoutPolish() {
       style.id = styleId
       style.textContent = `
         .drawer .drawerLogout {
-          width:auto !important;
-          min-width:150px !important;
-          max-width:100% !important;
-          min-height:42px !important;
-          margin:22px auto 8px !important;
-          padding:10px 16px !important;
-          border:1px solid #f0caca !important;
-          border-radius:13px !important;
-          background:#fff4f4 !important;
-          color:#9b3030 !important;
+          width:100% !important;
+          min-height:54px !important;
+          margin:18px 0 10px !important;
+          padding:0 14px !important;
+          border:1px solid #f3cccc !important;
+          border-radius:16px !important;
+          background:#fff5f5 !important;
+          color:#b33d3d !important;
           font-size:14px !important;
-          font-weight:800 !important;
+          font-weight:850 !important;
           line-height:1.2 !important;
           display:flex !important;
           align-items:center !important;
-          justify-content:center !important;
-          gap:8px !important;
-          box-shadow:none !important;
+          justify-content:flex-start !important;
+          gap:12px !important;
+          box-shadow:0 5px 16px rgba(201,75,75,.07) !important;
+        }
+        .drawer .drawerLogout::after {
+          content:'›';
+          margin-left:auto;
+          font-size:22px;
+          line-height:1;
+          color:#c94b4b;
         }
         .drawer .drawerLogout:active {
           background:#fdeaea !important;
-          transform:scale(.98);
+          transform:scale(.99);
         }
         .driver-logout-confirm-backdrop {
           position:fixed;
           inset:0;
           z-index:99999;
-          background:rgba(15,32,51,.46);
+          background:rgba(15,32,51,.5);
           display:flex;
           align-items:center;
           justify-content:center;
           padding:20px;
+          backdrop-filter:blur(3px);
         }
         .driver-logout-confirm-card {
           width:min(360px,100%);
           background:#fff;
-          border-radius:18px;
-          padding:20px;
-          box-shadow:0 18px 60px rgba(0,0,0,.22);
+          border-radius:22px;
+          padding:22px;
+          box-shadow:0 20px 70px rgba(0,0,0,.24);
           font-family:Inter,system-ui,sans-serif;
           color:#102033;
+          text-align:center;
+        }
+        .driver-logout-confirm-icon {
+          width:58px;
+          height:58px;
+          margin:0 auto 12px;
+          border-radius:18px;
+          display:grid;
+          place-items:center;
+          background:#fff1f1;
+          font-size:28px;
         }
         .driver-logout-confirm-card h3 {
           margin:0 0 8px;
-          font-size:18px;
-          font-weight:850;
+          font-size:19px;
+          font-weight:900;
         }
         .driver-logout-confirm-card p {
-          margin:0 0 18px;
+          margin:0 auto 20px;
+          max-width:270px;
           color:#667789;
           font-size:14px;
           line-height:1.45;
@@ -72,8 +90,8 @@ export default function DriverLogoutPolish() {
           gap:10px;
         }
         .driver-logout-confirm-actions button {
-          min-height:44px;
-          border-radius:12px;
+          min-height:46px;
+          border-radius:13px;
           font-size:14px;
           font-weight:850;
           cursor:pointer;
@@ -85,9 +103,10 @@ export default function DriverLogoutPolish() {
         }
         .driver-logout-yes {
           border:0;
-          background:#b63b3b;
+          background:#c94b4b;
           color:#fff;
         }
+        .driver-logout-yes:disabled { opacity:.65 }
       `
       document.head.appendChild(style)
     }
@@ -103,6 +122,7 @@ export default function DriverLogoutPolish() {
       backdrop.className = 'driver-logout-confirm-backdrop'
       backdrop.innerHTML = `
         <div class="driver-logout-confirm-card" role="dialog" aria-modal="true">
+          <div class="driver-logout-confirm-icon">🚪</div>
           <h3>${lang === 'ht' ? 'Dekonekte?' : 'Se déconnecter ?'}</h3>
           <p>${lang === 'ht' ? 'Èske ou vle soti nan kont chofè ou a?' : 'Voulez-vous vraiment quitter votre compte chauffeur ?'}</p>
           <div class="driver-logout-confirm-actions">
@@ -134,7 +154,7 @@ export default function DriverLogoutPolish() {
 
       const lang = localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
       const label = lang === 'ht' ? 'Dekonekte' : 'Se déconnecter'
-      if (button.textContent !== `⎋ ${label}`) button.textContent = `⎋ ${label}`
+      if (button.textContent !== `🚪 ${label}`) button.textContent = `🚪 ${label}`
 
       if (button.dataset.logoutConfirm === 'custom') return
       button.dataset.logoutConfirm = 'custom'
