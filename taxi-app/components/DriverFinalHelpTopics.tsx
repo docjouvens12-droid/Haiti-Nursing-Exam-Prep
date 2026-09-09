@@ -42,9 +42,34 @@ const FR: Topic[] = [
   ['Contacter le support','Comment contacter l’équipe de support lorsque vous avez besoin d’une assistance directe.']
 ]
 
+const ICONS=['🚕','✅','👤','💳','📱','👤','🚗','🛡️','🚨','🛠️','📍','🔒','✖️','⚠️','📋','💬']
+
 export default function DriverFinalHelpTopics(){
   useEffect(()=>{
     if(window.location.pathname!=='/driver/dashboard') return
+
+    const styleId='driver-help-center-polish-style'
+    if(!document.getElementById(styleId)){
+      const style=document.createElement('style')
+      style.id=styleId
+      style.textContent=`
+        .driver-help-center-head{background:linear-gradient(145deg,#0f705a,#155f51);color:#fff;border-radius:18px;padding:15px;margin:2px 0 12px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 20px rgba(15,112,90,.16)}
+        .driver-help-center-head .dhc-icon{width:44px;height:44px;border-radius:14px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:21px;border:1px solid rgba(255,255,255,.28)}
+        .driver-help-center-head strong{display:block;font-size:14px}.driver-help-center-head small{display:block;margin-top:3px;font-size:10px;line-height:1.35;opacity:.86}
+        .driver-help-topic{border:1px solid #e2e9e6;border-radius:14px;background:#fff;margin:8px 0;overflow:hidden;box-shadow:0 4px 12px rgba(16,32,51,.04)}
+        .driver-help-topic button{width:100%;border:0;background:#fff;padding:12px;display:grid;grid-template-columns:34px 1fr 22px;gap:10px;align-items:center;text-align:left;color:#102033;cursor:pointer;touch-action:manipulation}
+        .driver-help-topic .dht-icon{width:34px;height:34px;border-radius:10px;background:#eaf5f1;display:grid;place-items:center;font-size:16px}
+        .driver-help-topic .dht-title{font-size:11px;font-weight:850;line-height:1.25}
+        .driver-help-topic .dht-chevron{font-size:18px;color:#0f705a;text-align:center;transition:transform .2s ease}
+        .driver-help-topic.open{border-color:#9fd1c1;background:#f8fcfa}
+        .driver-help-topic.open .dht-chevron{transform:rotate(90deg)}
+        .driver-help-topic .dht-answer{display:none;margin:0;padding:0 12px 12px 56px;font-size:10px;line-height:1.5;color:#63736d}
+        .driver-help-topic.open .dht-answer{display:block}
+        .driver-help-support{margin-top:12px;border-radius:14px;padding:13px;background:#f2f7f5;border:1px solid #dce9e4;text-align:center}
+        .driver-help-support strong{display:block;font-size:11px;color:#102033;margin-bottom:4px}.driver-help-support span{font-size:10px;color:#6b7b75;line-height:1.4;display:block}
+      `
+      document.head.appendChild(style)
+    }
 
     const render=()=>{
       const sections=Array.from(document.querySelectorAll<HTMLElement>('.driver-final-menu-stable-root .dfm-section'))
@@ -54,22 +79,44 @@ export default function DriverFinalHelpTopics(){
       })
       const body=help?.querySelector<HTMLElement>('.dfm-body')
       if(!body) return
-      if(body.dataset.fullHelpTopics==='1') return
 
       const ht=localStorage.getItem('taxi-language')==='ht'
+      const langKey=ht?'ht':'fr'
+      if(body.dataset.fullHelpTopics===langKey) return
+
       const topics=ht?HT:FR
-      body.innerHTML=''
-      for(const [title,description] of topics){
+      body.replaceChildren()
+
+      const head=document.createElement('div')
+      head.className='driver-help-center-head'
+      head.innerHTML=`<div class="dhc-icon">❓</div><div><strong>${ht?'Sant Èd chofè':'Centre d’aide chauffeur'}</strong><small>${ht?'Chwazi yon sijè pou jwenn asistans rapid.':'Choisissez un sujet pour obtenir une aide rapide.'}</small></div>`
+      body.appendChild(head)
+
+      topics.forEach(([title,description],index)=>{
         const card=document.createElement('div')
-        card.className='dfm-help-card'
-        const strong=document.createElement('strong')
-        strong.textContent=title
-        const p=document.createElement('p')
-        p.textContent=description
-        card.append(strong,p)
+        card.className='driver-help-topic'
+        const button=document.createElement('button')
+        button.type='button'
+        button.setAttribute('aria-expanded','false')
+        button.innerHTML=`<span class="dht-icon">${ICONS[index]||'❓'}</span><span class="dht-title"></span><span class="dht-chevron">›</span>`
+        const titleEl=button.querySelector<HTMLElement>('.dht-title')
+        if(titleEl) titleEl.textContent=title
+        const answer=document.createElement('p')
+        answer.className='dht-answer'
+        answer.textContent=description
+        button.addEventListener('click',()=>{
+          const open=card.classList.toggle('open')
+          button.setAttribute('aria-expanded',String(open))
+        })
+        card.append(button,answer)
         body.appendChild(card)
-      }
-      body.dataset.fullHelpTopics='1'
+      })
+
+      const support=document.createElement('div')
+      support.className='driver-help-support'
+      support.innerHTML=`<strong>💬 ${ht?'Bezwen plis èd?':'Besoin de plus d’aide ?'}</strong><span>${ht?'Sèvi ak seksyon Kontakte sipò a pou asistans dirèk.':'Utilisez la rubrique Contacter le support pour une assistance directe.'}</span>`
+      body.appendChild(support)
+      body.dataset.fullHelpTopics=langKey
     }
 
     render()
