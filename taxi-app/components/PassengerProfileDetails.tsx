@@ -24,6 +24,7 @@ export default function PassengerProfileDetails() {
       const drawer = document.querySelector('.nav-drawer')
       if (!drawer) {
         setTarget(null)
+        setExpanded(false)
         return
       }
 
@@ -35,6 +36,7 @@ export default function PassengerProfileDetails() {
 
       if (!profileButton) {
         setTarget(null)
+        setExpanded(false)
         return
       }
 
@@ -121,6 +123,10 @@ export default function PassengerProfileDetails() {
 
   return createPortal(
     <section className="drawer-profile-inline">
+      <div className="drawer-profile-inline-head">
+        <strong>Profil</strong>
+        <button type="button" onClick={() => { setExpanded(false); setEditing(false); setMessage('') }}>Fèmen</button>
+      </div>
       {editing ? (
         <form className="drawer-profile-form" onSubmit={saveProfile}>
           <label><span>Nom</span><input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" /></label>
