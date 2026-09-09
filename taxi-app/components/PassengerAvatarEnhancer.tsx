@@ -67,12 +67,24 @@ export default function PassengerAvatarEnhancer() {
         if (details) details.style.display = 'none'
       }
 
-      const navButtons = Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
-      const becomeDriverButton = navButtons.find((button) => {
-        const text = (button.textContent || '').toLowerCase()
-        return text.includes('devenir chauffeur') || text.includes('vin chofè')
-      })
-      if (becomeDriverButton) becomeDriverButton.style.display = 'none'
+      const nav = drawer.querySelector('.drawer-nav') as HTMLElement | null
+      if (nav) {
+        const navButtons = Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button'))
+        const becomeDriverButton = navButtons.find((button) => {
+          const text = (button.textContent || '').toLowerCase()
+          return text.includes('devenir chauffeur') || text.includes('vin chofè') || text.includes('vin chofe')
+        })
+        if (becomeDriverButton) becomeDriverButton.remove()
+
+        const helpButton = Array.from(nav.querySelectorAll<HTMLButtonElement>(':scope > button')).find((button) => {
+          const text = (button.textContent || '').toLowerCase().trim()
+          return text.includes('aide') || text.includes('èd')
+        })
+        const languageBlock = nav.querySelector(':scope > .drawer-language') as HTMLElement | null
+        if (helpButton && languageBlock && languageBlock.nextElementSibling !== helpButton) {
+          languageBlock.insertAdjacentElement('afterend', helpButton)
+        }
+      }
 
       const circle = drawer.querySelector('.drawer-avatar') as HTMLElement | null
       if (circle) {
