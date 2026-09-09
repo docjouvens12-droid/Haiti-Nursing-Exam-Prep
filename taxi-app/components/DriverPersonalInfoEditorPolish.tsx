@@ -18,8 +18,8 @@ export default function DriverPersonalInfoEditorPolish() {
         const text = (s.querySelector('h3')?.textContent || '').toLowerCase()
         return text.includes('person') || text.includes('pèson')
       })
-      if (!section || section.dataset.personalEditorReady === 'true') return
-      section.dataset.personalEditorReady = 'true'
+      if (!section) return
+      if (section.querySelector('[data-driver-personal-editor="true"]')) return
 
       const title = section.querySelector('h3') as HTMLElement | null
       if (!title) return
@@ -27,11 +27,13 @@ export default function DriverPersonalInfoEditorPolish() {
       const { data: auth } = await supabase.auth.getUser()
       const user = auth.user
       if (!user || disposed) return
+      if (section.querySelector('[data-driver-personal-editor="true"]')) return
 
       const [{ data: person }, { data: driver }] = await Promise.all([
         supabase.from('profiles').select('full_name,phone').eq('id', user.id).maybeSingle(),
         supabase.from('driver_profiles').select('license_number,license_document_path').eq('user_id', user.id).maybeSingle(),
       ])
+      if (disposed || section.querySelector('[data-driver-personal-editor="true"]')) return
 
       const meta = user.user_metadata || {}
       let values = {
@@ -48,6 +50,7 @@ export default function DriverPersonalInfoEditorPolish() {
       Array.from(section.children).forEach((child) => { if (child !== title) child.remove() })
 
       const container = document.createElement('div')
+      container.dataset.driverPersonalEditor = 'true'
       container.style.display = title.getAttribute('aria-expanded') === 'true' ? '' : 'none'
       container.style.paddingTop = '10px'
       section.appendChild(container)
