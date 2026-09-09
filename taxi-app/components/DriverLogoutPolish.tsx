@@ -42,71 +42,105 @@ export default function DriverLogoutPolish() {
           transform:scale(.99);
         }
         .driver-logout-confirm-backdrop {
-          position:fixed;
-          inset:0;
-          z-index:99999;
-          background:rgba(15,32,51,.5);
-          display:flex;
-          align-items:center;
-          justify-content:center;
-          padding:20px;
+          position:fixed !important;
+          inset:0 !important;
+          z-index:2147483647 !important;
+          background:rgba(15,32,51,.5) !important;
+          display:flex !important;
+          align-items:center !important;
+          justify-content:center !important;
+          padding:20px !important;
           backdrop-filter:blur(3px);
         }
         .driver-logout-confirm-card {
-          width:min(360px,100%);
-          background:#fff;
-          border-radius:22px;
-          padding:22px;
-          box-shadow:0 20px 70px rgba(0,0,0,.24);
-          font-family:Inter,system-ui,sans-serif;
-          color:#102033;
-          text-align:center;
+          width:min(360px,100%) !important;
+          max-width:100% !important;
+          background:#fff !important;
+          border-radius:22px !important;
+          padding:22px !important;
+          box-shadow:0 20px 70px rgba(0,0,0,.24) !important;
+          font-family:Inter,system-ui,sans-serif !important;
+          color:#102033 !important;
+          text-align:center !important;
+          position:relative !important;
+          overflow:visible !important;
         }
         .driver-logout-confirm-icon {
-          width:58px;
-          height:58px;
-          margin:0 auto 12px;
-          border-radius:18px;
-          display:grid;
-          place-items:center;
-          background:#fff1f1;
-          font-size:28px;
+          width:58px !important;
+          height:58px !important;
+          margin:0 auto 12px !important;
+          border-radius:18px !important;
+          display:grid !important;
+          place-items:center !important;
+          background:#fff1f1 !important;
+          font-size:28px !important;
         }
         .driver-logout-confirm-card h3 {
-          margin:0 0 8px;
-          font-size:19px;
-          font-weight:900;
+          margin:0 0 8px !important;
+          font-size:19px !important;
+          font-weight:900 !important;
+          color:#102033 !important;
+          display:block !important;
         }
         .driver-logout-confirm-card p {
-          margin:0 auto 20px;
-          max-width:270px;
-          color:#667789;
-          font-size:14px;
-          line-height:1.45;
+          margin:0 auto 20px !important;
+          max-width:270px !important;
+          color:#667789 !important;
+          font-size:14px !important;
+          line-height:1.45 !important;
+          display:block !important;
         }
         .driver-logout-confirm-actions {
-          display:grid;
-          grid-template-columns:1fr 1fr;
-          gap:10px;
+          width:100% !important;
+          display:grid !important;
+          grid-template-columns:1fr 1fr !important;
+          gap:10px !important;
+          visibility:visible !important;
+          opacity:1 !important;
         }
         .driver-logout-confirm-actions button {
-          min-height:46px;
-          border-radius:13px;
-          font-size:14px;
-          font-weight:850;
-          cursor:pointer;
+          width:100% !important;
+          min-width:0 !important;
+          min-height:48px !important;
+          margin:0 !important;
+          padding:10px 12px !important;
+          border-radius:13px !important;
+          font-size:14px !important;
+          font-weight:850 !important;
+          cursor:pointer !important;
+          display:flex !important;
+          align-items:center !important;
+          justify-content:center !important;
+          visibility:visible !important;
+          opacity:1 !important;
+          position:relative !important;
+          transform:none !important;
         }
         .driver-logout-cancel {
-          border:1px solid #d8e0e6;
-          background:#fff;
-          color:#30465a;
+          border:1px solid #cfd8de !important;
+          background:#f7f9fa !important;
+          color:#102033 !important;
+        }
+        .driver-logout-cancel:active {
+          background:#edf1f3 !important;
         }
         .driver-logout-yes {
-          border:0;
-          background:#c94b4b;
-          color:#fff;
+          border:1px solid #c94b4b !important;
+          background:#c94b4b !important;
+          color:#fff !important;
         }
-        .driver-logout-yes:disabled { opacity:.65 }
+        .driver-logout-yes:disabled { opacity:.65 !important }
+        @media (max-width:360px){
+          .driver-logout-confirm-actions{
+            grid-template-columns:1fr !important;
+          }
+          .driver-logout-cancel{
+            order:2 !important;
+          }
+          .driver-logout-yes{
+            order:1 !important;
+          }
+        }
       `
       document.head.appendChild(style)
     }
@@ -121,9 +155,9 @@ export default function DriverLogoutPolish() {
       const backdrop = document.createElement('div')
       backdrop.className = 'driver-logout-confirm-backdrop'
       backdrop.innerHTML = `
-        <div class="driver-logout-confirm-card" role="dialog" aria-modal="true">
+        <div class="driver-logout-confirm-card" role="dialog" aria-modal="true" aria-labelledby="driver-logout-title">
           <div class="driver-logout-confirm-icon">🚪</div>
-          <h3>${lang === 'ht' ? 'Dekonekte?' : 'Se déconnecter ?'}</h3>
+          <h3 id="driver-logout-title">${lang === 'ht' ? 'Dekonekte?' : 'Se déconnecter ?'}</h3>
           <p>${lang === 'ht' ? 'Èske ou vle soti nan kont chofè ou a?' : 'Voulez-vous vraiment quitter votre compte chauffeur ?'}</p>
           <div class="driver-logout-confirm-actions">
             <button type="button" class="driver-logout-cancel">${lang === 'ht' ? 'Anile' : 'Annuler'}</button>
@@ -135,7 +169,11 @@ export default function DriverLogoutPolish() {
       backdrop.addEventListener('click', (event) => {
         if (event.target === backdrop) closeModal()
       })
-      backdrop.querySelector<HTMLButtonElement>('.driver-logout-cancel')?.addEventListener('click', closeModal)
+      backdrop.querySelector<HTMLButtonElement>('.driver-logout-cancel')?.addEventListener('click', (event) => {
+        event.preventDefault()
+        event.stopPropagation()
+        closeModal()
+      })
       backdrop.querySelector<HTMLButtonElement>('.driver-logout-yes')?.addEventListener('click', async () => {
         const yes = backdrop.querySelector<HTMLButtonElement>('.driver-logout-yes')
         if (yes) {
