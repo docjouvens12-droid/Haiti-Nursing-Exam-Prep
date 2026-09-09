@@ -24,33 +24,46 @@ export default function PassengerPaymentEnhancer() {
     const normalized: Method = savedMethod === 'natcash' ? 'natcash' : 'moncash'
     setMethod(normalized)
     window.localStorage.setItem('taxi-payment-method', normalized)
+    void supabase.rpc('set_preferred_payment_provider', { p_provider: normalized })
   }, [])
 
   useEffect(() => {
     if (!open) return
-    void supabase.auth.getUser().then(({ data }) => {
-      const user = data.user
-      if (!user) return
+    let active = true
+    void (async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user || !active) return
       const metadata = user.user_metadata || {}
       const fallbackName = String(metadata.full_name || '')
       const fallbackPhone = String(metadata.phone || '')
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('moncash_name,moncash_phone,natcash_name,natcash_phone,preferred_payment_provider')
+        .eq('id', user.id)
+        .maybeSingle()
+
+      if (!active) return
       const next = {
         moncash: {
-          name: String(metadata.moncash_name || ''),
-          phone: String(metadata.moncash_phone || ''),
+          name: String(profile?.moncash_name || metadata.moncash_name || ''),
+          phone: String(profile?.moncash_phone || metadata.moncash_phone || ''),
         },
         natcash: {
-          name: String(metadata.natcash_name || ''),
-          phone: String(metadata.natcash_phone || ''),
+          name: String(profile?.natcash_name || metadata.natcash_name || ''),
+          phone: String(profile?.natcash_phone || metadata.natcash_phone || ''),
         },
       }
+      const preferred = profile?.preferred_payment_provider === 'natcash' ? 'natcash' : profile?.preferred_payment_provider === 'moncash' ? 'moncash' : method
+      setMethod(preferred)
+      window.localStorage.setItem('taxi-payment-method', preferred)
       setAccounts(next)
       setDrafts({
         moncash: { name: next.moncash.name || fallbackName, phone: next.moncash.phone || fallbackPhone },
         natcash: { name: next.natcash.name || fallbackName, phone: next.natcash.phone || fallbackPhone },
       })
       setEditing({ moncash: !next.moncash.name || !next.moncash.phone, natcash: !next.natcash.name || !next.natcash.phone })
-    })
+    })()
+    return () => { active = false }
   }, [open])
 
   useEffect(() => {
@@ -110,10 +123,11 @@ export default function PassengerPaymentEnhancer() {
     }
   }, [])
 
-  const choose = (next: Method) => {
+  const choose = async (next: Method) => {
     setMethod(next)
     window.localStorage.setItem('taxi-payment-method', next)
     window.dispatchEvent(new CustomEvent('taxi-payment-method-change', { detail: next }))
+    await supabase.rpc('set_preferred_payment_provider', { p_provider: next })
   }
 
   async function saveAccount(event: FormEvent, id: Method) {
@@ -124,11 +138,21 @@ export default function PassengerPaymentEnhancer() {
     const payload = id === 'moncash'
       ? { moncash_name: draft.name.trim(), moncash_phone: draft.phone.trim() }
       : { natcash_name: draft.name.trim(), natcash_phone: draft.phone.trim() }
-    const { error } = await supabase.auth.updateUser({ data: payload })
+
+    const [{ error: metadataError }, { error: profileError }] = await Promise.all([
+      supabase.auth.updateUser({ data: payload }),
+      supabase.rpc('save_passenger_payment_account', {
+        p_provider: id,
+        p_account_name: draft.name.trim(),
+        p_account_phone: draft.phone.trim(),
+      }),
+    ])
     setSaving(null)
-    if (error) return
+    if (metadataError || profileError) return
+
     setAccounts((current) => ({ ...current, [id]: { name: draft.name.trim(), phone: draft.phone.trim() } }))
     setEditing((current) => ({ ...current, [id]: false }))
+    await choose(id)
   }
 
   if (!target || !open) return null
@@ -155,7 +179,7 @@ export default function PassengerPaymentEnhancer() {
             <div className="drawer-payment-method-top">
               <span className="drawer-payment-icon">{option.icon}</span>
               <span className="drawer-payment-copy"><strong>{option.label}</strong><small>{active ? (ht ? 'Metòd chwazi' : 'Mode sélectionné') : (ht ? 'Peze switch la pou chwazi' : 'Activez pour sélectionner')}</small></span>
-              <button type="button" className={`drawer-payment-switch ${active ? 'on' : ''}`} onClick={() => choose(option.id)} aria-label={option.label}><i /></button>
+              <button type="button" className={`drawer-payment-switch ${active ? 'on' : ''}`} onClick={() => void choose(option.id)} aria-label={option.label}><i /></button>
             </div>
 
             {isEditing ? (
@@ -178,7 +202,7 @@ export default function PassengerPaymentEnhancer() {
         })}
       </div>
 
-      <p className="drawer-payment-note">{ht ? 'Chwazi youn nan 2 metòd yo pou pwochen trajè a.' : 'Choisissez un des deux modes pour le prochain trajet.'}</p>
+      <p className="drawer-payment-note">{ht ? 'Peman trajè a ap pase nan app la. 85% pou chofè a, 15% pou platfòm nan.' : 'Le paiement du trajet passe par l’app : 85 % au chauffeur et 15 % à la plateforme.'}</p>
     </section>,
     target,
   )
