@@ -5,15 +5,6 @@ const nextConfig = {
   turbopack: {
     root: path.resolve(__dirname),
   },
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/login',
-        permanent: false,
-      },
-    ]
-  },
   async headers() {
     const noCache = [
       { key: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate' },
