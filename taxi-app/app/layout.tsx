@@ -34,6 +34,7 @@ import DriverLogoutPolish from '../components/DriverLogoutPolish'
 import DriverAutoRequestSearch from '../components/DriverAutoRequestSearch'
 import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish'
 import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
+import DriverHomeDashboardPolish from '../components/DriverHomeDashboardPolish'
 import DriverFinalMenuStable from '../components/DriverFinalMenuStable'
 import DriverApplicationSubmitButton from '../components/DriverApplicationSubmitButton'
 import DriverPayoutEditPolish from '../components/DriverPayoutEditPolish'
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverAutoRequestSearch />
         <DriverRideExperiencePolish />
         <DriverCompletedRideSummary />
+        <DriverHomeDashboardPolish />
         <DriverFinalMenuStable />
         <DriverApplicationSubmitButton />
         <DriverPayoutEditPolish />
