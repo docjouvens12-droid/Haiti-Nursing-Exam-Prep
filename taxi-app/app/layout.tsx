@@ -17,6 +17,7 @@ import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
 import PassengerRidePhasePolish from '../components/PassengerRidePhasePolish'
+import PassengerCompletionPolish from '../components/PassengerCompletionPolish'
 import PassengerAvatarEnhancer from '../components/PassengerAvatarEnhancer'
 import PassengerProfileDetails from '../components/PassengerProfileDetails'
 import PassengerDriverApplicationMenuItem from '../components/PassengerDriverApplicationMenuItem'
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerPendingRideCancel />
         <PassengerRideCompletion />
         <PassengerRidePhasePolish />
+        <PassengerCompletionPolish />
         <PassengerAvatarEnhancer />
         <PassengerProfileDetails />
         <PassengerDriverApplicationMenuItem />
