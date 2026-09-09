@@ -52,6 +52,31 @@ export default function PassengerRootAuthRedirect() {
           return
         }
 
+        // Safari/iOS can navigate before the auth session is durably persisted.
+        // Explicitly set and then re-read the session before leaving the login page.
+        const persisted = await supabase.auth.setSession({
+          access_token: data.session.access_token,
+          refresh_token: data.session.refresh_token,
+        })
+
+        if (persisted.error || !persisted.data.session?.user) {
+          const errorBox = document.createElement('div')
+          errorBox.className = 'auth-message passenger-direct-auth-error'
+          errorBox.textContent = persisted.error?.message || 'Session non enregistrée. Veuillez réessayer.'
+          submitButton?.insertAdjacentElement('beforebegin', errorBox)
+          return
+        }
+
+        await new Promise((resolve) => window.setTimeout(resolve, 250))
+        const { data: verified } = await supabase.auth.getSession()
+        if (!verified.session?.user) {
+          const errorBox = document.createElement('div')
+          errorBox.className = 'auth-message passenger-direct-auth-error'
+          errorBox.textContent = 'Session non enregistrée. Veuillez réessayer.'
+          submitButton?.insertAdjacentElement('beforebegin', errorBox)
+          return
+        }
+
         window.location.replace('/passenger/dashboard')
       } finally {
         if (submitButton) submitButton.disabled = false
@@ -63,7 +88,10 @@ export default function PassengerRootAuthRedirect() {
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!active) return
       if (session?.user && window.location.pathname === '/') {
-        window.location.replace('/passenger/dashboard')
+        // Let signInWithPassword finish persisting before navigating.
+        window.setTimeout(() => {
+          if (window.location.pathname === '/') void redirectIfSignedIn()
+        }, 300)
       }
     })
 
