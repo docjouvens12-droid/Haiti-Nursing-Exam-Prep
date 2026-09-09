@@ -4,7 +4,8 @@ import { useEffect } from 'react'
 
 export default function PassengerDashboardHardV2(){
   useEffect(()=>{
-    if(!window.location.pathname.includes('/passenger/dashboard')) return
+    const path=window.location.pathname
+    if(path!=='/' && !path.includes('/passenger/dashboard')) return
 
     const apply=()=>{
       document.body.classList.add('passenger-hard-v2')
@@ -26,9 +27,8 @@ export default function PassengerDashboardHardV2(){
 
       const payment=document.querySelector<HTMLElement>('.payment-row strong')
       if(payment){
-        const ht=localStorage.getItem('taxi-language')==='ht'
         const method=localStorage.getItem('taxi-payment-method')
-        payment.textContent=method==='moncash'?'MonCash':method==='natcash'?'NatCash':(ht?'MonCash / NatCash':'MonCash / NatCash')
+        payment.textContent=method==='moncash'?'MonCash':method==='natcash'?'NatCash':'MonCash / NatCash'
       }
     }
 
