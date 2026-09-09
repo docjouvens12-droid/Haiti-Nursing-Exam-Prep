@@ -9,29 +9,39 @@ export default function DriverMenuShell(){
   useEffect(()=>{
     if(window.location.pathname!=='/driver/dashboard') return
 
-    const bind=()=>{
-      const button=document.querySelector<HTMLButtonElement>('button.menuButton')
-      if(!button || button.dataset.driverMenuShellBound==='true') return
-      button.dataset.driverMenuShellBound='true'
-      const handler=(e:Event)=>{
-        e.preventDefault()
-        e.stopPropagation()
-        setOpen(true)
-      }
-      button.addEventListener('click',handler,true)
-      button.addEventListener('touchend',handler,true)
+    const openFromEvent=(event:Event)=>{
+      const target=event.target as HTMLElement | null
+      const button=target?.closest?.('button.menuButton') as HTMLButtonElement | null
+      if(!button) return
+      event.preventDefault()
+      event.stopPropagation()
+      setOpen(true)
     }
 
-    bind()
-    const observer=new MutationObserver(bind)
+    document.addEventListener('pointerup',openFromEvent,true)
+    document.addEventListener('touchend',openFromEvent,true)
+    document.addEventListener('click',openFromEvent,true)
+
+    const hideNativeDrawer=()=>{
+      const overlays=Array.from(document.querySelectorAll<HTMLElement>('.overlay'))
+      overlays.forEach(el=>{
+        if(!el.closest('.driver-menu-shell-overlay')) el.style.display='none'
+      })
+    }
+    const observer=new MutationObserver(hideNativeDrawer)
     observer.observe(document.body,{childList:true,subtree:true})
-    return()=>observer.disconnect()
+
+    return()=>{
+      document.removeEventListener('pointerup',openFromEvent,true)
+      document.removeEventListener('touchend',openFromEvent,true)
+      document.removeEventListener('click',openFromEvent,true)
+      observer.disconnect()
+    }
   },[])
 
   useEffect(()=>{
-    if(!open) return
     const old=document.body.style.overflow
-    document.body.style.overflow='hidden'
+    document.body.style.overflow=open?'hidden':old
     return()=>{document.body.style.overflow=old}
   },[open])
 
@@ -41,12 +51,12 @@ export default function DriverMenuShell(){
     <div
       className="driver-menu-shell-overlay"
       onClick={()=>setOpen(false)}
-      style={{position:'fixed',inset:0,zIndex:10000,background:'rgba(15,30,43,.45)'}}
+      style={{position:'fixed',inset:0,zIndex:2147483000,background:'rgba(15,30,43,.45)',display:'block'}}
     >
       <aside
         className="drawer driver-menu-shell-drawer"
         onClick={e=>e.stopPropagation()}
-        style={{position:'absolute',left:0,top:0,bottom:0,width:'min(88vw,360px)',background:'#fff',padding:'18px',overflowY:'auto',WebkitOverflowScrolling:'touch'}}
+        style={{position:'absolute',left:0,top:0,bottom:0,width:'min(88vw,360px)',background:'#fff',padding:'18px',overflowY:'auto',WebkitOverflowScrolling:'touch',display:'block',visibility:'visible',pointerEvents:'auto'}}
       >
         <div className="drawerTop" style={{display:'flex',alignItems:'center',minHeight:44}}>
           <button
