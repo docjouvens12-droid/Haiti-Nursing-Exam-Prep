@@ -38,6 +38,7 @@ import DriverApplicationProfileAddon from '../components/DriverApplicationProfil
 import DriverProfileRequiredFields from '../components/DriverProfileRequiredFields'
 import DriverVehicleRequiredFieldsGuard from '../components/DriverVehicleRequiredFieldsGuard'
 import DriverHelpTopicsAddon from '../components/DriverHelpTopicsAddon'
+import DriverMenuTapRecovery from '../components/DriverMenuTapRecovery'
 import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
@@ -78,6 +79,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <DriverProfileRequiredFields />
         <DriverVehicleRequiredFieldsGuard />
         <DriverHelpTopicsAddon />
+        <DriverMenuTapRecovery />
         <AdminDriverApplicationProfileSnapshot />
         <AdminDriverVehicleSnapshot />
         {children}
