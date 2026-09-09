@@ -52,18 +52,14 @@ export default function PassengerAvatarEnhancer() {
 
       const ht = localStorage.getItem('taxi-language') === 'ht'
       const brand = drawer.querySelector('.drawer-brand') as HTMLElement | null
-      if (brand) {
-        brand.style.setProperty('display', 'flex', 'important')
-        Array.from(brand.children).forEach((child, index) => {
-          if (index > 0) (child as HTMLElement).style.setProperty('display', 'none', 'important')
-        })
-      }
+      if (brand) brand.style.setProperty('display', 'none', 'important')
 
       const head = drawer.querySelector('.drawer-head') as HTMLElement | null
       if (head) {
-        head.style.justifyContent = 'space-between'
-        head.style.borderBottom = '0'
-        head.style.paddingBottom = '2px'
+        head.style.setProperty('justify-content', 'flex-end', 'important')
+        head.style.setProperty('border-bottom', '0', 'important')
+        head.style.setProperty('padding-bottom', '0', 'important')
+        head.style.setProperty('min-height', '52px', 'important')
       }
 
       const user = drawer.querySelector('.drawer-user') as HTMLElement | null
@@ -152,17 +148,17 @@ export default function PassengerAvatarEnhancer() {
   return <>
     <input ref={inputRef} type="file" accept="image/*" onChange={onPick} style={{ display: 'none' }} />
     <style>{`
-      .nav-drawer .drawer-brand>div:not(:first-child),
-      .nav-drawer .drawer-brand>span:not(:first-child),
-      .nav-drawer .drawer-brand>section:not(:first-child){display:none!important}
+      .nav-drawer .drawer-brand{display:none!important}
+      .nav-drawer .drawer-head{justify-content:flex-end!important;border-bottom:0!important;padding-bottom:0!important;min-height:52px!important}
       .nav-drawer .drawer-user.passenger-premium-user{
         display:flex!important;
         flex-direction:column!important;
         align-items:center!important;
         justify-content:center!important;
         gap:0!important;
-        margin:6px 2px 14px!important;
-        padding:12px!important;
+        margin:2px 2px 14px!important;
+        padding:14px 12px!important;
+        min-height:108px!important;
         border:1px solid #e2ebe7!important;
         border-radius:20px!important;
         background:linear-gradient(180deg,#ffffff 0%,#f5faf8 100%)!important;
@@ -172,23 +168,23 @@ export default function PassengerAvatarEnhancer() {
       .nav-drawer .drawer-user.passenger-premium-user>div:last-child{display:none!important}
       .nav-drawer .drawer-avatar.passenger-photo-avatar{
         position:relative!important;
-        width:76px!important;
-        height:76px!important;
-        min-width:76px!important;
-        border-radius:24px!important;
+        width:68px!important;
+        height:68px!important;
+        min-width:68px!important;
+        border-radius:22px!important;
         display:grid!important;
         place-items:center!important;
         overflow:visible!important;
         background:#0f705a!important;
         color:#fff!important;
-        font-size:27px!important;
+        font-size:25px!important;
         font-weight:900!important;
         border:4px solid #fff!important;
         box-shadow:0 8px 22px rgba(15,112,90,.2)!important;
         cursor:pointer!important;
       }
       .nav-drawer .drawer-avatar.passenger-photo-avatar img{
-        width:100%!important;height:100%!important;object-fit:cover!important;border-radius:20px!important;display:block!important;
+        width:100%!important;height:100%!important;object-fit:cover!important;border-radius:18px!important;display:block!important;
       }
       .nav-drawer .passenger-avatar-camera{
         position:absolute!important;right:-6px!important;bottom:-5px!important;
