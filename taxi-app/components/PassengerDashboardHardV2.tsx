@@ -4,10 +4,10 @@ import { useEffect } from 'react'
 
 export default function PassengerDashboardHardV2(){
   useEffect(()=>{
-    const path=window.location.pathname
-    if(path!=='/' && !path.includes('/passenger/dashboard')) return
-
     const apply=()=>{
+      const booking=document.querySelector<HTMLElement>('.booking-sheet')
+      if(!booking) return
+
       document.body.classList.add('passenger-hard-v2')
 
       const greeting=document.querySelector<HTMLElement>('.greeting-row')
@@ -35,18 +35,17 @@ export default function PassengerDashboardHardV2(){
     apply()
     const observer=new MutationObserver(apply)
     observer.observe(document.body,{childList:true,subtree:true,characterData:true})
-    const timer=window.setInterval(apply,500)
-    const stop=window.setTimeout(()=>window.clearInterval(timer),12000)
+    const timer=window.setInterval(apply,300)
 
     return()=>{
       observer.disconnect()
       window.clearInterval(timer)
-      window.clearTimeout(stop)
       document.body.classList.remove('passenger-hard-v2')
     }
   },[])
 
   return <style>{`
+    body.passenger-hard-v2 .greeting-row{display:none!important}
     body.passenger-hard-v2 .map-panel.real-map-panel{height:48dvh!important;min-height:350px!important}
     body.passenger-hard-v2 .booking-sheet{margin-top:-54px!important;padding-top:14px!important;border-radius:28px!important}
     body.passenger-hard-v2 .ride-list{grid-template-columns:1fr 1fr!important;gap:10px!important}
