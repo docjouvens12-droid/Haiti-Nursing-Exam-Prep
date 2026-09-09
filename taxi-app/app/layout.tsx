@@ -20,6 +20,24 @@ import PassengerPaymentEnhancer from '../components/PassengerPaymentEnhancer'
 import PassengerLanguageSwitchEnhancer from '../components/PassengerLanguageSwitchEnhancer'
 import PassengerHelpDirectNavigation from '../components/PassengerHelpDirectNavigation'
 import PassengerRidePaymentSync from '../components/PassengerRidePaymentSync'
+import DriverMenuAccordionPolish from '../components/DriverMenuAccordionPolish'
+import DriverAvatarUploadPolish from '../components/DriverAvatarUploadPolish'
+import DriverVehicleMenuPolish from '../components/DriverVehicleMenuPolish'
+import DriverLanguageSwitchPolish from '../components/DriverLanguageSwitchPolish'
+import DriverDashboardTitleHide from '../components/DriverDashboardTitleHide'
+import DriverOnlineSwitchPolish from '../components/DriverOnlineSwitchPolish'
+import DriverBrandTaxiPolish from '../components/DriverBrandTaxiPolish'
+import DriverCompactBrandPolish from '../components/DriverCompactBrandPolish'
+import DriverEarningsMenuPolish from '../components/DriverEarningsMenuPolish'
+import DriverNetEarningsPolish from '../components/DriverNetEarningsPolish'
+import DriverRideHistoryMenuPolish from '../components/DriverRideHistoryMenuPolish'
+import DriverMenuVisualConsistency from '../components/DriverMenuVisualConsistency'
+import DriverLogoutPolish from '../components/DriverLogoutPolish'
+import DriverAutoRequestSearch from '../components/DriverAutoRequestSearch'
+import DriverRideExperiencePolish from '../components/DriverRideExperiencePolish'
+import DriverCompletedRideSummary from '../components/DriverCompletedRideSummary'
+import DriverPaymentMethodPolish from '../components/DriverPaymentMethodPolish'
+import DriverPaymentMenuPolish from '../components/DriverPaymentMenuPolish'
 
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
@@ -40,6 +58,24 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerLanguageSwitchEnhancer />
         <PassengerHelpDirectNavigation />
         <PassengerRidePaymentSync />
+        <DriverMenuAccordionPolish />
+        <DriverAvatarUploadPolish />
+        <DriverVehicleMenuPolish />
+        <DriverLanguageSwitchPolish />
+        <DriverDashboardTitleHide />
+        <DriverOnlineSwitchPolish />
+        <DriverBrandTaxiPolish />
+        <DriverCompactBrandPolish />
+        <DriverEarningsMenuPolish />
+        <DriverNetEarningsPolish />
+        <DriverRideHistoryMenuPolish />
+        <DriverMenuVisualConsistency />
+        <DriverLogoutPolish />
+        <DriverAutoRequestSearch />
+        <DriverRideExperiencePolish />
+        <DriverCompletedRideSummary />
+        <DriverPaymentMethodPolish />
+        <DriverPaymentMenuPolish />
         {children}
       </body>
     </html>
