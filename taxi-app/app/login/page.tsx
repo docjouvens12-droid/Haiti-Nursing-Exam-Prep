@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react'
 import { supabase } from '../../lib/supabase'
+import HomePage from '../page'
 
 type Target = {
   path: string
@@ -12,6 +13,8 @@ export default function UnifiedLoginPage() {
   const [password, setPassword] = useState('')
   const [busy, setBusy] = useState(false)
   const [message, setMessage] = useState('')
+  const [passengerReady, setPassengerReady] = useState(false)
+  const [passengerTransition, setPassengerTransition] = useState(false)
 
   async function submit(e: FormEvent) {
     e.preventDefault()
@@ -30,9 +33,6 @@ export default function UnifiedLoginPage() {
       return
     }
 
-    // Safari/iPhone can navigate before the auth client has fully written the
-    // new session to local storage. Explicitly persist the returned tokens,
-    // then read them back before leaving this page.
     const { error: persistError } = await supabase.auth.setSession({
       access_token: data.session.access_token,
       refresh_token: data.session.refresh_token,
@@ -51,9 +51,7 @@ export default function UnifiedLoginPage() {
       return
     }
 
-    let target: Target = {
-      path: '/passenger/dashboard',
-    }
+    let target: Target = { path: '/passenger/dashboard' }
 
     const { data: profile } = await supabase
       .from('profiles')
@@ -62,9 +60,7 @@ export default function UnifiedLoginPage() {
       .maybeSingle()
 
     if (profile?.role === 'admin') {
-      target = {
-        path: '/admin/drivers',
-      }
+      target = { path: '/admin/drivers' }
     } else {
       const { data: driver } = await supabase
         .from('driver_profiles')
@@ -73,16 +69,35 @@ export default function UnifiedLoginPage() {
         .maybeSingle()
 
       if (driver?.status === 'approved') {
-        target = {
-          path: '/driver/dashboard',
-        }
+        target = { path: '/driver/dashboard' }
       }
     }
 
-    // Give WebKit one event-loop turn after the verified storage write before
-    // replacing the page. This prevents login -> dashboard -> login loops.
+    if (target.path === '/passenger/dashboard') {
+      // Keep the verified Supabase client/session alive in the same WebKit page.
+      // This avoids iPhone/Safari losing the just-created session during a hard navigation.
+      window.history.replaceState({}, '', '/passenger/dashboard')
+      setPassengerTransition(true)
+      setPassengerReady(true)
+      setBusy(false)
+      window.setTimeout(() => setPassengerTransition(false), 450)
+      return
+    }
+
     await new Promise((resolve) => window.setTimeout(resolve, 120))
     window.location.replace(target.path)
+  }
+
+  if (passengerReady) {
+    return <>
+      <HomePage />
+      {passengerTransition && <div style={{position:'fixed',inset:0,zIndex:2147483647,display:'grid',placeItems:'center',background:'linear-gradient(160deg,#e3f1ed,#eef2f7 48%,#e7edf3)',fontFamily:'system-ui,sans-serif'}}>
+        <div style={{display:'grid',gap:12,justifyItems:'center',color:'#0f6f59',fontWeight:900}}>
+          <div style={{width:48,height:48,borderRadius:16,display:'grid',placeItems:'center',background:'#0f6f59',color:'#fff',fontSize:22}}>T</div>
+          <span>Ou konekte. N ap louvri espas kliyan an…</span>
+        </div>
+      </div>}
+    </>
   }
 
   return (
