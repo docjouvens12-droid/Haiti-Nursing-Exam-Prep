@@ -26,16 +26,21 @@ export default function DriverMenuAccordionPolish() {
       drawer.style.width = 'min(68vw, 280px)'
       drawer.style.boxSizing = 'border-box'
 
-      const head = drawer.querySelector('.drawerHead') as HTMLElement | null
+      // Support both the restored/current driver drawer markup and the older one.
+      const head = drawer.querySelector('.drawerTop, .drawerHead') as HTMLElement | null
       const headTitle = head?.querySelector('strong') as HTMLElement | null
       if (headTitle) headTitle.style.display = 'none'
-      if (head) head.style.justifyContent = 'flex-end'
+      if (head) head.style.justifyContent = 'flex-start'
 
-      const profile = drawer.querySelector('.profileBlock') as HTMLElement | null
-      const profileText = profile?.querySelector('div:last-child') as HTMLElement | null
+      const profile = drawer.querySelector('.profile, .profileBlock') as HTMLElement | null
+      const profileText = profile?.querySelector(':scope > div:last-child') as HTMLElement | null
       const visibleName = profileText?.querySelector('strong')?.textContent?.trim() || ''
       if (profileText) profileText.style.display = 'none'
-      if (profile) profile.style.justifyContent = 'center'
+      if (profile) {
+        profile.style.justifyContent = 'center'
+        profile.style.paddingLeft = '0'
+        profile.style.paddingRight = '0'
+      }
 
       const { data: auth } = await supabase.auth.getUser()
       const user = auth.user
