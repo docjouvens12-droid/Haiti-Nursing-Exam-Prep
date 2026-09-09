@@ -9,11 +9,13 @@ export default function PassengerLogoutPolish(){
   const [ht,setHt]=useState(false)
 
   useEffect(()=>{
+    if(window.location.pathname.startsWith('/driver')) return
     setHt(localStorage.getItem('taxi-language')==='ht')
     let current:HTMLButtonElement|null=null
     let handler:((event:MouseEvent)=>void)|null=null
 
     const apply=()=>{
+      if(window.location.pathname.startsWith('/driver')) return
       const drawer=document.querySelector('.nav-drawer')
       if(!drawer) return
       const buttons=Array.from(drawer.querySelectorAll<HTMLButtonElement>('.drawer-nav > button'))
