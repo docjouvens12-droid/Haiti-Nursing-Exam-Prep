@@ -13,7 +13,7 @@ async function routeUser(userId: string) {
     .maybeSingle()
 
   if (profile?.role === 'admin') {
-    window.location.replace('/admin/drivers')
+    window.location.replace('/admin')
     return
   }
 
@@ -26,7 +26,10 @@ async function routeUser(userId: string) {
 
     if (driver?.status === 'approved') {
       window.location.replace('/driver/dashboard')
+      return
     }
+
+    window.location.replace('/driver')
   }
 }
 
