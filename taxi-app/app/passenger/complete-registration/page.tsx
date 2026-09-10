@@ -20,9 +20,10 @@ export default function PassengerCompleteRegistrationPage() {
     supabase.auth.getUser().then(async ({data})=>{
       if(!data.user){location.replace('/');return}
       setEmail(data.user.email??'')
-      const {data:profile}=await supabase.from('profiles').select('role,full_name,phone').eq('id',data.user.id).maybeSingle()
+      const {data:profile}=await supabase.from('profiles').select('role,full_name,phone,passenger_onboarding_completed').eq('id',data.user.id).maybeSingle()
       if(profile?.role==='admin'){location.replace('/admin');return}
       if(profile?.role==='driver'){location.replace('/driver');return}
+      if(profile?.role==='passenger' && profile.passenger_onboarding_completed){location.replace('/');return}
       setFullName(profile?.full_name??'')
       setPhone(profile?.phone??'')
       setReady(true)
@@ -33,7 +34,7 @@ export default function PassengerCompleteRegistrationPage() {
     e.preventDefault();setBusy(true);setMessage('')
     const {data:auth}=await supabase.auth.getUser()
     if(!auth.user){location.replace('/');return}
-    const {error}=await supabase.from('profiles').update({full_name:fullName.trim(),phone:phone.trim(),updated_at:new Date().toISOString()}).eq('id',auth.user.id)
+    const {error}=await supabase.from('profiles').update({full_name:fullName.trim(),phone:phone.trim(),passenger_onboarding_completed:true,updated_at:new Date().toISOString()}).eq('id',auth.user.id)
     if(error){setMessage(error.message);setBusy(false);return}
     location.replace('/')
   }
