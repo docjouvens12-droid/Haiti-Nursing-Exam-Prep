@@ -1,0 +1,27 @@
+{
+  "id": "/",
+  "name": "MOVI",
+  "short_name": "MOVI",
+  "description": "Deplase fasil, rapidman ak an sekirite",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "display_override": ["standalone"],
+  "background_color": "#f4f8f6",
+  "theme_color": "#0f705a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/taxi-haiti-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/taxi-haiti-icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
