@@ -1,6 +1,6 @@
-const CACHE_NAME = 'movi-static-v6'
-const STATIC_URLS = ['/manifest.webmanifest', '/taxi-haiti-icon.svg', '/taxi-haiti-icon-maskable.svg']
-const PWA_REFRESH_VERSION = '6'
+const CACHE_NAME = 'movi-static-v7'
+const STATIC_URLS = ['/manifest.webmanifest', '/movi-icon.svg', '/movi-icon-maskable.svg']
+const PWA_REFRESH_VERSION = '7'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
