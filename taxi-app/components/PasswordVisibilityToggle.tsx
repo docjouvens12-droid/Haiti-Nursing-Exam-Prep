@@ -1,9 +1,20 @@
 'use client'
 
 import { useEffect } from 'react'
+import { supabase } from '../lib/supabase'
 
 export default function PasswordVisibilityToggle() {
   useEffect(() => {
+    const clearCredentialFields = () => {
+      const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
+      document.querySelectorAll<HTMLInputElement>('input[type="email"], input[type="password"], input[data-password-visible-toggle="true"]').forEach((input) => {
+        if (setter) setter.call(input, '')
+        else input.value = ''
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+        input.dispatchEvent(new Event('change', { bubbles: true }))
+      })
+    }
+
     const enhance = () => {
       document.querySelectorAll<HTMLInputElement>('input[type="password"], input[data-password-visible-toggle="true"]').forEach((input) => {
         if (input.dataset.passwordToggleReady === 'true') return
@@ -54,7 +65,18 @@ export default function PasswordVisibilityToggle() {
     enhance()
     const observer = new MutationObserver(enhance)
     observer.observe(document.body, { childList: true, subtree: true })
-    return () => observer.disconnect()
+
+    const { data: listener } = supabase.auth.onAuthStateChange((event) => {
+      if (event !== 'SIGNED_OUT') return
+      clearCredentialFields()
+      window.setTimeout(clearCredentialFields, 50)
+      window.setTimeout(clearCredentialFields, 250)
+    })
+
+    return () => {
+      observer.disconnect()
+      listener.subscription.unsubscribe()
+    }
   }, [])
 
   return null
