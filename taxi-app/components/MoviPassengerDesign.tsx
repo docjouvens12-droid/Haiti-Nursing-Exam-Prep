@@ -11,27 +11,33 @@ export default function MoviPassengerDesign() {
       document.body.classList.toggle('movi-passenger-ui', active)
       if (!active) return
 
-      const brand = document.querySelector<HTMLElement>('.app-underlay .brand-chip strong')
-      const mark = document.querySelector<HTMLElement>('.app-underlay .brand-chip .brand-mark')
-      if (brand && brand.textContent !== 'MOVI') brand.textContent = 'MOVI'
-      if (mark && mark.textContent !== 'M') mark.textContent = 'M'
-
       document.querySelectorAll<HTMLElement>('.nav-drawer strong').forEach((el) => {
         if (/Taxi Haiti|Taxi Platform Haiti/i.test(el.textContent || '')) el.textContent = 'MOVI'
       })
     }
 
     sync()
-    const timer = window.setInterval(sync, 250)
+    const observer = new MutationObserver(sync)
+    observer.observe(document.body, { childList: true, subtree: true, characterData: true })
+    const timer = window.setInterval(sync, 1000)
     return () => {
+      observer.disconnect()
       window.clearInterval(timer)
       document.body.classList.remove('movi-passenger-ui')
     }
   }, [])
 
   return <style>{`
-    .app-underlay .brand-chip{
-      min-width:120px!important;
+    body.movi-passenger-ui .topbar{
+      grid-template-columns:46px minmax(0,1fr) 46px!important;
+      left:14px!important;
+      right:14px!important;
+    }
+    body.movi-passenger-ui .brand-chip{
+      justify-self:center!important;
+      width:max-content!important;
+      min-width:118px!important;
+      max-width:170px!important;
       height:46px!important;
       padding:6px 13px 6px 7px!important;
       border-radius:17px!important;
@@ -39,19 +45,45 @@ export default function MoviPassengerDesign() {
       border:1px solid #dce9e4!important;
       box-shadow:0 10px 26px rgba(16,32,51,.12)!important;
     }
-    .app-underlay .brand-chip .brand-mark{
+    body.movi-passenger-ui .brand-chip .brand-mark{
       width:33px!important;height:33px!important;border-radius:12px!important;
       display:grid!important;place-items:center!important;
       background:linear-gradient(145deg,#18a06f,#08794f)!important;
-      color:#fff!important;font-size:18px!important;font-weight:950!important;
+      color:transparent!important;font-size:0!important;font-weight:950!important;
       box-shadow:0 7px 18px rgba(11,132,88,.24)!important;
+      position:relative!important;overflow:hidden!important;
     }
-    .app-underlay .brand-chip strong{
-      display:block!important;font-size:17px!important;line-height:1!important;
-      color:#0b2037!important;font-weight:950!important;letter-spacing:-.035em!important;
+    body.movi-passenger-ui .brand-chip .brand-mark::after{
+      content:'M'!important;
+      color:#fff!important;
+      font-size:18px!important;
+      line-height:1!important;
+      font-weight:950!important;
+      position:absolute!important;
+      inset:0!important;
+      display:grid!important;
+      place-items:center!important;
     }
-    .app-underlay .brand-chip strong:after{content:none!important}
-    .app-underlay .brand-chip small{display:none!important}
+    body.movi-passenger-ui .brand-chip strong{
+      display:block!important;
+      color:transparent!important;
+      font-size:0!important;
+      line-height:1!important;
+      font-weight:950!important;
+      letter-spacing:-.035em!important;
+      position:relative!important;
+      min-width:46px!important;
+    }
+    body.movi-passenger-ui .brand-chip strong::after{
+      content:'MOVI'!important;
+      color:#0b2037!important;
+      font-size:17px!important;
+      line-height:1!important;
+      font-weight:950!important;
+      letter-spacing:-.035em!important;
+      display:block!important;
+    }
+    body.movi-passenger-ui .brand-chip small{display:none!important}
 
     body.movi-passenger-ui{background:#f4f8f6!important}
     body.movi-passenger-ui .phone-frame{background:#f4f8f6!important}
@@ -62,7 +94,7 @@ export default function MoviPassengerDesign() {
     }
     body.movi-passenger-ui .topbar{
       top:calc(12px + env(safe-area-inset-top))!important;
-      left:14px!important;right:14px!important;z-index:60!important;
+      z-index:60!important;
     }
     body.movi-passenger-ui .round-button{
       width:46px!important;height:46px!important;border-radius:16px!important;
@@ -100,6 +132,7 @@ export default function MoviPassengerDesign() {
     @media(max-width:420px){
       body.movi-passenger-ui .map-panel.real-map-panel{height:45dvh!important;min-height:322px!important}
       body.movi-passenger-ui .booking-sheet{margin-top:-52px!important}
+      body.movi-passenger-ui .brand-chip{min-width:112px!important}
     }
   `}</style>
 }
