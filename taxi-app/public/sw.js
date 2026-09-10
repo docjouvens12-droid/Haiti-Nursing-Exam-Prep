@@ -1,5 +1,6 @@
-const CACHE_NAME = 'movi-static-v3'
+const CACHE_NAME = 'movi-static-v6'
 const STATIC_URLS = ['/manifest.webmanifest', '/taxi-haiti-icon.svg', '/taxi-haiti-icon-maskable.svg']
+const PWA_REFRESH_VERSION = '6'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -15,6 +16,18 @@ self.addEventListener('activate', (event) => {
     caches.keys()
       .then((keys) => Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))))
       .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: 'window', includeUncontrolled: true }))
+      .then((clients) => Promise.all(clients.map((client) => {
+        try {
+          const url = new URL(client.url)
+          if (url.origin !== self.location.origin) return undefined
+          if (url.searchParams.get('movi_pwa') === PWA_REFRESH_VERSION) return undefined
+          url.searchParams.set('movi_pwa', PWA_REFRESH_VERSION)
+          return client.navigate(url.toString())
+        } catch {
+          return undefined
+        }
+      })))
   )
 })
 
