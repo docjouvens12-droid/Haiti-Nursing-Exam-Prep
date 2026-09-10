@@ -8,7 +8,7 @@ async function routeUser(userId: string) {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role,full_name,phone')
+    .select('role,passenger_onboarding_completed')
     .eq('id', userId)
     .maybeSingle()
 
@@ -34,7 +34,7 @@ async function routeUser(userId: string) {
     return
   }
 
-  if (!profile?.full_name?.trim() || !profile?.phone?.trim()) {
+  if (profile?.role === 'passenger' && !profile.passenger_onboarding_completed) {
     window.location.replace('/passenger/complete-registration')
   }
 }
