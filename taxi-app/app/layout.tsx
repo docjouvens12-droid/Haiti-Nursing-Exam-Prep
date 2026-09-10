@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import './globals.css'
 import './menu.css'
 import './completion.css'
@@ -18,6 +18,7 @@ import UnifiedPublicEntry from '../components/UnifiedPublicEntry'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
+import PwaRegister from '../components/PwaRegister'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -71,12 +72,34 @@ import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot
 export const metadata: Metadata = {
   title: 'Taxi Platform Haiti',
   description: 'Mande yon taksi rapidman an Ayiti',
+  applicationName: 'Taxi Platform Haiti',
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: '/taxi-haiti-icon.svg',
+    apple: '/taxi-haiti-icon.svg',
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Taxi Haiti',
+  },
+  formatDetection: {
+    telephone: false,
+  },
+}
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#0f705a',
 }
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="fr">
       <body>
+        <PwaRegister />
         <UnifiedPublicEntry />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
