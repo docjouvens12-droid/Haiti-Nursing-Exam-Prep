@@ -5,19 +5,24 @@ import { usePathname } from 'next/navigation'
 import { supabase } from '../lib/supabase'
 
 type Lang = 'fr' | 'ht'
+type Mode = 'signin' | 'signup'
 
 export default function UnifiedPublicEntry() {
   const pathname = usePathname()
-  const [lang, setLang] = useState<Lang>('ht')
+  const [lang, setLang] = useState<Lang>('fr')
+  const [mode, setMode] = useState<Mode>('signin')
   const [visible, setVisible] = useState(false)
   const [checking, setChecking] = useState(true)
+  const [busy, setBusy] = useState(false)
+  const [message, setMessage] = useState('')
+  const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   useEffect(() => {
     if (pathname !== '/') { setChecking(false); setVisible(false); return }
     const saved = window.localStorage.getItem('taxi-language') as Lang | null
     if (saved === 'fr' || saved === 'ht') setLang(saved)
-
     let mounted = true
     supabase.auth.getSession().then(({ data }) => {
       if (!mounted) return
@@ -25,8 +30,7 @@ export default function UnifiedPublicEntry() {
       setChecking(false)
     })
     const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!mounted) return
-      setVisible(!session?.user)
+      if (mounted) setVisible(!session?.user)
     })
     return () => { mounted = false; listener.subscription.unsubscribe() }
   }, [pathname])
@@ -41,30 +45,39 @@ export default function UnifiedPublicEntry() {
     window.localStorage.setItem('taxi-language', next)
   }
 
-  function continueWithEmail(event: FormEvent) {
+  async function submit(event: FormEvent) {
     event.preventDefault()
-    const clean = email.trim().toLowerCase()
-    if (!clean) return
-    window.sessionStorage.setItem('taxi-entry-email', clean)
-    setVisible(false)
+    setBusy(true)
+    setMessage('')
+    const cleanEmail = email.trim().toLowerCase()
 
-    // Prefill the existing secure auth form without changing its authentication logic.
-    window.setTimeout(() => {
-      const input = document.querySelector('.auth-form input[type="email"]') as HTMLInputElement | null
-      if (!input) return
-      const setter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value')?.set
-      setter?.call(input, clean)
-      input.dispatchEvent(new Event('input', { bubbles: true }))
-      input.dispatchEvent(new Event('change', { bubbles: true }))
-      const password = document.querySelector('.auth-form input[type="password"]') as HTMLInputElement | null
-      password?.focus()
-    }, 80)
+    if (mode === 'signin') {
+      const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password })
+      if (error) setMessage(lang === 'ht' ? 'Imel oswa modpas la pa kòrèk.' : 'E-mail ou mot de passe incorrect.')
+    } else {
+      const { error } = await supabase.auth.signUp({
+        email: cleanEmail,
+        password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/`,
+          data: { full_name: fullName.trim(), role: 'passenger' },
+        },
+      })
+      if (error) {
+        setMessage(error.message)
+      } else {
+        setMessage(lang === 'ht' ? 'Kont lan kreye. Tcheke imel ou epi konfime adrès imel la anvan ou konekte.' : 'Compte créé. Vérifiez votre e-mail et confirmez votre adresse avant de vous connecter.')
+        setMode('signin')
+        setPassword('')
+      }
+    }
+    setBusy(false)
   }
 
   if (pathname !== '/' || checking || !visible) return null
-
   const ht = lang === 'ht'
-  return <main className="upe-shell" aria-label={ht ? 'Akèy Taxi Platform Haiti' : 'Accueil Taxi Platform Haiti'}>
+
+  return <main className="upe-shell">
     <section className="upe-card">
       <header className="upe-top">
         <div className="upe-brand"><span>🚕</span><div><strong>Taxi Platform Haiti</strong><small>{ht ? 'Deplase fasil. Deplase an sekirite.' : 'Déplacez-vous facilement, en toute sécurité.'}</small></div></div>
@@ -72,34 +85,29 @@ export default function UnifiedPublicEntry() {
       </header>
 
       <section className="upe-hero">
-        <div className="upe-badge">🇭🇹 {ht ? 'Yon sèl pòt antre pou tout moun' : 'Une seule entrée pour tout le monde'}</div>
-        <h1>{ht ? 'Antre imel ou pou kòmanse' : 'Entrez votre e-mail pour commencer'}</h1>
-        <p>{ht ? 'Nou pral gide ou otomatikman selon kont ou: pasaje, chofè oswa administrasyon.' : 'Nous vous guiderons automatiquement selon votre compte : passager, chauffeur ou administration.'}</p>
+        <h1>{mode === 'signin' ? (ht ? 'Konekte' : 'Connectez-vous') : (ht ? 'Enskri' : 'Inscrivez-vous')}</h1>
+        <p>{mode === 'signin' ? (ht ? 'Antre imel ak modpas ou. N ap voye ou otomatikman nan espas ki koresponn ak kont ou.' : 'Entrez votre e-mail et votre mot de passe. Vous serez dirigé automatiquement vers votre espace.') : (ht ? 'Kreye kont ou. N ap voye yon imel konfimasyon ba ou.' : 'Créez votre compte. Un e-mail de confirmation vous sera envoyé.')}</p>
       </section>
 
-      <form className="upe-email-form" onSubmit={continueWithEmail}>
+      <form className="upe-form" onSubmit={submit}>
+        {mode === 'signup' && <><label htmlFor="upe-name">{ht ? 'Non konplè' : 'Nom complet'}</label><input id="upe-name" value={fullName} onChange={e=>setFullName(e.target.value)} autoComplete="name" required /></>}
         <label htmlFor="upe-email">{ht ? 'Imel' : 'E-mail'}</label>
-        <div className="upe-email-box"><span>✉️</span><input id="upe-email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} placeholder={ht ? 'nonou@email.com' : 'votre@email.com'} value={email} onChange={e=>setEmail(e.target.value)} required /></div>
-        <button type="submit">{ht ? 'Kontinye' : 'Continuer'} <b>›</b></button>
+        <input id="upe-email" type="email" inputMode="email" autoComplete="email" autoCapitalize="none" value={email} onChange={e=>setEmail(e.target.value)} placeholder="email@exemple.com" required />
+        <label htmlFor="upe-password">{ht ? 'Modpas' : 'Mot de passe'}</label>
+        <input id="upe-password" type="password" autoComplete={mode==='signin'?'current-password':'new-password'} value={password} onChange={e=>setPassword(e.target.value)} minLength={6} required />
+        {message && <div className="upe-message">{message}</div>}
+        <button className="upe-submit" type="submit" disabled={busy}>{busy ? (ht ? 'Tanpri tann…' : 'Veuillez patienter…') : mode === 'signin' ? (ht ? 'Konekte' : 'Se connecter') : (ht ? 'Enskri' : "S'inscrire")}</button>
       </form>
 
-      <section className="upe-flow">
-        <div><span>👤</span><p><strong>{ht?'Pasaje':'Passager'}</strong><small>{ht?'Konekte oswa kreye kont, epi mande yon taksi.':'Connexion ou inscription, puis commandez un taxi.'}</small></p></div>
-        <div><span>🚘</span><p><strong>{ht?'Chofè':'Chauffeur'}</strong><small>{ht?'Apre koneksyon, suiv pwosesis aplikasyon chofè a si sa nesesè.':'Après connexion, suivez la procédure de candidature chauffeur si nécessaire.'}</small></p></div>
-        <div><span>🛡️</span><p><strong>Admin</strong><small>{ht?'Kont admin otorize ale dirèk sou dashboard administrasyon an.':'Un compte admin autorisé est dirigé vers le tableau de bord.'}</small></p></div>
-      </section>
-
-      <div className="upe-trust"><span>✓ {ht?'Kont sekirize':'Compte sécurisé'}</span><span>✓ FR / Kreyòl</span><span>✓ {ht?'Yon sèl paj akèy':'Une seule page d’accueil'}</span></div>
+      <div className="upe-switch">
+        <span>{mode === 'signin' ? (ht ? 'Ou poko gen kont?' : 'Vous n’avez pas encore de compte ?') : (ht ? 'Ou deja gen kont?' : 'Vous avez déjà un compte ?')}</span>
+        <button onClick={()=>{setMode(mode==='signin'?'signup':'signin');setMessage('')}}>{mode === 'signin' ? (ht ? 'Enskri' : "S'inscrire") : (ht ? 'Konekte' : 'Se connecter')}</button>
+      </div>
+      <div className="upe-note">🔒 {ht ? 'Kont admin, chofè ak pasaje itilize menm koneksyon an.' : 'Les comptes admin, chauffeur et passager utilisent la même connexion.'}</div>
     </section>
+
     <style jsx>{`
-      .upe-shell{position:fixed;inset:0;z-index:2147480000;overflow:auto;background:radial-gradient(circle at 20% 0,#17735f 0,#0a3f35 42%,#062b25 100%);padding:max(18px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));display:grid;place-items:center;font-family:Inter,system-ui,-apple-system,sans-serif;color:#102033}
-      .upe-card{width:min(100%,440px);background:#fff;border-radius:30px;padding:18px;box-shadow:0 28px 80px rgba(0,0,0,.28)}
-      .upe-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.upe-brand{display:flex;align-items:center;gap:10px;min-width:0}.upe-brand>span{width:46px;height:46px;border-radius:15px;background:#0f705a;display:grid;place-items:center;font-size:24px;box-shadow:0 10px 22px rgba(15,112,90,.2)}.upe-brand strong,.upe-brand small{display:block}.upe-brand strong{font-size:14px}.upe-brand small{font-size:9px;color:#71817b;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px}.upe-lang{display:flex;background:#edf3f1;padding:3px;border-radius:11px}.upe-lang button{border:0;background:transparent;border-radius:8px;padding:7px 8px;font-size:10px;font-weight:900;color:#63736d}.upe-lang button.active{background:#fff;color:#0f705a;box-shadow:0 2px 8px rgba(16,32,51,.08)}
-      .upe-hero{padding:32px 4px 20px}.upe-badge{display:inline-flex;padding:7px 10px;border-radius:999px;background:#eaf6f1;color:#0f705a;font-size:10px;font-weight:900}.upe-hero h1{font-size:34px;line-height:1.03;margin:14px 0 10px;letter-spacing:-.035em}.upe-hero p{margin:0;color:#6b7a75;font-size:13px;line-height:1.55;max-width:360px}
-      .upe-email-form{display:grid;gap:9px}.upe-email-form label{font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:900;color:#5e7069}.upe-email-box{display:grid;grid-template-columns:28px 1fr;align-items:center;border:1.5px solid #d8e4df;background:#fbfdfc;border-radius:16px;padding:0 13px;min-height:58px}.upe-email-box:focus-within{border-color:#0f705a;box-shadow:0 0 0 4px rgba(15,112,90,.1)}.upe-email-box span{font-size:17px}.upe-email-box input{width:100%;border:0;outline:0;background:transparent;color:#102033;font-size:16px;font-weight:700;min-width:0}.upe-email-form>button{margin-top:3px;border:0;border-radius:16px;min-height:56px;background:#0f705a;color:#fff;font-size:15px;font-weight:900;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:0 12px 28px rgba(15,112,90,.23);touch-action:manipulation}.upe-email-form>button b{font-size:22px;font-weight:500}
-      .upe-flow{display:grid;gap:8px;margin-top:20px;padding-top:17px;border-top:1px solid #edf1ef}.upe-flow>div{display:grid;grid-template-columns:34px 1fr;gap:9px;align-items:start}.upe-flow>div>span{width:34px;height:34px;border-radius:11px;background:#eef6f3;display:grid;place-items:center}.upe-flow p{margin:0}.upe-flow strong,.upe-flow small{display:block}.upe-flow strong{font-size:11px;color:#17352d}.upe-flow small{font-size:9.5px;line-height:1.35;color:#778680;margin-top:2px}
-      .upe-trust{display:flex;justify-content:center;flex-wrap:wrap;gap:8px 13px;margin-top:16px;padding-top:14px;border-top:1px solid #edf1ef;color:#71817b;font-size:9px;font-weight:750}
-      @media(max-width:390px){.upe-card{padding:14px;border-radius:24px}.upe-brand small{max-width:160px}.upe-hero{padding:25px 2px 17px}.upe-hero h1{font-size:29px}}
+      .upe-shell{position:fixed;inset:0;z-index:2147480000;overflow:auto;background:radial-gradient(circle at 20% 0,#17735f 0,#0a3f35 42%,#062b25 100%);padding:max(18px,env(safe-area-inset-top)) 14px max(18px,env(safe-area-inset-bottom));display:grid;place-items:center;font-family:Inter,system-ui,-apple-system,sans-serif;color:#102033}.upe-card{width:min(100%,430px);background:#fff;border-radius:30px;padding:20px;box-shadow:0 28px 80px rgba(0,0,0,.28)}.upe-top{display:flex;align-items:center;justify-content:space-between;gap:12px}.upe-brand{display:flex;align-items:center;gap:10px;min-width:0}.upe-brand>span{width:46px;height:46px;border-radius:15px;background:#0f705a;display:grid;place-items:center;font-size:24px}.upe-brand strong,.upe-brand small{display:block}.upe-brand strong{font-size:14px}.upe-brand small{font-size:9px;color:#71817b;margin-top:2px}.upe-lang{display:flex;background:#edf3f1;padding:3px;border-radius:11px}.upe-lang button{border:0;background:transparent;border-radius:8px;padding:7px 8px;font-size:10px;font-weight:900}.upe-lang button.active{background:#fff;color:#0f705a}.upe-hero{padding:34px 2px 22px}.upe-hero h1{font-size:34px;line-height:1;margin:0 0 10px}.upe-hero p{margin:0;color:#6b7a75;font-size:13px;line-height:1.5}.upe-form{display:grid;gap:8px}.upe-form label{font-size:10px;text-transform:uppercase;letter-spacing:.07em;font-weight:900;color:#5e7069;margin-top:4px}.upe-form input{width:100%;height:56px;border:1.5px solid #d8e4df;border-radius:16px;padding:0 14px;font-size:16px;outline:none;background:#fbfdfc}.upe-form input:focus{border-color:#0f705a;box-shadow:0 0 0 4px rgba(15,112,90,.1)}.upe-submit{margin-top:8px;border:0;border-radius:16px;min-height:56px;background:#0f705a;color:#fff;font-size:15px;font-weight:900;box-shadow:0 12px 28px rgba(15,112,90,.23)}.upe-submit:disabled{opacity:.65}.upe-message{margin-top:5px;padding:11px 12px;border-radius:12px;background:#edf7f3;color:#17664f;font-size:11px;font-weight:750;line-height:1.4}.upe-switch{display:flex;justify-content:center;align-items:center;gap:5px;flex-wrap:wrap;margin-top:18px;font-size:11px;color:#71817b}.upe-switch button{border:0;background:transparent;color:#0f705a;font-weight:900;text-decoration:underline}.upe-note{margin-top:16px;padding-top:14px;border-top:1px solid #edf1ef;text-align:center;color:#71817b;font-size:9px;font-weight:700}@media(max-width:390px){.upe-card{padding:15px;border-radius:24px}.upe-hero{padding:27px 2px 18px}.upe-hero h1{font-size:30px}}
     `}</style>
   </main>
 }
