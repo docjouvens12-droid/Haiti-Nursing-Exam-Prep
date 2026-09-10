@@ -5,6 +5,32 @@ import { supabase } from '../lib/supabase'
 
 export default function PassengerRootAuthRedirect() {
   useEffect(() => {
+    if (window.location.pathname === '/passenger/dashboard') {
+      let stopped = false
+      const closeDrawer = () => {
+        if (stopped) return
+        const drawer = document.querySelector<HTMLElement>('.nav-drawer')
+        if (!drawer) return
+        const closeButton = drawer.querySelector<HTMLButtonElement>('.drawer-head > button')
+        closeButton?.click()
+      }
+
+      const timers = [0, 120, 350, 700, 1200].map((delay) => window.setTimeout(closeDrawer, delay))
+      const observer = new MutationObserver(closeDrawer)
+      observer.observe(document.body, { childList: true, subtree: true })
+      const stopTimer = window.setTimeout(() => {
+        stopped = true
+        observer.disconnect()
+      }, 1500)
+
+      return () => {
+        stopped = true
+        observer.disconnect()
+        timers.forEach((timer) => window.clearTimeout(timer))
+        window.clearTimeout(stopTimer)
+      }
+    }
+
     if (window.location.pathname !== '/') return
     let active = true
 
