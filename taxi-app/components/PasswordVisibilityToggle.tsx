@@ -13,40 +13,40 @@ export default function PasswordVisibilityToggle() {
         const parent = input.parentElement
         if (!parent) return
 
-        parent.style.position = 'relative'
+        if (window.getComputedStyle(parent).position === 'static') parent.style.position = 'relative'
         input.style.paddingRight = '3.5rem'
 
         const button = document.createElement('button')
         button.type = 'button'
         button.setAttribute('aria-label', 'Afficher le mot de passe')
         button.setAttribute('title', 'Afficher / masquer le mot de passe')
-        button.textContent = '👁'
+        button.textContent = '👁️'
         button.style.position = 'absolute'
-        button.style.right = '0.8rem'
-        button.style.top = '50%'
-        button.style.transform = 'translateY(-50%)'
+        button.style.right = '0.7rem'
+        button.style.bottom = '0.55rem'
+        button.style.width = '2.4rem'
+        button.style.height = '2.4rem'
         button.style.border = '0'
+        button.style.borderRadius = '0.7rem'
         button.style.background = 'transparent'
         button.style.cursor = 'pointer'
-        button.style.fontSize = '1.25rem'
+        button.style.fontSize = '1.15rem'
         button.style.lineHeight = '1'
-        button.style.padding = '0.3rem'
+        button.style.padding = '0'
         button.style.zIndex = '10'
         button.style.webkitAppearance = 'none'
         button.style.appearance = 'none'
 
-        const toggle = (event: Event) => {
+        button.addEventListener('click', (event) => {
           event.preventDefault()
           event.stopPropagation()
-          const nextType = input.type === 'password' ? 'text' : 'password'
-          input.setAttribute('type', nextType)
-          button.textContent = nextType === 'text' ? '🙈' : '👁'
-          button.setAttribute('aria-label', nextType === 'text' ? 'Masquer le mot de passe' : 'Afficher le mot de passe')
+          const visible = input.type === 'text'
+          input.setAttribute('type', visible ? 'password' : 'text')
+          button.textContent = visible ? '👁️' : '🙈'
+          button.setAttribute('aria-label', visible ? 'Afficher le mot de passe' : 'Masquer le mot de passe')
           requestAnimationFrame(() => input.focus())
-        }
+        })
 
-        button.addEventListener('click', toggle)
-        button.addEventListener('touchend', toggle, { passive: false })
         parent.appendChild(button)
       })
     }
