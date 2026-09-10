@@ -65,7 +65,7 @@ export default function PassengerHomeDashboardPolish(){
     body.passenger-home-premium .brand-chip strong{font-size:14px!important;color:#102033!important;white-space:nowrap!important}
     body.passenger-home-premium .brand-chip small{display:none!important}
     body.passenger-home-premium .brand-chip strong{font-size:0!important}
-    body.passenger-home-premium .brand-chip strong::after{content:'Taxi Haiti';font-size:14px!important}
+    body.passenger-home-premium .brand-chip strong::after{content:'MOVI';font-size:17px!important;font-weight:950!important;letter-spacing:-.03em!important}
 
     body.passenger-home-premium .booking-sheet{
       position:relative!important;z-index:30!important;margin:-30px 12px 18px!important;padding:18px 14px 18px!important;
