@@ -1,4 +1,4 @@
-const CACHE_NAME = 'taxi-haiti-static-v2'
+const CACHE_NAME = 'movi-static-v3'
 const STATIC_URLS = ['/manifest.webmanifest', '/taxi-haiti-icon.svg', '/taxi-haiti-icon-maskable.svg']
 
 self.addEventListener('install', (event) => {
@@ -25,14 +25,11 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url)
   if (url.origin !== self.location.origin) return
 
-  // App pages must always come from the network so installed PWA users
-  // receive the latest production deployment immediately.
   if (request.mode === 'navigate') {
     event.respondWith(fetch(request, { cache: 'no-store' }))
     return
   }
 
-  // Never cache API or authenticated application data.
   if (
     url.pathname.startsWith('/api/') ||
     url.pathname.startsWith('/admin') ||
@@ -40,7 +37,6 @@ self.addEventListener('fetch', (event) => {
     url.pathname.startsWith('/passenger')
   ) return
 
-  // Cache only stable PWA metadata/assets.
   if (STATIC_URLS.includes(url.pathname)) {
     event.respondWith(
       fetch(request, { cache: 'no-store' })
