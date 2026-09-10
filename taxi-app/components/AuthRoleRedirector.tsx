@@ -8,7 +8,7 @@ async function routeUser(userId: string) {
 
   const { data: profile } = await supabase
     .from('profiles')
-    .select('role')
+    .select('role,full_name,phone')
     .eq('id', userId)
     .maybeSingle()
 
@@ -20,7 +20,7 @@ async function routeUser(userId: string) {
   if (profile?.role === 'driver') {
     const { data: driver } = await supabase
       .from('driver_profiles')
-      .select('status')
+      .select('status,application_submitted_at')
       .eq('user_id', userId)
       .maybeSingle()
 
@@ -30,6 +30,11 @@ async function routeUser(userId: string) {
     }
 
     window.location.replace('/driver')
+    return
+  }
+
+  if (!profile?.full_name?.trim() || !profile?.phone?.trim()) {
+    window.location.replace('/passenger/complete-registration')
   }
 }
 
