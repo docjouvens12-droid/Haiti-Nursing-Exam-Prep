@@ -1,0 +1,29 @@
+/* Admin-only mobile header spacing: keeps Taxi Haiti branding from covering the admin title/content. */
+.adminShell .topbar{position:relative!important;z-index:2!important;min-width:0!important;overflow:visible!important}
+.adminShell .topbar .brand{min-width:0!important;flex:1 1 auto!important}
+.adminShell .topbar .brand>div{min-width:0!important}
+.adminShell .topbar .brand strong,.adminShell .topbar .brand small{max-width:100%!important;overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important}
+.adminShell .topbar .topActions{flex:0 0 auto!important}
+.adminShell .hero{position:relative!important;z-index:1!important;clear:both!important}
+
+@media(max-width:650px){
+  .adminShell{padding-top:max(10px,env(safe-area-inset-top))!important}
+  .adminShell .topbar{min-height:58px!important;padding:8px 10px!important;border-radius:18px!important;gap:8px!important}
+  .adminShell .topbar .brand{gap:8px!important;overflow:hidden!important}
+  .adminShell .topbar .brand>span{width:38px!important;height:38px!important;min-width:38px!important;border-radius:12px!important;font-size:18px!important}
+  .adminShell .topbar .brand strong{font-size:13px!important;line-height:1.15!important}
+  .adminShell .topbar .brand small{display:none!important}
+  .adminShell .topbar .topActions{gap:5px!important}
+  .adminShell .topbar .topActions select,.adminShell .topbar .topActions button{height:38px!important;min-width:38px!important;padding:0 8px!important;border-radius:11px!important}
+  .adminShell .hero{padding:16px 4px 12px!important;align-items:flex-start!important}
+  .adminShell .hero>div{min-width:0!important;flex:1 1 auto!important}
+  .adminShell .hero h1{font-size:22px!important;line-height:1.12!important;overflow-wrap:anywhere!important}
+  .adminShell .hero p{font-size:9px!important;margin-bottom:4px!important}
+  .adminShell .hero button{flex:0 0 auto!important;white-space:nowrap!important}
+}
+
+@media(max-width:390px){
+  .adminShell .topbar .brand strong{font-size:12px!important}
+  .adminShell .hero{gap:8px!important}
+  .adminShell .hero h1{font-size:20px!important}
+}
