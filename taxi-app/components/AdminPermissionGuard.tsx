@@ -17,6 +17,7 @@ type PermissionRow = {
 }
 
 function allowed(pathname: string, p: PermissionRow) {
+  if (pathname === '/admin/set-password') return true
   if (p.is_super_admin) return true
   if (pathname === '/admin' || pathname === '/admin/login') return true
   if (pathname.startsWith('/admin/admins')) return p.can_manage_admins
@@ -39,6 +40,18 @@ export default function AdminPermissionGuard() {
     async function check() {
       const { data: auth } = await supabase.auth.getUser()
       if (cancelled || !auth.user) return
+
+      const { data: mustChange, error: passwordCheckError } = await supabase.rpc('admin_requires_password_change')
+      if (cancelled || passwordCheckError) return
+      if (mustChange && pathname !== '/admin/set-password') {
+        window.location.replace('/admin/set-password')
+        return
+      }
+      if (!mustChange && pathname === '/admin/set-password') {
+        window.location.replace('/admin')
+        return
+      }
+
       const { data, error } = await supabase.rpc('get_my_admin_permissions')
       if (cancelled || error) return
       const row = (Array.isArray(data) ? data[0] : data) as PermissionRow | undefined
