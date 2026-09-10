@@ -64,13 +64,22 @@ export default function DriverRideExperiencePolish() {
         .driver-arriving-action,
         .driver-start-action,
         .driver-complete-action {
+          display:flex !important;
+          align-items:center !important;
+          justify-content:center !important;
           width:100% !important;
-          min-height:48px !important;
+          min-height:50px !important;
           margin-top:13px !important;
           border-radius:15px !important;
           font-size:15px !important;
           font-weight:900 !important;
           box-shadow:none !important;
+          visibility:visible !important;
+          opacity:1;
+          pointer-events:auto !important;
+          touch-action:manipulation;
+          position:relative !important;
+          z-index:2 !important;
         }
         .driver-accept-action { background:#0f8067 !important; color:#fff !important; }
         .driver-arriving-action { background:#f4b740 !important; color:#332500 !important; }
@@ -102,24 +111,9 @@ export default function DriverRideExperiencePolish() {
           background:#f2f9f7;
           color:#173f36;
         }
-        .driver-step-guide .driver-step-icon {
-          font-size:21px;
-          line-height:1;
-          margin-top:1px;
-        }
-        .driver-step-guide strong {
-          display:block;
-          font-size:14px;
-          line-height:1.25;
-        }
-        .driver-step-guide small {
-          display:block;
-          margin-top:3px;
-          color:#657a73;
-          font-size:11px;
-          line-height:1.35;
-          font-weight:650;
-        }
+        .driver-step-guide .driver-step-icon { font-size:21px; line-height:1; margin-top:1px; }
+        .driver-step-guide strong { display:block; font-size:14px; line-height:1.25; }
+        .driver-step-guide small { display:block; margin-top:3px; color:#657a73; font-size:11px; line-height:1.35; font-weight:650; }
         .empty.driver-search-empty {
           border:1px dashed #bcd7cf !important;
           background:#f6fbf9 !important;
@@ -133,6 +127,7 @@ export default function DriverRideExperiencePolish() {
         @media (max-width:600px) {
           .ride-wrap { padding:14px !important; }
           .ride-card .metrics { grid-template-columns:1fr 1fr !important; }
+          .ride-card > button.primary { min-height:52px !important; font-size:16px !important; }
         }
       `
       document.head.appendChild(style)
@@ -141,23 +136,24 @@ export default function DriverRideExperiencePolish() {
     const getLang = () => localStorage.getItem('taxi-language') === 'ht' ? 'ht' : 'fr'
 
     const updateStepGuide = (lang: 'ht' | 'fr') => {
-      const action = document.querySelector<HTMLButtonElement>('button.primary.action')
+      const action = document.querySelector<HTMLButtonElement>('button.primary.action, .ride-card.active > button.primary')
       if (!action) {
         document.querySelectorAll('[data-driver-step-guide="true"]').forEach((el) => el.remove())
         return
       }
 
       const section = action.closest('.section') as HTMLElement | null
-      const rideCard = section?.querySelector('.ride-card') as HTMLElement | null
-      if (!section || !rideCard) return
+      const rideCard = action.closest('.ride-card') as HTMLElement | null
+      const host = section || rideCard?.parentElement
+      if (!host || !rideCard) return
 
-      let guide = section.querySelector<HTMLElement>('[data-driver-step-guide="true"]')
+      let guide = host.querySelector<HTMLElement>('[data-driver-step-guide="true"]')
       if (!guide) {
         guide = document.createElement('div')
         guide.className = 'driver-step-guide'
         guide.dataset.driverStepGuide = 'true'
         guide.innerHTML = '<span class="driver-step-icon" aria-hidden="true"></span><div><strong></strong><small></small></div>'
-        section.insertBefore(guide, rideCard)
+        host.insertBefore(guide, rideCard)
       }
 
       const text = (action.textContent || '').toLowerCase()
@@ -190,12 +186,11 @@ export default function DriverRideExperiencePolish() {
     const apply = () => {
       const lang = getLang()
 
-      document.querySelectorAll<HTMLButtonElement>('.ride-wrap > button.primary').forEach((button) => {
+      document.querySelectorAll<HTMLButtonElement>('.ride-wrap > button.primary, .ride-card:not(.active) > button.primary').forEach((button) => {
         button.classList.add('driver-accept-action')
       })
 
-      document.querySelectorAll<HTMLButtonElement>('button.primary.action').forEach((button) => {
-        if (button.dataset.driverProcessing === 'true') return
+      document.querySelectorAll<HTMLButtonElement>('button.primary.action, .ride-card.active > button.primary').forEach((button) => {
         button.classList.remove('driver-arriving-action', 'driver-start-action', 'driver-complete-action')
         const text = (button.textContent || '').toLowerCase()
         if (text.includes('arrivé') || text.includes('rive')) button.classList.add('driver-arriving-action')
@@ -221,9 +216,8 @@ export default function DriverRideExperiencePolish() {
         const text = (empty.textContent || '').toLowerCase()
         if (text.includes('aucune demande') || text.includes('pa gen demann')) {
           empty.classList.add('driver-search-empty')
-          empty.textContent = lang === 'ht'
-            ? '🔎 N ap chèche nouvo trajè pou ou…'
-            : '🔎 Nous recherchons de nouvelles courses pour vous…'
+          const desired = lang === 'ht' ? '🔎 N ap chèche nouvo trajè pou ou…' : '🔎 Nous recherchons de nouvelles courses pour vous…'
+          if (empty.textContent !== desired) empty.textContent = desired
         }
       })
 
@@ -238,8 +232,14 @@ export default function DriverRideExperiencePolish() {
 
     const onClickCapture = (event: Event) => {
       const target = event.target as HTMLElement | null
-      const button = target?.closest('.ride-wrap > button.primary, button.primary.action') as HTMLButtonElement | null
-      if (!button || button.disabled || button.dataset.driverProcessing === 'true') return
+      const button = target?.closest('.ride-wrap > button.primary, button.primary.action, .ride-card > button.primary') as HTMLButtonElement | null
+      if (!button || button.disabled) return
+
+      if (button.dataset.rideClickLock === 'true') {
+        event.preventDefault()
+        event.stopPropagation()
+        return
+      }
 
       const text = (button.textContent || '').toLowerCase()
       const lang = getLang()
@@ -268,20 +268,10 @@ export default function DriverRideExperiencePolish() {
         }
       }
 
-      button.dataset.driverProcessing = 'true'
-      const originalText = button.textContent || ''
+      button.dataset.rideClickLock = 'true'
       window.setTimeout(() => {
-        if (!button.isConnected) return
-        button.disabled = true
-        button.textContent = lang === 'ht' ? '⏳ N ap trete…' : '⏳ Traitement…'
-        window.setTimeout(() => {
-          if (!button.isConnected) return
-          if (!button.disabled) {
-            button.textContent = originalText
-            delete button.dataset.driverProcessing
-          }
-        }, 5000)
-      }, 0)
+        if (button.isConnected) delete button.dataset.rideClickLock
+      }, 1400)
     }
 
     apply()
