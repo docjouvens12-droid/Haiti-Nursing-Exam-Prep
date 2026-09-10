@@ -13,7 +13,8 @@ async function routeUser(userId: string) {
     .maybeSingle()
 
   if (profile?.role === 'admin') {
-    window.location.replace('/admin')
+    const { data: mustChange } = await supabase.rpc('admin_requires_password_change')
+    window.location.replace(mustChange ? '/admin/set-password' : '/admin')
     return
   }
 
