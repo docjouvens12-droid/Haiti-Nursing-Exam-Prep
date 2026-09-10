@@ -30,12 +30,26 @@ function allowed(pathname: string, p: PermissionRow) {
   return false
 }
 
+function ensurePlatformPaymentLink() {
+  if (window.location.pathname !== '/admin' || document.querySelector('[data-platform-payment-accounts="true"]')) return
+  const grid = document.querySelector<HTMLElement>('.navGrid')
+  if (!grid) return
+  const button = document.createElement('button')
+  button.type = 'button'
+  button.className = 'navCard'
+  button.dataset.platformPaymentAccounts = 'true'
+  button.innerHTML = '<span class="icon">📲</span><div><strong>Kont MonCash / NatCash</strong><small>Kont platfòm pou resevwa peman kliyan yo</small></div><span class="arrow">›</span>'
+  button.addEventListener('click', () => window.location.assign('/admin/payment-accounts'))
+  grid.appendChild(button)
+}
+
 export default function AdminPermissionGuard() {
   const pathname = usePathname()
 
   useEffect(() => {
     if (!pathname.startsWith('/admin') || pathname === '/admin/login') return
     let cancelled = false
+    let observer: MutationObserver | null = null
 
     async function check() {
       const { data: auth } = await supabase.auth.getUser()
@@ -56,11 +70,24 @@ export default function AdminPermissionGuard() {
       if (cancelled || error) return
       const row = (Array.isArray(data) ? data[0] : data) as PermissionRow | undefined
       if (!row?.is_admin) return
-      if (!allowed(pathname, row)) window.location.replace('/admin?restricted=1')
+      if (!allowed(pathname, row)) {
+        window.location.replace('/admin?restricted=1')
+        return
+      }
+
+      if (pathname === '/admin' && row.is_super_admin) {
+        ensurePlatformPaymentLink()
+        observer = new MutationObserver(ensurePlatformPaymentLink)
+        observer.observe(document.body, { childList: true, subtree: true })
+      }
     }
 
     void check()
-    return () => { cancelled = true }
+    return () => {
+      cancelled = true
+      observer?.disconnect()
+      document.querySelector('[data-platform-payment-accounts="true"]')?.remove()
+    }
   }, [pathname])
 
   return null
