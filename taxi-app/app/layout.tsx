@@ -16,6 +16,7 @@ import './passenger-support-redesign.css'
 import './public-home-premium.css'
 import './movi-brand.css'
 import UnifiedPublicEntry from '../components/UnifiedPublicEntry'
+import IphoneLoginInputFix from '../components/IphoneLoginInputFix'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
@@ -105,6 +106,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <HaitiTestGeolocation />
         <PwaRegister />
         <UnifiedPublicEntry />
+        <IphoneLoginInputFix />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
         <PasswordVisibilityToggle />
