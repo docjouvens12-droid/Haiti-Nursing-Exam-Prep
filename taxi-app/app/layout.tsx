@@ -20,6 +20,7 @@ import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 import PwaRegister from '../components/PwaRegister'
 import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
+import MoviBranding from '../components/MoviBranding'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -71,9 +72,9 @@ import AdminDriverApplicationProfileSnapshot from '../components/AdminDriverAppl
 import AdminDriverVehicleSnapshot from '../components/AdminDriverVehicleSnapshot'
 
 export const metadata: Metadata = {
-  title: 'Taxi Platform Haiti',
-  description: 'Mande yon taksi rapidman an Ayiti',
-  applicationName: 'Taxi Platform Haiti',
+  title: 'MOVI',
+  description: 'Deplase fasil, rapidman ak an sekirite',
+  applicationName: 'MOVI',
   manifest: '/manifest.webmanifest',
   icons: {
     icon: '/taxi-haiti-icon.svg',
@@ -82,7 +83,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Taxi Haiti',
+    title: 'MOVI',
   },
   formatDetection: {
     telephone: false,
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <HaitiTestGeolocation />
         <PwaRegister />
+        <MoviBranding />
         <UnifiedPublicEntry />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
