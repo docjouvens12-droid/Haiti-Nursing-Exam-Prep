@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Taxi Platform Haiti',
-    short_name: 'Taxi Haiti',
-    description: 'Mande yon taksi rapidman an Ayiti',
+    name: 'MOVI',
+    short_name: 'MOVI',
+    description: 'Deplase fasil, rapidman ak an sekirite',
     start_url: '/',
     scope: '/',
     display: 'standalone',
