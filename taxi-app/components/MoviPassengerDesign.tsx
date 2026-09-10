@@ -5,12 +5,24 @@ import { useEffect } from 'react'
 export default function MoviPassengerDesign() {
   useEffect(() => {
     const sync = () => {
-      const passengerDashboard = document.querySelector('.booking-sheet') && document.querySelector('.map-panel.real-map-panel')
-      document.body.classList.toggle('movi-passenger-ui', Boolean(passengerDashboard))
+      const booking = document.querySelector('.booking-sheet')
+      const map = document.querySelector('.map-panel.real-map-panel')
+      const active = Boolean(booking && map)
+      document.body.classList.toggle('movi-passenger-ui', active)
+      if (!active) return
+
+      const brand = document.querySelector<HTMLElement>('.app-underlay .brand-chip strong')
+      const mark = document.querySelector<HTMLElement>('.app-underlay .brand-chip .brand-mark')
+      if (brand && brand.textContent !== 'MOVI') brand.textContent = 'MOVI'
+      if (mark && mark.textContent !== 'M') mark.textContent = 'M'
+
+      document.querySelectorAll<HTMLElement>('.nav-drawer strong').forEach((el) => {
+        if (/Taxi Haiti|Taxi Platform Haiti/i.test(el.textContent || '')) el.textContent = 'MOVI'
+      })
     }
 
     sync()
-    const timer = window.setInterval(sync, 500)
+    const timer = window.setInterval(sync, 250)
     return () => {
       window.clearInterval(timer)
       document.body.classList.remove('movi-passenger-ui')
@@ -18,146 +30,76 @@ export default function MoviPassengerDesign() {
   }, [])
 
   return <style>{`
-    body.movi-passenger-ui{background:#f5f8f7!important;color:#0f2136!important}
-    body.movi-passenger-ui .phone-frame{background:#f5f8f7!important}
-
-    body.movi-passenger-ui .map-panel.real-map-panel{
-      height:46dvh!important;
-      min-height:335px!important;
-      max-height:470px!important;
-      border-radius:0 0 30px 30px!important;
-      overflow:hidden!important;
-      box-shadow:0 18px 44px rgba(10,34,28,.08)!important;
+    .app-underlay .brand-chip{
+      min-width:120px!important;
+      height:46px!important;
+      padding:6px 13px 6px 7px!important;
+      border-radius:17px!important;
+      background:rgba(255,255,255,.98)!important;
+      border:1px solid #dce9e4!important;
+      box-shadow:0 10px 26px rgba(16,32,51,.12)!important;
     }
+    .app-underlay .brand-chip .brand-mark{
+      width:33px!important;height:33px!important;border-radius:12px!important;
+      display:grid!important;place-items:center!important;
+      background:linear-gradient(145deg,#18a06f,#08794f)!important;
+      color:#fff!important;font-size:18px!important;font-weight:950!important;
+      box-shadow:0 7px 18px rgba(11,132,88,.24)!important;
+    }
+    .app-underlay .brand-chip strong{
+      display:block!important;font-size:17px!important;line-height:1!important;
+      color:#0b2037!important;font-weight:950!important;letter-spacing:-.035em!important;
+    }
+    .app-underlay .brand-chip strong:after{content:none!important}
+    .app-underlay .brand-chip small{display:none!important}
 
+    body.movi-passenger-ui{background:#f4f8f6!important}
+    body.movi-passenger-ui .phone-frame{background:#f4f8f6!important}
+    body.movi-passenger-ui .map-panel.real-map-panel{
+      height:47dvh!important;min-height:340px!important;max-height:480px!important;
+      border-radius:0 0 32px 32px!important;overflow:hidden!important;
+      box-shadow:0 18px 44px rgba(10,34,28,.09)!important;
+    }
     body.movi-passenger-ui .topbar{
       top:calc(12px + env(safe-area-inset-top))!important;
-      left:14px!important;
-      right:14px!important;
-      grid-template-columns:46px minmax(0,1fr) 46px!important;
-      gap:10px!important;
-      z-index:40!important;
+      left:14px!important;right:14px!important;z-index:60!important;
     }
-
     body.movi-passenger-ui .round-button{
-      width:46px!important;
-      height:46px!important;
-      border-radius:16px!important;
-      border:1px solid rgba(219,231,226,.95)!important;
-      background:rgba(255,255,255,.97)!important;
-      color:#10243a!important;
-      box-shadow:0 10px 26px rgba(16,32,51,.13)!important;
-      backdrop-filter:blur(16px)!important;
-      -webkit-backdrop-filter:blur(16px)!important;
+      width:46px!important;height:46px!important;border-radius:16px!important;
+      background:rgba(255,255,255,.98)!important;border:1px solid #dce8e3!important;
+      box-shadow:0 10px 25px rgba(16,32,51,.13)!important;
     }
-
-    body.movi-passenger-ui .brand-chip{
-      justify-self:center!important;
-      min-width:124px!important;
-      max-width:180px!important;
-      height:48px!important;
-      padding:6px 14px 6px 7px!important;
-      border-radius:17px!important;
-      border:1px solid rgba(216,229,223,.95)!important;
-      background:rgba(255,255,255,.97)!important;
-      box-shadow:0 10px 26px rgba(16,32,51,.11)!important;
-      backdrop-filter:blur(16px)!important;
-      -webkit-backdrop-filter:blur(16px)!important;
-    }
-
-    body.movi-passenger-ui .brand-chip .brand-mark{
-      width:34px!important;
-      height:34px!important;
-      border-radius:12px!important;
-      background:linear-gradient(145deg,#18a06f,#08794f)!important;
-      color:#fff!important;
-      box-shadow:0 7px 18px rgba(11,132,88,.25)!important;
-      font-size:0!important;
-    }
-    body.movi-passenger-ui .brand-chip .brand-mark:after{
-      content:'M';
-      font-size:18px!important;
-      line-height:1!important;
-      font-weight:950!important;
-      letter-spacing:-.08em!important;
-      transform:skew(-6deg);
-    }
-    body.movi-passenger-ui .brand-chip strong{
-      font-size:0!important;
-      color:#0c2038!important;
-      font-weight:950!important;
-      letter-spacing:-.035em!important;
-    }
-    body.movi-passenger-ui .brand-chip strong:after{
-      content:'MOVI';
-      font-size:17px!important;
-      line-height:1!important;
-    }
-    body.movi-passenger-ui .brand-chip small{display:none!important}
-
     body.movi-passenger-ui .booking-sheet{
-      width:calc(100% - 18px)!important;
-      max-width:452px!important;
-      margin:-58px auto 0!important;
-      padding:13px 14px calc(108px + env(safe-area-inset-bottom))!important;
-      border-radius:30px 30px 0 0!important;
-      border:1px solid #e2ebe7!important;
-      border-bottom:0!important;
-      background:rgba(255,255,255,.99)!important;
-      box-shadow:0 -10px 34px rgba(16,32,51,.09)!important;
-      z-index:45!important;
+      width:calc(100% - 12px)!important;max-width:454px!important;
+      margin:-58px auto 0!important;padding:14px 14px calc(108px + env(safe-area-inset-bottom))!important;
+      border-radius:30px 30px 0 0!important;background:#fff!important;
+      border:1px solid #e1ebe6!important;border-bottom:0!important;
+      box-shadow:0 -10px 34px rgba(16,32,51,.09)!important;z-index:50!important;
     }
-
-    body.movi-passenger-ui .grabber{width:42px!important;height:4px!important;margin:1px auto 12px!important;border-radius:999px!important;background:#d7e1dd!important}
-    body.movi-passenger-ui .passenger-booking-head{max-width:398px!important;margin:0 auto 12px!important;padding:0 2px!important}
-    body.movi-passenger-ui .passenger-booking-head small{color:#0d8a5b!important;font-size:9px!important;letter-spacing:.11em!important}
-    body.movi-passenger-ui .passenger-booking-head strong{color:#0e2037!important;font-size:22px!important;letter-spacing:-.035em!important}
-    body.movi-passenger-ui .passenger-booking-head span{color:#7b8884!important;font-size:10px!important}
-    body.movi-passenger-ui .passenger-booking-head-icon{width:42px!important;height:42px!important;border-radius:14px!important;background:#e8f7f1!important;border:1px solid #d3ebe2!important;box-shadow:0 7px 18px rgba(12,126,84,.08)!important}
-
-    body.movi-passenger-ui .route-card{max-width:398px!important;margin:0 auto!important;padding:5px 12px!important;border-radius:20px!important;border:1px solid #dce7e2!important;background:#fff!important;box-shadow:0 9px 24px rgba(16,32,51,.055)!important}
-    body.movi-passenger-ui .route-line{min-height:60px!important}
-    body.movi-passenger-ui .route-line:first-child{border-bottom:1px solid #eef3f1!important}
-    body.movi-passenger-ui .pickup-dot{background:#0c9362!important;box-shadow:0 0 0 5px #e9f7f2!important}
-    body.movi-passenger-ui .destination-dot{background:#10243a!important;box-shadow:0 0 0 5px #eef2f5!important}
-    body.movi-passenger-ui .input-wrap label{color:#7c8985!important;font-size:8.5px!important}
-    body.movi-passenger-ui .input-wrap input{color:#11263d!important;font-size:16px!important;font-weight:800!important}
-
-    body.movi-passenger-ui .section-heading,
-    body.movi-passenger-ui .ride-list,
-    body.movi-passenger-ui .payment-row,
-    body.movi-passenger-ui .request-button,
-    body.movi-passenger-ui .searching-card,
-    body.movi-passenger-ui .ride-error{max-width:398px!important;margin-left:auto!important;margin-right:auto!important}
-
-    body.movi-passenger-ui .section-heading{margin-top:16px!important}
-    body.movi-passenger-ui .section-heading h2{font-size:16px!important;color:#10243a!important}
-    body.movi-passenger-ui .passenger-service-subtitle{color:#87938f!important}
-
-    body.movi-passenger-ui .ride-list{gap:10px!important;margin-top:9px!important}
-    body.movi-passenger-ui .ride-option{min-height:108px!important;border-radius:20px!important;border:1px solid #e0e9e5!important;background:#fff!important;box-shadow:0 7px 20px rgba(16,32,51,.045)!important}
-    body.movi-passenger-ui .ride-option.selected{border:1.5px solid #46a784!important;background:linear-gradient(180deg,#f3fbf8 0%,#ebf7f2 100%)!important;box-shadow:0 10px 24px rgba(13,139,92,.11)!important}
-    body.movi-passenger-ui .ride-option.selected:after{background:#0c8d5e!important}
-    body.movi-passenger-ui .ride-icon{background:#f0f6f3!important}
-    body.movi-passenger-ui .ride-copy strong{color:#10243a!important}
-    body.movi-passenger-ui .ride-price{color:#087d54!important}
-
-    body.movi-passenger-ui .payment-row{margin-top:12px!important;padding:12px!important;border-radius:18px!important;border:1px solid #dbe8e3!important;background:#f7fbf9!important;box-shadow:none!important}
-    body.movi-passenger-ui .payment-icon{background:#e7f5ef!important}
-    body.movi-passenger-ui .payment-row button{color:#087d54!important}
-
-    body.movi-passenger-ui .request-button{margin-top:12px!important;min-height:61px!important;border-radius:19px!important;background:linear-gradient(135deg,#13a16d 0%,#087c53 100%)!important;box-shadow:0 13px 30px rgba(8,124,83,.24)!important}
-    body.movi-passenger-ui .request-button:disabled{background:#afbbb7!important;box-shadow:none!important}
-
-    body.movi-passenger-ui .nav-drawer{border-radius:0 28px 28px 0!important;background:#fff!important;box-shadow:22px 0 55px rgba(8,29,24,.18)!important}
-
+    body.movi-passenger-ui .passenger-booking-head strong{font-size:22px!important;color:#0d2037!important}
+    body.movi-passenger-ui .passenger-booking-head small{color:#0b8c5d!important}
+    body.movi-passenger-ui .route-card{
+      border-radius:20px!important;border:1px solid #dae7e1!important;background:#fff!important;
+      box-shadow:0 9px 24px rgba(16,32,51,.055)!important;
+    }
+    body.movi-passenger-ui .input-wrap input{font-size:16px!important;color:#10243a!important;font-weight:800!important}
+    body.movi-passenger-ui .ride-option{
+      border-radius:20px!important;background:#fff!important;border:1px solid #dfe9e4!important;
+      box-shadow:0 7px 20px rgba(16,32,51,.045)!important;
+    }
+    body.movi-passenger-ui .ride-option.selected{
+      border-color:#43a27f!important;background:linear-gradient(180deg,#f3fbf8,#ebf7f2)!important;
+      box-shadow:0 10px 24px rgba(13,139,92,.11)!important;
+    }
+    body.movi-passenger-ui .request-button{
+      min-height:61px!important;border-radius:19px!important;
+      background:linear-gradient(135deg,#13a16d,#087c53)!important;
+      box-shadow:0 13px 30px rgba(8,124,83,.24)!important;
+    }
+    body.movi-passenger-ui .payment-row{border-radius:18px!important;background:#f7fbf9!important;border:1px solid #dbe8e3!important}
     @media(max-width:420px){
-      body.movi-passenger-ui .map-panel.real-map-panel{height:44dvh!important;min-height:318px!important}
-      body.movi-passenger-ui .booking-sheet{width:calc(100% - 10px)!important;margin-top:-52px!important;padding-left:12px!important;padding-right:12px!important}
-      body.movi-passenger-ui .brand-chip{height:44px!important;min-width:116px!important}
-      body.movi-passenger-ui .brand-chip .brand-mark{width:31px!important;height:31px!important}
-      body.movi-passenger-ui .brand-chip strong:after{font-size:16px!important}
-      body.movi-passenger-ui .passenger-booking-head strong{font-size:20px!important}
+      body.movi-passenger-ui .map-panel.real-map-panel{height:45dvh!important;min-height:322px!important}
+      body.movi-passenger-ui .booking-sheet{margin-top:-52px!important}
     }
   `}</style>
 }
