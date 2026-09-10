@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="MOVI app icon">
+  <defs>
+    <linearGradient id="bg" x1="120" y1="90" x2="900" y2="940" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#1fbd76"/>
+      <stop offset="0.52" stop-color="#0b9561"/>
+      <stop offset="1" stop-color="#05623f"/>
+    </linearGradient>
+    <linearGradient id="pin" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#86f29a"/>
+      <stop offset="1" stop-color="#4bd879"/>
+    </linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#003a29" flood-opacity="0.28"/>
+    </filter>
+  </defs>
+  <rect x="38" y="38" width="948" height="948" rx="224" fill="url(#bg)"/>
+  <path d="M246 659 L419 357 Q443 319 478 319 Q513 319 538 357 L650 530 Q666 555 691 555 Q712 555 729 540 L797 480 Q823 457 852 471 Q881 485 887 520 L927 735 Q934 773 905 795 Q876 817 842 801 Q819 790 812 764 L783 637 L722 691 Q690 719 650 719 Q607 719 577 683 L476 552 L347 727 Q324 759 287 759 Q254 759 236 734 Q218 708 228 679 Q233 668 246 659 Z" fill="#fff" filter="url(#shadow)"/>
+  <path d="M715 194 C647 194 592 249 592 317 C592 402 715 516 715 516 C715 516 838 402 838 317 C838 249 783 194 715 194 Z" fill="url(#pin)" filter="url(#shadow)"/>
+  <circle cx="715" cy="314" r="39" fill="#0b8b5a"/>
+</svg>
