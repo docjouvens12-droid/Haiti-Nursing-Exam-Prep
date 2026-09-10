@@ -14,6 +14,7 @@ import './passenger-language-switch.css'
 import './passenger-secondary-centered.css'
 import './passenger-support-redesign.css'
 import './public-home-premium.css'
+import UnifiedPublicEntry from '../components/UnifiedPublicEntry'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
@@ -75,6 +76,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   return (
     <html lang="fr">
       <body>
+        <UnifiedPublicEntry />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
         <PassengerRideLifecycleGuard />
