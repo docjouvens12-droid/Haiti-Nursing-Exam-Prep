@@ -13,6 +13,7 @@ import './passenger-language-switch.css'
 import './passenger-secondary-centered.css'
 import './passenger-support-redesign.css'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
+import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -73,6 +74,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="fr">
       <body>
         <AuthRoleRedirector />
+        <AdminPermissionGuard />
         <PassengerRideLifecycleGuard />
         <PassengerActiveDriver />
         <PassengerPendingRideCancel />
