@@ -20,7 +20,6 @@ import AdminPermissionGuard from '../components/AdminPermissionGuard'
 import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 import PwaRegister from '../components/PwaRegister'
 import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
-import MoviBranding from '../components/MoviBranding'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -103,7 +102,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body>
         <HaitiTestGeolocation />
         <PwaRegister />
-        <MoviBranding />
         <UnifiedPublicEntry />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
