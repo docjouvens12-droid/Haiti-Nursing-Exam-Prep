@@ -79,8 +79,8 @@ export const metadata: Metadata = {
   applicationName: 'MOVI',
   manifest: '/manifest.webmanifest',
   icons: {
-    icon: '/taxi-haiti-icon.svg',
-    apple: '/taxi-haiti-icon.svg',
+    icon: '/movi-icon.svg',
+    apple: '/movi-icon.svg',
   },
   appleWebApp: {
     capable: true,
