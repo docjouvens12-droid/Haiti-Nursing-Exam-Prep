@@ -8,11 +8,11 @@ export default function PwaRegister() {
 
     const register = async () => {
       try {
-        const registration = await navigator.serviceWorker.register('/sw.js?v=4', {
+        const registration = await navigator.serviceWorker.register('/sw.js?v=5', {
           scope: '/',
           updateViaCache: 'none',
         })
-        void registration.update()
+        await registration.update()
       } catch {
         // PWA maintenance must never block the application.
       }
