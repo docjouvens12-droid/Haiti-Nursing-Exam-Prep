@@ -1,10 +1,10 @@
-const CACHE_NAME = 'taxi-haiti-shell-v1'
-const SHELL_URLS = ['/', '/manifest.webmanifest', '/taxi-haiti-icon.svg', '/taxi-haiti-icon-maskable.svg']
+const CACHE_NAME = 'taxi-haiti-static-v2'
+const STATIC_URLS = ['/manifest.webmanifest', '/taxi-haiti-icon.svg', '/taxi-haiti-icon-maskable.svg']
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
-      .then((cache) => cache.addAll(SHELL_URLS))
+      .then((cache) => cache.addAll(STATIC_URLS))
       .catch(() => undefined)
       .then(() => self.skipWaiting())
   )
@@ -25,23 +25,33 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url)
   if (url.origin !== self.location.origin) return
 
-  // Never cache authenticated/data-heavy app routes or Supabase/API calls.
+  // App pages must always come from the network so installed PWA users
+  // receive the latest production deployment immediately.
+  if (request.mode === 'navigate') {
+    event.respondWith(fetch(request, { cache: 'no-store' }))
+    return
+  }
+
+  // Never cache API or authenticated application data.
   if (
+    url.pathname.startsWith('/api/') ||
     url.pathname.startsWith('/admin') ||
     url.pathname.startsWith('/driver') ||
-    url.pathname.startsWith('/passenger') ||
-    url.pathname.startsWith('/api/')
+    url.pathname.startsWith('/passenger')
   ) return
 
-  event.respondWith(
-    fetch(request)
-      .then((response) => {
-        if (response.ok && request.mode === 'navigate' && url.pathname === '/') {
-          const copy = response.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put('/', copy)).catch(() => undefined)
-        }
-        return response
-      })
-      .catch(() => caches.match(request).then((cached) => cached || caches.match('/')))
-  )
+  // Cache only stable PWA metadata/assets.
+  if (STATIC_URLS.includes(url.pathname)) {
+    event.respondWith(
+      fetch(request, { cache: 'no-store' })
+        .then((response) => {
+          if (response.ok) {
+            const copy = response.clone()
+            caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)).catch(() => undefined)
+          }
+          return response
+        })
+        .catch(() => caches.match(request))
+    )
+  }
 })
