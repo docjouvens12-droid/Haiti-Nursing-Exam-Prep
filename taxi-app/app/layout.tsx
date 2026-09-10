@@ -17,6 +17,7 @@ import './public-home-premium.css'
 import UnifiedPublicEntry from '../components/UnifiedPublicEntry'
 import AuthRoleRedirector from '../components/AuthRoleRedirector'
 import AdminPermissionGuard from '../components/AdminPermissionGuard'
+import PasswordVisibilityToggle from '../components/PasswordVisibilityToggle'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
@@ -79,6 +80,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <UnifiedPublicEntry />
         <AuthRoleRedirector />
         <AdminPermissionGuard />
+        <PasswordVisibilityToggle />
         <PassengerRideLifecycleGuard />
         <PassengerActiveDriver />
         <PassengerPendingRideCancel />
