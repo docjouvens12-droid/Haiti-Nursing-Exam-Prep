@@ -25,7 +25,7 @@ export default function AdminLoginPage() {
       const { data } = await supabase.auth.getUser()
       if (!data.user) return
       const { data: profile } = await supabase.from('profiles').select('role').eq('id', data.user.id).maybeSingle()
-      if (profile?.role === 'admin') window.location.assign('/admin/drivers')
+      if (profile?.role === 'admin') window.location.assign('/admin')
     })()
   }, [])
 
@@ -50,7 +50,7 @@ export default function AdminLoginPage() {
       return
     }
 
-    window.location.assign('/admin/drivers')
+    window.location.assign('/admin')
   }
 
   function changeLang(next: Lang) { setLang(next); localStorage.setItem('taxi-language', next) }
