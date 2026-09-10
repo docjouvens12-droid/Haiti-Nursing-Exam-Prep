@@ -12,13 +12,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/taxi-haiti-icon.svg",
+      "src": "/movi-icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/taxi-haiti-icon-maskable.svg",
+      "src": "/movi-icon-maskable.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
