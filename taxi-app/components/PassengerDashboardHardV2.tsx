@@ -59,9 +59,9 @@ export default function PassengerDashboardHardV2(){
       }
 
       const brand=document.querySelector<HTMLElement>('.brand-chip strong')
-      if(brand && brand.textContent!=='Taxi Haiti') brand.textContent='Taxi Haiti'
+      if(brand && brand.textContent!=='MOVI') brand.textContent='MOVI'
       const mark=document.querySelector<HTMLElement>('.brand-chip .brand-mark')
-      if(mark && mark.textContent!=='🚕') mark.textContent='🚕'
+      if(mark && mark.textContent!=='M') mark.textContent='M'
 
       const paymentRow=booking.querySelector<HTMLElement>('.payment-row')
       const payment=paymentRow?.querySelector<HTMLElement>('strong')
