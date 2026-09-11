@@ -59,6 +59,7 @@ import AdminDriverVehicleSnapshot from './AdminDriverVehicleSnapshot'
 export default function RouteScopedEnhancers() {
   const pathname = usePathname()
   const isDriver = pathname.startsWith('/driver')
+  const isCleanDriverDashboard = pathname === '/driver/dashboard-v2'
   const isAdmin = pathname.startsWith('/admin')
   const isPassenger = !isDriver && !isAdmin
 
@@ -93,7 +94,7 @@ export default function RouteScopedEnhancers() {
       <MoviPassengerDesign />
     </>}
 
-    {isDriver && <>
+    {isDriver && !isCleanDriverDashboard && <>
       <DriverAccessGate />
       <DriverAvatarUploadPolish />
       <DriverDashboardTitleHide />
