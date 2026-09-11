@@ -43,6 +43,7 @@ export async function GET(request: NextRequest) {
         : payload?.data ?? payload
 
     if (!row) {
+      console.info('[driver-dashboard] no-row', { payloadType: Array.isArray(payload) ? 'array' : typeof payload })
       return NextResponse.json({ error: 'Profil chauffeur introuvable.' }, { status: 404 })
     }
 
@@ -59,11 +60,21 @@ export async function GET(request: NextRequest) {
       vehicle_color: row.vehicle_color ?? null,
     }
 
+    console.info('[driver-dashboard] normalized', {
+      hasDriver: true,
+      status: driver.status,
+      hasName: Boolean(driver.full_name),
+      averageRating: driver.average_rating,
+      totalRides: driver.total_rides,
+      hasVehicle: Boolean(driver.vehicle_id),
+    })
+
     return NextResponse.json(
       { driver, data: [driver] },
       { status: 200, headers: { 'Cache-Control': 'no-store, max-age=0' } },
     )
   } catch (error) {
+    console.error('[driver-dashboard] exception', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Impossible de charger le tableau de bord.' },
       { status: 500 },
