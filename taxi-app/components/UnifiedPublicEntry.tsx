@@ -10,7 +10,7 @@ type AccountType = 'passenger' | 'driver'
 
 export default function UnifiedPublicEntry() {
   const pathname = usePathname()
-  const isPublicEntry = pathname === '/' || pathname === '/movi'
+  const isPublicEntry = pathname === '/' || pathname === '/movi' || pathname === '/movi-app-v2'
   const [lang, setLang] = useState<Lang>('fr')
   const [visible, setVisible] = useState(false)
   const [checking, setChecking] = useState(true)
@@ -70,7 +70,7 @@ export default function UnifiedPublicEntry() {
       email: cleanEmail,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/movi`,
+        emailRedirectTo: `${window.location.origin}/movi-app-v2`,
         data: { account_type: accountType },
       },
     })
