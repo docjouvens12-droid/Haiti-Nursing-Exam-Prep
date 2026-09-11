@@ -52,6 +52,7 @@ import DriverHistorySectionPolish from './DriverHistorySectionPolish'
 import DriverEarningsSectionPolish from './DriverEarningsSectionPolish'
 import DriverLanguageSectionPolish from './DriverLanguageSectionPolish'
 import DriverAccessGate from './DriverAccessGate'
+import DriverCleanMenu from './DriverCleanMenu'
 
 import AdminDriverApplicationProfileSnapshot from './AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from './AdminDriverVehicleSnapshot'
@@ -93,6 +94,8 @@ export default function RouteScopedEnhancers() {
       <PassengerUnifiedFinalPolish />
       <MoviPassengerDesign />
     </>}
+
+    {isCleanDriverDashboard && <DriverCleanMenu />}
 
     {isDriver && !isCleanDriverDashboard && <>
       <DriverAccessGate />
