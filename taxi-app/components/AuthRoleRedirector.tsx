@@ -6,8 +6,12 @@ import { supabase } from '../lib/supabase'
 const ROUTING_CLASS = 'taxi-role-routing'
 const PUBLIC_ENTRY_PATHS = new Set(['/', '/movi', '/movi-app-v2'])
 
-function isPublicEntryPath() {
-  return PUBLIC_ENTRY_PATHS.has(window.location.pathname)
+function currentPath() {
+  return window.location.pathname
+}
+
+function isPublicEntryPath(path = currentPath()) {
+  return PUBLIC_ENTRY_PATHS.has(path)
 }
 
 function beginRoleRouting() {
@@ -18,9 +22,18 @@ function finishRoleRouting() {
   document.body.classList.remove(ROUTING_CLASS)
 }
 
+function replaceIfNeeded(target: string) {
+  if (currentPath() === target) {
+    finishRoleRouting()
+    return false
+  }
+  window.location.replace(target)
+  return true
+}
+
 async function routeUser(userId: string) {
-  if (!isPublicEntryPath()) return
-  beginRoleRouting()
+  const path = currentPath()
+  if (isPublicEntryPath(path)) beginRoleRouting()
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
@@ -33,34 +46,48 @@ async function routeUser(userId: string) {
     return
   }
 
-  if (profile.role === 'admin' || profile.role === 'super_admin') {
+  if (profile.role === 'admin') {
+    if (path.startsWith('/admin')) {
+      finishRoleRouting()
+      return
+    }
     const { data: mustChange } = await supabase.rpc('admin_requires_password_change')
-    window.location.replace(mustChange ? '/admin/set-password' : '/admin')
+    replaceIfNeeded(mustChange ? '/admin/set-password' : '/admin')
     return
   }
 
   if (profile.role === 'driver') {
     const { data: driver } = await supabase
       .from('driver_profiles')
-      .select('status,application_submitted_at')
+      .select('status')
       .eq('user_id', userId)
       .maybeSingle()
 
-    if (driver?.status === 'approved') {
-      window.location.replace('/driver/dashboard')
+    const target = driver?.status === 'approved' ? '/driver/dashboard' : '/driver'
+    if (path.startsWith('/driver') && (target === '/driver' || path === '/driver/dashboard')) {
+      finishRoleRouting()
+      return
+    }
+    replaceIfNeeded(target)
+    return
+  }
+
+  if (profile.role === 'passenger') {
+    if (!profile.passenger_onboarding_completed) {
+      replaceIfNeeded('/passenger/complete-registration')
       return
     }
 
-    window.location.replace('/driver')
+    // A passenger must never remain inside driver/admin areas.
+    if (path.startsWith('/driver') || path.startsWith('/admin')) {
+      replaceIfNeeded('/')
+      return
+    }
+
+    finishRoleRouting()
     return
   }
 
-  if (profile.role === 'passenger' && !profile.passenger_onboarding_completed) {
-    window.location.replace('/passenger/complete-registration')
-    return
-  }
-
-  // Only a fully registered passenger is allowed to reveal the passenger dashboard.
   finishRoleRouting()
 }
 
@@ -68,14 +95,16 @@ export default function AuthRoleRedirector() {
   useEffect(() => {
     let active = true
 
-    // Hide passenger UI on every shared public entry route until role is known.
     if (isPublicEntryPath()) beginRoleRouting()
 
-    supabase.auth.getUser().then(({ data }) => {
+    const routeCurrentUser = async () => {
+      const { data } = await supabase.auth.getUser()
       if (!active) return
-      if (data.user) void routeUser(data.user.id)
+      if (data.user) await routeUser(data.user.id)
       else finishRoleRouting()
-    })
+    }
+
+    void routeCurrentUser()
 
     const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
       if (!active) return
@@ -85,16 +114,22 @@ export default function AuthRoleRedirector() {
         return
       }
 
-      if (event === 'SIGNED_IN') {
-        beginRoleRouting()
+      if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        if (isPublicEntryPath()) beginRoleRouting()
         window.setTimeout(() => {
           if (active) void routeUser(session.user.id)
         }, 0)
       }
     })
 
+    // Safety check for PWA/iOS navigation where auth events can be delayed.
+    const watchdog = window.setInterval(() => {
+      if (active) void routeCurrentUser()
+    }, 2500)
+
     return () => {
       active = false
+      window.clearInterval(watchdog)
       listener.subscription.unsubscribe()
       finishRoleRouting()
     }
