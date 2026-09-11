@@ -53,6 +53,44 @@ export default function UnifiedPublicEntry() {
     window.localStorage.setItem('taxi-language', next)
   }
 
+  async function routeSignedInUser(userId: string) {
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('role,passenger_onboarding_completed')
+      .eq('id', userId)
+      .maybeSingle()
+
+    if (profileError || !profile) {
+      setMessage(lang === 'ht' ? 'Nou pa rive verifye wòl kont lan.' : 'Impossible de vérifier le rôle du compte.')
+      return false
+    }
+
+    if (profile.role === 'admin' || profile.role === 'super_admin') {
+      const { data: mustChange } = await supabase.rpc('admin_requires_password_change')
+      window.location.replace(mustChange ? '/admin/set-password' : '/admin')
+      return true
+    }
+
+    if (profile.role === 'driver') {
+      const { data: driver } = await supabase
+        .from('driver_profiles')
+        .select('status,application_submitted_at')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      window.location.replace(driver?.status === 'approved' ? '/driver/dashboard' : '/driver')
+      return true
+    }
+
+    if (profile.role === 'passenger') {
+      window.location.replace(profile.passenger_onboarding_completed ? '/' : '/passenger/complete-registration')
+      return true
+    }
+
+    setMessage(lang === 'ht' ? 'Wòl kont sa a pa rekonèt.' : 'Le rôle de ce compte n’est pas reconnu.')
+    return false
+  }
+
   async function submit(event: FormEvent) {
     event.preventDefault()
     setBusy(true)
@@ -60,9 +98,15 @@ export default function UnifiedPublicEntry() {
     const cleanEmail = email.trim().toLowerCase()
 
     if (mode === 'signin') {
-      const { error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password })
-      if (error) setMessage(lang === 'ht' ? 'Imel oswa modpas la pa kòrèk.' : 'E-mail ou mot de passe incorrect.')
-      setBusy(false)
+      const { data, error } = await supabase.auth.signInWithPassword({ email: cleanEmail, password })
+      if (error || !data.user) {
+        setMessage(lang === 'ht' ? 'Imel oswa modpas la pa kòrèk.' : 'E-mail ou mot de passe incorrect.')
+        setBusy(false)
+        return
+      }
+
+      const routed = await routeSignedInUser(data.user.id)
+      if (!routed) setBusy(false)
       return
     }
 
