@@ -1,9 +1,9 @@
 {
-  "id": "/movi",
+  "id": "/movi-app-v2",
   "name": "MOVI",
   "short_name": "MOVI",
   "description": "Deplase fasil, rapidman ak an sekirite",
-  "start_url": "/movi",
+  "start_url": "/movi-app-v2",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone"],
