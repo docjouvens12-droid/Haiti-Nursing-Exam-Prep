@@ -38,6 +38,38 @@ type DashboardRow = {
   vehicle_color: string | null
 }
 
+type StoredSession = {
+  access_token: string
+  user?: { id?: string }
+}
+
+function parseStoredSession(raw: string | null): StoredSession | null {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw)
+    const session = parsed?.currentSession ?? parsed?.session ?? parsed
+    if (!session?.access_token) return null
+    return session as StoredSession
+  } catch {
+    return null
+  }
+}
+
+function readStoredSession(): StoredSession | null {
+  if (typeof window === 'undefined') return null
+
+  const preferred = parseStoredSession(window.localStorage.getItem('taxi-auth-default'))
+  if (preferred) return preferred
+
+  for (let i = 0; i < window.localStorage.length; i += 1) {
+    const key = window.localStorage.key(i)
+    if (!key) continue
+    const value = parseStoredSession(window.localStorage.getItem(key))
+    if (value?.access_token) return value
+  }
+  return null
+}
+
 async function rpc<T = unknown>(name: string, body: Record<string, unknown> = {}) {
   const { data, error } = await supabase.rpc(name, body)
   if (error) throw error
@@ -64,15 +96,15 @@ export default function DriverDashboardPage() {
 
     const init = async () => {
       try {
-        const { data } = await supabase.auth.getSession()
-        const session = data.session
-        if (!session?.user?.id || !session.access_token) {
-          window.location.replace('/movi-app-v2')
+        const stored = readStoredSession()
+        if (!stored?.access_token) {
+          if (!cancelled) setMessage('Session chauffeur introuvable. Déconnectez-vous puis reconnectez-vous.')
           return
         }
-        if (cancelled) return
-        userIdRef.current = session.user.id
-        accessTokenRef.current = session.access_token
+
+        accessTokenRef.current = stored.access_token
+        userIdRef.current = stored.user?.id ?? null
+
         await refreshDashboard(false)
       } catch (error) {
         if (!cancelled) setMessage(error instanceof Error ? error.message : 'Impossible d’ouvrir votre espace chauffeur.')
@@ -83,12 +115,12 @@ export default function DriverDashboardPage() {
     return () => { cancelled = true }
   }, [])
 
-  async function getAccessToken() {
+  function getAccessToken() {
     if (accessTokenRef.current) return accessTokenRef.current
-    const { data } = await supabase.auth.getSession()
-    const token = data.session?.access_token ?? null
+    const stored = readStoredSession()
+    const token = stored?.access_token ?? null
     accessTokenRef.current = token
-    if (data.session?.user?.id) userIdRef.current = data.session.user.id
+    if (stored?.user?.id) userIdRef.current = stored.user.id
     return token
   }
 
@@ -130,9 +162,9 @@ export default function DriverDashboardPage() {
     if (showBusy) setBusy(true)
     setMessage('')
     try {
-      const token = await getAccessToken()
+      const token = getAccessToken()
       if (!token) {
-        window.location.replace('/movi-app-v2')
+        setMessage('Session chauffeur introuvable. Déconnectez-vous puis reconnectez-vous.')
         return
       }
 
