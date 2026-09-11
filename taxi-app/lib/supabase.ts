@@ -2,6 +2,7 @@ import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+const storageKey = 'taxi-auth-default'
 
 const fetchWithTimeout: typeof fetch = async (input, init = {}) => {
   const controller = new AbortController()
@@ -17,10 +18,6 @@ const fetchWithTimeout: typeof fetch = async (input, init = {}) => {
   try {
     return await fetch(input, { ...init, signal: controller.signal })
   } catch (error) {
-    // Supabase query builders normally resolve with { data, error }. If fetch
-    // throws on iPhone after an abort/timeout, callers without try/catch can
-    // remain forever in their loading state. Convert that transport failure
-    // into a normal HTTP error response so the query resolves cleanly.
     if (controller.signal.aborted) {
       return new Response(
         JSON.stringify({ message: 'Request timed out. Please try again.' }),
@@ -43,17 +40,39 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,
-    storageKey: 'taxi-auth-default',
+    storageKey,
   },
   global: {
     fetch: fetchWithTimeout,
   },
 })
 
-// On iPhone/Safari, always prefer the locally persisted session and re-check
-// it after any slower getUser() request. This prevents an auth request started
-// before sign-in from resolving later with null and clearing a newly signed-in
-// user from the React state.
+function readPersistedSession() {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem(storageKey)
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    const session = parsed?.currentSession ?? parsed?.session ?? parsed
+    if (!session?.access_token || !session?.user?.id) return null
+    return session
+  } catch {
+    return null
+  }
+}
+
+// Safari/PWA can occasionally leave the Supabase auth lock waiting even though
+// a valid persisted session is already present. Prefer that local session so
+// MOVI role routing and driver/admin dashboards can render immediately.
+const originalGetSession = supabase.auth.getSession.bind(supabase.auth)
+supabase.auth.getSession = (async () => {
+  const persisted = readPersistedSession()
+  if (persisted) {
+    return { data: { session: persisted }, error: null }
+  }
+  return originalGetSession()
+}) as typeof supabase.auth.getSession
+
 const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
 supabase.auth.getUser = (async (...args: Parameters<typeof originalGetUser>) => {
   const before = await supabase.auth.getSession()
