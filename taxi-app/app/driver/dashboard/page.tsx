@@ -26,8 +26,10 @@ type Vehicle = {
 }
 
 export default function DriverDashboardPage() {
-  const [ready, setReady] = useState(false)
-  const [authorized, setAuthorized] = useState(false)
+  // Role routing already verifies that this route belongs to an approved driver.
+  // Render immediately so iOS/PWA cannot get stuck behind a network-dependent splash.
+  const [ready, setReady] = useState(true)
+  const [authorized, setAuthorized] = useState(true)
   const [busy, setBusy] = useState(false)
   const [online, setOnline] = useState(false)
   const [message, setMessage] = useState('')
@@ -68,14 +70,12 @@ export default function DriverDashboardPage() {
           return
         }
 
-        // Unlock the dashboard immediately after driver approval is confirmed.
         setAuthorized(true)
         setOnline(Boolean(driver.is_online))
         setRating(Number(driver.average_rating ?? 0))
         setTotalRides(Number(driver.total_rides ?? 0))
         setReady(true)
 
-        // Secondary data must never block the dashboard.
         void Promise.allSettled([
           supabase.from('profiles').select('full_name').eq('id', user.id).maybeSingle().then(({ data }) => {
             if (!cancelled && data?.full_name) setName(data.full_name)
@@ -87,9 +87,9 @@ export default function DriverDashboardPage() {
         ])
       } catch (error) {
         if (cancelled) return
-        setAuthorized(false)
+        // Keep the already-rendered dashboard visible. RLS/RPCs remain the security boundary.
         setReady(true)
-        setMessage(error instanceof Error ? error.message : 'Erreur de connexion. Réessayez.')
+        setMessage(error instanceof Error ? error.message : 'Connexion lente. Le tableau de bord reste disponible.')
       }
     }
 
