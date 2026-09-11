@@ -59,7 +59,10 @@ export async function GET(request: NextRequest) {
       vehicle_color: row.vehicle_color ?? null,
     }
 
-    return NextResponse.json({ driver }, { status: 200, headers: { 'Cache-Control': 'no-store' } })
+    return NextResponse.json(
+      { driver, data: [driver] },
+      { status: 200, headers: { 'Cache-Control': 'no-store, max-age=0' } },
+    )
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Impossible de charger le tableau de bord.' },
