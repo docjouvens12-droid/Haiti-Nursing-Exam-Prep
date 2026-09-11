@@ -53,6 +53,17 @@ export default function UnifiedPublicEntry() {
     window.localStorage.setItem('taxi-language', next)
   }
 
+  function persistFastSession(session: unknown) {
+    try {
+      const current = session as { access_token?: string; user?: { id?: string } } | null
+      if (current?.access_token && current?.user?.id) {
+        window.localStorage.setItem('movi-session', JSON.stringify(current))
+      }
+    } catch {
+      // Fast session persistence must never block sign-in.
+    }
+  }
+
   async function routeSignedInUser(userId: string) {
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
@@ -105,6 +116,7 @@ export default function UnifiedPublicEntry() {
         return
       }
 
+      persistFastSession(data.session)
       const routed = await routeSignedInUser(data.user.id)
       if (!routed) setBusy(false)
       return
