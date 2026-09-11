@@ -80,8 +80,8 @@ export const metadata: Metadata = {
   applicationName: 'MOVI',
   manifest: '/manifest.webmanifest',
   icons: {
-    icon: '/movi-icon.svg',
-    apple: '/movi-icon.svg',
+    icon: '/icon',
+    apple: '/apple-icon',
   },
   appleWebApp: {
     capable: true,
