@@ -38,6 +38,68 @@ type DashboardRow = {
   vehicle_color: string | null
 }
 
+type LocalSession = {
+  access_token?: string
+  user?: { id?: string; email?: string }
+}
+
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
+
+function readLocalSession(): LocalSession | null {
+  if (typeof window === 'undefined') return null
+  try {
+    const raw = window.localStorage.getItem('taxi-auth-default')
+    if (!raw) return null
+    const parsed = JSON.parse(raw)
+    if (parsed?.access_token) return parsed
+    if (parsed?.currentSession?.access_token) return parsed.currentSession
+    return null
+  } catch {
+    return null
+  }
+}
+
+async function authedFetch(path: string, init: RequestInit = {}) {
+  const session = readLocalSession()
+  if (!session?.access_token) throw new Error('Session MOVI introuvable. Reconnectez-vous.')
+
+  const controller = new AbortController()
+  const timer = window.setTimeout(() => controller.abort(), 10000)
+  try {
+    return await fetch(`${supabaseUrl}${path}`, {
+      ...init,
+      signal: controller.signal,
+      headers: {
+        apikey: supabaseKey,
+        Authorization: `Bearer ${session.access_token}`,
+        'Content-Type': 'application/json',
+        ...(init.headers ?? {}),
+      },
+      cache: 'no-store',
+    })
+  } finally {
+    window.clearTimeout(timer)
+  }
+}
+
+async function rpc<T = unknown>(name: string, body: Record<string, unknown> = {}) {
+  const response = await authedFetch(`/rest/v1/rpc/${name}`, {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+  if (!response.ok) {
+    let message = `Erreur ${response.status}`
+    try {
+      const payload = await response.json()
+      message = payload?.message || payload?.hint || payload?.details || message
+    } catch {}
+    throw new Error(message)
+  }
+  if (response.status === 204) return null as T
+  return await response.json() as T
+}
+
 export default function DriverDashboardPage() {
   const [authorized, setAuthorized] = useState(true)
   const [busy, setBusy] = useState(false)
@@ -53,119 +115,72 @@ export default function DriverDashboardPage() {
   const userIdRef = useRef<string | null>(null)
 
   useEffect(() => {
-    let cancelled = false
-
-    const init = async () => {
-      const { data: sessionData } = await supabase.auth.getSession()
-      const user = sessionData.session?.user
-      if (!user) {
-        window.location.replace('/movi-app-v2')
-        return
-      }
-
-      userIdRef.current = user.id
-
-      try {
-        const { data, error } = await supabase.rpc('get_my_driver_dashboard')
-        if (cancelled) return
-        if (error) throw error
-
-        const row = Array.isArray(data) ? (data[0] as DashboardRow | undefined) : undefined
-        if (!row || row.status !== 'approved') {
-          setAuthorized(false)
-          setMessage('Ce compte n’est pas un chauffeur approuvé.')
-          return
-        }
-
-        setAuthorized(true)
-        if (row.full_name) setName(row.full_name)
-        setOnline(Boolean(row.is_online))
-        setRating(Number(row.average_rating ?? 0))
-        setTotalRides(Number(row.total_rides ?? 0))
-
-        if (row.vehicle_id && row.vehicle_make && row.vehicle_model && row.vehicle_plate_number) {
-          setVehicle({
-            id: row.vehicle_id,
-            make: row.vehicle_make,
-            model: row.vehicle_model,
-            plate_number: row.vehicle_plate_number,
-            color: row.vehicle_color,
-          })
-        }
-
-        void loadRides(user.id, Boolean(row.is_online))
-      } catch (error) {
-        if (cancelled) return
-        setMessage(error instanceof Error ? error.message : 'Connexion lente. Réessayez avec Actualiser.')
-      }
+    const session = readLocalSession()
+    const userId = session?.user?.id ?? null
+    if (!session?.access_token || !userId) {
+      window.location.replace('/movi-app-v2')
+      return
     }
-
-    void init()
-    return () => { cancelled = true }
+    userIdRef.current = userId
+    void refreshDashboard(false)
   }, [])
-
-  useEffect(() => {
-    if (!authorized) return
-    const channel = supabase
-      .channel(`movi-driver-${userIdRef.current ?? 'active'}`)
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'rides' }, () => {
-        void loadRides(userIdRef.current, online)
-      })
-      .subscribe()
-    return () => { void supabase.removeChannel(channel) }
-  }, [authorized, online])
 
   async function loadRides(userId = userIdRef.current, isOnline = online) {
     if (!userId) return
     try {
-      const { data: mine } = await supabase
-        .from('rides')
-        .select('*')
-        .eq('driver_id', userId)
-        .in('status', ['accepted', 'driver_arriving', 'in_progress'])
-        .order('requested_at', { ascending: false })
-        .limit(1)
-        .maybeSingle()
+      const mineResponse = await authedFetch(`/rest/v1/rides?select=*&driver_id=eq.${encodeURIComponent(userId)}&status=in.(accepted,driver_arriving,in_progress)&order=requested_at.desc&limit=1`)
+      const mineRows = mineResponse.ok ? await mineResponse.json() as Ride[] : []
+      const mine = mineRows[0] ?? null
+      setActiveRide(mine)
 
-      setActiveRide((mine ?? null) as Ride | null)
       if (!isOnline || mine) {
         setAvailable([])
         return
       }
 
-      const { data: requests } = await supabase
-        .from('rides')
-        .select('*')
-        .eq('status', 'requested')
-        .is('driver_id', null)
-        .neq('passenger_id', userId)
-        .order('requested_at', { ascending: true })
-        .limit(20)
-
-      setAvailable((requests ?? []) as Ride[])
+      const requestsResponse = await authedFetch(`/rest/v1/rides?select=*&status=eq.requested&driver_id=is.null&passenger_id=neq.${encodeURIComponent(userId)}&order=requested_at.asc&limit=20`)
+      const requests = requestsResponse.ok ? await requestsResponse.json() as Ride[] : []
+      setAvailable(requests)
     } catch {
       // Ride refresh failure must not blank the dashboard.
     }
   }
 
-  async function refreshDashboard() {
-    setBusy(true)
+  async function refreshDashboard(showBusy = true) {
+    if (showBusy) setBusy(true)
     setMessage('')
     try {
-      const { data, error } = await supabase.rpc('get_my_driver_dashboard')
-      if (error) throw error
-      const row = Array.isArray(data) ? (data[0] as DashboardRow | undefined) : undefined
-      if (row) {
-        if (row.full_name) setName(row.full_name)
-        setOnline(Boolean(row.is_online))
-        setRating(Number(row.average_rating ?? 0))
-        setTotalRides(Number(row.total_rides ?? 0))
+      const data = await rpc<DashboardRow[]>('get_my_driver_dashboard')
+      const row = Array.isArray(data) ? data[0] : undefined
+      if (!row || row.status !== 'approved') {
+        setAuthorized(false)
+        setMessage('Ce compte n’est pas un chauffeur approuvé.')
+        return
       }
-      await loadRides(userIdRef.current, Boolean(row?.is_online))
+
+      setAuthorized(true)
+      setName(row.full_name || 'Chauffeur')
+      setOnline(Boolean(row.is_online))
+      setRating(Number(row.average_rating ?? 0))
+      setTotalRides(Number(row.total_rides ?? 0))
+
+      if (row.vehicle_id && row.vehicle_make && row.vehicle_model && row.vehicle_plate_number) {
+        setVehicle({
+          id: row.vehicle_id,
+          make: row.vehicle_make,
+          model: row.vehicle_model,
+          plate_number: row.vehicle_plate_number,
+          color: row.vehicle_color,
+        })
+      } else {
+        setVehicle(null)
+      }
+
+      await loadRides(userIdRef.current, Boolean(row.is_online))
     } catch (error) {
-      setMessage(error instanceof Error ? error.message : 'Impossible d’actualiser.')
+      setMessage(error instanceof Error ? error.message : 'Impossible de charger le profil chauffeur.')
     } finally {
-      setBusy(false)
+      if (showBusy) setBusy(false)
     }
   }
 
@@ -175,8 +190,7 @@ export default function DriverDashboardPage() {
     setMessage('')
     const next = !online
     try {
-      const { error } = await supabase.rpc('set_driver_online', { p_online: next })
-      if (error) throw error
+      await rpc('set_driver_online', { p_online: next })
       setOnline(next)
       setMessage(next ? 'Vous êtes maintenant en ligne.' : 'Vous êtes maintenant hors ligne.')
       await loadRides(userIdRef.current, next)
@@ -197,12 +211,10 @@ export default function DriverDashboardPage() {
     setBusy(true)
     setMessage('')
     try {
-      let error: any = null
-      if (action === 'accept') ({ error } = await supabase.rpc('accept_ride', { p_ride_id: ride.id, p_vehicle_id: vehicle!.id }))
-      if (action === 'arriving') ({ error } = await supabase.rpc('mark_driver_arriving', { p_ride_id: ride.id }))
-      if (action === 'start') ({ error } = await supabase.rpc('start_ride', { p_ride_id: ride.id }))
-      if (action === 'complete') ({ error } = await supabase.rpc('complete_ride', { p_ride_id: ride.id, p_final_fare_htg: ride.estimated_fare_htg ?? 0, p_payment_method: 'cash' }))
-      if (error) throw error
+      if (action === 'accept') await rpc('accept_ride', { p_ride_id: ride.id, p_vehicle_id: vehicle!.id })
+      if (action === 'arriving') await rpc('mark_driver_arriving', { p_ride_id: ride.id })
+      if (action === 'start') await rpc('start_ride', { p_ride_id: ride.id })
+      if (action === 'complete') await rpc('complete_ride', { p_ride_id: ride.id, p_final_fare_htg: ride.estimated_fare_htg ?? 0, p_payment_method: 'cash' })
       await loadRides(userIdRef.current, online)
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Impossible de mettre à jour le trajet.')
@@ -213,9 +225,10 @@ export default function DriverDashboardPage() {
 
   async function logout() {
     try {
-      if (online) await supabase.rpc('set_driver_online', { p_online: false })
+      if (online) await rpc('set_driver_online', { p_online: false })
     } catch {}
-    await supabase.auth.signOut()
+    try { await supabase.auth.signOut() } catch {}
+    try { window.localStorage.removeItem('taxi-auth-default') } catch {}
     window.location.replace('/movi-app-v2')
   }
 
@@ -255,7 +268,7 @@ export default function DriverDashboardPage() {
         {nextAction && <button className="primary" disabled={busy} onClick={() => rideAction(nextAction.key, activeRide)}>{nextAction.label}</button>}
       </section>}
 
-      <div className="sectionTitle"><div><small>COURSES</small><h2>Demandes disponibles</h2></div><button onClick={refreshDashboard} disabled={busy}>Actualiser</button></div>
+      <div className="sectionTitle"><div><small>COURSES</small><h2>Demandes disponibles</h2></div><button onClick={() => refreshDashboard(true)} disabled={busy}>{busy ? '...' : 'Actualiser'}</button></div>
 
       {!online ? <div className="empty">Passez en ligne pour recevoir les demandes.</div>
         : available.length === 0 ? <div className="empty">Aucune demande disponible pour le moment.</div>
