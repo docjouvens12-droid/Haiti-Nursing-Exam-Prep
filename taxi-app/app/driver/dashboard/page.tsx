@@ -38,66 +38,10 @@ type DashboardRow = {
   vehicle_color: string | null
 }
 
-type LocalSession = {
-  access_token?: string
-  user?: { id?: string; email?: string }
-}
-
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
-
-function readLocalSession(): LocalSession | null {
-  if (typeof window === 'undefined') return null
-  try {
-    const raw = window.localStorage.getItem('taxi-auth-default')
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    if (parsed?.access_token) return parsed
-    if (parsed?.currentSession?.access_token) return parsed.currentSession
-    return null
-  } catch {
-    return null
-  }
-}
-
-async function authedFetch(path: string, init: RequestInit = {}) {
-  const session = readLocalSession()
-  if (!session?.access_token) throw new Error('Session MOVI introuvable. Reconnectez-vous.')
-
-  const controller = new AbortController()
-  const timer = window.setTimeout(() => controller.abort(), 10000)
-  try {
-    return await fetch(`${supabaseUrl}${path}`, {
-      ...init,
-      signal: controller.signal,
-      headers: {
-        apikey: supabaseKey,
-        Authorization: `Bearer ${session.access_token}`,
-        'Content-Type': 'application/json',
-        ...(init.headers ?? {}),
-      },
-      cache: 'no-store',
-    })
-  } finally {
-    window.clearTimeout(timer)
-  }
-}
-
 async function rpc<T = unknown>(name: string, body: Record<string, unknown> = {}) {
-  const response = await authedFetch(`/rest/v1/rpc/${name}`, {
-    method: 'POST',
-    body: JSON.stringify(body),
-  })
-  if (!response.ok) {
-    let message = `Erreur ${response.status}`
-    try {
-      const payload = await response.json()
-      message = payload?.message || payload?.hint || payload?.details || message
-    } catch {}
-    throw new Error(message)
-  }
-  if (response.status === 204) return null as T
-  return await response.json() as T
+  const { data, error } = await supabase.rpc(name, body)
+  if (error) throw error
+  return data as T
 }
 
 export default function DriverDashboardPage() {
@@ -115,22 +59,36 @@ export default function DriverDashboardPage() {
   const userIdRef = useRef<string | null>(null)
 
   useEffect(() => {
-    const session = readLocalSession()
-    const userId = session?.user?.id ?? null
-    if (!session?.access_token || !userId) {
-      window.location.replace('/movi-app-v2')
-      return
+    let cancelled = false
+
+    const init = async () => {
+      const { data } = await supabase.auth.getSession()
+      const session = data.session
+      if (!session?.user?.id) {
+        window.location.replace('/movi-app-v2')
+        return
+      }
+      if (cancelled) return
+      userIdRef.current = session.user.id
+      await refreshDashboard(false)
     }
-    userIdRef.current = userId
-    void refreshDashboard(false)
+
+    void init()
+    return () => { cancelled = true }
   }, [])
 
   async function loadRides(userId = userIdRef.current, isOnline = online) {
     if (!userId) return
     try {
-      const mineResponse = await authedFetch(`/rest/v1/rides?select=*&driver_id=eq.${encodeURIComponent(userId)}&status=in.(accepted,driver_arriving,in_progress)&order=requested_at.desc&limit=1`)
-      const mineRows = mineResponse.ok ? await mineResponse.json() as Ride[] : []
-      const mine = mineRows[0] ?? null
+      const { data: mineRows } = await supabase
+        .from('rides')
+        .select('*')
+        .eq('driver_id', userId)
+        .in('status', ['accepted', 'driver_arriving', 'in_progress'])
+        .order('requested_at', { ascending: false })
+        .limit(1)
+
+      const mine = (mineRows?.[0] as Ride | undefined) ?? null
       setActiveRide(mine)
 
       if (!isOnline || mine) {
@@ -138,9 +96,16 @@ export default function DriverDashboardPage() {
         return
       }
 
-      const requestsResponse = await authedFetch(`/rest/v1/rides?select=*&status=eq.requested&driver_id=is.null&passenger_id=neq.${encodeURIComponent(userId)}&order=requested_at.asc&limit=20`)
-      const requests = requestsResponse.ok ? await requestsResponse.json() as Ride[] : []
-      setAvailable(requests)
+      const { data: requests } = await supabase
+        .from('rides')
+        .select('*')
+        .eq('status', 'requested')
+        .is('driver_id', null)
+        .neq('passenger_id', userId)
+        .order('requested_at', { ascending: true })
+        .limit(20)
+
+      setAvailable((requests ?? []) as Ride[])
     } catch {
       // Ride refresh failure must not blank the dashboard.
     }
@@ -233,7 +198,7 @@ export default function DriverDashboardPage() {
   }
 
   if (!authorized) {
-    return <main className="page"><section className="card"><div className="logo">M</div><h1>Accès chauffeur</h1><p>{message || 'Ce compte n’est pas un chauffeur approuvé.'}</p><button className="primary" onClick={logout}>Retour à la connexion</button></section><style jsx>{styles}</style></main>
+    return <main className="page"><section className="card"><div className="logo">M</div><h1>Accès chauffeur</h1><p>{message || 'Ce compte n’est pas un chauffeur approuvé.'}</p><button className="primary" onClick={logout}>Retour à la connexion</button></section></main>
   }
 
   const nextAction = activeRide?.status === 'accepted'
@@ -281,10 +246,5 @@ export default function DriverDashboardPage() {
 
       {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)}><aside onClick={e => e.stopPropagation()}><button className="close" onClick={() => setMenuOpen(false)}>×</button><div className="avatar">{name.slice(0,1).toUpperCase()}</div><h2>{name}</h2>{vehicle && <div className="vehicle"><small>VÉHICULE</small><strong>{vehicle.make} {vehicle.model}</strong><span>{vehicle.plate_number}</span></div>}<button className="logout" onClick={logout}>Se déconnecter</button></aside></div>}
     </section>
-    <style jsx>{styles}</style>
   </main>
 }
-
-const styles = `
-  .page{min-height:100vh;background:#f4f8f6;color:#10253a;font-family:Inter,system-ui,-apple-system,sans-serif;padding:18px 14px 40px}.card{max-width:720px;margin:0 auto}.header{display:flex;align-items:center;gap:12px;margin-bottom:24px}.menu{width:48px;height:48px;border:0;border-radius:16px;background:#fff;box-shadow:0 8px 24px #0b4d3b14;font-size:22px}.brand{display:flex;align-items:center;gap:10px}.brand>span,.logo{width:50px;height:50px;border-radius:16px;background:linear-gradient(145deg,#18a97b,#08745d);color:#fff;display:grid;place-items:center;font-size:24px;font-weight:900}.brand strong,.brand small{display:block}.brand strong{font-size:21px}.brand small{color:#73827e}.welcome{display:flex;justify-content:space-between;align-items:end;margin:10px 0 18px}.welcome small{color:#74847f}.welcome h1{margin:2px 0 0;font-size:28px}.rating{background:#fff;border-radius:16px;padding:12px 14px;font-weight:900}.rating small{display:block;font-size:11px;margin-top:3px}.statusCard{background:#fff;border:1px solid #dce9e4;border-radius:22px;padding:18px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 12px 30px #0f705a0d}.statusCard>div{display:flex;align-items:center;gap:12px}.statusCard strong,.statusCard small{display:block}.statusCard small{color:#7a8985;margin-top:4px}.dot{width:14px;height:14px;border-radius:50%;background:#aab4b1}.dot.on{background:#12a274;box-shadow:0 0 0 6px #12a27419}.switch{width:66px;height:38px;border:0;border-radius:999px;padding:4px;background:#ccd4d1}.switch span{display:block;width:30px;height:30px;border-radius:50%;background:#fff;transition:.2s}.switch.on{background:#18a97b}.switch.on span{transform:translateX(28px)}.message{margin:14px 0;padding:12px 14px;border-radius:14px;background:#eaf6f2;color:#0f705a;font-weight:700}.sectionTitle{display:flex;justify-content:space-between;align-items:end;margin:28px 0 12px}.sectionTitle small{font-size:11px;letter-spacing:.15em;color:#0f7b63;font-weight:900}.sectionTitle h2{margin:3px 0 0;font-size:21px}.sectionTitle button{border:0;border-radius:12px;background:#10253a;color:#fff;padding:9px 12px;font-weight:800}.empty{padding:24px;border:1px dashed #b9cec7;border-radius:18px;text-align:center;color:#6c7b77;background:#fbfdfc}.ride{background:#fff;border:1px solid #dfe9e5;border-radius:20px;padding:17px;margin-bottom:13px}.ride.active{border-color:#19a67a;box-shadow:0 10px 30px #0f705a12}.rideHead{display:flex;justify-content:space-between;gap:12px}.rideHead span{font-size:12px;text-transform:capitalize;color:#0f7b63;font-weight:900}.ride p{color:#52635f}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}.stats span{background:#f2f6f4;border-radius:12px;padding:10px 5px;text-align:center;font-weight:800}.primary{width:100%;border:0;border-radius:14px;background:linear-gradient(135deg,#18a97b,#08745d);color:#fff;padding:14px;font-size:16px;font-weight:900}.overlay{position:fixed;inset:0;background:#0b2d2566;z-index:100}.overlay aside{position:absolute;left:0;top:0;bottom:0;width:min(84vw,340px);background:#fff;padding:24px;box-shadow:10px 0 40px #0002}.close{float:right;width:42px;height:42px;border:0;border-radius:14px;background:#edf4f1;font-size:26px}.avatar{width:72px;height:72px;border-radius:22px;background:#0f7b63;color:#fff;display:grid;place-items:center;font-size:28px;font-weight:900;margin-top:60px}.vehicle{display:grid;gap:5px;padding:18px 0;border-top:1px solid #e4ece9;border-bottom:1px solid #e4ece9}.vehicle small{color:#70807b}.logout{width:100%;margin-top:22px;border:1px solid #f0caca;background:#fff6f6;color:#a73838;border-radius:14px;padding:13px;font-weight:900}
-`
