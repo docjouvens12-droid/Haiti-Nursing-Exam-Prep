@@ -4,6 +4,43 @@ const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 const storageKey = 'taxi-auth-default'
 
+function extractSession(raw: string | null) {
+  if (!raw) return null
+  try {
+    const parsed = JSON.parse(raw)
+    const session = parsed?.currentSession ?? parsed?.session ?? parsed
+    if (!session?.access_token || !session?.user?.id) return null
+    return session
+  } catch {
+    return null
+  }
+}
+
+function migrateLegacySession() {
+  if (typeof window === 'undefined') return
+  try {
+    const current = extractSession(window.localStorage.getItem(storageKey))
+    if (current) return
+
+    for (let i = 0; i < window.localStorage.length; i += 1) {
+      const key = window.localStorage.key(i)
+      if (!key || key === storageKey) continue
+      if (!key.includes('auth') && !key.includes('supabase') && !key.includes('sb-')) continue
+
+      const raw = window.localStorage.getItem(key)
+      const session = extractSession(raw)
+      if (!session) continue
+
+      window.localStorage.setItem(storageKey, JSON.stringify(session))
+      break
+    }
+  } catch {
+    // Storage migration must never block MOVI.
+  }
+}
+
+migrateLegacySession()
+
 const fetchWithTimeout: typeof fetch = async (input, init = {}) => {
   const controller = new AbortController()
   const timeoutId = setTimeout(() => controller.abort(), 12000)
@@ -50,12 +87,8 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
 function readPersistedSession() {
   if (typeof window === 'undefined') return null
   try {
-    const raw = window.localStorage.getItem(storageKey)
-    if (!raw) return null
-    const parsed = JSON.parse(raw)
-    const session = parsed?.currentSession ?? parsed?.session ?? parsed
-    if (!session?.access_token || !session?.user?.id) return null
-    return session
+    migrateLegacySession()
+    return extractSession(window.localStorage.getItem(storageKey))
   } catch {
     return null
   }
