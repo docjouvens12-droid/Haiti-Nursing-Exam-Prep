@@ -4,9 +4,14 @@ import { useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
 const ROUTING_CLASS = 'taxi-role-routing'
+const PUBLIC_ENTRY_PATHS = new Set(['/', '/movi', '/movi-app-v2'])
+
+function isPublicEntryPath() {
+  return PUBLIC_ENTRY_PATHS.has(window.location.pathname)
+}
 
 function beginRoleRouting() {
-  if (window.location.pathname === '/') document.body.classList.add(ROUTING_CLASS)
+  if (isPublicEntryPath()) document.body.classList.add(ROUTING_CLASS)
 }
 
 function finishRoleRouting() {
@@ -14,7 +19,7 @@ function finishRoleRouting() {
 }
 
 async function routeUser(userId: string) {
-  if (window.location.pathname !== '/') return
+  if (!isPublicEntryPath()) return
   beginRoleRouting()
 
   const { data: profile, error: profileError } = await supabase
@@ -28,7 +33,7 @@ async function routeUser(userId: string) {
     return
   }
 
-  if (profile.role === 'admin') {
+  if (profile.role === 'admin' || profile.role === 'super_admin') {
     const { data: mustChange } = await supabase.rpc('admin_requires_password_change')
     window.location.replace(mustChange ? '/admin/set-password' : '/admin')
     return
@@ -63,9 +68,8 @@ export default function AuthRoleRedirector() {
   useEffect(() => {
     let active = true
 
-    // If a session already exists on the shared home route, hide passenger UI
-    // until we know the account role.
-    if (window.location.pathname === '/') beginRoleRouting()
+    // Hide passenger UI on every shared public entry route until role is known.
+    if (isPublicEntryPath()) beginRoleRouting()
 
     supabase.auth.getUser().then(({ data }) => {
       if (!active) return
