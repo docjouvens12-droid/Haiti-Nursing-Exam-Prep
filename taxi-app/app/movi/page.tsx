@@ -1,5 +1,5 @@
-import { redirect } from 'next/navigation'
+import HomePage from '../page'
 
 export default function MoviEntryPage() {
-  redirect('/')
+  return <HomePage />
 }
