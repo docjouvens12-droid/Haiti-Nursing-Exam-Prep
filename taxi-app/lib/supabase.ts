@@ -3,6 +3,7 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 const storageKey = 'taxi-auth-default'
+const fastStorageKey = 'movi-session'
 
 function extractSession(raw: string | null) {
   if (!raw) return null
@@ -16,15 +17,34 @@ function extractSession(raw: string | null) {
   }
 }
 
+function writeFastSession(session: any | null) {
+  if (typeof window === 'undefined') return
+  try {
+    if (session?.access_token && session?.user?.id) {
+      window.localStorage.setItem(fastStorageKey, JSON.stringify(session))
+    } else {
+      window.localStorage.removeItem(fastStorageKey)
+    }
+  } catch {
+    // Fast session persistence must never block MOVI.
+  }
+}
+
 function migrateLegacySession() {
   if (typeof window === 'undefined') return
   try {
+    const fast = extractSession(window.localStorage.getItem(fastStorageKey))
+    if (fast) return
+
     const current = extractSession(window.localStorage.getItem(storageKey))
-    if (current) return
+    if (current) {
+      writeFastSession(current)
+      return
+    }
 
     for (let i = 0; i < window.localStorage.length; i += 1) {
       const key = window.localStorage.key(i)
-      if (!key || key === storageKey) continue
+      if (!key || key === storageKey || key === fastStorageKey) continue
       if (!key.includes('auth') && !key.includes('supabase') && !key.includes('sb-')) continue
 
       const raw = window.localStorage.getItem(key)
@@ -32,6 +52,7 @@ function migrateLegacySession() {
       if (!session) continue
 
       window.localStorage.setItem(storageKey, JSON.stringify(session))
+      writeFastSession(session)
       break
     }
   } catch {
@@ -88,22 +109,31 @@ function readPersistedSession() {
   if (typeof window === 'undefined') return null
   try {
     migrateLegacySession()
-    return extractSession(window.localStorage.getItem(storageKey))
+    return extractSession(window.localStorage.getItem(fastStorageKey))
+      ?? extractSession(window.localStorage.getItem(storageKey))
   } catch {
     return null
   }
 }
 
-// Safari/PWA can occasionally leave the Supabase auth lock waiting even though
-// a valid persisted session is already present. Prefer that local session so
-// MOVI role routing and driver/admin dashboards can render immediately.
+// Keep one simple copy of the live Supabase session for Safari/PWA. This avoids
+// waiting on the internal auth lock when MOVI already has a valid session.
+if (typeof window !== 'undefined') {
+  supabase.auth.onAuthStateChange((_event, session) => {
+    writeFastSession(session)
+  })
+}
+
 const originalGetSession = supabase.auth.getSession.bind(supabase.auth)
 supabase.auth.getSession = (async () => {
   const persisted = readPersistedSession()
   if (persisted) {
     return { data: { session: persisted }, error: null }
   }
-  return originalGetSession()
+
+  const result = await originalGetSession()
+  if (result.data.session) writeFastSession(result.data.session)
+  return result
 }) as typeof supabase.auth.getSession
 
 const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
