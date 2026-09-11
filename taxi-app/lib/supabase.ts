@@ -16,6 +16,22 @@ const fetchWithTimeout: typeof fetch = async (input, init = {}) => {
 
   try {
     return await fetch(input, { ...init, signal: controller.signal })
+  } catch (error) {
+    // Supabase query builders normally resolve with { data, error }. If fetch
+    // throws on iPhone after an abort/timeout, callers without try/catch can
+    // remain forever in their loading state. Convert that transport failure
+    // into a normal HTTP error response so the query resolves cleanly.
+    if (controller.signal.aborted) {
+      return new Response(
+        JSON.stringify({ message: 'Request timed out. Please try again.' }),
+        {
+          status: 504,
+          statusText: 'Gateway Timeout',
+          headers: { 'Content-Type': 'application/json' },
+        },
+      )
+    }
+    throw error
   } finally {
     clearTimeout(timeoutId)
     upstreamSignal?.removeEventListener('abort', abortFromUpstream)
