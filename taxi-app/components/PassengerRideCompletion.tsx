@@ -21,6 +21,7 @@ type RidePayment = {
 }
 
 const dismissedKey = (userId: string, rideId: string) => `taxi-dismissed-receipt:${userId}:${rideId}`
+const MAX_RECEIPT_AGE_MS = 15 * 60 * 1000
 
 export default function PassengerRideCompletion() {
   const [user, setUser] = useState<User | null>(null)
@@ -103,6 +104,17 @@ export default function PassengerRideCompletion() {
         setPayment(null)
         return
       }
+
+      const completedAtMs = row.completed_at ? Date.parse(row.completed_at) : Number.NaN
+      const receiptIsStale = !Number.isFinite(completedAtMs) || Date.now() - completedAtMs > MAX_RECEIPT_AGE_MS
+      if (receiptIsStale) {
+        window.localStorage.setItem(dismissedKey(currentUser.id, row.id), '1')
+        setHiddenRideId(row.id)
+        setRide(null)
+        setPayment(null)
+        return
+      }
+
       if (row.id === hiddenRideId) return
       if (window.localStorage.getItem(dismissedKey(currentUser.id, row.id)) === '1') {
         setRide((current) => current?.id === row.id ? null : current)
