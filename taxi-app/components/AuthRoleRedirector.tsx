@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 
 const ROUTING_CLASS = 'taxi-role-routing'
 const PUBLIC_ENTRY_PATHS = new Set(['/', '/movi', '/movi-app-v2'])
+const DRIVER_DASHBOARD_PATH = '/driver/dashboard-v2'
 
 function currentPath() {
   return window.location.pathname
@@ -63,8 +64,12 @@ async function routeUser(userId: string) {
       .eq('user_id', userId)
       .maybeSingle()
 
-    const target = driver?.status === 'approved' ? '/driver/dashboard' : '/driver'
-    if (path.startsWith('/driver') && (target === '/driver' || path === '/driver/dashboard')) {
+    const target = driver?.status === 'approved' ? DRIVER_DASHBOARD_PATH : '/driver'
+    if (path === target) {
+      finishRoleRouting()
+      return
+    }
+    if (target === '/driver' && path === '/driver') {
       finishRoleRouting()
       return
     }
@@ -78,7 +83,6 @@ async function routeUser(userId: string) {
       return
     }
 
-    // A passenger must never remain inside driver/admin areas.
     if (path.startsWith('/driver') || path.startsWith('/admin')) {
       replaceIfNeeded('/')
       return
@@ -122,7 +126,6 @@ export default function AuthRoleRedirector() {
       }
     })
 
-    // Safety check for PWA/iOS navigation where auth events can be delayed.
     const watchdog = window.setInterval(() => {
       if (active) void routeCurrentUser()
     }, 2500)
