@@ -22,7 +22,7 @@ export async function GET(request: NextRequest) {
     })
 
     const text = await response.text()
-    let payload: unknown = null
+    let payload: any = null
     try {
       payload = text ? JSON.parse(text) : null
     } catch {
@@ -31,12 +31,35 @@ export async function GET(request: NextRequest) {
 
     if (!response.ok) {
       return NextResponse.json(
-        { error: (payload as any)?.message || (payload as any)?.error || `Supabase ${response.status}` },
+        { error: payload?.message || payload?.error || `Supabase ${response.status}` },
         { status: response.status },
       )
     }
 
-    return NextResponse.json({ data: payload }, { status: 200 })
+    const row = Array.isArray(payload)
+      ? payload[0] ?? null
+      : payload?.data && Array.isArray(payload.data)
+        ? payload.data[0] ?? null
+        : payload?.data ?? payload
+
+    if (!row) {
+      return NextResponse.json({ error: 'Profil chauffeur introuvable.' }, { status: 404 })
+    }
+
+    const driver = {
+      full_name: row.full_name ?? null,
+      status: row.status ?? null,
+      is_online: Boolean(row.is_online),
+      average_rating: Number(row.average_rating ?? 0),
+      total_rides: Number(row.total_rides ?? 0),
+      vehicle_id: row.vehicle_id ?? null,
+      vehicle_make: row.vehicle_make ?? null,
+      vehicle_model: row.vehicle_model ?? null,
+      vehicle_plate_number: row.vehicle_plate_number ?? null,
+      vehicle_color: row.vehicle_color ?? null,
+    }
+
+    return NextResponse.json({ driver }, { status: 200, headers: { 'Cache-Control': 'no-store' } })
   } catch (error) {
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Impossible de charger le tableau de bord.' },
