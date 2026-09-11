@@ -1,17 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-label="MOVI maskable app icon">
   <defs>
-    <linearGradient id="bg" x1="80" y1="80" x2="940" y2="950" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#1fbd76"/>
-      <stop offset="0.52" stop-color="#0b9561"/>
-      <stop offset="1" stop-color="#05623f"/>
+    <linearGradient id="bg" x1="80" y1="60" x2="950" y2="970" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#24c47c"/>
+      <stop offset="0.48" stop-color="#0d9963"/>
+      <stop offset="1" stop-color="#05613f"/>
     </linearGradient>
     <linearGradient id="pin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#86f29a"/>
-      <stop offset="1" stop-color="#4bd879"/>
+      <stop offset="0" stop-color="#91f6a2"/>
+      <stop offset="1" stop-color="#48d978"/>
     </linearGradient>
   </defs>
+
   <rect width="1024" height="1024" fill="url(#bg)"/>
-  <path d="M278 653 L425 401 Q445 368 476 368 Q507 368 528 401 L625 554 Q639 576 662 576 Q681 576 697 562 L754 512 Q777 492 802 504 Q827 516 832 547 L866 730 Q872 763 847 782 Q822 801 793 787 Q773 777 767 755 L743 646 L692 692 Q664 716 628 716 Q591 716 565 684 L477 570 L369 721 Q349 749 317 749 Q289 749 273 727 Q258 705 266 681 Q270 671 278 653 Z" fill="#fff"/>
-  <path d="M699 242 C642 242 596 288 596 345 C596 416 699 512 699 512 C699 512 802 416 802 345 C802 288 756 242 699 242 Z" fill="url(#pin)"/>
-  <circle cx="699" cy="343" r="33" fill="#0b8b5a"/>
+
+  <g transform="translate(92 92) scale(.82)">
+    <path d="M214 586 L374 332 Q399 292 437 292 Q475 292 501 332 L607 494 Q624 520 649 520 Q672 520 690 502 L760 440 Q787 416 817 430 Q846 445 852 481 L886 662 Q893 700 865 722 Q837 744 804 729 Q780 718 774 693 L752 594 L697 643 Q666 671 626 671 Q582 671 552 635 L439 492 L323 650 Q300 682 263 682 Q229 682 210 657 Q191 631 201 602 Q205 593 214 586 Z" fill="#fff"/>
+
+    <path d="M681 169 C614 169 560 223 560 290 C560 373 681 486 681 486 C681 486 802 373 802 290 C802 223 748 169 681 169 Z" fill="url(#pin)"/>
+    <circle cx="681" cy="287" r="38" fill="#087d55"/>
+
+    <text x="512" y="806" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="174" font-weight="900" letter-spacing="-10">Movi</text>
+    <circle cx="704" cy="664" r="18" fill="#2cff73"/>
+    <text x="512" y="873" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600">Mouvman pou yon pi bon demen</text>
+  </g>
 </svg>
