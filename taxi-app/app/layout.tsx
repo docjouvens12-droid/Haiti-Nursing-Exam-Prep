@@ -25,6 +25,7 @@ import HaitiTestGeolocation from '../components/HaitiTestGeolocation'
 import PassengerActiveDriver from '../components/PassengerActiveDriver'
 import PassengerPendingRideCancel from '../components/PassengerPendingRideCancel'
 import PassengerRideCompletion from '../components/PassengerRideCompletion'
+import PassengerStaleReceiptGuard from '../components/PassengerStaleReceiptGuard'
 import PassengerRidePhasePolish from '../components/PassengerRidePhasePolish'
 import PassengerCompletionPolish from '../components/PassengerCompletionPolish'
 import PassengerRideLifecycleGuard from '../components/PassengerRideLifecycleGuard'
@@ -114,6 +115,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <PassengerActiveDriver />
         <PassengerPendingRideCancel />
         <PassengerRideCompletion />
+        <PassengerStaleReceiptGuard />
         <PassengerRidePhasePolish />
         <PassengerCompletionPolish />
         <PassengerAvatarEnhancer />
