@@ -57,25 +57,40 @@ export default function DriverDashboardPage() {
   const [available, setAvailable] = useState<Ride[]>([])
   const [menuOpen, setMenuOpen] = useState(false)
   const userIdRef = useRef<string | null>(null)
+  const accessTokenRef = useRef<string | null>(null)
 
   useEffect(() => {
     let cancelled = false
 
     const init = async () => {
-      const { data } = await supabase.auth.getSession()
-      const session = data.session
-      if (!session?.user?.id) {
-        window.location.replace('/movi-app-v2')
-        return
+      try {
+        const { data } = await supabase.auth.getSession()
+        const session = data.session
+        if (!session?.user?.id || !session.access_token) {
+          window.location.replace('/movi-app-v2')
+          return
+        }
+        if (cancelled) return
+        userIdRef.current = session.user.id
+        accessTokenRef.current = session.access_token
+        await refreshDashboard(false)
+      } catch (error) {
+        if (!cancelled) setMessage(error instanceof Error ? error.message : 'Impossible d’ouvrir votre espace chauffeur.')
       }
-      if (cancelled) return
-      userIdRef.current = session.user.id
-      await refreshDashboard(false)
     }
 
     void init()
     return () => { cancelled = true }
   }, [])
+
+  async function getAccessToken() {
+    if (accessTokenRef.current) return accessTokenRef.current
+    const { data } = await supabase.auth.getSession()
+    const token = data.session?.access_token ?? null
+    accessTokenRef.current = token
+    if (data.session?.user?.id) userIdRef.current = data.session.user.id
+    return token
+  }
 
   async function loadRides(userId = userIdRef.current, isOnline = online) {
     if (!userId) return
@@ -115,8 +130,23 @@ export default function DriverDashboardPage() {
     if (showBusy) setBusy(true)
     setMessage('')
     try {
-      const data = await rpc<DashboardRow[]>('get_my_driver_dashboard')
-      const row = Array.isArray(data) ? data[0] : undefined
+      const token = await getAccessToken()
+      if (!token) {
+        window.location.replace('/movi-app-v2')
+        return
+      }
+
+      const response = await fetch('/api/driver/dashboard', {
+        method: 'GET',
+        headers: { Authorization: `Bearer ${token}` },
+        cache: 'no-store',
+      })
+
+      const payload = await response.json()
+      if (!response.ok) throw new Error(payload?.error || `Erreur ${response.status}`)
+
+      const raw = payload?.data
+      const row: DashboardRow | undefined = Array.isArray(raw) ? raw[0] : raw
       if (!row || row.status !== 'approved') {
         setAuthorized(false)
         setMessage('Ce compte n’est pas un chauffeur approuvé.')
@@ -124,7 +154,7 @@ export default function DriverDashboardPage() {
       }
 
       setAuthorized(true)
-      setName(row.full_name || 'Chauffeur')
+      setName(row.full_name?.trim() || 'Chauffeur')
       setOnline(Boolean(row.is_online))
       setRating(Number(row.average_rating ?? 0))
       setTotalRides(Number(row.total_rides ?? 0))
