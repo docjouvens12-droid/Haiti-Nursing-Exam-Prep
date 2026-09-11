@@ -3,6 +3,25 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
 const supabasePublishableKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!
 
+const fetchWithTimeout: typeof fetch = async (input, init = {}) => {
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 12000)
+  const upstreamSignal = init.signal
+
+  const abortFromUpstream = () => controller.abort()
+  if (upstreamSignal) {
+    if (upstreamSignal.aborted) controller.abort()
+    else upstreamSignal.addEventListener('abort', abortFromUpstream, { once: true })
+  }
+
+  try {
+    return await fetch(input, { ...init, signal: controller.signal })
+  } finally {
+    clearTimeout(timeoutId)
+    upstreamSignal?.removeEventListener('abort', abortFromUpstream)
+  }
+}
+
 export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
   auth: {
     persistSession: true,
@@ -10,12 +29,15 @@ export const supabase = createClient(supabaseUrl, supabasePublishableKey, {
     detectSessionInUrl: true,
     storageKey: 'taxi-auth-default',
   },
+  global: {
+    fetch: fetchWithTimeout,
+  },
 })
 
 // On iPhone/Safari, always prefer the locally persisted session and re-check
 // it after any slower getUser() request. This prevents an auth request started
 // before sign-in from resolving later with null and clearing a newly signed-in
-// passenger from the React state.
+// user from the React state.
 const originalGetUser = supabase.auth.getUser.bind(supabase.auth)
 supabase.auth.getUser = (async (...args: Parameters<typeof originalGetUser>) => {
   const before = await supabase.auth.getSession()
