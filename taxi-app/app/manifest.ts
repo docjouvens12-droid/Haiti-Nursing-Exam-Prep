@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    id: '/movi-pwa-v4',
+    id: '/movi-pwa-v6',
     name: 'MOVI',
     short_name: 'MOVI',
     description: 'Deplase fasil, rapidman ak an sekirite',
@@ -11,19 +11,19 @@ export default function manifest(): MetadataRoute.Manifest {
     display: 'standalone',
     display_override: ['standalone'],
     background_color: '#eff7f4',
-    theme_color: '#0f705a',
+    theme_color: '#10cf72',
     orientation: 'portrait-primary',
     lang: 'fr-HT',
     categories: ['travel', 'navigation'],
     icons: [
       {
-        src: '/icon',
-        sizes: '512x512',
-        type: 'image/png',
+        src: '/movi-icon-v6.svg',
+        sizes: 'any',
+        type: 'image/svg+xml',
         purpose: 'any',
       },
       {
-        src: '/apple-icon',
+        src: '/apple-icon-v6',
         sizes: '180x180',
         type: 'image/png',
         purpose: 'any',
