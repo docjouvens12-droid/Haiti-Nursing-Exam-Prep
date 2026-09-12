@@ -29,12 +29,28 @@ function findContext(value: string) {
 
 export default function PassengerTypedAddressPreview() {
   useEffect(() => {
-    let host: HTMLDivElement | null = null
+    let host: HTMLButtonElement | null = null
     let cleanupTimer: number | null = null
+    let autoSelectTimer: number | null = null
 
     const removeHost = () => {
       host?.remove()
       host = null
+    }
+
+    const autoSelectFirstNativeResult = (routeCard: HTMLElement) => {
+      let attempts = 0
+      const trySelect = () => {
+        attempts += 1
+        const nativeButton = routeCard.parentElement?.querySelector('.search-results button') as HTMLButtonElement | null
+        if (nativeButton) {
+          nativeButton.click()
+          removeHost()
+          return
+        }
+        if (attempts < 16) autoSelectTimer = window.setTimeout(trySelect, 200)
+      }
+      autoSelectTimer = window.setTimeout(trySelect, 150)
     }
 
     const renderPreview = (input: HTMLInputElement) => {
@@ -47,9 +63,19 @@ export default function PassengerTypedAddressPreview() {
       }
 
       if (!host || !host.isConnected) {
-        host = document.createElement('div')
+        host = document.createElement('button')
+        host.type = 'button'
         host.className = 'passenger-typed-address-preview'
         routeCard.insertAdjacentElement('afterend', host)
+      }
+
+      host.onclick = () => {
+        input.focus()
+        const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
+        setter?.call(input, context)
+        input.dispatchEvent(new Event('input', { bubbles: true }))
+        input.dispatchEvent(new Event('change', { bubbles: true }))
+        autoSelectFirstNativeResult(routeCard)
       }
 
       host.innerHTML = ''
@@ -93,12 +119,14 @@ export default function PassengerTypedAddressPreview() {
       document.removeEventListener('input', onInput, true)
       document.removeEventListener('focusin', onFocus, true)
       if (cleanupTimer) window.clearTimeout(cleanupTimer)
+      if (autoSelectTimer) window.clearTimeout(autoSelectTimer)
       removeHost()
     }
   }, [])
 
   return <style>{`
     .passenger-typed-address-preview{
+      width:100%;
       margin:10px 0 4px;
       min-height:70px;
       padding:12px 14px;
@@ -109,7 +137,11 @@ export default function PassengerTypedAddressPreview() {
       align-items:center;
       gap:12px;
       box-shadow:0 7px 20px rgba(16,32,51,.04);
+      font:inherit;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
     }
+    .passenger-typed-address-preview:active{transform:scale(.995);background:#f8fcfa}
     .passenger-typed-address-pin{font-size:22px;flex:none}
     .passenger-typed-address-copy{min-width:0;display:grid;gap:4px;text-align:left}
     .passenger-typed-address-copy strong{font-size:14px;line-height:1.25;color:#17324b;font-weight:900}
