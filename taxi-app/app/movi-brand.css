@@ -55,22 +55,42 @@ body:has(.driver-home-polish-root) .brand > button::after {
   color: #fff !important;
 }
 
-/* Passenger: keep MOVI exactly centered regardless of side buttons */
-body.movi-passenger-ui .topbar,
-body.passenger-hard-v2 .topbar {
+/* Passenger dashboard: keep the M icon + MOVI wordmark exactly centered */
+.app-underlay .topbar {
   position: absolute !important;
   display: grid !important;
   grid-template-columns: 46px minmax(0,1fr) 46px !important;
   align-items: center !important;
+  column-gap: 8px !important;
 }
 
-body.movi-passenger-ui .brand-chip,
-body.passenger-hard-v2 .brand-chip {
+.app-underlay .topbar > .round-button:first-child {
+  grid-column: 1 !important;
+  justify-self: start !important;
+}
+
+.app-underlay .topbar > .brand-chip {
   grid-column: 2 !important;
   justify-self: center !important;
   margin-inline: auto !important;
-  min-width: 118px !important;
   width: max-content !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 7px 10px !important;
+  text-align: center !important;
+}
+
+.app-underlay .topbar > .brand-chip small {
+  display: none !important;
+}
+
+.app-underlay .topbar > .round-button:last-child {
+  grid-column: 3 !important;
+  justify-self: end !important;
 }
 
 /* Public entry */
