@@ -4,19 +4,14 @@ import { useEffect } from 'react'
 import { supabase } from '../lib/supabase'
 
 const ROUTING_CLASS = 'taxi-role-routing'
-const PUBLIC_ENTRY_PATHS = new Set(['/', '/movi', '/movi-app-v2'])
 const DRIVER_DASHBOARD_PATH = '/driver/dashboard-v2'
 
 function currentPath() {
   return window.location.pathname
 }
 
-function isPublicEntryPath(path = currentPath()) {
-  return PUBLIC_ENTRY_PATHS.has(path)
-}
-
 function beginRoleRouting() {
-  if (isPublicEntryPath()) document.body.classList.add(ROUTING_CLASS)
+  document.body.classList.add(ROUTING_CLASS)
 }
 
 function finishRoleRouting() {
@@ -28,13 +23,13 @@ function replaceIfNeeded(target: string) {
     finishRoleRouting()
     return false
   }
+  beginRoleRouting()
   window.location.replace(target)
   return true
 }
 
 async function routeUser(userId: string) {
   const path = currentPath()
-  if (isPublicEntryPath(path)) beginRoleRouting()
 
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
@@ -65,14 +60,6 @@ async function routeUser(userId: string) {
       .maybeSingle()
 
     const target = driver?.status === 'approved' ? DRIVER_DASHBOARD_PATH : '/driver'
-    if (path === target) {
-      finishRoleRouting()
-      return
-    }
-    if (target === '/driver' && path === '/driver') {
-      finishRoleRouting()
-      return
-    }
     replaceIfNeeded(target)
     return
   }
@@ -98,8 +85,7 @@ async function routeUser(userId: string) {
 export default function AuthRoleRedirector() {
   useEffect(() => {
     let active = true
-
-    if (isPublicEntryPath()) beginRoleRouting()
+    finishRoleRouting()
 
     const routeCurrentUser = async () => {
       const { data } = await supabase.auth.getUser()
@@ -119,20 +105,14 @@ export default function AuthRoleRedirector() {
       }
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
-        if (isPublicEntryPath()) beginRoleRouting()
         window.setTimeout(() => {
           if (active) void routeUser(session.user.id)
         }, 0)
       }
     })
 
-    const watchdog = window.setInterval(() => {
-      if (active) void routeCurrentUser()
-    }, 2500)
-
     return () => {
       active = false
-      window.clearInterval(watchdog)
       listener.subscription.unsubscribe()
       finishRoleRouting()
     }
