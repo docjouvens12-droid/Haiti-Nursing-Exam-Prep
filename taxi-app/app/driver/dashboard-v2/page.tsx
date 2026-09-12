@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { supabase } from '../../../lib/supabase'
+import DriverCleanUberBoltHome from '../../../components/DriverCleanUberBoltHome'
 
 type RideStatus = 'requested' | 'accepted' | 'driver_arriving' | 'in_progress' | 'completed' | 'cancelled'
 type Ride = {
@@ -66,7 +67,6 @@ export default function DriverDashboardV2Page() {
   const [busy,setBusy] = useState(false)
   const [online,setOnline] = useState(false)
   const [message,setMessage] = useState('')
-  const [name,setName] = useState('Chauffeur')
   const [rating,setRating] = useState(0)
   const [totalRides,setTotalRides] = useState(0)
   const [vehicle,setVehicle] = useState<Vehicle|null>(null)
@@ -122,7 +122,6 @@ export default function DriverDashboardV2Page() {
         throw new Error('Ce compte n’est pas un chauffeur approuvé.')
       }
       setAuthorized(true)
-      setName(row.full_name?.trim() || 'Chauffeur')
       setOnline(Boolean(row.is_online))
       setRating(Number(row.average_rating ?? 0))
       setTotalRides(Number(row.total_rides ?? 0))
@@ -180,10 +179,7 @@ export default function DriverDashboardV2Page() {
         <div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div>
       </header>
 
-      <section className="drv2-hero">
-        <div><span className="drv2-kicker">BONJOUR</span><h1>{name}</h1></div>
-        <div className={online ? 'drv2-pill online' : 'drv2-pill'}><span className="drv2-pulse"/>{online ? 'En ligne' : 'Hors ligne'}</div>
-      </section>
+      <DriverCleanUberBoltHome />
 
       <section className="drv2-status-card">
         <div className="drv2-status-copy"><strong>{online ? 'Prêt à conduire' : 'Vous êtes hors ligne'}</strong><span>{online ? 'Les nouvelles demandes peuvent apparaître maintenant.' : 'Activez-vous pour recevoir des courses.'}</span></div>
