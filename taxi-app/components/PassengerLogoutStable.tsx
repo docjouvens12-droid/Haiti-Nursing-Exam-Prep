@@ -10,11 +10,22 @@ export default function PassengerLogoutStable(){
   const [busy,setBusy]=useState(false)
 
   useEffect(()=>{
-    const sync=()=>setTarget(document.querySelector<HTMLElement>('.shell .nav-drawer .drawer-logout'))
+    const sync=()=>{
+      const el=document.querySelector<HTMLElement>('.shell .nav-drawer .drawer-logout')
+      if(el){
+        el.classList.add('passenger-logout-host')
+        setTarget(el)
+      }else{
+        setTarget(null)
+      }
+    }
     sync()
     const onClick=()=>window.setTimeout(sync,20)
     document.addEventListener('click',onClick,true)
-    return()=>document.removeEventListener('click',onClick,true)
+    return()=>{
+      document.removeEventListener('click',onClick,true)
+      document.querySelector<HTMLElement>('.shell .nav-drawer .drawer-logout')?.classList.remove('passenger-logout-host')
+    }
   },[])
 
   async function logout(){
