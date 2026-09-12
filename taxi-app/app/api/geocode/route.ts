@@ -5,6 +5,17 @@ type Result = { id: string; label: string; center: [number, number]; featureType
 const SEARCH_TYPES = 'address,street,neighborhood,locality,place,district,region'
 const PRECISE_TYPES = new Set(['address', 'street', 'neighborhood'])
 
+const KNOWN_CITY_FALLBACKS: Array<{ keys: string[]; label: string; center: [number, number] }> = [
+  { keys: ['les gonaives', 'gonaives', 'gonayiv'], label: 'Les Gonaïves, Artibonite, Haïti', center: [-72.6843, 19.4475] },
+  { keys: ['port au prince', 'potoprens'], label: 'Port-au-Prince, Ouest, Haïti', center: [-72.3364, 18.5392] },
+  { keys: ['delmas'], label: 'Delmas, Ouest, Haïti', center: [-72.2962, 18.5447] },
+  { keys: ['petion ville', 'petion-ville', 'petyonvil'], label: 'Pétion-Ville, Ouest, Haïti', center: [-72.2852, 18.5125] },
+  { keys: ['cap haitien', 'cap-haitien', 'okap'], label: 'Cap-Haïtien, Nord, Haïti', center: [-72.1982, 19.7594] },
+  { keys: ['saint marc', 'saint-marc', 'senmak'], label: 'Saint-Marc, Artibonite, Haïti', center: [-72.7000, 19.1082] },
+  { keys: ['jacmel', 'jakmel'], label: 'Jacmel, Sud-Est, Haïti', center: [-72.5370, 18.2343] },
+  { keys: ['les cayes', 'okay'], label: 'Les Cayes, Sud, Haïti', center: [-73.7500, 18.2000] },
+]
+
 function normalize(value: string) {
   return value
     .normalize('NFD')
@@ -60,6 +71,18 @@ function contextFromLabel(label: string) {
   const parts = label.split(',').map(part => part.trim()).filter(Boolean)
   if (parts.length >= 3) return parts.slice(-3).join(', ')
   return label.trim()
+}
+
+function knownCityFallback(query: string): Result | null {
+  const normalizedQuery = normalize(query)
+  const match = KNOWN_CITY_FALLBACKS.find(city => city.keys.some(key => normalizedQuery.includes(normalize(key))))
+  if (!match) return null
+  return {
+    id: `fallback-${normalize(match.label).replace(/\s+/g, '-')}`,
+    label: match.label,
+    center: match.center,
+    featureType: 'place',
+  }
 }
 
 export async function GET(request: NextRequest) {
@@ -212,8 +235,12 @@ export async function GET(request: NextRequest) {
 
     if (addressLike) {
       const precise = results.filter(result => PRECISE_TYPES.has(result.featureType || ''))
-      if (precise.length) results = precise
-      else results = []
+      if (precise.length) {
+        results = precise
+      } else {
+        const fallback = knownCityFallback(q)
+        results = fallback ? [fallback] : []
+      }
     }
 
     results = [...results].sort((a, b) => {
@@ -235,7 +262,7 @@ export async function GET(request: NextRequest) {
       label: `${contextFromLabel(result.label)}\n${q}`,
     }))
 
-    return NextResponse.json({ results: displayResults, query: q, precise: addressLike })
+    return NextResponse.json({ results: displayResults, query: q, precise: addressLike, fallback: addressLike && results.some(result => result.id.startsWith('fallback-')) })
   } catch {
     return NextResponse.json({ results: [], error: 'GEOCODE_FAILED' }, { status: 502 })
   }
