@@ -33,10 +33,10 @@ export const metadata: Metadata = {
   title: 'MOVI',
   description: 'Deplase fasil, rapidman ak an sekirite',
   applicationName: 'MOVI',
-  manifest: '/manifest.webmanifest',
+  manifest: '/manifest.webmanifest?v=5',
   icons: {
-    icon: '/icon',
-    apple: '/apple-icon',
+    icon: '/movi-icon-v5.svg',
+    apple: '/apple-icon-v5',
   },
   appleWebApp: {
     capable: true,
