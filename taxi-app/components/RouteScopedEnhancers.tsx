@@ -2,13 +2,6 @@
 
 import { usePathname } from 'next/navigation'
 
-import PassengerActiveDriver from './PassengerActiveDriver'
-import PassengerPendingRideCancel from './PassengerPendingRideCancel'
-import PassengerRideCompletion from './PassengerRideCompletion'
-import PassengerStaleReceiptGuard from './PassengerStaleReceiptGuard'
-import PassengerRideLifecycleGuard from './PassengerRideLifecycleGuard'
-import PassengerRidePaymentSync from './PassengerRidePaymentSync'
-
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
 import DriverOnlineSwitchPolish from './DriverOnlineSwitchPolish'
@@ -52,18 +45,8 @@ export default function RouteScopedEnhancers() {
   const isDriver = pathname.startsWith('/driver')
   const isCleanDriverDashboard = pathname.startsWith('/driver/dashboard-v2')
   const isAdmin = pathname.startsWith('/admin')
-  const isPassenger = !isDriver && !isAdmin
 
   return <>
-    {isPassenger && <>
-      <PassengerRideLifecycleGuard />
-      <PassengerActiveDriver />
-      <PassengerPendingRideCancel />
-      <PassengerRideCompletion />
-      <PassengerStaleReceiptGuard />
-      <PassengerRidePaymentSync />
-    </>}
-
     {isCleanDriverDashboard && <>
       <DriverCleanMenu />
       <DriverCleanMenuFinalGuard />
