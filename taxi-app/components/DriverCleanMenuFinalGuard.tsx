@@ -35,8 +35,7 @@ export default function DriverCleanMenuFinalGuard() {
   }, [])
 
   return <style jsx global>{`
-    /* Keep an expanded section from pushing Revenus, Langue, Aide and logout
-       out of sight on iPhone. The section scrolls inside the drawer instead. */
+    /* Long sections scroll inside the drawer so the rest of the menu remains reachable. */
     .dcm-panel {
       max-height: 38vh !important;
       overflow-y: auto !important;
@@ -50,13 +49,18 @@ export default function DriverCleanMenuFinalGuard() {
       padding-right: 4px !important;
     }
 
-    /* Keep the sign-out action reachable even with long ride history. */
+    /* Logout belongs after Revenus, Langue and Aide; never float over menu rows. */
     .dcm-logout {
-      position: sticky !important;
-      bottom: 0 !important;
-      z-index: 20 !important;
-      background: #fff7f7 !important;
-      box-shadow: 0 -10px 18px rgba(255,255,255,.96) !important;
+      position: static !important;
+      inset: auto !important;
+      z-index: auto !important;
+      display: block !important;
+      margin: 22px 0 calc(18px + env(safe-area-inset-bottom)) !important;
+      box-shadow: none !important;
+    }
+
+    .dcm-drawer {
+      padding-bottom: calc(38px + env(safe-area-inset-bottom)) !important;
     }
   `}</style>
 }
