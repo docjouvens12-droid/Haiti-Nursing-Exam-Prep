@@ -50,6 +50,7 @@ import DriverCleanHeaderRestore from './DriverCleanHeaderRestore'
 import DriverCleanAvatarUpload from './DriverCleanAvatarUpload'
 import DriverCleanApplicationPanel from './DriverCleanApplicationPanel'
 import DriverCleanPaymentsPolish from './DriverCleanPaymentsPolish'
+import DriverCleanHistoryPolish from './DriverCleanHistoryPolish'
 
 import AdminDriverApplicationProfileSnapshot from './AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from './AdminDriverVehicleSnapshot'
@@ -91,6 +92,7 @@ export default function RouteScopedEnhancers() {
       <DriverCleanAvatarUpload />
       <DriverCleanApplicationPanel />
       <DriverCleanPaymentsPolish />
+      <DriverCleanHistoryPolish />
     </>}
 
     {isDriver && !isCleanDriverDashboard && <>
