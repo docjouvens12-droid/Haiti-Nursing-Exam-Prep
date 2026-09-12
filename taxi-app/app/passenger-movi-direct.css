@@ -120,8 +120,81 @@
   white-space:normal!important;
 }
 
-.shell .route-card{border-radius:20px!important;border:1px solid #dae7e1!important;background:#fff!important;box-shadow:0 9px 24px rgba(16,32,51,.055)!important}
-.shell .input-wrap input{font-size:16px!important;color:#10243a!important;font-weight:800!important}
+/* STEP 3 — pickup + destination */
+.shell .route-card{
+  margin-top:18px!important;
+  padding:6px 14px!important;
+  border-radius:22px!important;
+  border:1px solid #dbe7e1!important;
+  background:#fff!important;
+  box-shadow:0 10px 26px rgba(16,32,51,.06)!important;
+}
+.shell .route-line{
+  min-height:62px!important;
+  display:grid!important;
+  grid-template-columns:18px minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:12px!important;
+}
+.shell .pickup-dot,.shell .destination-dot{
+  width:14px!important;
+  height:14px!important;
+  border-radius:50%!important;
+  justify-self:center!important;
+  box-sizing:border-box!important;
+}
+.shell .pickup-dot{
+  background:#13845f!important;
+  border:4px solid #dff4eb!important;
+  box-shadow:0 0 0 1px #8bc9b2!important;
+}
+.shell .destination-dot{
+  background:#10243a!important;
+  border:4px solid #e7ecef!important;
+  box-shadow:0 0 0 1px #b9c5cb!important;
+}
+.shell .connector{
+  height:13px!important;
+  margin:-2px 0 -2px 8px!important;
+  border-left:2px dashed #c8d5cf!important;
+}
+.shell .input-wrap{
+  min-width:0!important;
+  padding:8px 0!important;
+}
+.shell .input-wrap label{
+  display:block!important;
+  margin:0 0 4px!important;
+  color:#7d8f88!important;
+  font-size:10px!important;
+  line-height:1.2!important;
+  font-weight:850!important;
+  letter-spacing:.01em!important;
+}
+.shell .input-wrap input{
+  width:100%!important;
+  min-height:24px!important;
+  padding:0!important;
+  border:0!important;
+  outline:0!important;
+  background:transparent!important;
+  color:#10243a!important;
+  font-size:15px!important;
+  line-height:1.25!important;
+  font-weight:850!important;
+  text-overflow:ellipsis!important;
+}
+.shell .input-wrap input::placeholder{
+  color:#9aa8a2!important;
+  font-weight:650!important;
+}
+.shell .route-line:first-child .input-wrap{
+  border-bottom:1px solid #edf2ef!important;
+}
+.shell .route-line:last-child .input-wrap{
+  border-bottom:0!important;
+}
+
 .shell .section-heading{margin-top:20px!important}
 .shell .section-heading h2{font-size:20px!important;letter-spacing:-.02em!important;color:#10243a!important}
 .shell .ride-list{gap:10px!important}
@@ -174,4 +247,7 @@
   .shell .brand-chip{height:46px!important;padding-right:11px!important}
   .shell .greeting-row h1{font-size:27px!important}
   .shell .online-pill{max-width:112px!important;padding:7px 9px!important;font-size:9px!important}
+  .shell .route-card{margin-top:16px!important;padding:5px 12px!important;border-radius:20px!important}
+  .shell .route-line{min-height:59px!important;grid-template-columns:17px minmax(0,1fr)!important;column-gap:10px!important}
+  .shell .input-wrap input{font-size:14.5px!important}
 }
