@@ -6,32 +6,40 @@ export default function DriverCleanMenuOrder(){
   useEffect(()=>{
     if(!window.location.pathname.startsWith('/driver/dashboard-v2')) return
 
+    const getRank=(text:string)=>{
+      const t=text.toLowerCase()
+      if(t.includes('profil')||t.includes('pwofil')) return 0
+      if(t.includes('véhicule')||t.includes('veyikil')) return 1
+      if(t.includes('demande devenir chauffeur')||t.includes('demand devni chofè')) return 2
+      if(t.includes('paiements')||t.includes('peman')) return 3
+      if(t.includes('historique')||t.includes('istwa trajè')) return 4
+      if(t.includes('revenus')||t.includes('revni')) return 5
+      if(t.includes('langue')||t.includes('lang')) return 6
+      if(t.includes('aide')||t.includes('èd')) return 7
+      return 20
+    }
+
     const apply=()=>{
       const list=document.querySelector<HTMLElement>('.dcm-list')
       if(!list) return
+      list.style.display='flex'
+      list.style.flexDirection='column'
+
       const rows=Array.from(list.querySelectorAll<HTMLButtonElement>(':scope > .dcm-row'))
-      const appRow=rows.find(row=>row.textContent?.includes('Demande devenir chauffeur') || row.textContent?.includes('Demand devni chofè'))
-      const vehicleRow=rows.find(row=>row.textContent?.includes('Véhicule') || row.textContent?.includes('Veyikil'))
-      if(!appRow || !vehicleRow) return
-
-      const appPanel=appRow.nextElementSibling instanceof HTMLElement && appRow.nextElementSibling.classList.contains('dcm-panel')
-        ? appRow.nextElementSibling as HTMLElement
-        : null
-      const vehiclePanel=vehicleRow.nextElementSibling instanceof HTMLElement && vehicleRow.nextElementSibling.classList.contains('dcm-panel')
-        ? vehicleRow.nextElementSibling as HTMLElement
-        : null
-
-      const anchor=vehiclePanel || vehicleRow
-      if(anchor.nextElementSibling!==appRow){
-        anchor.insertAdjacentElement('afterend',appRow)
-        if(appPanel) appRow.insertAdjacentElement('afterend',appPanel)
+      for(const row of rows){
+        const rank=getRank(row.textContent||'')
+        row.style.order=String(rank*2)
+        const panel=row.nextElementSibling
+        if(panel instanceof HTMLElement && panel.classList.contains('dcm-panel')){
+          panel.style.order=String(rank*2+1)
+        }
       }
     }
 
+    const onClick=()=>window.setTimeout(apply,0)
     apply()
-    const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true})
-    return()=>observer.disconnect()
+    document.addEventListener('click',onClick,false)
+    return()=>document.removeEventListener('click',onClick,false)
   },[])
 
   return null
