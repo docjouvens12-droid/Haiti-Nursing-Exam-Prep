@@ -6,22 +6,18 @@
       <stop offset="1" stop-color="#05613f"/>
     </linearGradient>
     <linearGradient id="pin" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#91f6a2"/>
-      <stop offset="1" stop-color="#48d978"/>
+      <stop offset="0" stop-color="#9af4ad"/>
+      <stop offset="1" stop-color="#57df83"/>
     </linearGradient>
     <filter id="shadow" x="-30%" y="-30%" width="160%" height="160%">
-      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#003a29" flood-opacity="0.25"/>
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#003a29" flood-opacity="0.24"/>
     </filter>
   </defs>
 
   <rect x="34" y="34" width="956" height="956" rx="224" fill="url(#bg)"/>
 
-  <path d="M214 586 L374 332 Q399 292 437 292 Q475 292 501 332 L607 494 Q624 520 649 520 Q672 520 690 502 L760 440 Q787 416 817 430 Q846 445 852 481 L886 662 Q893 700 865 722 Q837 744 804 729 Q780 718 774 693 L752 594 L697 643 Q666 671 626 671 Q582 671 552 635 L439 492 L323 650 Q300 682 263 682 Q229 682 210 657 Q191 631 201 602 Q205 593 214 586 Z" fill="#fff" filter="url(#shadow)"/>
+  <path d="M184 652 L360 344 Q384 302 425 302 Q468 302 493 343 L607 524 Q625 552 650 552 Q674 552 693 530 L775 438 Q803 406 840 423 Q872 438 878 479 L904 666 Q910 708 878 731 Q846 754 811 736 Q785 723 780 691 L766 608 L710 668 Q679 702 636 702 Q590 702 559 662 L431 491 L303 680 Q280 714 240 714 Q204 714 183 687 Q164 661 184 652 Z" fill="#fff" filter="url(#shadow)"/>
 
-  <path d="M681 169 C614 169 560 223 560 290 C560 373 681 486 681 486 C681 486 802 373 802 290 C802 223 748 169 681 169 Z" fill="url(#pin)" filter="url(#shadow)"/>
-  <circle cx="681" cy="287" r="38" fill="#087d55"/>
-
-  <text x="512" y="806" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="174" font-weight="900" letter-spacing="-10">Movi</text>
-  <circle cx="704" cy="664" r="18" fill="#2cff73"/>
-  <text x="512" y="873" text-anchor="middle" fill="#fff" font-family="Arial, Helvetica, sans-serif" font-size="34" font-weight="600" letter-spacing="0.4">Mouvman pou yon pi bon demen</text>
+  <path d="M690 152 C618 152 560 210 560 282 C560 372 690 495 690 495 C690 495 820 372 820 282 C820 210 762 152 690 152 Z" fill="url(#pin)" filter="url(#shadow)"/>
+  <circle cx="690" cy="278" r="42" fill="#0a8b5b"/>
 </svg>
