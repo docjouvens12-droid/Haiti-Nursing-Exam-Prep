@@ -13,6 +13,25 @@ function normalize(value: string) {
     .trim()
 }
 
+function completeLabel(props: any, fallbackName = '') {
+  const name = String(props?.name || fallbackName || '').trim()
+  const fullAddress = String(props?.full_address || '').trim()
+  const placeFormatted = String(props?.place_formatted || '').trim()
+
+  // Prefer Mapbox's complete address when it really contains more than the feature name.
+  if (fullAddress && normalize(fullAddress) !== normalize(name)) return fullAddress
+
+  // For streets/addresses where Mapbox sends the street name separately from city/region,
+  // combine both so the passenger sees the complete location instead of only the city.
+  if (name && placeFormatted) {
+    const normalizedName = normalize(name)
+    const normalizedContext = normalize(placeFormatted)
+    if (!normalizedContext.startsWith(normalizedName)) return `${name}, ${placeFormatted}`
+  }
+
+  return fullAddress || placeFormatted || name || 'Destination'
+}
+
 export async function GET(request: NextRequest) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
   const { searchParams } = new URL(request.url)
@@ -56,8 +75,7 @@ export async function GET(request: NextRequest) {
 
         const props = f.properties ?? {}
         const name = props.name || f.name || ''
-        const context = props.place_formatted || ''
-        const label = props.full_address || [name, context].filter(Boolean).join(', ') || 'Destination'
+        const label = completeLabel(props, name)
 
         return [{
           id: f.id || props.mapbox_id || `${center[0]},${center[1]}`,
@@ -108,6 +126,19 @@ export async function GET(request: NextRequest) {
       return 6371 * 2 * Math.asin(Math.sqrt(a))
     }
 
+    const typeRank = (type = '') => {
+      const rank: Record<string, number> = {
+        address: 0,
+        street: 1,
+        neighborhood: 2,
+        locality: 3,
+        place: 4,
+        district: 5,
+        region: 6,
+      }
+      return rank[type] ?? 7
+    }
+
     results = [...results].sort((a, b) => {
       const aLabel = normalize(a.label)
       const bLabel = normalize(b.label)
@@ -115,9 +146,10 @@ export async function GET(request: NextRequest) {
       const bMatches = bLabel.includes(normalizedQuery) ? 0 : 1
       if (aMatches !== bMatches) return aMatches - bMatches
 
-      const aRegionPenalty = a.featureType === 'region' ? 1 : 0
-      const bRegionPenalty = b.featureType === 'region' ? 1 : 0
-      if (aRegionPenalty !== bRegionPenalty) return aRegionPenalty - bRegionPenalty
+      // Street/address results must appear before a city/region with the same text.
+      const aType = typeRank(a.featureType)
+      const bType = typeRank(b.featureType)
+      if (aType !== bType) return aType - bType
 
       return distance(a) - distance(b)
     })
