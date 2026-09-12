@@ -175,7 +175,7 @@ export default function DriverDashboardV2Page() {
   return <main className="drv2-page">
     <div className="drv2-shell">
       <header className="drv2-topbar">
-        <button className="menu drv2-menu" aria-label="Menu">☰</button>
+        <button className="menu drv2-menu" aria-label="Menu" onTouchStart={(event)=>{event.currentTarget.click()}}>☰</button>
         <div className="drv2-brand"><div className="drv2-logo">M</div><div><strong>MOVI</strong><span>Espace chauffeur</span></div></div>
         <div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div>
       </header>
