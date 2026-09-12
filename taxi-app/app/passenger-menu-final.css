@@ -1,5 +1,6 @@
 @media (max-width: 600px) {
   body.passenger-hard-v2 .nav-drawer{
+    position:fixed!important;
     width:min(88vw,360px)!important;
     max-height:calc(100dvh - 24px)!important;
     top:12px!important;
@@ -8,17 +9,33 @@
     border-radius:26px!important;
     padding:14px 13px calc(14px + env(safe-area-inset-bottom))!important;
     overflow-y:auto!important;
-    overscroll-behavior:contain;
-    background:rgba(255,255,255,.97)!important;
+    -webkit-overflow-scrolling:touch!important;
+    overscroll-behavior:contain!important;
+    background:#fff!important;
     border:1px solid rgba(217,228,223,.95)!important;
     box-shadow:0 24px 70px rgba(16,32,51,.24)!important;
-    backdrop-filter:blur(18px);
-    -webkit-backdrop-filter:blur(18px);
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    animation:none!important;
+    transition:none!important;
+    transform:none!important;
+    will-change:auto!important;
+    backface-visibility:hidden!important;
+    -webkit-backface-visibility:hidden!important;
+    contain:layout paint!important;
+    isolation:isolate!important;
+    touch-action:pan-y!important;
   }
   body.passenger-hard-v2 .drawer-backdrop{
+    position:fixed!important;
+    inset:0!important;
+    width:100vw!important;
+    height:100dvh!important;
     background:rgba(12,28,38,.34)!important;
-    backdrop-filter:blur(3px);
-    -webkit-backdrop-filter:blur(3px);
+    backdrop-filter:none!important;
+    -webkit-backdrop-filter:none!important;
+    animation:none!important;
+    transition:none!important;
   }
   body.passenger-hard-v2 .drawer-head{
     padding:0 0 10px!important;
