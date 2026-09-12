@@ -35,12 +35,14 @@ export default function PassengerLanguageSwitchStable(){
 
   return createPortal(<>
     <style>{`
-      .passenger-language-switch-host>span,.passenger-language-switch-host>div{display:none!important}
-      .pls-row{width:100%;display:flex;align-items:center;gap:10px}
-      .pls-icon{width:32px;height:32px;border-radius:10px;background:#eef5f3;display:grid;place-items:center;font-size:16px;flex:0 0 auto}
-      .pls-copy{min-width:0;flex:1}.pls-copy b{display:block;font-size:13px;color:#10243a;line-height:1.15}.pls-copy small{display:block;margin-top:2px;font-size:9px;color:#7b8984}
-      .pls-switch{width:46px;height:27px;border:0;border-radius:999px;background:#dbe5e1;padding:3px;display:flex;align-items:center;justify-content:flex-start;transition:.18s ease;flex:0 0 auto}
-      .pls-switch.on{background:#0f8a68;justify-content:flex-end}.pls-switch i{display:block;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(15,36,58,.18)}
+      .passenger-language-switch-host>span:not(.pls-icon),
+      .passenger-language-switch-host>div:not(.pls-row){display:none!important}
+      .passenger-language-switch-host{display:block!important;padding:0!important;background:transparent!important;border:0!important}
+      .pls-row{width:100%;min-height:58px;display:flex!important;align-items:center;gap:10px;padding:9px 12px;border:1px solid #dfe8e4;border-radius:16px;background:#fff;box-sizing:border-box}
+      .pls-icon{width:38px;height:38px;border-radius:12px;background:#eef5f3;display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+      .pls-copy{min-width:0;flex:1}.pls-copy b{display:block;font-size:14px;color:#10243a;line-height:1.15}.pls-copy small{display:block;margin-top:3px;font-size:10px;color:#7b8984}
+      .pls-switch{width:48px;height:28px;border:0;border-radius:999px;background:#dbe5e1;padding:3px;display:flex;align-items:center;justify-content:flex-start;transition:.18s ease;flex:0 0 auto}
+      .pls-switch.on{background:#0f8a68;justify-content:flex-end}.pls-switch i{display:block;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(15,36,58,.18)}
     `}</style>
     <div className="pls-row">
       <span className="pls-icon">🌐</span>
