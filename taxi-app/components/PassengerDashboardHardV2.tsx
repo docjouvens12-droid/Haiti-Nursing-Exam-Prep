@@ -4,7 +4,10 @@ import { useEffect } from 'react'
 
 export default function PassengerDashboardHardV2(){
   useEffect(()=>{
+    let cancelled=false
+
     const apply=()=>{
+      if(cancelled) return
       const booking=document.querySelector<HTMLElement>('.booking-sheet')
       if(!booking) return
 
@@ -25,8 +28,8 @@ export default function PassengerDashboardHardV2(){
 
       const routeLines=booking.querySelectorAll<HTMLElement>('.route-card .route-line')
       routeLines.forEach((line,index)=>{
-        line.classList.toggle('passenger-pickup-line',index===0)
-        line.classList.toggle('passenger-destination-line',index===1)
+        if(index===0) line.classList.add('passenger-pickup-line')
+        if(index===1) line.classList.add('passenger-destination-line')
       })
 
       document.querySelectorAll<HTMLElement>('.ride-option').forEach((el)=>{
@@ -37,8 +40,8 @@ export default function PassengerDashboardHardV2(){
         }
         const isMoto=text.includes('moto')
         const isStandard=text.includes('standard')
-        el.classList.toggle('passenger-moto-option',isMoto)
-        el.classList.toggle('passenger-standard-option',isStandard)
+        if(isMoto) el.classList.add('passenger-moto-option')
+        if(isStandard) el.classList.add('passenger-standard-option')
         if((isMoto||isStandard) && !el.querySelector('.passenger-service-badge')){
           const badge=document.createElement('span')
           badge.className='passenger-service-badge'
@@ -79,14 +82,11 @@ export default function PassengerDashboardHardV2(){
       }
 
       const requestButton=booking.querySelector<HTMLButtonElement>('.request-button')
-      if(requestButton){
-        requestButton.classList.toggle('passenger-request-disabled',requestButton.disabled)
-        if(!requestButton.querySelector('.passenger-request-arrow')){
-          const arrow=document.createElement('span')
-          arrow.className='passenger-request-arrow'
-          arrow.textContent='→'
-          requestButton.appendChild(arrow)
-        }
+      if(requestButton && !requestButton.querySelector('.passenger-request-arrow')){
+        const arrow=document.createElement('span')
+        arrow.className='passenger-request-arrow'
+        arrow.textContent='→'
+        requestButton.appendChild(arrow)
       }
 
       const searching=booking.querySelector<HTMLElement>('.searching-card')
@@ -101,26 +101,29 @@ export default function PassengerDashboardHardV2(){
       }
     }
 
-    apply()
-    const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true})
-    const timer=window.setInterval(apply,700)
+    document.body.classList.add('passenger-hard-v2')
+    const raf=window.requestAnimationFrame(apply)
+    const t1=window.setTimeout(apply,180)
+    const t2=window.setTimeout(apply,650)
 
     return()=>{
-      observer.disconnect()
-      window.clearInterval(timer)
+      cancelled=true
+      window.cancelAnimationFrame(raf)
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
       document.body.classList.remove('passenger-hard-v2')
     }
   },[])
 
   return <style>{`
-    body.passenger-hard-v2{background:#eef3f1!important}
+    body.passenger-hard-v2{background:#eef3f1!important;overflow-x:hidden!important}
+    body.passenger-hard-v2 *,body.passenger-hard-v2 *::before,body.passenger-hard-v2 *::after{scroll-behavior:auto!important}
     body.passenger-hard-v2 .greeting-row{display:none!important}
-    body.passenger-hard-v2 .map-panel.real-map-panel{height:43dvh!important;min-height:315px!important;max-height:430px!important}
-    body.passenger-hard-v2 .topbar{top:14px!important;left:14px!important;right:14px!important}
+    body.passenger-hard-v2 .map-panel.real-map-panel{height:43svh!important;min-height:315px!important;max-height:430px!important;transition:none!important;animation:none!important}
+    body.passenger-hard-v2 .topbar{top:14px!important;left:14px!important;right:14px!important;transition:none!important}
     body.passenger-hard-v2 .round-button{box-shadow:0 8px 22px rgba(16,32,51,.12)!important;border:1px solid rgba(220,231,226,.95)!important}
     body.passenger-hard-v2 .brand-chip{min-width:126px!important;justify-content:center!important;box-shadow:0 8px 22px rgba(16,32,51,.10)!important;border:1px solid rgba(220,231,226,.92)!important}
-    body.passenger-hard-v2 .booking-sheet{margin-top:-42px!important;padding:13px 15px calc(102px + env(safe-area-inset-bottom))!important;border-radius:28px 28px 0 0!important;box-shadow:0 -10px 34px rgba(16,32,51,.08)!important;background:#fff!important}
+    body.passenger-hard-v2 .booking-sheet{margin-top:-42px!important;padding:13px 15px calc(102px + env(safe-area-inset-bottom))!important;border-radius:28px 28px 0 0!important;box-shadow:0 -10px 34px rgba(16,32,51,.08)!important;background:#fff!important;transition:none!important;animation:none!important;transform:none!important}
     body.passenger-hard-v2 .grabber{width:38px!important;height:4px!important;margin-bottom:10px!important;background:#d8e1dd!important}
     body.passenger-hard-v2 .passenger-booking-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 1px 11px;padding:2px 2px 0}
     body.passenger-hard-v2 .passenger-booking-head small{display:block;font-size:9px;font-weight:900;letter-spacing:.08em;color:#0f705a;margin-bottom:2px}
@@ -150,7 +153,7 @@ export default function PassengerDashboardHardV2(){
     body.passenger-hard-v2 .section-heading>span{font-size:9px!important;color:#718078!important;background:#f3f7f5!important;padding:5px 7px!important;border-radius:999px!important}
     body.passenger-hard-v2 .passenger-service-subtitle{display:block!important;margin-top:3px!important;font-size:8.8px!important;color:#87938e!important;font-weight:650!important}
     body.passenger-hard-v2 .ride-list{grid-template-columns:1fr 1fr!important;gap:10px!important;margin-top:9px!important}
-    body.passenger-hard-v2 .ride-option{min-height:105px!important;padding:12px 10px 10px!important;border-radius:18px!important;display:grid!important;grid-template-columns:42px 1fr!important;grid-template-rows:auto auto!important;align-items:center!important;text-align:left!important;position:relative!important;border:1px solid #e1e9e6!important;background:#fff!important;box-shadow:0 5px 16px rgba(16,32,51,.045)!important;overflow:hidden!important}
+    body.passenger-hard-v2 .ride-option{min-height:105px!important;padding:12px 10px 10px!important;border-radius:18px!important;display:grid!important;grid-template-columns:42px 1fr!important;grid-template-rows:auto auto!important;align-items:center!important;text-align:left!important;position:relative!important;border:1px solid #e1e9e6!important;background:#fff!important;box-shadow:0 5px 16px rgba(16,32,51,.045)!important;overflow:hidden!important;transition:none!important}
     body.passenger-hard-v2 .ride-option.selected{border:1.5px solid #59a88f!important;background:linear-gradient(180deg,#f2faf7 0%,#edf7f3 100%)!important;box-shadow:0 8px 20px rgba(15,112,90,.11)!important}
     body.passenger-hard-v2 .ride-option.selected:after{content:'✓';position:absolute;right:8px;top:8px;width:19px;height:19px;border-radius:50%;background:#0f705a;color:#fff;display:grid;place-items:center;font-size:10px;font-weight:900}
     body.passenger-hard-v2 .passenger-service-badge{position:absolute!important;left:9px!important;top:8px!important;padding:3px 6px!important;border-radius:999px!important;font-size:7px!important;font-weight:900!important;letter-spacing:.02em!important;line-height:1!important;background:#eef4f2!important;color:#587069!important}
@@ -168,12 +171,11 @@ export default function PassengerDashboardHardV2(){
     body.passenger-hard-v2 .payment-row strong{font-size:12px!important;color:#18302a!important}
     body.passenger-hard-v2 .passenger-payment-note{display:block!important;margin-top:2px!important;font-size:7.6px!important;line-height:1.2!important;color:#8b9893!important;font-weight:600!important}
     body.passenger-hard-v2 .payment-row button{font-size:9px!important;font-weight:900!important;color:#0f705a!important;background:#fff!important;border:1px solid #d8e7e1!important;border-radius:999px!important;padding:6px 9px!important}
-    body.passenger-hard-v2 .request-button{position:relative!important;margin-top:11px!important;min-height:60px!important;border-radius:18px!important;background:linear-gradient(180deg,#117b63 0%,#0f705a 100%)!important;box-shadow:0 12px 24px rgba(15,112,90,.21)!important;font-size:13px!important;padding:12px 46px 12px 15px!important;text-align:left!important}
+    body.passenger-hard-v2 .request-button{position:relative!important;margin-top:11px!important;min-height:60px!important;border-radius:18px!important;background:linear-gradient(180deg,#117b63 0%,#0f705a 100%)!important;box-shadow:0 12px 24px rgba(15,112,90,.21)!important;font-size:13px!important;padding:12px 46px 12px 15px!important;text-align:left!important;transition:none!important}
     body.passenger-hard-v2 .request-button>span:first-child{font-weight:900!important}
     body.passenger-hard-v2 .request-button>strong{font-size:12px!important}
     body.passenger-hard-v2 .passenger-request-arrow{position:absolute!important;right:13px!important;top:50%!important;transform:translateY(-50%)!important;width:30px!important;height:30px!important;border-radius:10px!important;display:grid!important;place-items:center!important;background:rgba(255,255,255,.14)!important;color:#fff!important;font-size:16px!important;font-weight:900!important}
-    body.passenger-hard-v2 .request-button.passenger-request-disabled{background:#aebbb6!important;box-shadow:none!important;opacity:.72!important}
-    body.passenger-hard-v2 .request-button.passenger-request-disabled .passenger-request-arrow{background:rgba(255,255,255,.1)!important}
+    body.passenger-hard-v2 .request-button:disabled{background:#aebbb6!important;box-shadow:none!important;opacity:.72!important}
     body.passenger-hard-v2 .searching-card{margin-top:11px!important;border-radius:18px!important;min-height:78px!important;padding:12px 13px!important;border:1px solid #cfe2db!important;background:linear-gradient(180deg,#f2faf7 0%,#edf7f3 100%)!important;box-shadow:0 8px 20px rgba(15,112,90,.08)!important}
     body.passenger-hard-v2 .searching-card strong{font-size:12px!important;color:#17392f!important}
     body.passenger-hard-v2 .searching-card small{font-size:8.5px!important;color:#6f8079!important}
@@ -181,7 +183,7 @@ export default function PassengerDashboardHardV2(){
     body.passenger-hard-v2 .spinner{width:34px!important;height:34px!important;border-width:3px!important;border-color:#b9dacf!important;border-top-color:#0f705a!important}
     body.passenger-hard-v2 .fine-print{display:none!important}
     @media(max-width:420px){
-      body.passenger-hard-v2 .map-panel.real-map-panel{height:41dvh!important;min-height:300px!important}
+      body.passenger-hard-v2 .map-panel.real-map-panel{height:41svh!important;min-height:300px!important}
       body.passenger-hard-v2 .booking-sheet{margin-top:-38px!important}
       body.passenger-hard-v2 .passenger-booking-head strong{font-size:18px!important}
       body.passenger-hard-v2 .ride-option{min-height:100px!important}
