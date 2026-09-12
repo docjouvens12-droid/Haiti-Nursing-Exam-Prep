@@ -13,17 +13,31 @@ export default function DriverCleanApplicationRestore(){
     let currentStatus:DriverStatus=''
     const isHt=()=>localStorage.getItem('taxi-language')==='ht'
 
-    const findPanel=()=>{
+    const getApplicationRow=()=>{
       const rows=Array.from(document.querySelectorAll<HTMLButtonElement>('.dcm-row'))
-      const row=rows.find(el=>{
-        const t=(el.textContent||'').toLowerCase()
-        return t.includes('demande devenir chauffeur')||t.includes('demand devni chofè')
-      })
-      const panel=row?.nextElementSibling as HTMLElement|null
-      return panel?.classList.contains('dcm-panel') ? panel : null
+      return rows.find(el=>{
+        const text=(el.textContent||'').toLowerCase()
+        return text.includes('demande devenir chauffeur')||text.includes('demand devni chofè')
+      }) || null
     }
 
-    const buttonLabel=(status:DriverStatus)=>{
+    const getOpenPanel=()=>{
+      const row=getApplicationRow()
+      if(!row) return null
+
+      let node=row.nextElementSibling as HTMLElement|null
+      if(node?.classList.contains('dcm-panel')) return node
+
+      const list=row.parentElement
+      if(!list) return null
+      const panels=Array.from(list.querySelectorAll<HTMLElement>(':scope > .dcm-panel'))
+      return panels.find(panel=>{
+        const text=(panel.textContent||'').toLowerCase()
+        return text.includes('profil chauffeur') || text.includes('pwofil chofè') || panel.dataset.cleanDriverApplication==='panel'
+      }) || null
+    }
+
+    const statusLabel=(status:DriverStatus)=>{
       const ht=isHt()
       if(status==='pending') return ht?'Demand lan an attente':'Demande en attente'
       if(status==='approved') return ht?'Chofè apwouve':'Chauffeur approuvé'
@@ -32,46 +46,42 @@ export default function DriverCleanApplicationRestore(){
       return ht?'Voye demand lan':'Envoyer la demande'
     }
 
-    const render=(message?:string)=>{
-      const panel=findPanel()
-      if(!panel) return
-      const old=panel.querySelector<HTMLElement>(':scope > .dcm-note')
-      if(old) old.style.display='none'
-      let wrap=panel.querySelector<HTMLElement>('[data-clean-driver-application="true"]')
-      if(!wrap){
-        wrap=document.createElement('div')
-        wrap.dataset.cleanDriverApplication='true'
-        panel.appendChild(wrap)
-      }
-      wrap.innerHTML=''
+    const introText=(status:DriverStatus)=>{
       const ht=isHt()
+      if(status==='approved') return ht?'Kont chofè sa a deja apwouve.':'Ce compte chauffeur est déjà approuvé.'
+      if(status==='pending') return ht?'Demand ou an attente verifikasyon administrasyon an.':'Votre demande est en attente de vérification par l’administration.'
+      if(status==='suspended') return ht?'Kont chofè sa a sispann. Kontakte sipò si ou bezwen asistans.':'Ce compte chauffeur est suspendu. Contactez le support si nécessaire.'
+      return ht?'Ranpli Pwofil ak Veyikil, epi voye demand ou pou vin chofè.':'Complétez Profil et Véhicule, puis envoyez votre demande pour devenir chauffeur.'
+    }
+
+    const paint=(message='')=>{
+      const panel=getOpenPanel()
+      if(!panel) return
+      panel.dataset.cleanDriverApplication='panel'
+      panel.innerHTML=''
+
       const intro=document.createElement('div')
       intro.className='dcm-note'
-      intro.style.display='block'
-      intro.textContent=currentStatus==='approved'
-        ? (ht?'Kont chofè sa a deja apwouve.':'Ce compte chauffeur est déjà approuvé.')
-        : currentStatus==='pending'
-          ? (ht?'Demand ou an attente verifikasyon administrasyon an.':'Votre demande est en attente de vérification par l’administration.')
-          : (ht?'Ranpli Pwofil ak Veyikil, epi voye demand ou pou vin chofè.':'Complétez Profil et Véhicule, puis envoyez votre demande pour devenir chauffeur.')
-      wrap.appendChild(intro)
+      intro.textContent=introText(currentStatus)
+      panel.appendChild(intro)
 
       const btn=document.createElement('button')
       btn.type='button'
       btn.className='dcm-primary'
-      btn.textContent=buttonLabel(currentStatus)
+      btn.textContent=statusLabel(currentStatus)
       const locked=currentStatus==='pending'||currentStatus==='approved'||currentStatus==='suspended'
       btn.disabled=busy||locked
       if(locked){btn.style.opacity='.65';btn.style.cursor='default'}
       btn.onclick=()=>void submit()
-      wrap.appendChild(btn)
+      panel.appendChild(btn)
 
       if(message){
-        const m=document.createElement('div')
-        m.className='dcm-status'
-        m.style.marginTop='8px'
-        m.style.lineHeight='1.4'
-        m.textContent=message
-        wrap.appendChild(m)
+        const msg=document.createElement('div')
+        msg.className='dcm-status'
+        msg.style.marginTop='8px'
+        msg.style.lineHeight='1.4'
+        msg.textContent=message
+        panel.appendChild(msg)
       }
     }
 
@@ -81,17 +91,18 @@ export default function DriverCleanApplicationRestore(){
       if(!user) return
       const {data}=await supabase.from('driver_profiles').select('status').eq('user_id',user.id).maybeSingle()
       currentStatus=(data?.status||'') as DriverStatus
-      render()
+      paint()
     }
 
     const submit=async()=>{
       if(busy) return
       const ht=isHt()
       busy=true
-      render('')
+      paint()
+
       const {data:auth}=await supabase.auth.getUser()
       const user=auth.user
-      if(!user){busy=false;render(ht?'Ou dwe konekte anvan.':'Vous devez être connecté.');return}
+      if(!user){busy=false;paint(ht?'Ou dwe konekte anvan.':'Vous devez être connecté.');return}
 
       const metadata=user.user_metadata||{}
       const [{data:person},{data:driver},{data:vehicle}]=await Promise.all([
@@ -118,7 +129,7 @@ export default function DriverCleanApplicationRestore(){
 
       if(!fullName||!birthDate||!gender||!address||!phone||!license||!nationalId||!vehicleType||!make||!model||!color||!year||!plate||!seats){
         busy=false
-        render(ht?'Tanpri ranpli tout chan obligatwa nan Pwofil ak tout chan Veyikil yo. Eta sivil ak imèl opsyonèl.':'Veuillez compléter tous les champs obligatoires du Profil et tous les champs du Véhicule. L’état civil et l’e-mail sont facultatifs.')
+        paint(ht?'Tanpri ranpli tout chan obligatwa nan Pwofil ak tout chan Veyikil yo. Eta sivil ak imèl opsyonèl.':'Veuillez compléter tous les champs obligatoires du Profil et tous les champs du Véhicule. L’état civil et l’e-mail sont facultatifs.')
         return
       }
 
@@ -127,20 +138,27 @@ export default function DriverCleanApplicationRestore(){
         p_full_name:fullName,p_birth_date:birthDate,p_gender:gender,p_address:address,p_marital_status:maritalStatus,p_phone:phone,p_email:user.email||'',p_license_number:license,p_national_id_number:nationalId,p_vehicle_type:normalizedType,p_vehicle_make:make,p_vehicle_model:model,p_vehicle_color:color,p_vehicle_year:year,p_plate_number:plate,p_seats:seats,
       })
       busy=false
-      if(error){render(error.message);return}
+      if(error){paint(error.message);return}
       currentStatus='pending'
-      render(ht?'Demand lan voye avèk siksè. Li an attente verifikasyon.':'Demande envoyée avec succès. Elle est en attente de vérification.')
+      paint(ht?'Demand lan voye avèk siksè. Li an attente verifikasyon.':'Demande envoyée avec succès. Elle est en attente de vérification.')
     }
 
-    const onClick=(event:MouseEvent)=>{
-      const target=event.target as Element|null
-      if(!target?.closest('.dcm-row')) return
-      window.setTimeout(()=>{render();void loadStatus()},30)
+    const handleClick=(event:MouseEvent)=>{
+      const clicked=(event.target as Element|null)?.closest<HTMLButtonElement>('.dcm-row')
+      const appRow=getApplicationRow()
+      if(!clicked || !appRow || clicked!==appRow) return
+
+      window.setTimeout(()=>{
+        const panel=getOpenPanel()
+        if(!panel) return
+        paint()
+        void loadStatus()
+      },120)
     }
 
-    document.addEventListener('click',onClick,false)
-    void loadStatus()
-    return()=>document.removeEventListener('click',onClick,false)
+    document.addEventListener('click',handleClick,false)
+    return()=>document.removeEventListener('click',handleClick,false)
   },[])
+
   return null
 }
