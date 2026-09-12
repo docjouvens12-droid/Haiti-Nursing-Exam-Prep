@@ -73,7 +73,7 @@ export default function DriverCleanHeaderRestore(){
 
     apply()
     const observer=new MutationObserver(apply)
-    observer.observe(document.body,{childList:true,subtree:true,attributes:true,classFilter:['class']})
+    observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})
     return()=>observer.disconnect()
   },[])
 
