@@ -4,12 +4,17 @@ import { useEffect } from 'react'
 
 export default function MoviPassengerDesign() {
   useEffect(() => {
-    const sync = () => {
+    let stopped = false
+    let timer = 0
+    let attempts = 0
+
+    const apply = () => {
+      if (stopped) return true
       const booking = document.querySelector('.booking-sheet')
       const map = document.querySelector('.map-panel.real-map-panel')
-      const active = Boolean(booking && map)
-      document.body.classList.toggle('movi-passenger-ui', active)
-      if (!active) return
+      if (!booking || !map) return false
+
+      document.body.classList.add('movi-passenger-ui')
 
       const brand = document.querySelector<HTMLElement>('.brand-chip strong')
       const mark = document.querySelector<HTMLElement>('.brand-chip .brand-mark')
@@ -19,16 +24,20 @@ export default function MoviPassengerDesign() {
       document.querySelectorAll<HTMLElement>('.nav-drawer strong').forEach((el) => {
         if (/Taxi Haiti|Taxi Platform Haiti/i.test(el.textContent || '')) el.textContent = 'MOVI'
       })
+      return true
     }
 
-    sync()
-    const observer = new MutationObserver(sync)
-    observer.observe(document.body, { childList: true, subtree: true, characterData: true })
-    const timer = window.setInterval(sync, 500)
+    const boot = () => {
+      if (stopped || apply() || attempts >= 12) return
+      attempts += 1
+      timer = window.setTimeout(boot, 120)
+    }
+
+    boot()
 
     return () => {
-      observer.disconnect()
-      window.clearInterval(timer)
+      stopped = true
+      window.clearTimeout(timer)
       document.body.classList.remove('movi-passenger-ui')
     }
   }, [])
@@ -60,8 +69,16 @@ export default function MoviPassengerDesign() {
 
     body.movi-passenger-ui{background:#f4f8f6!important}
     body.movi-passenger-ui .phone-frame{background:#f4f8f6!important}
+    body.movi-passenger-ui .phone-frame,
+    body.movi-passenger-ui .map-panel.real-map-panel,
+    body.movi-passenger-ui .booking-sheet{
+      transition:none!important;
+      animation:none!important;
+      overflow-anchor:none!important;
+    }
     body.movi-passenger-ui .map-panel.real-map-panel{
-      height:47dvh!important;min-height:340px!important;max-height:480px!important;
+      height:clamp(322px,43svh,460px)!important;
+      min-height:322px!important;max-height:460px!important;
       border-radius:0 0 32px 32px!important;overflow:hidden!important;
       box-shadow:0 18px 44px rgba(10,34,28,.09)!important;
     }
@@ -79,7 +96,7 @@ export default function MoviPassengerDesign() {
     }
     body.movi-passenger-ui .booking-sheet{
       width:calc(100% - 12px)!important;max-width:454px!important;
-      margin:-58px auto 0!important;padding:14px 14px calc(108px + env(safe-area-inset-bottom))!important;
+      margin:-52px auto 0!important;padding:14px 14px calc(108px + env(safe-area-inset-bottom))!important;
       border-radius:30px 30px 0 0!important;background:#fff!important;
       border:1px solid #e1ebe6!important;border-bottom:0!important;
       box-shadow:0 -10px 34px rgba(16,32,51,.09)!important;z-index:50!important;
@@ -105,9 +122,5 @@ export default function MoviPassengerDesign() {
       box-shadow:0 13px 30px rgba(8,124,83,.24)!important;
     }
     body.movi-passenger-ui .payment-row{border-radius:18px!important;background:#f7fbf9!important;border:1px solid #dbe8e3!important}
-    @media(max-width:420px){
-      body.movi-passenger-ui .map-panel.real-map-panel{height:45dvh!important;min-height:322px!important}
-      body.movi-passenger-ui .booking-sheet{margin-top:-52px!important}
-    }
   `}</style>
 }
