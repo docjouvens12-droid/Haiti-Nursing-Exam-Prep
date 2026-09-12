@@ -36,9 +36,9 @@ export default function DriverCleanApplicationPanel(){
       window.setTimeout(locate,60)
     }
 
-    document.addEventListener('click',onClick,false)
+    document.addEventListener('click',onClick,true)
     locate()
-    return()=>document.removeEventListener('click',onClick,false)
+    return()=>document.removeEventListener('click',onClick,true)
   },[])
 
   useEffect(()=>{
