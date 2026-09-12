@@ -12,10 +12,8 @@ export default function PassengerLanguageStableInline(){
 
   useEffect(()=>{
     const onClick=(event:MouseEvent)=>{
-      const el=(event.target as HTMLElement|null)?.closest<HTMLButtonElement>('.shell .nav-drawer .drawer-nav > button')
-      if(!el)return
-      const text=(el.textContent||'').toLowerCase()
-      if(!text.includes('langue')&&!/^\s*🌐?\s*lang\s*$/i.test(el.textContent||'')&&!text.includes(' lang'))return
+      const languageRow=(event.target as HTMLElement|null)?.closest<HTMLElement>('.shell .nav-drawer .drawer-language')
+      if(!languageRow)return
 
       event.preventDefault()
       event.stopPropagation()
@@ -24,11 +22,11 @@ export default function PassengerLanguageStableInline(){
       const saved=localStorage.getItem('taxi-language')
       setLang(saved==='ht'?'ht':'fr')
 
-      let mount=el.nextElementSibling as HTMLElement|null
+      let mount=languageRow.nextElementSibling as HTMLElement|null
       if(!mount||!mount.classList.contains('drawer-language-stable-target')){
         mount=document.createElement('div')
         mount.className='drawer-language-stable-target'
-        el.insertAdjacentElement('afterend',mount)
+        languageRow.insertAdjacentElement('afterend',mount)
       }
       setTarget(mount)
       setOpen(v=>!v)
@@ -41,19 +39,7 @@ export default function PassengerLanguageStableInline(){
   function choose(next:Lang){
     setLang(next)
     localStorage.setItem('taxi-language',next)
-
-    const trigger=document.querySelector<HTMLButtonElement>('.language-trigger')
-    if(trigger){
-      trigger.click()
-      window.setTimeout(()=>{
-        const buttons=Array.from(document.querySelectorAll<HTMLButtonElement>('.language-options button'))
-        const wanted=buttons.find(button=>next==='fr'?/français/i.test(button.textContent||''):/kreyòl/i.test(button.textContent||''))
-        wanted?.click()
-      },30)
-    }else{
-      window.dispatchEvent(new StorageEvent('storage',{key:'taxi-language',newValue:next}))
-      window.location.reload()
-    }
+    window.location.reload()
   }
 
   if(!target||!open||!document.contains(target))return null
@@ -68,6 +54,7 @@ export default function PassengerLanguageStableInline(){
         .psl-head button{margin-left:auto;border:0;border-radius:10px;background:#edf5f2;padding:7px 9px;font-size:9px;font-weight:900;color:#0f705a}
         .psl-options{display:grid;gap:7px}.psl-option{width:100%;border:1px solid #e0e8e5;border-radius:13px;background:#fff;padding:11px;display:flex;align-items:center;gap:10px;text-align:left;color:#10243a}
         .psl-option.active{border-color:#9acdbd;background:#eff9f5}.psl-flag{font-size:20px}.psl-copy{flex:1}.psl-copy b{display:block;font-size:12px}.psl-copy small{display:block;margin-top:2px;font-size:9px;color:#7b8984}.psl-check{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#edf2f0;color:#8b9993;font-size:11px;font-weight:900}.psl-option.active .psl-check{background:#0f705a;color:#fff}
+        .drawer-language .language-options{display:none!important}
       `}</style>
       <div className="psl-head">
         <span>🌐</span>
