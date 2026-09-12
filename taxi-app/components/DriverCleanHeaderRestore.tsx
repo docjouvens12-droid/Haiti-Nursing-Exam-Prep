@@ -65,14 +65,16 @@ export default function DriverCleanHeaderRestore(){
         badge.className='dcm-driver-status'
         head.appendChild(badge)
       }
-      const online=Boolean(document.querySelector('.online-card .dot.on, .onlineCard .dot.on, .status-dot.on'))
+      const online=Boolean(document.querySelector('.online-card .dot.on, .onlineCard .dot.on, .status-dot.on, .drv2-pill.online'))
       const ht=localStorage.getItem('taxi-language')==='ht'
-      badge.classList.toggle('on',online)
-      badge.innerHTML=`<span></span>${online?(ht?'Sou liy':'En ligne'):(ht?'Pa sou liy':'Hors ligne')}`
+      const label=online?(ht?'Sou liy':'En ligne'):(ht?'Pa sou liy':'Hors ligne')
+      const wanted=`<span></span>${label}`
+      if(badge.innerHTML!==wanted) badge.innerHTML=wanted
+      if(badge.classList.contains('on')!==online) badge.classList.toggle('on',online)
     }
 
     apply()
-    const observer=new MutationObserver(apply)
+    const observer=new MutationObserver(()=>apply())
     observer.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['class']})
     return()=>observer.disconnect()
   },[])
