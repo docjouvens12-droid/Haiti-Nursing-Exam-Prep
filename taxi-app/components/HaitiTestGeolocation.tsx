@@ -2,12 +2,10 @@
 
 import { useLayoutEffect } from 'react'
 
-// QA fallback used only when the device location is outside Haiti or test mode is enabled.
-// Keep it inside Gonaïves so local ride pricing can be validated from abroad.
 const TEST_POSITION: GeolocationPosition = {
   coords: {
-    latitude: 19.4450,
-    longitude: -72.6920,
+    latitude: 19.4475,
+    longitude: -72.6843,
     accuracy: 15,
     altitude: null,
     altitudeAccuracy: null,
@@ -67,7 +65,7 @@ export default function HaitiTestGeolocation() {
         )
       }) as typeof geo.getCurrentPosition
 
-      geo.watchPosition = ((success: PositionCallback, _error?: PositionErrorCallback | null, options?: PositionOptions) => {
+      geo.watchPosition = ((success: PositionCallback, error?: PositionErrorCallback | null, options?: PositionOptions) => {
         return originalWatchPosition(
           (position) => {
             if (isInHaiti(position)) success(position)
