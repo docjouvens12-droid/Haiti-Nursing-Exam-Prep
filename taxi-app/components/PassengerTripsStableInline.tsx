@@ -11,6 +11,7 @@ function label(status:string,ht:boolean){
   if(status==='completed')return ht?'Konplete':'Terminé'
   if(status==='cancelled')return ht?'Anile':'Annulé'
   if(status==='in_progress')return ht?'An kou':'En cours'
+  if(status==='driver_arriving')return ht?'Chofè rive':'Chauffeur arrivé'
   if(status==='accepted')return ht?'Aksepte':'Accepté'
   if(status==='requested')return ht?'Ap chèche chofè':'Recherche chauffeur'
   return status||'—'
@@ -46,10 +47,16 @@ export default function PassengerTripsStableInline(){
   useEffect(()=>{
     if(!open||!target)return
     let active=true
-    setBusy(true)
-    supabase.from('rides').select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at').order('requested_at',{ascending:false}).limit(100).then(({data})=>{
-      if(active)setRides((data||[]) as Ride[])
-    }).finally(()=>{if(active)setBusy(false)})
+    const load=async()=>{
+      setBusy(true)
+      try{
+        const {data}=await supabase.from('rides').select('id,status,pickup_address,destination_address,final_fare_htg,estimated_fare_htg,requested_at').order('requested_at',{ascending:false}).limit(100)
+        if(active)setRides((data||[]) as Ride[])
+      }finally{
+        if(active)setBusy(false)
+      }
+    }
+    void load()
     return()=>{active=false}
   },[open,target])
 
