@@ -1,6 +1,7 @@
 'use client'
 
 import { usePathname } from 'next/navigation'
+import PassengerStableAvatarUpload from './PassengerStableAvatarUpload'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -45,8 +46,11 @@ export default function RouteScopedEnhancers() {
   const isDriver = pathname.startsWith('/driver')
   const isCleanDriverDashboard = pathname.startsWith('/driver/dashboard-v2')
   const isAdmin = pathname.startsWith('/admin')
+  const isPassenger = !isDriver && !isAdmin
 
   return <>
+    {isPassenger && <PassengerStableAvatarUpload />}
+
     {isCleanDriverDashboard && <>
       <DriverCleanMenu />
       <DriverCleanMenuFinalGuard />
