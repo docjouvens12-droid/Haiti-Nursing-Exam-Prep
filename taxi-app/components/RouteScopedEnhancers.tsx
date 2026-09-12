@@ -44,6 +44,7 @@ import DriverLanguageSectionPolish from './DriverLanguageSectionPolish'
 import DriverAccessGate from './DriverAccessGate'
 import DriverCleanMenu from './DriverCleanMenu'
 import DriverCleanMenuFinalGuard from './DriverCleanMenuFinalGuard'
+import DriverCleanHelpTopics from './DriverCleanHelpTopics'
 
 import AdminDriverApplicationProfileSnapshot from './AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from './AdminDriverVehicleSnapshot'
@@ -79,6 +80,7 @@ export default function RouteScopedEnhancers() {
     {isCleanDriverDashboard && <>
       <DriverCleanMenu />
       <DriverCleanMenuFinalGuard />
+      <DriverCleanHelpTopics />
     </>}
 
     {isDriver && !isCleanDriverDashboard && <>
