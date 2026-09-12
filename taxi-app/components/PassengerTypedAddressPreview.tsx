@@ -32,10 +32,22 @@ export default function PassengerTypedAddressPreview() {
     let host: HTMLButtonElement | null = null
     let cleanupTimer: number | null = null
     let autoSelectTimer: number | null = null
+    let observer: MutationObserver | null = null
 
     const removeHost = () => {
       host?.remove()
       host = null
+    }
+
+    const watchNativeResults = (routeCard: HTMLElement) => {
+      observer?.disconnect()
+      const parent = routeCard.parentElement
+      if (!parent) return
+      observer = new MutationObserver(() => {
+        const nativeButton = parent.querySelector('.search-results button')
+        if (nativeButton) removeHost()
+      })
+      observer.observe(parent, { childList: true, subtree: true })
     }
 
     const autoSelectFirstNativeResult = (routeCard: HTMLElement) => {
@@ -61,6 +73,14 @@ export default function PassengerTypedAddressPreview() {
         removeHost()
         return
       }
+
+      const existingNative = routeCard.parentElement?.querySelector('.search-results button')
+      if (existingNative) {
+        removeHost()
+        return
+      }
+
+      watchNativeResults(routeCard)
 
       if (!host || !host.isConnected) {
         host = document.createElement('button')
@@ -95,7 +115,7 @@ export default function PassengerTypedAddressPreview() {
       cleanupTimer = window.setTimeout(() => {
         const nativeResults = routeCard.parentElement?.querySelector('.search-results')
         if (nativeResults && nativeResults.querySelector('button')) removeHost()
-      }, 1300)
+      }, 500)
     }
 
     const onInput = (event: Event) => {
@@ -120,6 +140,7 @@ export default function PassengerTypedAddressPreview() {
       document.removeEventListener('focusin', onFocus, true)
       if (cleanupTimer) window.clearTimeout(cleanupTimer)
       if (autoSelectTimer) window.clearTimeout(autoSelectTimer)
+      observer?.disconnect()
       removeHost()
     }
   }, [])
