@@ -34,5 +34,29 @@ export default function DriverCleanMenuFinalGuard() {
     return () => document.removeEventListener('click', handleClick, true)
   }, [])
 
-  return null
+  return <style jsx global>{`
+    /* Keep an expanded section from pushing Revenus, Langue, Aide and logout
+       out of sight on iPhone. The section scrolls inside the drawer instead. */
+    .dcm-panel {
+      max-height: 38vh !important;
+      overflow-y: auto !important;
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .dcm-trips {
+      max-height: min(300px, 34vh) !important;
+      overflow-y: auto !important;
+      padding-right: 4px !important;
+    }
+
+    /* Keep the sign-out action reachable even with long ride history. */
+    .dcm-logout {
+      position: sticky !important;
+      bottom: 0 !important;
+      z-index: 20 !important;
+      background: #fff7f7 !important;
+      box-shadow: 0 -10px 18px rgba(255,255,255,.96) !important;
+    }
+  `}</style>
 }
