@@ -52,6 +52,15 @@
 .shell .drawer-language small{font-size:10px!important;color:#8b9a94!important;font-weight:800!important}
 .shell .drawer-logout{margin-top:18px!important;width:100%!important;min-height:54px!important;border-radius:18px!important;background:#fff8f7!important;border:1px solid #efd8d3!important;color:#bf4c43!important;font-size:15px!important;font-weight:900!important}
 
+/* New drawer order: Profile first. Remove Accueil and Devenir chauffeur. */
+.shell .drawer-nav>button:nth-of-type(1){display:none!important}
+.shell .drawer-nav>button:nth-of-type(5){display:none!important}
+.shell .drawer-nav>button:nth-of-type(4){order:10!important}
+.shell .drawer-nav>button:nth-of-type(2){order:20!important}
+.shell .drawer-nav>button:nth-of-type(3){order:30!important}
+.shell .drawer-language{order:40!important}
+.shell .drawer-nav>button:nth-of-type(6){order:50!important}
+
 @media(max-width:420px){
   .shell .nav-drawer{width:86vw!important;padding-left:14px!important;padding-right:14px!important}
   .shell .booking-sheet{width:calc(100% - 8px)!important;padding-left:12px!important;padding-right:12px!important}
