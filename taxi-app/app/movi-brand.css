@@ -24,7 +24,7 @@ body:has(.driver-home-polish-root) .brand strong::after {
   color: #10243a !important;
 }
 
-/* Shared M logo */
+/* Shared MOVI app mark: green tile + white movement M + mint location pin */
 .app-underlay .brand-chip .brand-mark,
 .upe-brand > span,
 .auth-brand .brand-mark,
@@ -32,10 +32,12 @@ body:has(.driver-home-polish-root) .brand strong::after {
 body:has(.driver-home-polish-root) .brand > span,
 body:has(.driver-home-polish-root) .brand > button {
   font-size: 0 !important;
-  color: #fff !important;
-  background: linear-gradient(145deg,#18a06f,#08794f) !important;
+  color: transparent !important;
+  background: linear-gradient(145deg,#18b76f 0%,#07965d 55%,#087b50 100%) !important;
   border-radius: 13px !important;
   font-weight: 950 !important;
+  box-shadow: 0 5px 14px rgba(8,123,80,.18) !important;
+  overflow: hidden !important;
 }
 
 .app-underlay .brand-chip .brand-mark::after,
@@ -44,18 +46,17 @@ body:has(.driver-home-polish-root) .brand > button {
 .adminShell .brand > span::after,
 body:has(.driver-home-polish-root) .brand > span::after,
 body:has(.driver-home-polish-root) .brand > button::after {
-  content: 'M' !important;
-  display: grid !important;
-  place-items: center !important;
+  content: '' !important;
+  display: block !important;
   width: 100% !important;
   height: 100% !important;
-  font-size: 18px !important;
-  font-weight: 950 !important;
-  line-height: 1 !important;
-  color: #fff !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M16 72 L33 37 Q36 31 42 37 L58 58 Q61 62 65 57 L73 46 Q78 39 82 48 L87 72' fill='none' stroke='%23ffffff' stroke-width='15' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M65 13c-10 0-18 8-18 18 0 14 18 31 18 31s18-17 18-31c0-10-8-18-18-18z' fill='%2389efb6'/%3E%3Ccircle cx='65' cy='31' r='6.5' fill='%2309975e'/%3E%3C/svg%3E") !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+  background-size: 88% 88% !important;
 }
 
-/* Passenger dashboard: keep the M icon + MOVI wordmark exactly centered */
+/* Passenger dashboard: keep the icon + MOVI wordmark exactly centered */
 .app-underlay .topbar {
   position: absolute !important;
   display: grid !important;
