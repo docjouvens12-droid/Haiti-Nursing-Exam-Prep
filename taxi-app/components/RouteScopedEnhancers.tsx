@@ -11,23 +11,13 @@ import PassengerCompletionPolish from './PassengerCompletionPolish'
 import PassengerRideLifecycleGuard from './PassengerRideLifecycleGuard'
 import PassengerAvatarEnhancer from './PassengerAvatarEnhancer'
 import PassengerProfileDetails from './PassengerProfileDetails'
-import PassengerDriverApplicationMenuItem from './PassengerDriverApplicationMenuItem'
 import PassengerTripsEnhancer from './PassengerTripsEnhancer'
 import PassengerPaymentEnhancer from './PassengerPaymentEnhancer'
 import PassengerLanguageSwitchEnhancer from './PassengerLanguageSwitchEnhancer'
 import PassengerHelpDirectNavigation from './PassengerHelpDirectNavigation'
 import PassengerLogoutPolish from './PassengerLogoutPolish'
 import PassengerRidePaymentSync from './PassengerRidePaymentSync'
-import PassengerDashboardDriverStyle from './PassengerDashboardDriverStyle'
-import PassengerMainPaymentPolish from './PassengerMainPaymentPolish'
-import PassengerDashboardQuickInfo from './PassengerDashboardQuickInfo'
-import PassengerRestoredVersionPolish from './PassengerRestoredVersionPolish'
-import PassengerHomeDashboardPolish from './PassengerHomeDashboardPolish'
-import PassengerDashboardV2Polish from './PassengerDashboardV2Polish'
 import PassengerDashboardHardV2 from './PassengerDashboardHardV2'
-import PassengerDashboardFinalReview from './PassengerDashboardFinalReview'
-import PassengerPlatformRedesignV3 from './PassengerPlatformRedesignV3'
-import PassengerUnifiedFinalPolish from './PassengerUnifiedFinalPolish'
 import MoviPassengerDesign from './MoviPassengerDesign'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
@@ -76,23 +66,13 @@ export default function RouteScopedEnhancers() {
       <PassengerCompletionPolish />
       <PassengerAvatarEnhancer />
       <PassengerProfileDetails />
-      <PassengerDriverApplicationMenuItem />
       <PassengerTripsEnhancer />
       <PassengerPaymentEnhancer />
       <PassengerLanguageSwitchEnhancer />
       <PassengerHelpDirectNavigation />
       <PassengerLogoutPolish />
       <PassengerRidePaymentSync />
-      <PassengerDashboardDriverStyle />
-      <PassengerMainPaymentPolish />
-      <PassengerDashboardQuickInfo />
-      <PassengerRestoredVersionPolish />
-      <PassengerHomeDashboardPolish />
-      <PassengerDashboardV2Polish />
       <PassengerDashboardHardV2 />
-      <PassengerDashboardFinalReview />
-      <PassengerPlatformRedesignV3 />
-      <PassengerUnifiedFinalPolish />
       <MoviPassengerDesign />
     </>}
 
