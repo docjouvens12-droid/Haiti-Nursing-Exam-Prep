@@ -1,9 +1,9 @@
 {
-  "id": "/movi-pwa-v4",
+  "id": "/movi-pwa-v5",
   "name": "MOVI",
   "short_name": "MOVI",
   "description": "Deplase fasil, rapidman ak an sekirite",
-  "start_url": "/movi-app-v2?from=pwa-v4",
+  "start_url": "/movi-app-v2?from=pwa-v5",
   "scope": "/",
   "display": "standalone",
   "display_override": ["standalone"],
@@ -12,13 +12,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/movi-icon.svg",
+      "src": "/movi-icon-v5.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "/movi-icon-maskable.svg",
+      "src": "/movi-icon-maskable-v5.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "maskable"
