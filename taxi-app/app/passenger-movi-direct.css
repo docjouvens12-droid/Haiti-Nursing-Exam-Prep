@@ -31,17 +31,13 @@
 .shell .request-button:disabled{background:#bcc8c3!important;box-shadow:none!important}
 .shell .fine-print{display:none!important}
 
-/* MOVI drawer, directly styled on the real React menu */
+/* Passenger drawer, directly styled on the real React menu */
 .shell .drawer-backdrop{background:rgba(8,25,34,.42)!important;backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important}
 .shell .nav-drawer{width:min(86vw,380px)!important;background:#fff!important;border-radius:0 28px 28px 0!important;box-shadow:24px 0 70px rgba(7,29,24,.18)!important;padding:calc(18px + env(safe-area-inset-top)) 18px calc(20px + env(safe-area-inset-bottom))!important;transition:transform .22s ease-out!important}
-.shell .drawer-head{padding:0 0 18px!important;border-bottom:1px solid #edf2ef!important}
-.shell .drawer-brand .brand-mark{width:54px!important;height:54px!important;border-radius:18px!important;font-size:0!important;background:linear-gradient(145deg,#18a06f,#08794f)!important;box-shadow:0 9px 20px rgba(11,132,88,.22)!important}
-.shell .drawer-brand .brand-mark:after{content:'M';font-size:26px!important;color:#fff!important;font-weight:950!important}
-.shell .drawer-brand strong{font-size:0!important}
-.shell .drawer-brand strong:after{content:'MOVI';font-size:25px!important;color:#10243a!important;font-weight:950!important;letter-spacing:-.04em!important}
-.shell .drawer-brand small{font-size:12px!important;color:#8a9994!important}
+.shell .drawer-head{padding:0 0 14px!important;border-bottom:1px solid #edf2ef!important;display:flex!important;justify-content:flex-end!important;align-items:center!important}
+.shell .drawer-brand{display:none!important}
 .shell .drawer-head>button{width:48px!important;height:48px!important;border:0!important;border-radius:16px!important;background:#f0f5f3!important;color:#50666f!important;font-size:30px!important;display:grid!important;place-items:center!important}
-.shell .drawer-user{margin:18px 0!important;padding:16px!important;border-radius:22px!important;background:linear-gradient(180deg,#f5faf8,#eef7f3)!important;border:1px solid #dfeae5!important}
+.shell .drawer-user{margin:14px 0 18px!important;padding:16px!important;border-radius:22px!important;background:linear-gradient(180deg,#f5faf8,#eef7f3)!important;border:1px solid #dfeae5!important}
 .shell .drawer-avatar{width:56px!important;height:56px!important;background:linear-gradient(145deg,#18a06f,#08794f)!important}
 .shell .drawer-user strong{font-size:17px!important;color:#10243a!important}
 .shell .drawer-user small{font-size:12px!important;color:#86958f!important}
