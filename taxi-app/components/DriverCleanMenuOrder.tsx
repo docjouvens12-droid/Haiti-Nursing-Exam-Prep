@@ -9,8 +9,8 @@ export default function DriverCleanMenuOrder(){
     const getRank=(text:string)=>{
       const t=text.toLowerCase()
       if(t.includes('profil')||t.includes('pwofil')) return 0
-      if(t.includes('véhicule')||t.includes('veyikil')) return 1
-      if(t.includes('demande devenir chauffeur')||t.includes('demand devni chofè')) return 2
+      if(t.includes('véhicule')||t.includes('vehicule')||t.includes('veyikil')) return 1
+      if(t.includes('demande devenir chauffeur')||t.includes('demand devni chofè')||t.includes('demand devni chofe')) return 2
       if(t.includes('paiements')||t.includes('peman')) return 3
       if(t.includes('historique')||t.includes('istwa trajè')) return 4
       if(t.includes('revenus')||t.includes('revni')) return 5
@@ -25,7 +25,7 @@ export default function DriverCleanMenuOrder(){
       list.style.display='flex'
       list.style.flexDirection='column'
 
-      const rows=Array.from(list.querySelectorAll<HTMLButtonElement>(':scope > .dcm-row'))
+      const rows=Array.from(list.children).filter((el):el is HTMLButtonElement=>el instanceof HTMLButtonElement && el.classList.contains('dcm-row'))
       for(const row of rows){
         const rank=getRank(row.textContent||'')
         row.style.order=String(rank*2)
@@ -36,10 +36,22 @@ export default function DriverCleanMenuOrder(){
       }
     }
 
-    const onClick=()=>window.setTimeout(apply,0)
-    apply()
-    document.addEventListener('click',onClick,false)
-    return()=>document.removeEventListener('click',onClick,false)
+    let raf=0
+    const schedule=()=>{
+      cancelAnimationFrame(raf)
+      raf=requestAnimationFrame(()=>apply())
+    }
+
+    schedule()
+    const observer=new MutationObserver(schedule)
+    observer.observe(document.body,{childList:true,subtree:true})
+    document.addEventListener('click',schedule,false)
+
+    return()=>{
+      cancelAnimationFrame(raf)
+      observer.disconnect()
+      document.removeEventListener('click',schedule,false)
+    }
   },[])
 
   return null
