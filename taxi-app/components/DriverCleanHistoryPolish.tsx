@@ -23,18 +23,15 @@ export default function DriverCleanHistoryPolish(){
     setHt(localStorage.getItem('taxi-language')==='ht')
     const locate=()=>{
       const panel=document.querySelector<HTMLElement>('.dcm-panel.dcm-trips')
-      if(!panel){setTarget(null);return}
-      panel.classList.add('driver-clean-history-polish')
-      Array.from(panel.children).forEach(el=>{
-        const node=el as HTMLElement
-        if(!node.classList.contains('driver-clean-history-root')) node.style.display='none'
-      })
-      let mount=panel.querySelector<HTMLElement>('.driver-clean-history-root')
-      if(!mount){mount=document.createElement('div');mount.className='driver-clean-history-root';panel.appendChild(mount)}
-      setTarget(prev=>prev===mount?prev:mount)
+      if(panel){
+        panel.classList.add('driver-clean-history-polish')
+        setTarget(prev=>prev===panel?prev:panel)
+      }else{
+        setTarget(null)
+      }
     }
     locate()
-    const timer=window.setInterval(locate,150)
+    const timer=window.setInterval(locate,120)
     return()=>window.clearInterval(timer)
   },[])
 
@@ -52,7 +49,9 @@ export default function DriverCleanHistoryPolish(){
   useEffect(()=>{if(target) void loadRides()},[target])
 
   const filtered=useMemo(()=>{
-    const q=query.trim().toLowerCase();const now=new Date();const cutoff=new Date(now)
+    const q=query.trim().toLowerCase()
+    const now=new Date()
+    const cutoff=new Date(now)
     if(dateFilter==='today') cutoff.setHours(0,0,0,0)
     if(dateFilter==='7d') cutoff.setDate(now.getDate()-7)
     if(dateFilter==='30d') cutoff.setDate(now.getDate()-30)
@@ -78,9 +77,14 @@ export default function DriverCleanHistoryPolish(){
   const statusLabel=(v:unknown)=>{const s=String(v||'').toLowerCase();if(['completed','complete','finished'].includes(s))return ht?'Konplete':'Terminé';if(['cancelled','canceled','cancelled_by_driver','cancelled_by_passenger'].includes(s))return ht?'Anile':'Annulé';if(['accepted','assigned'].includes(s))return ht?'Aksepte':'Accepté';if(['in_progress','started'].includes(s))return ht?'An kou':'En cours';return v?String(v):'—'}
 
   if(!target)return null
+
   return createPortal(<div className="dch-wrap">
     <style>{`
-      .driver-clean-history-polish{background:#f8faf9!important;border-radius:18px!important;padding:12px!important;max-height:none!important;overflow:visible!important}.dch-wrap{display:grid;gap:10px;color:#102033}.dch-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dch-stat{background:linear-gradient(145deg,#0f705a,#155f51);color:#fff;border-radius:16px;padding:13px}.dch-stat span{display:block;font-size:9px;opacity:.82;font-weight:800;text-transform:uppercase}.dch-stat strong{display:block;margin-top:4px;font-size:16px}.dch-searchbar{display:grid;grid-template-columns:1fr auto;gap:6px}.dch-searchbar input{min-width:0;border:1px solid #dce6e2;background:#fff;border-radius:12px;padding:10px 11px;font-size:11px}.dch-refresh{border:0;border-radius:12px;background:#edf5f2;color:#0f705a;font-weight:900;padding:0 11px}.dch-status,.dch-dates{display:grid;gap:5px;background:#eef3f1;padding:4px;border-radius:13px}.dch-status{grid-template-columns:repeat(3,1fr)}.dch-dates{grid-template-columns:repeat(4,1fr)}.dch-status button,.dch-dates button{border:0;background:transparent;border-radius:10px;padding:8px 4px;font-size:9px;font-weight:900;color:#718078}.dch-status button.active,.dch-dates button.active{background:#fff;color:#0f705a}.dch-list{display:grid;gap:8px;max-height:420px;overflow:auto;-webkit-overflow-scrolling:touch}.dch-trip{width:100%;text-align:left;background:#fff;border:1px solid #e4ebe8;border-radius:15px;padding:11px;color:#102033}.dch-trip-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}.dch-trip-head strong{font-size:10px;color:#52645d}.dch-badge{font-size:8px;font-weight:900;background:#e8f6f1;color:#0f705a;border-radius:999px;padding:5px 7px}.dch-route{display:grid;gap:6px;font-size:10px;color:#40534c}.dch-route div{display:flex;gap:6px}.dch-fare{margin-top:9px;padding-top:8px;border-top:1px solid #edf1ef;display:flex;justify-content:space-between}.dch-fare span{font-size:9px;color:#7b8983}.dch-fare strong{font-size:13px}.dch-more{margin-top:9px;padding:9px;background:#f6f9f8;border-radius:11px;display:grid;gap:5px;font-size:9px;color:#5d6c66}.dch-empty,.dch-loading{padding:18px 12px;text-align:center;color:#73827b;font-size:11px;background:#fff;border:1px dashed #d5dfdb;border-radius:14px}
+      .driver-clean-history-polish{display:block!important;background:#f8faf9!important;border-radius:18px!important;padding:12px!important;max-height:none!important;overflow:visible!important}
+      .driver-clean-history-polish>div:not(.dch-wrap){display:none!important}
+      .driver-clean-history-polish>.dcm-trip{display:none!important}
+      .dch-wrap{display:grid!important;gap:10px;color:#102033;width:100%}
+      .dch-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.dch-stat{background:linear-gradient(145deg,#0f705a,#155f51);color:#fff;border-radius:16px;padding:13px}.dch-stat span{display:block;font-size:9px;opacity:.82;font-weight:800;text-transform:uppercase}.dch-stat strong{display:block;margin-top:4px;font-size:16px}.dch-searchbar{display:grid;grid-template-columns:1fr auto;gap:6px}.dch-searchbar input{min-width:0;border:1px solid #dce6e2;background:#fff;border-radius:12px;padding:10px 11px;font-size:11px;color:#102033}.dch-refresh{border:0;border-radius:12px;background:#edf5f2;color:#0f705a;font-weight:900;padding:0 11px}.dch-status,.dch-dates{display:grid;gap:5px;background:#eef3f1;padding:4px;border-radius:13px}.dch-status{grid-template-columns:repeat(3,1fr)}.dch-dates{grid-template-columns:repeat(4,1fr)}.dch-status button,.dch-dates button{border:0;background:transparent;border-radius:10px;padding:8px 4px;font-size:9px;font-weight:900;color:#718078}.dch-status button.active,.dch-dates button.active{background:#fff;color:#0f705a;box-shadow:0 3px 8px rgba(16,32,51,.07)}.dch-list{display:grid;gap:8px;max-height:420px;overflow:auto;-webkit-overflow-scrolling:touch}.dch-trip{width:100%;text-align:left;background:#fff;border:1px solid #e4ebe8;border-radius:15px;padding:11px;color:#102033}.dch-trip-head{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px}.dch-trip-head strong{font-size:10px;color:#52645d}.dch-badge{font-size:8px;font-weight:900;background:#e8f6f1;color:#0f705a;border-radius:999px;padding:5px 7px}.dch-route{display:grid;gap:6px;font-size:10px;color:#40534c}.dch-route div{display:flex;gap:6px}.dch-fare{margin-top:9px;padding-top:8px;border-top:1px solid #edf1ef;display:flex;justify-content:space-between}.dch-fare span{font-size:9px;color:#7b8983}.dch-fare strong{font-size:13px}.dch-more{margin-top:9px;padding:9px;background:#f6f9f8;border-radius:11px;display:grid;gap:5px;font-size:9px;color:#5d6c66}.dch-empty,.dch-loading{padding:18px 12px;text-align:center;color:#73827b;font-size:11px;background:#fff;border:1px dashed #d5dfdb;border-radius:14px}
     `}</style>
     <div className="dch-summary"><div className="dch-stat"><span>{ht?'Trajè':'Trajets'}</span><strong>{filtered.length}</strong></div><div className="dch-stat"><span>Total</span><strong>{total.toLocaleString('fr-HT')} HTG</strong></div></div>
     <div className="dch-searchbar"><input value={query} onChange={e=>setQuery(e.target.value)} placeholder={ht?'Chèche depa oswa destinasyon':'Rechercher départ ou destination'}/><button className="dch-refresh" onClick={()=>void loadRides()}>↻</button></div>
