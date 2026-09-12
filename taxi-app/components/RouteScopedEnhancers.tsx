@@ -54,6 +54,7 @@ import DriverCleanHistoryPolish from './DriverCleanHistoryPolish'
 import DriverCleanHistoryLabel from './DriverCleanHistoryLabel'
 import DriverCleanEarningsPolish from './DriverCleanEarningsPolish'
 import DriverCleanLanguagePolish from './DriverCleanLanguagePolish'
+import DriverCleanUberBoltHome from './DriverCleanUberBoltHome'
 
 import AdminDriverApplicationProfileSnapshot from './AdminDriverApplicationProfileSnapshot'
 import AdminDriverVehicleSnapshot from './AdminDriverVehicleSnapshot'
@@ -99,6 +100,7 @@ export default function RouteScopedEnhancers() {
       <DriverCleanHistoryLabel />
       <DriverCleanEarningsPolish />
       <DriverCleanLanguagePolish />
+      <DriverCleanUberBoltHome />
     </>}
 
     {isDriver && !isCleanDriverDashboard && <>
