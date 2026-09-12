@@ -26,19 +26,15 @@ export default function DriverCleanApplicationPanel(){
       if(panel?.classList.contains('dcm-panel')){
         const old=panel.querySelector<HTMLElement>(':scope > .dcm-note')
         if(old) old.style.display='none'
-        setTarget(panel)
-      } else setTarget(null)
+        setTarget(current=>current===panel?current:panel)
+      } else {
+        setTarget(current=>current && document.body.contains(current) ? current : null)
+      }
     }
 
-    const onClick=(event:MouseEvent)=>{
-      const el=event.target as Element|null
-      if(!el?.closest('.dcm-row')) return
-      window.setTimeout(locate,60)
-    }
-
-    document.addEventListener('click',onClick,true)
     locate()
-    return()=>document.removeEventListener('click',onClick,true)
+    const timer=window.setInterval(locate,200)
+    return()=>window.clearInterval(timer)
   },[])
 
   useEffect(()=>{
