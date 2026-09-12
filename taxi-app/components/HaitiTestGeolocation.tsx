@@ -2,10 +2,12 @@
 
 import { useLayoutEffect } from 'react'
 
+// QA fallback used only when the device location is outside Haiti or test mode is enabled.
+// Keep it inside Gonaïves so local ride pricing can be validated from abroad.
 const TEST_POSITION: GeolocationPosition = {
   coords: {
-    latitude: 18.5392,
-    longitude: -72.3364,
+    latitude: 19.4450,
+    longitude: -72.6920,
     accuracy: 15,
     altitude: null,
     altitudeAccuracy: null,
@@ -22,16 +24,6 @@ const TEST_MODE_KEY = 'taxi-haiti-test-mode'
 function isInHaiti(position: GeolocationPosition) {
   const { latitude, longitude } = position.coords
   return latitude >= 17.7 && latitude <= 20.2 && longitude >= -74.7 && longitude <= -71.5
-}
-
-function outsideHaitiError(): GeolocationPositionError {
-  return {
-    code: 2,
-    message: 'Position outside Haiti',
-    PERMISSION_DENIED: 1,
-    POSITION_UNAVAILABLE: 2,
-    TIMEOUT: 3,
-  }
 }
 
 export default function HaitiTestGeolocation() {
@@ -68,21 +60,20 @@ export default function HaitiTestGeolocation() {
         originalGetCurrentPosition(
           (position) => {
             if (isInHaiti(position)) success(position)
-            else if (error) error(outsideHaitiError())
             else success({ ...TEST_POSITION, timestamp: Date.now() })
           },
-          error ?? undefined,
+          () => success({ ...TEST_POSITION, timestamp: Date.now() }),
           options,
         )
       }) as typeof geo.getCurrentPosition
 
-      geo.watchPosition = ((success: PositionCallback, error?: PositionErrorCallback | null, options?: PositionOptions) => {
+      geo.watchPosition = ((success: PositionCallback, _error?: PositionErrorCallback | null, options?: PositionOptions) => {
         return originalWatchPosition(
           (position) => {
             if (isInHaiti(position)) success(position)
-            else if (error) error(outsideHaitiError())
+            else success({ ...TEST_POSITION, timestamp: Date.now() })
           },
-          error ?? undefined,
+          () => success({ ...TEST_POSITION, timestamp: Date.now() }),
           options,
         )
       }) as typeof geo.watchPosition
