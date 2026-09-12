@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 type Result = { id: string; label: string; center: [number, number]; featureType?: string }
 
 const SEARCH_TYPES = 'address,street,neighborhood,locality,place,district,region'
+const PRECISE_TYPES = new Set(['address', 'street', 'neighborhood'])
 
 function normalize(value: string) {
   return value
@@ -18,11 +19,8 @@ function completeLabel(props: any, fallbackName = '') {
   const fullAddress = String(props?.full_address || '').trim()
   const placeFormatted = String(props?.place_formatted || '').trim()
 
-  // Prefer Mapbox's complete address when it really contains more than the feature name.
   if (fullAddress && normalize(fullAddress) !== normalize(name)) return fullAddress
 
-  // For streets/addresses where Mapbox sends the street name separately from city/region,
-  // combine both so the passenger sees the complete location instead of only the city.
   if (name && placeFormatted) {
     const normalizedName = normalize(name)
     const normalizedContext = normalize(placeFormatted)
@@ -30,6 +28,36 @@ function completeLabel(props: any, fallbackName = '') {
   }
 
   return fullAddress || placeFormatted || name || 'Destination'
+}
+
+function looksLikeStreetAddress(query: string) {
+  const q = normalize(query)
+  const hasNumber = /(^|\s)\d+[a-z]?(\s|$)/i.test(q)
+  const hasStreetWord = /\b(rue|ruelle|route|avenue|av|boulevard|bd|impasse|chemin|road|street|st)\b/i.test(q)
+  return hasNumber || hasStreetWord
+}
+
+function buildAddressVariants(query: string) {
+  const clean = query.trim().replace(/\s+/g, ' ')
+  const variants = new Set<string>([clean])
+
+  if (!/ha[iï]ti/i.test(clean)) variants.add(`${clean}, Haïti`)
+
+  // Haitian users commonly type "125 rue egalite gonaives" without commas.
+  // Adding punctuation/context gives Mapbox a better chance to parse house/street/city separately.
+  const normalized = normalize(clean)
+  const knownCities = ['gonaives', 'les gonaives', 'port au prince', 'cap haitien', 'saint marc', 'jacmel', 'les cayes', 'petion ville', 'delmas']
+  for (const city of knownCities) {
+    const index = normalized.lastIndexOf(city)
+    if (index > 0) {
+      const wordsBeforeCity = clean.slice(0, Math.min(clean.length, index)).trim().replace(/[,:-]+$/g, '')
+      if (wordsBeforeCity) {
+        variants.add(`${wordsBeforeCity}, ${city}, Haïti`)
+      }
+    }
+  }
+
+  return Array.from(variants)
 }
 
 export async function GET(request: NextRequest) {
@@ -44,7 +72,7 @@ export async function GET(request: NextRequest) {
 
   const proximity = Number.isFinite(lat) && Number.isFinite(lng) ? `${lng},${lat}` : null
 
-  async function searchMapbox(query: string, useTypes = true): Promise<Result[]> {
+  async function searchMapboxV6(query: string, useTypes = true): Promise<Result[]> {
     const params = new URLSearchParams({
       q: query,
       access_token: token as string,
@@ -65,21 +93,59 @@ export async function GET(request: NextRequest) {
         signal: controller.signal,
         cache: 'no-store',
       })
-
       if (!response.ok) return []
 
       const json = await response.json()
       return (json.features ?? []).flatMap((f: any) => {
         const center = f.geometry?.coordinates
         if (!Array.isArray(center) || center.length < 2) return []
-
         const props = f.properties ?? {}
         const name = props.name || f.name || ''
-        const label = completeLabel(props, name)
-
         return [{
           id: f.id || props.mapbox_id || `${center[0]},${center[1]}`,
-          label,
+          label: completeLabel(props, name),
+          center: [Number(center[0]), Number(center[1])] as [number, number],
+          featureType: props.feature_type || f.feature_type || '',
+        }]
+      })
+    } catch {
+      return []
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
+  async function searchMapboxSearchBox(query: string): Promise<Result[]> {
+    const params = new URLSearchParams({
+      q: query,
+      access_token: token as string,
+      country: 'HT',
+      language: 'fr',
+      limit: '10',
+    })
+    if (proximity) params.set('proximity', proximity)
+
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 5000)
+
+    try {
+      const response = await fetch(`https://api.mapbox.com/search/searchbox/v1/forward?${params.toString()}`, {
+        signal: controller.signal,
+        cache: 'no-store',
+      })
+      if (!response.ok) return []
+
+      const json = await response.json()
+      return (json.features ?? []).flatMap((f: any) => {
+        const props = f.properties ?? {}
+        const center = f.geometry?.coordinates || props.coordinates?.longitude && props.coordinates?.latitude
+          ? [props.coordinates?.longitude, props.coordinates?.latitude]
+          : null
+        if (!Array.isArray(center) || center.length < 2 || !Number.isFinite(Number(center[0])) || !Number.isFinite(Number(center[1]))) return []
+
+        return [{
+          id: f.id || props.mapbox_id || `searchbox-${center[0]},${center[1]}`,
+          label: completeLabel(props, props.name || ''),
           center: [Number(center[0]), Number(center[1])] as [number, number],
           featureType: props.feature_type || f.feature_type || '',
         }]
@@ -93,27 +159,32 @@ export async function GET(request: NextRequest) {
 
   try {
     const batches: Result[][] = []
-    batches.push(await searchMapbox(q, true))
+    const variants = buildAddressVariants(q)
 
-    if (!batches[0].length && !/ha[iï]ti/i.test(q)) {
-      batches.push(await searchMapbox(`${q}, Haïti`, true))
+    for (const variant of variants) {
+      batches.push(await searchMapboxV6(variant, true))
     }
 
-    if (!batches.some((batch) => batch.length)) {
-      batches.push(await searchMapbox(q, false))
-      if (!/ha[iï]ti/i.test(q)) batches.push(await searchMapbox(`${q}, Haïti`, false))
+    const hasPreciseV6 = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
+    if (!hasPreciseV6 && looksLikeStreetAddress(q)) {
+      for (const variant of variants) batches.push(await searchMapboxSearchBox(variant))
+    }
+
+    if (!batches.some(batch => batch.length)) {
+      batches.push(await searchMapboxV6(q, false))
     }
 
     const deduped = new Map<string, Result>()
     for (const batch of batches) {
       for (const result of batch) {
-        const key = `${result.center[0].toFixed(6)},${result.center[1].toFixed(6)}|${result.label.toLowerCase()}`
+        const key = `${result.center[0].toFixed(6)},${result.center[1].toFixed(6)}|${normalize(result.label)}`
         if (!deduped.has(key)) deduped.set(key, result)
       }
     }
 
     let results = Array.from(deduped.values())
     const normalizedQuery = normalize(q)
+    const addressLike = looksLikeStreetAddress(q)
 
     const toRad = (value: number) => value * Math.PI / 180
     const distance = (result: Result) => {
@@ -139,6 +210,14 @@ export async function GET(request: NextRequest) {
       return rank[type] ?? 7
     }
 
+    // If the user entered a house number/street, never let a city-only result replace it.
+    // Keep only precise results when Mapbox found at least one; otherwise show no misleading city suggestion.
+    if (addressLike) {
+      const precise = results.filter(result => PRECISE_TYPES.has(result.featureType || ''))
+      if (precise.length) results = precise
+      else results = []
+    }
+
     results = [...results].sort((a, b) => {
       const aLabel = normalize(a.label)
       const bLabel = normalize(b.label)
@@ -146,7 +225,6 @@ export async function GET(request: NextRequest) {
       const bMatches = bLabel.includes(normalizedQuery) ? 0 : 1
       if (aMatches !== bMatches) return aMatches - bMatches
 
-      // Street/address results must appear before a city/region with the same text.
       const aType = typeRank(a.featureType)
       const bType = typeRank(b.featureType)
       if (aType !== bType) return aType - bType
@@ -154,10 +232,7 @@ export async function GET(request: NextRequest) {
       return distance(a) - distance(b)
     })
 
-    const matchingResults = results.filter((result) => normalize(result.label).includes(normalizedQuery))
-    if (matchingResults.length) results = matchingResults
-
-    return NextResponse.json({ results: results.slice(0, 12), query: q })
+    return NextResponse.json({ results: results.slice(0, 12), query: q, precise: addressLike })
   } catch {
     return NextResponse.json({ results: [], error: 'GEOCODE_FAILED' }, { status: 502 })
   }
