@@ -19,6 +19,21 @@ const TEST_POSITION: GeolocationPosition = {
 
 const TEST_MODE_KEY = 'taxi-haiti-test-mode'
 
+function isInHaiti(position: GeolocationPosition) {
+  const { latitude, longitude } = position.coords
+  return latitude >= 17.7 && latitude <= 20.2 && longitude >= -74.7 && longitude <= -71.5
+}
+
+function outsideHaitiError(): GeolocationPositionError {
+  return {
+    code: 2,
+    message: 'Position outside Haiti',
+    PERMISSION_DENIED: 1,
+    POSITION_UNAVAILABLE: 2,
+    TIMEOUT: 3,
+  }
+}
+
 export default function HaitiTestGeolocation() {
   useLayoutEffect(() => {
     if (typeof window === 'undefined' || !navigator.geolocation) return
@@ -34,21 +49,44 @@ export default function HaitiTestGeolocation() {
       requestedTestMode || window.localStorage.getItem(TEST_MODE_KEY) === 'haiti'
     )
 
-    if (!forceTestMode) return
-
     const geo = navigator.geolocation
     const originalGetCurrentPosition = geo.getCurrentPosition.bind(geo)
     const originalWatchPosition = geo.watchPosition.bind(geo)
 
-    geo.getCurrentPosition = ((success: PositionCallback) => {
-      window.setTimeout(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 0)
-    }) as typeof geo.getCurrentPosition
+    if (forceTestMode) {
+      geo.getCurrentPosition = ((success: PositionCallback) => {
+        window.setTimeout(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 0)
+      }) as typeof geo.getCurrentPosition
 
-    geo.watchPosition = ((success: PositionCallback) => {
-      const id = window.setInterval(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 5000)
-      window.setTimeout(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 0)
-      return id
-    }) as typeof geo.watchPosition
+      geo.watchPosition = ((success: PositionCallback) => {
+        const id = window.setInterval(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 5000)
+        window.setTimeout(() => success({ ...TEST_POSITION, timestamp: Date.now() }), 0)
+        return id
+      }) as typeof geo.watchPosition
+    } else if (!requestedRealMode) {
+      geo.getCurrentPosition = ((success: PositionCallback, error?: PositionErrorCallback | null, options?: PositionOptions) => {
+        originalGetCurrentPosition(
+          (position) => {
+            if (isInHaiti(position)) success(position)
+            else if (error) error(outsideHaitiError())
+            else success({ ...TEST_POSITION, timestamp: Date.now() })
+          },
+          error ?? undefined,
+          options,
+        )
+      }) as typeof geo.getCurrentPosition
+
+      geo.watchPosition = ((success: PositionCallback, error?: PositionErrorCallback | null, options?: PositionOptions) => {
+        return originalWatchPosition(
+          (position) => {
+            if (isInHaiti(position)) success(position)
+            else if (error) error(outsideHaitiError())
+          },
+          error ?? undefined,
+          options,
+        )
+      }) as typeof geo.watchPosition
+    }
 
     return () => {
       geo.getCurrentPosition = originalGetCurrentPosition
