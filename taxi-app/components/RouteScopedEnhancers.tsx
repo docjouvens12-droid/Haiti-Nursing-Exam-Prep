@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation'
 import PassengerStableAvatarUpload from './PassengerStableAvatarUpload'
+import PassengerProfilePageRestore from './PassengerProfilePageRestore'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -49,7 +50,10 @@ export default function RouteScopedEnhancers() {
   const isPassenger = !isDriver && !isAdmin
 
   return <>
-    {isPassenger && <PassengerStableAvatarUpload />}
+    {isPassenger && <>
+      <PassengerStableAvatarUpload />
+      <PassengerProfilePageRestore />
+    </>}
 
     {isCleanDriverDashboard && <>
       <DriverCleanMenu />
