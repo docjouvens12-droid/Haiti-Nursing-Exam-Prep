@@ -56,6 +56,12 @@ function buildAddressVariants(query: string) {
   return Array.from(variants)
 }
 
+function contextFromLabel(label: string) {
+  const parts = label.split(',').map(part => part.trim()).filter(Boolean)
+  if (parts.length >= 3) return parts.slice(-3).join(', ')
+  return label.trim()
+}
+
 export async function GET(request: NextRequest) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
   const { searchParams } = new URL(request.url)
@@ -224,7 +230,12 @@ export async function GET(request: NextRequest) {
       return distance(a) - distance(b)
     })
 
-    return NextResponse.json({ results: results.slice(0, 12), query: q, precise: addressLike })
+    const displayResults = results.slice(0, 12).map(result => ({
+      ...result,
+      label: `${contextFromLabel(result.label)}\n${q}`,
+    }))
+
+    return NextResponse.json({ results: displayResults, query: q, precise: addressLike })
   } catch {
     return NextResponse.json({ results: [], error: 'GEOCODE_FAILED' }, { status: 502 })
   }
