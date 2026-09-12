@@ -5,6 +5,7 @@ import PassengerStableAvatarUpload from './PassengerStableAvatarUpload'
 import PassengerProfileDetails from './PassengerProfileDetails'
 import PassengerTripsStableInline from './PassengerTripsStableInline'
 import PassengerPaymentStableInline from './PassengerPaymentStableInline'
+import PassengerLanguageSwitchStable from './PassengerLanguageSwitchStable'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -57,6 +58,7 @@ export default function RouteScopedEnhancers() {
       <PassengerProfileDetails />
       <PassengerTripsStableInline />
       <PassengerPaymentStableInline />
+      <PassengerLanguageSwitchStable />
     </>}
 
     {isCleanDriverDashboard && <>
