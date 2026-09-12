@@ -6,19 +6,8 @@ import PassengerActiveDriver from './PassengerActiveDriver'
 import PassengerPendingRideCancel from './PassengerPendingRideCancel'
 import PassengerRideCompletion from './PassengerRideCompletion'
 import PassengerStaleReceiptGuard from './PassengerStaleReceiptGuard'
-import PassengerRidePhasePolish from './PassengerRidePhasePolish'
-import PassengerCompletionPolish from './PassengerCompletionPolish'
 import PassengerRideLifecycleGuard from './PassengerRideLifecycleGuard'
-import PassengerAvatarEnhancer from './PassengerAvatarEnhancer'
-import PassengerProfileDetails from './PassengerProfileDetails'
-import PassengerTripsEnhancer from './PassengerTripsEnhancer'
-import PassengerPaymentEnhancer from './PassengerPaymentEnhancer'
-import PassengerLanguageSwitchEnhancer from './PassengerLanguageSwitchEnhancer'
-import PassengerHelpDirectNavigation from './PassengerHelpDirectNavigation'
-import PassengerLogoutPolish from './PassengerLogoutPolish'
 import PassengerRidePaymentSync from './PassengerRidePaymentSync'
-import PassengerDashboardHardV2 from './PassengerDashboardHardV2'
-import MoviPassengerDesign from './MoviPassengerDesign'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -72,18 +61,7 @@ export default function RouteScopedEnhancers() {
       <PassengerPendingRideCancel />
       <PassengerRideCompletion />
       <PassengerStaleReceiptGuard />
-      <PassengerRidePhasePolish />
-      <PassengerCompletionPolish />
-      <PassengerAvatarEnhancer />
-      <PassengerProfileDetails />
-      <PassengerTripsEnhancer />
-      <PassengerPaymentEnhancer />
-      <PassengerLanguageSwitchEnhancer />
-      <PassengerHelpDirectNavigation />
-      <PassengerLogoutPolish />
       <PassengerRidePaymentSync />
-      <PassengerDashboardHardV2 />
-      <MoviPassengerDesign />
     </>}
 
     {isCleanDriverDashboard && <>
