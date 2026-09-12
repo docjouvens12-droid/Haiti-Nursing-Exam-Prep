@@ -17,7 +17,14 @@ type ActiveRide={
 
 type RouteInfo={distanceKm:number;durationMin:number;instruction:string;phase:'pickup'|'destination'}
 
-type RouteResponse={routes?:Array<{distance:number;duration:number;geometry:{coordinates:[number,number][];type:'LineString'};legs?:Array<{steps?:Array<{maneuver?:{instruction?:string}}>}>>}>}
+type RouteResponse={
+  routes?:Array<{
+    distance:number
+    duration:number
+    geometry:{coordinates:[number,number][];type:'LineString'}
+    legs?:Array<{steps?:Array<{maneuver?:{instruction?:string}}> }>
+  }>
+}
 
 function metersBetween(a:[number,number],b:[number,number]){
   const R=6371000
