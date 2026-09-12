@@ -43,17 +43,13 @@ function buildAddressVariants(query: string) {
 
   if (!/ha[iï]ti/i.test(clean)) variants.add(`${clean}, Haïti`)
 
-  // Haitian users commonly type "125 rue egalite gonaives" without commas.
-  // Adding punctuation/context gives Mapbox a better chance to parse house/street/city separately.
   const normalized = normalize(clean)
   const knownCities = ['gonaives', 'les gonaives', 'port au prince', 'cap haitien', 'saint marc', 'jacmel', 'les cayes', 'petion ville', 'delmas']
   for (const city of knownCities) {
     const index = normalized.lastIndexOf(city)
     if (index > 0) {
       const wordsBeforeCity = clean.slice(0, Math.min(clean.length, index)).trim().replace(/[,:-]+$/g, '')
-      if (wordsBeforeCity) {
-        variants.add(`${wordsBeforeCity}, ${city}, Haïti`)
-      }
+      if (wordsBeforeCity) variants.add(`${wordsBeforeCity}, ${city}, Haïti`)
     }
   }
 
@@ -138,9 +134,11 @@ export async function GET(request: NextRequest) {
       const json = await response.json()
       return (json.features ?? []).flatMap((f: any) => {
         const props = f.properties ?? {}
-        const center = f.geometry?.coordinates || props.coordinates?.longitude && props.coordinates?.latitude
-          ? [props.coordinates?.longitude, props.coordinates?.latitude]
+        const geometryCenter = f.geometry?.coordinates
+        const propertyCenter = Number.isFinite(Number(props.coordinates?.longitude)) && Number.isFinite(Number(props.coordinates?.latitude))
+          ? [Number(props.coordinates.longitude), Number(props.coordinates.latitude)]
           : null
+        const center = Array.isArray(geometryCenter) && geometryCenter.length >= 2 ? geometryCenter : propertyCenter
         if (!Array.isArray(center) || center.length < 2 || !Number.isFinite(Number(center[0])) || !Number.isFinite(Number(center[1]))) return []
 
         return [{
@@ -161,18 +159,14 @@ export async function GET(request: NextRequest) {
     const batches: Result[][] = []
     const variants = buildAddressVariants(q)
 
-    for (const variant of variants) {
-      batches.push(await searchMapboxV6(variant, true))
-    }
+    for (const variant of variants) batches.push(await searchMapboxV6(variant, true))
 
     const hasPreciseV6 = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
     if (!hasPreciseV6 && looksLikeStreetAddress(q)) {
       for (const variant of variants) batches.push(await searchMapboxSearchBox(variant))
     }
 
-    if (!batches.some(batch => batch.length)) {
-      batches.push(await searchMapboxV6(q, false))
-    }
+    if (!batches.some(batch => batch.length)) batches.push(await searchMapboxV6(q, false))
 
     const deduped = new Map<string, Result>()
     for (const batch of batches) {
@@ -210,8 +204,6 @@ export async function GET(request: NextRequest) {
       return rank[type] ?? 7
     }
 
-    // If the user entered a house number/street, never let a city-only result replace it.
-    // Keep only precise results when Mapbox found at least one; otherwise show no misleading city suggestion.
     if (addressLike) {
       const precise = results.filter(result => PRECISE_TYPES.has(result.featureType || ''))
       if (precise.length) results = precise
