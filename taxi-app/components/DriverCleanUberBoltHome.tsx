@@ -98,11 +98,16 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       }
       const instruction=route.legs?.[0]?.steps?.find(step=>step.maneuver?.instruction)?.maneuver?.instruction||''
       setRouteInfo({distanceKm:route.distance/1000,durationMin:Math.max(1,Math.round(route.duration/60)),instruction,phase})
-      const coords=route.geometry.coordinates
-      if(coords.length>1){
-        const mod=await import('mapbox-gl')
-        const bounds=coords.reduce((b,c)=>b.extend(c),new mod.default.LngLatBounds(coords[0],coords[0]))
-        map.fitBounds(bounds,{padding:{top:120,bottom:290,left:56,right:56},duration:500,maxZoom:16.5})
+      const directDistance=metersBetween(driverPoint,end)
+      if(directDistance<80){
+        map.easeTo({center:driverPoint,zoom:17,padding:{top:120,bottom:300,left:70,right:70},duration:450})
+      } else {
+        const coords=route.geometry.coordinates
+        if(coords.length>1){
+          const mod=await import('mapbox-gl')
+          const bounds=coords.reduce((b,c)=>b.extend(c),new mod.default.LngLatBounds(coords[0],coords[0]))
+          map.fitBounds(bounds,{padding:{top:120,bottom:290,left:56,right:56},duration:500,maxZoom:16.5})
+        }
       }
     }catch{}
   }
@@ -117,20 +122,20 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
     const closeToPassenger=pickupValid&&metersBetween(point,pickup)<40
     if(pickupValid){
       if(!pickupMarkerRef.current){
-        const el=document.createElement('div');el.className='dcu-stop pickup';el.innerHTML='<span>●</span>'
+        const el=document.createElement('div');el.className='dcu-stop passenger-point';el.innerHTML='<span>●</span>'
         pickupMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(pickup).addTo(map)
       } else pickupMarkerRef.current.setLngLat(pickup)
-      pickupMarkerRef.current.setOffset(closeToPassenger?[30,0]:[0,0])
-      pickupMarkerRef.current.getElement().style.zIndex='41'
+      pickupMarkerRef.current.setOffset(closeToPassenger?[34,0]:[0,0])
+      pickupMarkerRef.current.getElement().style.zIndex='61'
     }
-    driverMarkerRef.current?.setOffset(closeToPassenger?[-30,0]:[0,0])
-    if(driverMarkerRef.current)driverMarkerRef.current.getElement().style.zIndex='42'
+    driverMarkerRef.current?.setOffset(closeToPassenger?[-34,0]:[0,0])
+    if(driverMarkerRef.current)driverMarkerRef.current.getElement().style.zIndex='62'
     if(ride.status==='in_progress'&&Number.isFinite(dest[0])&&Number.isFinite(dest[1])){
       if(!destinationMarkerRef.current){
         const el=document.createElement('div');el.className='dcu-stop destination';el.innerHTML='<span>●</span>'
         destinationMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(dest).addTo(map)
       } else destinationMarkerRef.current.setLngLat(dest)
-      destinationMarkerRef.current.getElement().style.zIndex='40'
+      destinationMarkerRef.current.getElement().style.zIndex='60'
     } else { destinationMarkerRef.current?.remove(); destinationMarkerRef.current=null }
   }
 
@@ -145,7 +150,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       const el=document.createElement('div');el.className='dcu-marker active';el.innerHTML='<span>➤</span>'
       driverMarkerRef.current=new mod.default.Marker({element:el,rotationAlignment:'map',anchor:'center'}).setLngLat(point).addTo(map)
     } else driverMarkerRef.current.setLngLat(point)
-    driverMarkerRef.current.getElement().style.zIndex='42'
+    driverMarkerRef.current.getElement().style.zIndex='62'
     const user=(await supabase.auth.getUser()).data.user
     if(user) void supabase.from('driver_locations').upsert({driver_id:user.id,latitude:pos.coords.latitude,longitude:pos.coords.longitude,heading:Number.isFinite(pos.coords.heading)?pos.coords.heading:null,speed_kph:Number.isFinite(pos.coords.speed)?Math.max(0,(pos.coords.speed||0)*3.6):null,updated_at:new Date().toISOString()},{onConflict:'driver_id'})
     if(ride){
@@ -195,7 +200,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   const ht=typeof window!=='undefined'&&localStorage.getItem('taxi-language')==='ht'
   return <>
     <style>{`
-      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:45;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:10px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{display:none}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #111827;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:24px;color:#2563eb;z-index:42!important}.dcu-marker span{transform:rotate(0deg);line-height:1}.dcu-stop{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.28)}.dcu-stop.pickup{background:#16a34a}.dcu-stop.destination{background:#ef4444}.dcu-stop span{line-height:1}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
+      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:45;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:10px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{display:none}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #111827;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:24px;color:#2563eb;z-index:62!important}.dcu-marker span{line-height:1}.dcu-stop{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.28)}.dcu-stop.passenger-point{background:#16a34a}.dcu-stop.destination{background:#ef4444}.dcu-stop span{line-height:1}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
     `}</style>
     <section className="dcu-home">
       <div className="dcu-map-shell">
