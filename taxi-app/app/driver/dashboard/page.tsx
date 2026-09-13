@@ -143,16 +143,23 @@ export default function DriverDashboardPage() {
         return
       }
 
-      const { data: requests } = await supabase
-        .from('rides')
-        .select('*')
-        .eq('status', 'requested')
-        .is('driver_id', null)
-        .neq('passenger_id', userId)
-        .order('requested_at', { ascending: true })
-        .limit(20)
+      const [{ data: requests }, { data: rejectedRows }] = await Promise.all([
+        supabase
+          .from('rides')
+          .select('*')
+          .eq('status', 'requested')
+          .is('driver_id', null)
+          .neq('passenger_id', userId)
+          .order('requested_at', { ascending: true })
+          .limit(20),
+        supabase
+          .from('driver_ride_rejections')
+          .select('ride_id')
+          .eq('driver_id', userId),
+      ])
 
-      setAvailable((requests ?? []) as Ride[])
+      const rejected = new Set((rejectedRows ?? []).map(row => row.ride_id))
+      setAvailable(((requests ?? []) as Ride[]).filter(ride => !rejected.has(ride.id)))
     } catch {
       // Ride refresh failure must not blank the dashboard.
     }
@@ -228,7 +235,7 @@ export default function DriverDashboardPage() {
     }
   }
 
-  async function rideAction(action: 'accept' | 'arriving' | 'start' | 'complete', ride: Ride) {
+  async function rideAction(action: 'accept' | 'reject' | 'arriving' | 'start' | 'complete', ride: Ride) {
     if (busy) return
     if (action === 'accept' && !vehicle) {
       setMessage('Aucun véhicule actif n’est associé à ce compte.')
@@ -239,9 +246,11 @@ export default function DriverDashboardPage() {
     setMessage('')
     try {
       if (action === 'accept') await rpc('accept_ride', { p_ride_id: ride.id, p_vehicle_id: vehicle!.id })
+      if (action === 'reject') await rpc('reject_ride_request', { p_ride_id: ride.id, p_reason: 'rejected' })
       if (action === 'arriving') await rpc('mark_driver_arriving', { p_ride_id: ride.id })
       if (action === 'start') await rpc('start_ride', { p_ride_id: ride.id })
       if (action === 'complete') await rpc('complete_ride', { p_ride_id: ride.id, p_final_fare_htg: ride.estimated_fare_htg ?? 0, p_payment_method: 'cash' })
+      if (action === 'reject') setMessage('Demande refusée. Elle ne vous sera plus proposée.')
       await loadRides(userIdRef.current, online)
     } catch (error) {
       setMessage(error instanceof Error ? error.message : 'Impossible de mettre à jour le trajet.')
@@ -303,7 +312,15 @@ export default function DriverDashboardPage() {
           <div className="rideHead"><strong>{ride.pickup_address}</strong><span>{ride.service_type ?? 'standard'}</span></div>
           <p><b>Destination:</b> {ride.destination_address}</p>
           <div className="stats"><span>{ride.estimated_distance_km ?? '-'} km</span><span>{ride.estimated_duration_min ?? '-'} min</span><span>{ride.estimated_fare_htg ?? '-'} HTG</span></div>
-          <button className="primary" disabled={busy || !vehicle} onClick={() => rideAction('accept', ride)}>Accepter</button>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => rideAction('reject', ride)}
+              style={{ minHeight: 48, borderRadius: 14, border: '1px solid #e1e6e4', background: '#fff', color: '#bd2d2d', fontWeight: 900, fontSize: 14 }}
+            >Refuser</button>
+            <button className="primary" disabled={busy || !vehicle} onClick={() => rideAction('accept', ride)}>Accepter</button>
+          </div>
         </section>)}
 
       {menuOpen && <div className="overlay" onClick={() => setMenuOpen(false)}><aside onClick={e => e.stopPropagation()}><button className="close" onClick={() => setMenuOpen(false)}>×</button><div className="avatar">{name.slice(0,1).toUpperCase()}</div><h2>{name}</h2>{vehicle && <div className="vehicle"><small>VÉHICULE</small><strong>{vehicle.make} {vehicle.model}</strong><span>{vehicle.plate_number}</span></div>}<button className="logout" onClick={logout}>Se déconnecter</button></aside></div>}
