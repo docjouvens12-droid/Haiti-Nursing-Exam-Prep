@@ -126,12 +126,8 @@ export default function PassengerAcceptedRideMiniMap() {
       overlays.push(`path-6+087a5d-1(${encoded})`)
     }
 
-    overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
-
-    if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-      overlays.push(`pin-l-d+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
-      overlays.push(`pin-l-a+ef4444(${targetLng},${targetLat})`)
-    } else {
+    if (!inProgress) {
+      overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
       overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
     }
 
@@ -143,13 +139,10 @@ export default function PassengerAcceptedRideMiniMap() {
     if (!token || !routeTarget || !tracking) return ''
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
-    const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`]
-    if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-      overlays.push(`pin-l-d+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
-      overlays.push(`pin-l-a+ef4444(${targetLng},${targetLat})`)
-    } else {
-      overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
+    if (inProgress) {
+      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
+    const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`, `pin-l-p+ef4444(${targetLng},${targetLat})`]
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking])
 
@@ -175,7 +168,7 @@ export default function PassengerAcceptedRideMiniMap() {
   const visibleMapUrl = mapFailed ? fallbackMapUrl : mapUrl
 
   return createPortal(
-    <section className={`passenger-live-top-map ${arrived ? 'arrived' : ''}`} aria-live="polite">
+    <section className={`passenger-live-top-map ${arrived ? 'arrived' : ''} ${inProgress ? 'in-progress' : ''}`} aria-live="polite">
       <style>{`
         .map-panel.real-map-panel{position:relative!important}
         .passenger-live-top-map{position:absolute;left:0;right:0;top:76px;bottom:0;z-index:8;overflow:hidden;background:#eef5f2;font-family:Inter,system-ui,sans-serif}
@@ -184,11 +177,10 @@ export default function PassengerAcceptedRideMiniMap() {
         .passenger-live-top-map-copy{min-width:0;flex:1}.passenger-live-top-map-copy strong{display:block;color:#10243a;font-size:14px;line-height:1.2;font-weight:900}.passenger-live-top-map-copy small{display:block;margin-top:2px;color:#6d7e77;font-size:9px;line-height:1.3;font-weight:650}
         .passenger-live-top-map-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;letter-spacing:.05em}.passenger-live-top-map-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065}
         .passenger-live-top-map-frame{position:absolute;left:0;right:0;top:57px;bottom:0;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:100%;object-fit:cover}
-        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#087a5d}.start-dot{background:#2563eb}.end-dot{background:#ef4444}
-        .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:4;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:44px 20px;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
+        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#087a5d}.end-dot{background:#ef4444}
+        .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:4;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
         .passenger-live-top-map-metric{padding:6px 8px 5px;display:flex;flex-direction:column;justify-content:center;min-width:0}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #e6eeeb}
         .passenger-live-top-map-metric span{display:block;font-size:5.8px;color:#5f716a;font-weight:900;text-transform:uppercase;letter-spacing:.025em;line-height:1;white-space:nowrap}.passenger-live-top-map-metric strong{display:block;margin-top:3px;color:#0f2438;font-size:14px;line-height:1;font-weight:950;letter-spacing:-.02em;white-space:nowrap}.passenger-live-top-map-metric:first-child strong{color:#087a5d}
-        .trip-endpoints{grid-column:1/-1;display:flex;align-items:center;justify-content:flex-start;gap:7px;padding:0 6px;border-top:1px solid #eef3f1;background:rgba(248,251,250,.95);font-size:5.8px;font-weight:850;color:#52645e}.trip-endpoints span{display:flex;align-items:center;gap:3px;white-space:nowrap}.trip-endpoints b{width:5px;height:5px;border-radius:50%;display:inline-block}
         .passenger-live-top-map-loading{position:absolute;left:0;right:0;top:57px;bottom:0;display:grid;place-items:center;background:linear-gradient(180deg,#eaf2ef,#f4f8f6);color:#62766f;font-size:11px;font-weight:800;text-align:center;padding:20px}
         .passenger-live-arrived-panel{position:absolute;inset:57px 0 0;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(180deg,#edf8f4,#f8fcfa)}
         .passenger-live-arrived-panel div{max-width:310px}.passenger-live-arrived-panel span{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#dff3eb;font-size:34px}.passenger-live-arrived-panel strong{display:block;color:#0f604f;font-size:22px;font-weight:950}.passenger-live-arrived-panel small{display:block;margin-top:7px;color:#62766f;font-size:12px;line-height:1.45;font-weight:700}.passenger-live-top-map.arrived .passenger-live-top-map-live{display:none}
@@ -204,12 +196,11 @@ export default function PassengerAcceptedRideMiniMap() {
         <div className="passenger-live-arrived-panel"><div><span>📍</span><strong>{ht ? 'Chofè a rive' : 'Le chauffeur est arrivé'}</strong><small>{ht ? 'Chofè a ap tann ou nan kote pou pran ou.' : 'Votre chauffeur vous attend au point de prise en charge.'}</small></div></div>
       ) : visibleMapUrl ? (
         <div className="passenger-live-top-map-frame">
-          <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè chofè a jouk destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
-          <div className="passenger-live-top-map-pills">
+          <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè trajè a' : 'Itinéraire de la course') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
+          {!inProgress && <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
-            {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Pwen demaraj' : 'Point de départ'} · D</span>}
-            <span className="passenger-live-top-map-pill"><b className="end-dot" />{inProgress ? (ht ? 'Pwen arive · A' : 'Point d’arrivée · A') : (ht ? 'Ou' : 'Vous')}</span>
-          </div>
+            <span className="passenger-live-top-map-pill"><b className="end-dot" />{ht ? 'Ou' : 'Vous'}</span>
+          </div>}
         </div>
       ) : (
         <div className="passenger-live-top-map-loading">{ht ? 'N ap chaje itinerè a…' : 'Chargement de l’itinéraire…'}</div>
@@ -218,7 +209,6 @@ export default function PassengerAcceptedRideMiniMap() {
       {!arrived && <div className="passenger-live-top-map-metrics">
         <div className="passenger-live-top-map-metric"><span>{inProgress ? (ht ? 'Distans ki rete' : 'Distance restante') : (ht ? 'Distans' : 'Distance')}</span><strong>{distanceLabel}</strong></div>
         <div className="passenger-live-top-map-metric"><span>{inProgress ? (ht ? 'Tan ki rete' : 'Temps restant') : (ht ? 'Chofè a rive nan' : 'Arrivée dans')}</span><strong>{timeLabel}</strong></div>
-        {inProgress && <div className="trip-endpoints"><span><b className="start-dot" />{ht ? 'D = Depa' : 'D = Départ'}</span><span><b className="end-dot" />{ht ? 'A = Arive' : 'A = Arrivée'}</span></div>}
       </div>}
     </section>,
     target,
