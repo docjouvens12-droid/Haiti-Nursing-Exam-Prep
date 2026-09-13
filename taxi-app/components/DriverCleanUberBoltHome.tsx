@@ -41,6 +41,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   const watchRef=useRef<number|null>(null)
   const lastRoutePointRef=useRef<[number,number]|null>(null)
   const lastRouteAtRef=useRef(0)
+  const lastPositionRef=useRef<[number,number]|null>(null)
   const rideRef=useRef<DriverMapRide|null>(null)
   const effectiveRide=activeRide ?? previewRide
 
@@ -74,8 +75,12 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   async function drawRoute(driverPoint:[number,number],ride:DriverMapRide,force=false){
     const map=mapRef.current, token=process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if(!map||!token)return
+    if(!map.isStyleLoaded()){
+      map.once('load',()=>void drawRoute(driverPoint,ride,true))
+      return
+    }
     const now=Date.now(), moved=lastRoutePointRef.current?metersBetween(lastRoutePointRef.current,driverPoint):Infinity
-    if(!force&&moved<20&&now-lastRouteAtRef.current<5000)return
+    if(!force&&moved<15&&now-lastRouteAtRef.current<4000)return
     lastRoutePointRef.current=driverPoint; lastRouteAtRef.current=now
     const phase:RouteInfo['phase']=ride.status==='in_progress'?'destination':'pickup'
     const end:[number,number]=phase==='pickup'?[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]:[Number(ride.destination_longitude),Number(ride.destination_latitude)]
@@ -87,9 +92,9 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       const geojson={type:'Feature' as const,properties:{},geometry:route.geometry}
       const source=map.getSource('driver-live-route') as {setData?:(data:unknown)=>void}|undefined
       if(source?.setData) source.setData(geojson)
-      else if(map.isStyleLoaded()){
+      else {
         map.addSource('driver-live-route',{type:'geojson',data:geojson})
-        map.addLayer({id:'driver-live-route-line',type:'line',source:'driver-live-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#0F705A','line-width':7,'line-opacity':.92}})
+        map.addLayer({id:'driver-live-route-line',type:'line',source:'driver-live-route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#111827','line-width':8,'line-opacity':.95}})
       }
       const instruction=route.legs?.[0]?.steps?.find(step=>step.maneuver?.instruction)?.maneuver?.instruction||''
       setRouteInfo({distanceKm:route.distance/1000,durationMin:Math.max(1,Math.round(route.duration/60)),instruction,phase})
@@ -97,9 +102,36 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       if(coords.length>1){
         const mod=await import('mapbox-gl')
         const bounds=coords.reduce((b,c)=>b.extend(c),new mod.default.LngLatBounds(coords[0],coords[0]))
-        map.fitBounds(bounds,{padding:{top:34,bottom:104,left:38,right:38},duration:550,maxZoom:17})
+        map.fitBounds(bounds,{padding:{top:120,bottom:290,left:56,right:56},duration:500,maxZoom:16.5})
       }
     }catch{}
+  }
+
+  async function ensureRideMarkers(point:[number,number],ride:DriverMapRide){
+    const map=mapRef.current
+    if(!map)return
+    const mod=await import('mapbox-gl')
+    const pickup:[number,number]=[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]
+    const dest:[number,number]=[Number(ride.destination_longitude),Number(ride.destination_latitude)]
+    const pickupValid=Number.isFinite(pickup[0])&&Number.isFinite(pickup[1])
+    const closeToPassenger=pickupValid&&metersBetween(point,pickup)<40
+    if(pickupValid){
+      if(!pickupMarkerRef.current){
+        const el=document.createElement('div');el.className='dcu-stop pickup';el.innerHTML='<span>●</span>'
+        pickupMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(pickup).addTo(map)
+      } else pickupMarkerRef.current.setLngLat(pickup)
+      pickupMarkerRef.current.setOffset(closeToPassenger?[30,0]:[0,0])
+      pickupMarkerRef.current.getElement().style.zIndex='41'
+    }
+    driverMarkerRef.current?.setOffset(closeToPassenger?[-30,0]:[0,0])
+    if(driverMarkerRef.current)driverMarkerRef.current.getElement().style.zIndex='42'
+    if(ride.status==='in_progress'&&Number.isFinite(dest[0])&&Number.isFinite(dest[1])){
+      if(!destinationMarkerRef.current){
+        const el=document.createElement('div');el.className='dcu-stop destination';el.innerHTML='<span>●</span>'
+        destinationMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(dest).addTo(map)
+      } else destinationMarkerRef.current.setLngLat(dest)
+      destinationMarkerRef.current.getElement().style.zIndex='40'
+    } else { destinationMarkerRef.current?.remove(); destinationMarkerRef.current=null }
   }
 
   async function applyPosition(pos:GeolocationPosition){
@@ -107,28 +139,17 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
     if(!map)return
     setGpsStatus('ok')
     const point:[number,number]=[pos.coords.longitude,pos.coords.latitude]
+    lastPositionRef.current=point
     const mod=await import('mapbox-gl')
     if(!driverMarkerRef.current){
-      const el=document.createElement('div');el.className='dcu-marker active';el.textContent='🚕'
-      driverMarkerRef.current=new mod.default.Marker({element:el,rotationAlignment:'map'}).setLngLat(point).addTo(map)
+      const el=document.createElement('div');el.className='dcu-marker active';el.innerHTML='<span>➤</span>'
+      driverMarkerRef.current=new mod.default.Marker({element:el,rotationAlignment:'map',anchor:'center'}).setLngLat(point).addTo(map)
     } else driverMarkerRef.current.setLngLat(point)
-    const markerEl=driverMarkerRef.current.getElement(); markerEl.classList.add('active')
+    driverMarkerRef.current.getElement().style.zIndex='42'
     const user=(await supabase.auth.getUser()).data.user
     if(user) void supabase.from('driver_locations').upsert({driver_id:user.id,latitude:pos.coords.latitude,longitude:pos.coords.longitude,heading:Number.isFinite(pos.coords.heading)?pos.coords.heading:null,speed_kph:Number.isFinite(pos.coords.speed)?Math.max(0,(pos.coords.speed||0)*3.6):null,updated_at:new Date().toISOString()},{onConflict:'driver_id'})
     if(ride){
-      const pickup:[number,number]=[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]
-      const dest:[number,number]=[Number(ride.destination_longitude),Number(ride.destination_latitude)]
-      const pickupValid=Number.isFinite(pickup[0])&&Number.isFinite(pickup[1])
-      const closeToPassenger=pickupValid&&metersBetween(point,pickup)<35
-      if(pickupValid){
-        if(!pickupMarkerRef.current){const el=document.createElement('div');el.className='dcu-stop pickup';el.textContent='●';pickupMarkerRef.current=new mod.default.Marker({element:el}).setLngLat(pickup).addTo(map)} else pickupMarkerRef.current.setLngLat(pickup)
-        pickupMarkerRef.current.setOffset(closeToPassenger?[28,0]:[0,0])
-        driverMarkerRef.current.setOffset(closeToPassenger?[-28,0]:[0,0])
-      }
-      if(ride.status==='in_progress'&&Number.isFinite(dest[0])&&Number.isFinite(dest[1])){
-        if(!destinationMarkerRef.current){const el=document.createElement('div');el.className='dcu-stop destination';el.textContent='●';destinationMarkerRef.current=new mod.default.Marker({element:el}).setLngLat(dest).addTo(map)} else destinationMarkerRef.current.setLngLat(dest)
-      } else { destinationMarkerRef.current?.remove(); destinationMarkerRef.current=null }
-      if(closeToPassenger){ map.easeTo({center:point,zoom:17,duration:450}) }
+      await ensureRideMarkers(point,ride)
       void drawRoute(point,ride,true)
     } else {
       driverMarkerRef.current.setOffset([0,0])
@@ -150,8 +171,13 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
         mod.default.accessToken=token
         const map=new mod.default.Map({container:mapEl.current,style:'mapbox://styles/mapbox/streets-v12',center:[-72.6843,19.4475],zoom:13,attributionControl:false})
         map.addControl(new mod.default.NavigationControl({showCompass:false}),'bottom-right'); mapRef.current=map
+        map.on('load',()=>{
+          map.resize()
+          const point=lastPositionRef.current, ride=rideRef.current
+          if(point&&ride){void ensureRideMarkers(point,ride);void drawRoute(point,ride,true)}
+        })
         if(navigator.geolocation){
-          watchRef.current=navigator.geolocation.watchPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:1500,timeout:15000})
+          watchRef.current=navigator.geolocation.watchPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:1000,timeout:15000})
         } else setGpsStatus('error')
       }catch{if(!cancelled)setMapFailed(true)}
     })()
@@ -161,19 +187,21 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   useEffect(()=>{
     if(!effectiveRide||!navigator.geolocation)return
     setGpsStatus('waiting')
+    const map=mapRef.current
+    if(map)window.setTimeout(()=>map.resize(),60)
     navigator.geolocation.getCurrentPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:0,timeout:12000})
   },[effectiveRide?.id,effectiveRide?.status])
 
   const ht=typeof window!=='undefined'&&localStorage.getItem('taxi-language')==='ht'
   return <>
     <style>{`
-      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:5;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:11px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{margin:5px 0 0;font-size:10px;color:#60716a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #0f8065;box-shadow:0 0 0 9px rgba(15,128,101,.15),0 6px 16px rgba(0,0,0,.24);font-size:23px;z-index:20;animation:dcuPulse 1.7s ease-in-out infinite}.dcu-stop{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:12px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.24);z-index:18}.dcu-stop.pickup{background:#2563eb}.dcu-stop.destination{background:#ef4444}@keyframes dcuPulse{0%,100%{box-shadow:0 0 0 6px rgba(15,128,101,.12),0 6px 16px rgba(0,0,0,.24)}50%{box-shadow:0 0 0 13px rgba(15,128,101,.04),0 6px 16px rgba(0,0,0,.24)}}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
+      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:45;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:10px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{display:none}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #111827;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:24px;color:#2563eb;z-index:42!important}.dcu-marker span{transform:rotate(0deg);line-height:1}.dcu-stop{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.28)}.dcu-stop.pickup{background:#16a34a}.dcu-stop.destination{background:#ef4444}.dcu-stop span{line-height:1}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
     `}</style>
     <section className="dcu-home">
       <div className="dcu-map-shell">
         {!effectiveRide&&<div className={`dcu-map-label ${gpsStatus==='error'?'dcu-gps-error':''}`}>{gpsStatus==='error'?(ht?'GPS pa disponib':'GPS indisponible'):(ht?'Pozisyon ou':'Votre position')}</div>}
         {mapFailed?<div className="dcu-map-fallback">{ht?'Kat GPS la pa disponib pou kounye a.':'La carte GPS est indisponible pour le moment.'}</div>:<div ref={mapEl} className="dcu-map"/>}
-        {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Distans ak pasaje a':'Distance du passager'):(ht?'Rete pou destinasyon':'Reste à destination')}</strong><span>{routeInfo.distanceKm.toFixed(1)} km · {routeInfo.durationMin} min</span></div><p>{routeInfo.instruction||(ht?'Swiv wout la sou kat la.':'Suivez l’itinéraire affiché sur la carte.')}</p></div>}
+        {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Distans ak pasaje a':'Distance du passager'):(ht?'Rete pou destinasyon':'Reste à destination')}</strong><span>{routeInfo.distanceKm.toFixed(1)} km · {routeInfo.durationMin} min</span></div></div>}
       </div>
       <div className="dcu-stats"><div className="dcu-stat"><small>{ht?'Revni jodi a':'Revenus aujourd’hui'}</small><strong>💰 {Math.round(todayEarnings).toLocaleString('fr-HT')} HTG</strong></div><div className="dcu-stat"><small>{ht?'Trajè jodi a':'Trajets aujourd’hui'}</small><strong>🚕 {todayTrips}</strong></div><div className="dcu-stat"><small>{ht?'Evalyasyon':'Évaluation'}</small><strong>★ {rating.toFixed(1)}</strong></div></div>
     </section>
