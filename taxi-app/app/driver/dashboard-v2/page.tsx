@@ -5,33 +5,9 @@ import { supabase } from '../../../lib/supabase'
 import DriverCleanUberBoltHome from '../../../components/DriverCleanUberBoltHome'
 
 type RideStatus = 'requested' | 'accepted' | 'driver_arriving' | 'in_progress' | 'completed' | 'cancelled'
-type Ride = {
-  id: string
-  status: RideStatus
-  pickup_address: string
-  destination_address: string
-  estimated_distance_km: number | null
-  estimated_duration_min: number | null
-  estimated_fare_htg: number | null
-  service_type: string | null
-  driver_id: string | null
-  passenger_id: string
-}
-
+type Ride = { id:string; status:RideStatus; pickup_address:string; destination_address:string; estimated_distance_km:number|null; estimated_duration_min:number|null; estimated_fare_htg:number|null; service_type:string|null; driver_id:string|null; passenger_id:string }
 type Vehicle = { id:string; make:string; model:string; plate_number:string; color:string|null }
-type DashboardRow = {
-  full_name:string|null
-  status:string|null
-  is_online:boolean|null
-  average_rating:number|string|null
-  total_rides:number|null
-  vehicle_id:string|null
-  vehicle_make:string|null
-  vehicle_model:string|null
-  vehicle_plate_number:string|null
-  vehicle_color:string|null
-}
-
+type DashboardRow = { full_name:string|null; status:string|null; is_online:boolean|null; average_rating:number|string|null; total_rides:number|null; vehicle_id:string|null; vehicle_make:string|null; vehicle_model:string|null; vehicle_plate_number:string|null; vehicle_color:string|null }
 type StoredSession = { access_token:string; user?:{ id?:string } }
 
 function parseSession(raw:string|null):StoredSession|null {
@@ -54,6 +30,14 @@ function readSession():StoredSession|null {
     if (found?.access_token) return found
   }
   return null
+}
+
+function cleanDestination(value:string) {
+  const raw = value.trim().replace(/\s+/g,' ')
+  if (!raw) return raw
+  const hasLeadingGonaives = /^les\s+gona[iï]ves\s*,\s*artibonite\s*,\s*ha[iï]ti\b/i.test(raw)
+  if (!hasLeadingGonaives) return raw
+  return raw.replace(/\s+gona[iï]ves\s*$/i,'').trim()
 }
 
 async function rpc<T=unknown>(name:string, body:Record<string,unknown>={}) {
@@ -80,40 +64,29 @@ export default function DriverDashboardV2Page() {
 
   useEffect(() => {
     const session = readSession()
-    if (!session?.access_token) {
-      setMessage('Session chauffeur introuvable. Déconnectez-vous puis reconnectez-vous.')
-      return
-    }
+    if (!session?.access_token) { setMessage('Session chauffeur introuvable. Déconnectez-vous puis reconnectez-vous.'); return }
     tokenRef.current = session.access_token
     userIdRef.current = session.user?.id ?? null
     void refreshDashboard(false)
   }, [])
 
   useEffect(() => {
-    if (!online || activeRide || available.length === 0) {
-      setOfferRideId(null)
-      setOfferSeconds(20)
-      return
-    }
+    if (!online || activeRide || available.length===0) { setOfferRideId(null); setOfferSeconds(20); return }
     const first = available[0]
-    if (offerRideId !== first.id) {
-      timeoutLockRef.current = null
-      setOfferRideId(first.id)
-      setOfferSeconds(20)
-    }
+    if (offerRideId!==first.id) { timeoutLockRef.current=null; setOfferRideId(first.id); setOfferSeconds(20) }
   }, [online,activeRide,available,offerRideId])
 
   useEffect(() => {
     if (!offerRideId || activeRide || !online) return
-    if (offerSeconds <= 0) {
-      const ride = available.find(item => item.id === offerRideId)
-      if (!ride || timeoutLockRef.current === ride.id) return
-      timeoutLockRef.current = ride.id
+    if (offerSeconds<=0) {
+      const ride = available.find(item=>item.id===offerRideId)
+      if (!ride || timeoutLockRef.current===ride.id) return
+      timeoutLockRef.current=ride.id
       void rideAction('timeout',ride)
       return
     }
-    const timer = window.setTimeout(() => setOfferSeconds(current => Math.max(0,current-1)),1000)
-    return () => window.clearTimeout(timer)
+    const timer = window.setTimeout(()=>setOfferSeconds(current=>Math.max(0,current-1)),1000)
+    return ()=>window.clearTimeout(timer)
   }, [offerRideId,offerSeconds,activeRide,online,available])
 
   function token() {
@@ -131,13 +104,12 @@ export default function DriverDashboardV2Page() {
       const mine = (mineRows?.[0] as Ride|undefined) ?? null
       setActiveRide(mine)
       if (!isOnline || mine) { setAvailable([]); return }
-
       const [{ data: requests }, { data: rejectedRows }] = await Promise.all([
         supabase.from('rides').select('*').eq('status','requested').is('driver_id',null).neq('passenger_id',userId).order('requested_at',{ascending:true}).limit(20),
         supabase.from('driver_ride_rejections').select('ride_id').eq('driver_id',userId),
       ])
-      const rejected = new Set((rejectedRows ?? []).map(row => row.ride_id))
-      setAvailable(((requests ?? []) as Ride[]).filter(ride => !rejected.has(ride.id)))
+      const rejected = new Set((rejectedRows ?? []).map(row=>row.ride_id))
+      setAvailable(((requests ?? []) as Ride[]).filter(ride=>!rejected.has(ride.id)))
     } catch {}
   }
 
@@ -152,21 +124,16 @@ export default function DriverDashboardV2Page() {
       if (!response.ok) throw new Error(payload?.error || `Erreur ${response.status}`)
       const raw = payload?.driver ?? payload?.data
       const row:DashboardRow|undefined = Array.isArray(raw) ? raw[0] : raw
-      if (!row || row.status !== 'approved') {
-        setAuthorized(false)
-        throw new Error('Ce compte n’est pas un chauffeur approuvé.')
-      }
+      if (!row || row.status!=='approved') { setAuthorized(false); throw new Error('Ce compte n’est pas un chauffeur approuvé.') }
       setAuthorized(true)
       setOnline(Boolean(row.is_online))
       setRating(Number(row.average_rating ?? 0))
       setTotalRides(Number(row.total_rides ?? 0))
-      if (row.vehicle_id && row.vehicle_make && row.vehicle_model && row.vehicle_plate_number) {
-        setVehicle({ id:row.vehicle_id, make:row.vehicle_make, model:row.vehicle_model, plate_number:row.vehicle_plate_number, color:row.vehicle_color })
-      } else setVehicle(null)
+      if (row.vehicle_id && row.vehicle_make && row.vehicle_model && row.vehicle_plate_number) setVehicle({id:row.vehicle_id,make:row.vehicle_make,model:row.vehicle_model,plate_number:row.vehicle_plate_number,color:row.vehicle_color})
+      else setVehicle(null)
       await loadRides(userIdRef.current,Boolean(row.is_online))
-    } catch (e) {
-      setMessage(e instanceof Error ? e.message : 'Impossible de charger votre espace chauffeur.')
-    } finally { if (showBusy) setBusy(false) }
+    } catch(e) { setMessage(e instanceof Error ? e.message : 'Impossible de charger votre espace chauffeur.') }
+    finally { if (showBusy) setBusy(false) }
   }
 
   async function toggleOnline() {
@@ -210,51 +177,23 @@ export default function DriverDashboardV2Page() {
 
   if (!authorized) return <main className="drv2-page"><div className="drv2-shell"><div className="drv2-access"><div className="drv2-logo">M</div><h1>Accès chauffeur</h1><p>{message || 'Ce compte n’est pas un chauffeur approuvé.'}</p></div></div></main>
 
-  return <main className="drv2-page">
-    <div className="drv2-shell">
-      <header className="drv2-topbar">
-        <button className="menu drv2-menu" aria-label="Menu" onTouchStart={(event)=>{event.currentTarget.click()}}>☰</button>
-        <div className="drv2-brand"><div className="drv2-logo">M</div><div><strong>MOVI</strong><span>Espace chauffeur</span></div></div>
-        <div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div>
-      </header>
-
-      <DriverCleanUberBoltHome />
-
-      <section className="drv2-status-card">
-        <div className="drv2-status-copy"><strong>{online ? 'Prêt à conduire' : 'Vous êtes hors ligne'}</strong><span>{online ? 'Les nouvelles demandes peuvent apparaître maintenant.' : 'Activez-vous pour recevoir des courses.'}</span></div>
-        <button className={online ? 'drv2-switch on' : 'drv2-switch'} onClick={toggleOnline} disabled={busy} aria-label={online?'Passer hors ligne':'Passer en ligne'}><span/></button>
-      </section>
-
-      {vehicle && <section className="drv2-vehicle-strip"><span>🚙</span><div><small>VÉHICULE ACTIF</small><strong>{vehicle.make} {vehicle.model}</strong><em>{vehicle.plate_number}</em></div></section>}
-      {message && <div className="drv2-message">{message}</div>}
-
-      {activeRide && <section className="drv2-active-card">
-        <div className="drv2-section-label">TRAJET EN COURS</div>
-        <h2>{activeRide.destination_address}</h2>
-        <p><b>Départ</b><span>{activeRide.pickup_address}</span></p>
-        <div className="drv2-stats"><span>{activeRide.estimated_distance_km ?? '—'} km</span><span>{activeRide.estimated_duration_min ?? '—'} min</span><span>{activeRide.estimated_fare_htg ?? '—'} HTG</span></div>
-        {nextAction && <button className="drv2-primary" disabled={busy} onClick={()=>rideAction(nextAction.key,activeRide)}>{nextAction.label}</button>}
-      </section>}
-
-      <section className="drv2-requests">
-        <div className="drv2-section-head"><div><span className="drv2-kicker">COURSES</span><h2>Demandes disponibles</h2></div><button className="drv2-refresh" onClick={()=>refreshDashboard(true)} disabled={busy}>{busy?'...':'Actualiser'}</button></div>
-        {!online ? <div className="drv2-empty"><span>🚘</span><strong>Passez en ligne</strong><p>Activez votre disponibilité pour recevoir les demandes proches de vous.</p></div>
-          : available.length===0 ? <div className="drv2-empty"><span>🧭</span><strong>Aucune demande pour le moment</strong><p>Les nouvelles courses apparaîtront ici automatiquement.</p></div>
-          : <div className="drv2-list">{available.slice(0,1).map(ride=><article className="drv2-ride" key={ride.id}>
-              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginBottom:10}}>
-                <span style={{fontSize:12,fontWeight:900,color:'#0f705a'}}>NOUVELLE DEMANDE</span>
-                <span style={{minWidth:42,height:42,borderRadius:999,display:'grid',placeItems:'center',background:offerSeconds<=5?'#fff0f0':'#eef8f4',color:offerSeconds<=5?'#b23a3a':'#0f705a',fontWeight:950,fontSize:16}}>{offerSeconds}s</span>
-              </div>
-              <div className="drv2-ride-top"><div><small>DÉPART</small><strong>{ride.pickup_address}</strong></div><span>{ride.service_type ?? 'standard'}</span></div>
-              <div className="drv2-route-line"/>
-              <div className="drv2-destination"><small>DESTINATION</small><strong>{ride.destination_address}</strong></div>
-              <div className="drv2-stats"><span>{ride.estimated_distance_km ?? '—'} km</span><span>{ride.estimated_duration_min ?? '—'} min</span><span>{ride.estimated_fare_htg ?? '—'} HTG</span></div>
-              <div style={{display:'grid',gridTemplateColumns:'1fr 1.35fr',gap:10,marginTop:12}}>
-                <button type="button" disabled={busy} onClick={()=>rideAction('reject',ride)} style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}>Refuser</button>
-                <button className="drv2-primary" style={{marginTop:0}} disabled={busy || !vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button>
-              </div>
-            </article>)}</div>}
-      </section>
-    </div>
-  </main>
+  return <main className="drv2-page"><div className="drv2-shell">
+    <header className="drv2-topbar"><button className="menu drv2-menu" aria-label="Menu" onTouchStart={(event)=>{event.currentTarget.click()}}>☰</button><div className="drv2-brand"><div className="drv2-logo">M</div><div><strong>MOVI</strong><span>Espace chauffeur</span></div></div><div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div></header>
+    <DriverCleanUberBoltHome />
+    <section className="drv2-status-card"><div className="drv2-status-copy"><strong>{online ? 'Prêt à conduire' : 'Vous êtes hors ligne'}</strong><span>{online ? 'Les nouvelles demandes peuvent apparaître maintenant.' : 'Activez-vous pour recevoir des courses.'}</span></div><button className={online ? 'drv2-switch on' : 'drv2-switch'} onClick={toggleOnline} disabled={busy} aria-label={online?'Passer hors ligne':'Passer en ligne'}><span/></button></section>
+    {vehicle && <section className="drv2-vehicle-strip"><span>🚙</span><div><small>VÉHICULE ACTIF</small><strong>{vehicle.make} {vehicle.model}</strong><em>{vehicle.plate_number}</em></div></section>}
+    {message && <div className="drv2-message">{message}</div>}
+    {activeRide && <section className="drv2-active-card"><div className="drv2-section-label">TRAJET EN COURS</div><h2>{cleanDestination(activeRide.destination_address)}</h2><p><b>Départ</b><span>{activeRide.pickup_address}</span></p><div className="drv2-stats"><span>{activeRide.estimated_distance_km ?? '—'} km</span><span>{activeRide.estimated_duration_min ?? '—'} min</span><span>{activeRide.estimated_fare_htg ?? '—'} HTG</span></div>{nextAction && <button className="drv2-primary" disabled={busy} onClick={()=>rideAction(nextAction.key,activeRide)}>{nextAction.label}</button>}</section>}
+    <section className="drv2-requests"><div className="drv2-section-head"><div><span className="drv2-kicker">COURSES</span><h2>Demandes disponibles</h2></div><button className="drv2-refresh" onClick={()=>refreshDashboard(true)} disabled={busy}>{busy?'...':'Actualiser'}</button></div>
+      {!online ? <div className="drv2-empty"><span>🚘</span><strong>Passez en ligne</strong><p>Activez votre disponibilité pour recevoir les demandes proches de vous.</p></div>
+      : available.length===0 ? <div className="drv2-empty"><span>🧭</span><strong>Aucune demande pour le moment</strong><p>Les nouvelles courses apparaîtront ici automatiquement.</p></div>
+      : <div className="drv2-list">{available.slice(0,1).map(ride=><article className="drv2-ride" key={ride.id}>
+        <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginBottom:10}}><span style={{fontSize:12,fontWeight:900,color:'#0f705a'}}>NOUVELLE DEMANDE</span><span style={{minWidth:42,height:42,borderRadius:999,display:'grid',placeItems:'center',background:offerSeconds<=5?'#fff0f0':'#eef8f4',color:offerSeconds<=5?'#b23a3a':'#0f705a',fontWeight:950,fontSize:16}}>{offerSeconds}s</span></div>
+        <div className="drv2-ride-top"><div><small>DÉPART</small><strong>{ride.pickup_address}</strong></div><span>{ride.service_type ?? 'standard'}</span></div><div className="drv2-route-line"/>
+        <div className="drv2-destination"><small>DESTINATION</small><strong>{cleanDestination(ride.destination_address)}</strong></div>
+        <div className="drv2-stats"><span>{ride.estimated_distance_km ?? '—'} km</span><span>{ride.estimated_duration_min ?? '—'} min</span><span>{ride.estimated_fare_htg ?? '—'} HTG</span></div>
+        <div style={{display:'grid',gridTemplateColumns:'1fr 1.35fr',gap:10,marginTop:12}}><button type="button" disabled={busy} onClick={()=>rideAction('reject',ride)} style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}>Refuser</button><button className="drv2-primary" style={{marginTop:0}} disabled={busy || !vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button></div>
+      </article>)}</div>}
+    </section>
+  </div></main>
 }
