@@ -101,8 +101,13 @@ export default function DriverDashboardV2Page() {
       const mine = (mineRows?.[0] as Ride|undefined) ?? null
       setActiveRide(mine)
       if (!isOnline || mine) { setAvailable([]); return }
-      const { data: requests } = await supabase.from('rides').select('*').eq('status','requested').is('driver_id',null).neq('passenger_id',userId).order('requested_at',{ascending:true}).limit(20)
-      setAvailable((requests ?? []) as Ride[])
+
+      const [{ data: requests }, { data: rejectedRows }] = await Promise.all([
+        supabase.from('rides').select('*').eq('status','requested').is('driver_id',null).neq('passenger_id',userId).order('requested_at',{ascending:true}).limit(20),
+        supabase.from('driver_ride_rejections').select('ride_id').eq('driver_id',userId),
+      ])
+      const rejected = new Set((rejectedRows ?? []).map(row => row.ride_id))
+      setAvailable(((requests ?? []) as Ride[]).filter(ride => !rejected.has(ride.id)))
     } catch {}
   }
 
@@ -147,12 +152,13 @@ export default function DriverDashboardV2Page() {
     finally { setBusy(false) }
   }
 
-  async function rideAction(action:'accept'|'arriving'|'start'|'complete',ride:Ride) {
+  async function rideAction(action:'accept'|'reject'|'arriving'|'start'|'complete',ride:Ride) {
     if (busy) return
     if (action==='accept' && !vehicle) { setMessage('Aucun véhicule actif n’est associé à ce compte.'); return }
     setBusy(true); setMessage('')
     try {
       if (action==='accept') await rpc('accept_ride',{p_ride_id:ride.id,p_vehicle_id:vehicle!.id})
+      if (action==='reject') await rpc('reject_ride_request',{p_ride_id:ride.id,p_reason:'rejected'})
       if (action==='arriving') await rpc('mark_driver_arriving',{p_ride_id:ride.id})
       if (action==='start') await rpc('start_ride',{p_ride_id:ride.id})
       if (action==='complete') await rpc('complete_ride',{p_ride_id:ride.id,p_final_fare_htg:ride.estimated_fare_htg ?? 0,p_payment_method:'cash'})
@@ -206,7 +212,15 @@ export default function DriverDashboardV2Page() {
               <div className="drv2-route-line"/>
               <div className="drv2-destination"><small>DESTINATION</small><strong>{ride.destination_address}</strong></div>
               <div className="drv2-stats"><span>{ride.estimated_distance_km ?? '—'} km</span><span>{ride.estimated_duration_min ?? '—'} min</span><span>{ride.estimated_fare_htg ?? '—'} HTG</span></div>
-              <button className="drv2-primary" disabled={busy || !vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button>
+              <div style={{display:'grid',gridTemplateColumns:'1fr 1.35fr',gap:10,marginTop:12}}>
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={()=>rideAction('reject',ride)}
+                  style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}
+                >Refuser</button>
+                <button className="drv2-primary" style={{marginTop:0}} disabled={busy || !vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button>
+              </div>
             </article>)}</div>}
       </section>
     </div>
