@@ -21,6 +21,7 @@ export default function DriverDashboardV2Page(){
   const userIdRef=useRef<string|null>(null),tokenRef=useRef<string|null>(null),timeoutLockRef=useRef<string|null>(null)
 
   useEffect(()=>{const session=readSession();if(!session?.access_token){setMessage('Session chauffeur introuvable. Déconnectez-vous puis reconnectez-vous.');return}tokenRef.current=session.access_token;userIdRef.current=session.user?.id??null;void refreshDashboard(false)},[])
+  useEffect(()=>{if(!online||!userIdRef.current)return;void loadRides(userIdRef.current,true);const timer=window.setInterval(()=>void loadRides(userIdRef.current,true),1000);return()=>window.clearInterval(timer)},[online])
   useEffect(()=>{if(!online||activeRide||available.length===0){setOfferRideId(null);setOfferSeconds(20);return}const first=available[0];if(offerRideId!==first.id){timeoutLockRef.current=null;setOfferRideId(first.id);setOfferSeconds(20)}},[online,activeRide,available,offerRideId])
   useEffect(()=>{if(!offerRideId||activeRide||!online)return;if(offerSeconds<=0){const ride=available.find(item=>item.id===offerRideId);if(!ride||timeoutLockRef.current===ride.id)return;timeoutLockRef.current=ride.id;void rideAction('timeout',ride);return}const timer=window.setTimeout(()=>setOfferSeconds(current=>Math.max(0,current-1)),1000);return()=>window.clearTimeout(timer)},[offerRideId,offerSeconds,activeRide,online,available])
 
