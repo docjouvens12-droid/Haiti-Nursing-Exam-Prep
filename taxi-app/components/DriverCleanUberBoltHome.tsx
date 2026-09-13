@@ -27,6 +27,11 @@ function metersBetween(a:[number,number],b:[number,number]){
   return 2*R*Math.asin(Math.sqrt(x))
 }
 
+function formatDistanceKm(value:number){
+  if(value<1)return value.toFixed(2)
+  return value.toFixed(1)
+}
+
 export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?:DriverMapRide|null}){
   const [todayTrips,setTodayTrips]=useState(0)
   const [todayEarnings,setTodayEarnings]=useState(0)
@@ -85,26 +90,10 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
     if(source?.setData)source.setData(data)
     else{
       map.addSource('driver-live-points',{type:'geojson',data})
-      map.addLayer({
-        id:'driver-live-target-halo',type:'circle',source:'driver-live-points',
-        filter:['==',['get','role'],'target'],
-        paint:{'circle-radius':16,'circle-color':'#ffffff','circle-opacity':.96}
-      })
-      map.addLayer({
-        id:'driver-live-target',type:'circle',source:'driver-live-points',
-        filter:['==',['get','role'],'target'],
-        paint:{'circle-radius':10,'circle-color':['case',['==',['get','phase'],'destination'],'#ef4444','#16a34a'],'circle-stroke-width':3,'circle-stroke-color':'#ffffff'}
-      })
-      map.addLayer({
-        id:'driver-live-driver-halo',type:'circle',source:'driver-live-points',
-        filter:['==',['get','role'],'driver'],
-        paint:{'circle-radius':20,'circle-color':'#ffffff','circle-opacity':.98,'circle-stroke-width':3,'circle-stroke-color':'#111827'}
-      })
-      map.addLayer({
-        id:'driver-live-driver',type:'circle',source:'driver-live-points',
-        filter:['==',['get','role'],'driver'],
-        paint:{'circle-radius':11,'circle-color':'#2563eb','circle-stroke-width':2,'circle-stroke-color':'#ffffff'}
-      })
+      map.addLayer({id:'driver-live-target-halo',type:'circle',source:'driver-live-points',filter:['==',['get','role'],'target'],paint:{'circle-radius':16,'circle-color':'#ffffff','circle-opacity':.96}})
+      map.addLayer({id:'driver-live-target',type:'circle',source:'driver-live-points',filter:['==',['get','role'],'target'],paint:{'circle-radius':10,'circle-color':['case',['==',['get','phase'],'destination'],'#ef4444','#16a34a'],'circle-stroke-width':3,'circle-stroke-color':'#ffffff'}})
+      map.addLayer({id:'driver-live-driver-halo',type:'circle',source:'driver-live-points',filter:['==',['get','role'],'driver'],paint:{'circle-radius':20,'circle-color':'#ffffff','circle-opacity':.98,'circle-stroke-width':3,'circle-stroke-color':'#111827'}})
+      map.addLayer({id:'driver-live-driver',type:'circle',source:'driver-live-points',filter:['==',['get','role'],'driver'],paint:{'circle-radius':11,'circle-color':'#2563eb','circle-stroke-width':2,'circle-stroke-color':'#ffffff'}})
     }
   }
 
@@ -116,14 +105,12 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       return
     }
     const now=Date.now(),moved=lastRoutePointRef.current?metersBetween(lastRoutePointRef.current,driverPoint):Infinity
-    if(!force&&moved<15&&now-lastRouteAtRef.current<4000)return
+    if(!force&&moved<5&&now-lastRouteAtRef.current<2500)return
     lastRoutePointRef.current=driverPoint;lastRouteAtRef.current=now
     const phase:RouteInfo['phase']=ride.status==='in_progress'?'destination':'pickup'
     const end:[number,number]=phase==='pickup'?[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]:[Number(ride.destination_longitude),Number(ride.destination_latitude)]
     if(!Number.isFinite(end[0])||!Number.isFinite(end[1]))return
-
     updatePointLayers(driverPoint,end,phase)
-
     try{
       const url=`https://api.mapbox.com/directions/v5/mapbox/driving-traffic/${driverPoint[0]},${driverPoint[1]};${end[0]},${end[1]}?alternatives=false&geometries=geojson&overview=full&steps=true&language=fr&access_token=${encodeURIComponent(token)}`
       const response=await fetch(url,{cache:'no-store'});if(!response.ok)throw new Error('route')
@@ -199,7 +186,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
           if(point&&ride)void drawRoute(point,ride,true)
         })
         if(navigator.geolocation){
-          watchRef.current=navigator.geolocation.watchPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:1000,timeout:15000})
+          watchRef.current=navigator.geolocation.watchPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:500,timeout:15000})
         }else setGpsStatus('error')
       }catch{if(!cancelled)setMapFailed(true)}
     })()
@@ -209,9 +196,12 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   useEffect(()=>{
     if(!effectiveRide||!navigator.geolocation)return
     setGpsStatus('waiting')
+    const refresh=()=>navigator.geolocation.getCurrentPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:0,timeout:12000})
     const map=mapRef.current
     if(map)window.setTimeout(()=>map.resize(),60)
-    navigator.geolocation.getCurrentPosition(pos=>void applyPosition(pos),()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:0,timeout:12000})
+    refresh()
+    const timer=window.setInterval(refresh,2500)
+    return()=>window.clearInterval(timer)
   },[effectiveRide?.id,effectiveRide?.status])
 
   const ht=typeof window!=='undefined'&&localStorage.getItem('taxi-language')==='ht'
@@ -223,7 +213,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       <div className="dcu-map-shell">
         {!effectiveRide&&<div className={`dcu-map-label ${gpsStatus==='error'?'dcu-gps-error':''}`}>{gpsStatus==='error'?(ht?'GPS pa disponib':'GPS indisponible'):(ht?'Pozisyon ou':'Votre position')}</div>}
         {mapFailed?<div className="dcu-map-fallback">{ht?'Kat GPS la pa disponib pou kounye a.':'La carte GPS est indisponible pour le moment.'}</div>:<div ref={mapEl} className="dcu-map"/>}
-        {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Distans ak pasaje a':'Distance du passager'):(ht?'Rete pou destinasyon':'Reste à destination')}</strong><span>{routeInfo.distanceKm.toFixed(1)} km · {routeInfo.durationMin} min</span></div></div>}
+        {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Distans ak pasaje a':'Distance du passager'):(ht?'Rete pou destinasyon':'Reste à destination')}</strong><span>{formatDistanceKm(routeInfo.distanceKm)} km · {routeInfo.durationMin} min</span></div></div>}
       </div>
       <div className="dcu-stats"><div className="dcu-stat"><small>{ht?'Revni jodi a':'Revenus aujourd’hui'}</small><strong>💰 {Math.round(todayEarnings).toLocaleString('fr-HT')} HTG</strong></div><div className="dcu-stat"><small>{ht?'Trajè jodi a':'Trajets aujourd’hui'}</small><strong>🚕 {todayTrips}</strong></div><div className="dcu-stat"><small>{ht?'Evalyasyon':'Évaluation'}</small><strong>★ {rating.toFixed(1)}</strong></div></div>
     </section>
