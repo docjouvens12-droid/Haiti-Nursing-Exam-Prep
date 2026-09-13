@@ -33,6 +33,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   const [activeRide,setActiveRide]=useState<DriverMapRide|null>(null)
   const [routeInfo,setRouteInfo]=useState<RouteInfo|null>(null)
   const [gpsStatus,setGpsStatus]=useState<'waiting'|'ok'|'error'>('waiting')
+  const [overlapPair,setOverlapPair]=useState<'pickup'|'destination'|null>(null)
   const mapEl=useRef<HTMLDivElement|null>(null)
   const mapRef=useRef<MapboxMap|null>(null)
   const driverMarkerRef=useRef<MapboxMarker|null>(null)
@@ -119,22 +120,29 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
     const pickup:[number,number]=[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]
     const dest:[number,number]=[Number(ride.destination_longitude),Number(ride.destination_latitude)]
     const pickupValid=Number.isFinite(pickup[0])&&Number.isFinite(pickup[1])
-    const closeToPassenger=pickupValid&&metersBetween(point,pickup)<40
+    const destValid=Number.isFinite(dest[0])&&Number.isFinite(dest[1])
+    const target=ride.status==='in_progress'&&destValid?dest:pickup
+    const targetValid=ride.status==='in_progress'?destValid:pickupValid
+    const closeToTarget=targetValid&&metersBetween(point,target)<80
+    setOverlapPair(closeToTarget?(ride.status==='in_progress'?'destination':'pickup'):null)
+
     if(pickupValid){
       if(!pickupMarkerRef.current){
         const el=document.createElement('div');el.className='dcu-stop passenger-point';el.innerHTML='<span>●</span>'
         pickupMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(pickup).addTo(map)
       } else pickupMarkerRef.current.setLngLat(pickup)
-      pickupMarkerRef.current.setOffset(closeToPassenger?[34,0]:[0,0])
+      pickupMarkerRef.current.setOffset(closeToTarget&&ride.status!=='in_progress'?[40,0]:[0,0])
       pickupMarkerRef.current.getElement().style.zIndex='61'
     }
-    driverMarkerRef.current?.setOffset(closeToPassenger?[-34,0]:[0,0])
+    driverMarkerRef.current?.setOffset(closeToTarget?[-40,0]:[0,0])
     if(driverMarkerRef.current)driverMarkerRef.current.getElement().style.zIndex='62'
-    if(ride.status==='in_progress'&&Number.isFinite(dest[0])&&Number.isFinite(dest[1])){
+
+    if(ride.status==='in_progress'&&destValid){
       if(!destinationMarkerRef.current){
         const el=document.createElement('div');el.className='dcu-stop destination';el.innerHTML='<span>●</span>'
         destinationMarkerRef.current=new mod.default.Marker({element:el,anchor:'center'}).setLngLat(dest).addTo(map)
       } else destinationMarkerRef.current.setLngLat(dest)
+      destinationMarkerRef.current.setOffset(closeToTarget?[40,0]:[0,0])
       destinationMarkerRef.current.getElement().style.zIndex='60'
     } else { destinationMarkerRef.current?.remove(); destinationMarkerRef.current=null }
   }
@@ -157,6 +165,7 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
       await ensureRideMarkers(point,ride)
       void drawRoute(point,ride,true)
     } else {
+      setOverlapPair(null)
       driverMarkerRef.current.setOffset([0,0])
       setRouteInfo(null); pickupMarkerRef.current?.remove();pickupMarkerRef.current=null;destinationMarkerRef.current?.remove();destinationMarkerRef.current=null
       if(map.getLayer('driver-live-route-line'))map.removeLayer('driver-live-route-line')
@@ -200,12 +209,13 @@ export default function DriverCleanUberBoltHome({previewRide=null}:{previewRide?
   const ht=typeof window!=='undefined'&&localStorage.getItem('taxi-language')==='ht'
   return <>
     <style>{`
-      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:45;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:10px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{display:none}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #111827;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:24px;color:#2563eb;z-index:62!important}.dcu-marker span{line-height:1}.dcu-stop{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.28)}.dcu-stop.passenger-point{background:#16a34a}.dcu-stop.destination{background:#ef4444}.dcu-stop span{line-height:1}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
+      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:5;background:rgba(255,255,255,.96);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:45;background:rgba(255,255,255,.97);border:1px solid #dfe9e5;border-radius:18px;padding:10px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:12px;font-weight:950;color:#0f705a}.dcu-route-card p{display:none}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-marker{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#fff;border:4px solid #111827;box-shadow:0 4px 16px rgba(0,0,0,.3);font-size:24px;color:#2563eb;z-index:62!important}.dcu-marker span{line-height:1}.dcu-stop{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:16px;font-weight:1000;border:4px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.28)}.dcu-stop.passenger-point{background:#16a34a}.dcu-stop.destination{background:#ef4444}.dcu-stop span{line-height:1}.dcu-overlap-pair{position:absolute;left:50%;top:43%;transform:translate(-50%,-50%);z-index:75;display:flex;align-items:center;gap:18px;pointer-events:none}.dcu-overlap-driver,.dcu-overlap-target{display:grid;place-items:center;border-radius:50%;background:#fff;box-shadow:0 5px 18px rgba(0,0,0,.28)}.dcu-overlap-driver{width:48px;height:48px;border:4px solid #111827;color:#2563eb;font-size:25px}.dcu-overlap-target{width:34px;height:34px;border:4px solid #fff;background:#16a34a;color:#fff;font-size:15px}.dcu-overlap-target.destination{background:#ef4444}@media(max-width:560px){.dcu-map-shell{height:315px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
     `}</style>
     <section className="dcu-home">
       <div className="dcu-map-shell">
         {!effectiveRide&&<div className={`dcu-map-label ${gpsStatus==='error'?'dcu-gps-error':''}`}>{gpsStatus==='error'?(ht?'GPS pa disponib':'GPS indisponible'):(ht?'Pozisyon ou':'Votre position')}</div>}
         {mapFailed?<div className="dcu-map-fallback">{ht?'Kat GPS la pa disponib pou kounye a.':'La carte GPS est indisponible pour le moment.'}</div>:<div ref={mapEl} className="dcu-map"/>}
+        {overlapPair&&<div className="dcu-overlap-pair"><div className="dcu-overlap-driver">➤</div><div className={`dcu-overlap-target ${overlapPair==='destination'?'destination':''}`}>●</div></div>}
         {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Distans ak pasaje a':'Distance du passager'):(ht?'Rete pou destinasyon':'Reste à destination')}</strong><span>{routeInfo.distanceKm.toFixed(1)} km · {routeInfo.durationMin} min</span></div></div>}
       </div>
       <div className="dcu-stats"><div className="dcu-stat"><small>{ht?'Revni jodi a':'Revenus aujourd’hui'}</small><strong>💰 {Math.round(todayEarnings).toLocaleString('fr-HT')} HTG</strong></div><div className="dcu-stat"><small>{ht?'Trajè jodi a':'Trajets aujourd’hui'}</small><strong>🚕 {todayTrips}</strong></div><div className="dcu-stat"><small>{ht?'Evalyasyon':'Évaluation'}</small><strong>★ {rating.toFixed(1)}</strong></div></div>
