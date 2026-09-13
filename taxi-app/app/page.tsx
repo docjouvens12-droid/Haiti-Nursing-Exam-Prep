@@ -142,7 +142,7 @@ export default function HomePage() {
     navigator.geolocation.getCurrentPosition(
       (p) => setPickupCoords({ lat: p.coords.latitude, lng: p.coords.longitude }),
       () => { setPickupCoords({ lat: 18.5392, lng: -72.3364 }); setPickup(copy[lang].testPosition) },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 60000 }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     )
   }, [lang])
 
@@ -286,20 +286,70 @@ export default function HomePage() {
     setRideError('')
   }
 
+  function freshPassengerPosition(): Promise<Point> {
+    return new Promise((resolve, reject) => {
+      if (!navigator.geolocation) { reject(new Error('GEOLOCATION_UNAVAILABLE')); return }
+      navigator.geolocation.getCurrentPosition(
+        (p) => resolve({ lat: p.coords.latitude, lng: p.coords.longitude }),
+        () => reject(new Error('GEOLOCATION_FAILED')),
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+      )
+    })
+  }
+
   async function requestRide() {
-    if (!user || !pickupCoords || !effectiveDestinationCoords || !effectiveQuote) return
+    if (!user || !effectiveDestinationCoords) return
     setRequestState('requesting'); setRideError('')
+    let requestPickup: Point
+    try {
+      requestPickup = await freshPassengerPosition()
+      setPickupCoords(requestPickup)
+      setPickup(copy[lang].current)
+    } catch {
+      if (!pickupCoords) {
+        setRideError(lang === 'ht' ? 'Nou pa ka jwenn pozisyon GPS pasaje a. Tanpri aktive Lokalizasyon epi eseye ankò.' : 'Impossible d’obtenir la position GPS du passager. Activez la localisation puis réessayez.')
+        setRequestState('idle')
+        return
+      }
+      requestPickup = pickupCoords
+    }
+
+    const { data: freshQuoteData, error: freshQuoteError } = await supabase.rpc('quote_ride', {
+      p_service_type: selectedRide,
+      p_pickup_latitude: requestPickup.lat,
+      p_pickup_longitude: requestPickup.lng,
+      p_destination_latitude: effectiveDestinationCoords.lat,
+      p_destination_longitude: effectiveDestinationCoords.lng,
+    })
+    if (freshQuoteError) {
+      setRideError(freshQuoteError.message)
+      setRequestState('idle')
+      return
+    }
+    const freshRow = Array.isArray(freshQuoteData) ? freshQuoteData[0] : freshQuoteData
+    if (!freshRow) {
+      setRideError(lang === 'ht' ? 'Nou pa rive kalkile kous la ak nouvo pozisyon GPS la.' : 'Impossible de calculer la course avec la nouvelle position GPS.')
+      setRequestState('idle')
+      return
+    }
+    const freshQuote: Quote = {
+      distance_km: Number(freshRow.distance_km),
+      duration_min: Number(freshRow.duration_min),
+      fare_htg: Number(freshRow.fare_htg),
+    }
+    setQuote(freshQuote)
+
     const { data, error } = await supabase.rpc('request_ride_v3', {
       p_service_type: selectedRide,
-      p_pickup_address: pickup,
-      p_pickup_latitude: pickupCoords.lat,
-      p_pickup_longitude: pickupCoords.lng,
+      p_pickup_address: copy[lang].current,
+      p_pickup_latitude: requestPickup.lat,
+      p_pickup_longitude: requestPickup.lng,
       p_destination_address: destination,
       p_destination_latitude: effectiveDestinationCoords.lat,
       p_destination_longitude: effectiveDestinationCoords.lng,
-      p_estimated_distance_km: effectiveQuote.distance_km,
-      p_estimated_duration_min: effectiveQuote.duration_min,
-      p_estimated_fare_htg: effectiveQuote.fare_htg,
+      p_estimated_distance_km: freshQuote.distance_km,
+      p_estimated_duration_min: freshQuote.duration_min,
+      p_estimated_fare_htg: freshQuote.fare_htg,
     })
     if (error) { setRideError(error.message); setRequestState('idle'); return }
     setRideId(String(data)); setRequestState('searching')
