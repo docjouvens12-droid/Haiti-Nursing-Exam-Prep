@@ -31,7 +31,7 @@ function pointOverlay(lng: number, lat: number, color: string) {
   const geojson = {
     type: 'Feature',
     properties: {
-      'marker-size': 'medium',
+      'marker-size': 'large',
       'marker-color': color,
     },
     geometry: {
@@ -142,10 +142,8 @@ export default function PassengerAcceptedRideMiniMap() {
     }
 
     if (inProgress) {
-      if (tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-        overlays.push(pointOverlay(tracking.pickup_longitude, tracking.pickup_latitude, '#2563eb'))
-      }
       overlays.push(pointOverlay(targetLng, targetLat, '#ef4444'))
+      overlays.push(pointOverlay(dLng, dLat, '#2563eb'))
     } else {
       overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
       overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
@@ -160,11 +158,10 @@ export default function PassengerAcceptedRideMiniMap() {
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
     if (inProgress) {
-      const overlays: string[] = []
-      if (tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-        overlays.push(pointOverlay(tracking.pickup_longitude, tracking.pickup_latitude, '#2563eb'))
-      }
-      overlays.push(pointOverlay(targetLng, targetLat, '#ef4444'))
+      const overlays = [
+        pointOverlay(targetLng, targetLat, '#ef4444'),
+        pointOverlay(dLng, dLat, '#2563eb'),
+      ]
       return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
     const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`, `pin-l-p+ef4444(${targetLng},${targetLat})`]
