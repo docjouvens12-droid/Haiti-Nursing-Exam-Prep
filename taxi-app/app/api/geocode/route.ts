@@ -54,13 +54,23 @@ function buildAddressVariants(query: string) {
 
   if (!/ha[iï]ti/i.test(clean)) variants.add(`${clean}, Haïti`)
 
+  const withoutHouseNumber = clean.replace(/^\s*\d+[a-z]?\s*[,\-]?\s*/i, '').trim()
+  if (withoutHouseNumber && normalize(withoutHouseNumber) !== normalize(clean)) {
+    variants.add(withoutHouseNumber)
+    if (!/ha[iï]ti/i.test(withoutHouseNumber)) variants.add(`${withoutHouseNumber}, Haïti`)
+  }
+
   const normalized = normalize(clean)
   const knownCities = ['gonaives', 'les gonaives', 'port au prince', 'cap haitien', 'saint marc', 'jacmel', 'les cayes', 'petion ville', 'delmas']
   for (const city of knownCities) {
     const index = normalized.lastIndexOf(city)
     if (index > 0) {
       const wordsBeforeCity = clean.slice(0, Math.min(clean.length, index)).trim().replace(/[,:-]+$/g, '')
-      if (wordsBeforeCity) variants.add(`${wordsBeforeCity}, ${city}, Haïti`)
+      if (wordsBeforeCity) {
+        variants.add(`${wordsBeforeCity}, ${city}, Haïti`)
+        const streetOnly = wordsBeforeCity.replace(/^\s*\d+[a-z]?\s*[,\-]?\s*/i, '').trim()
+        if (streetOnly) variants.add(`${streetOnly}, ${city}, Haïti`)
+      }
     }
   }
 
