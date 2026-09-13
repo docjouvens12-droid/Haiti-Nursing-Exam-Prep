@@ -169,17 +169,22 @@ export default function PassengerAcceptedRideMiniMap() {
         || text === 'kat la pa disponib pou kounye a'
         || text === 'map temporarily unavailable'
     })
-    const shouldHide = !!tracking && tracking.ride_status === 'accepted'
+    const shouldHide = !!tracking && (tracking.ride_status === 'accepted' || tracking.ride_status === 'in_progress')
     placeholders.forEach((el) => {
       el.style.display = shouldHide ? 'none' : ''
     })
     return () => placeholders.forEach((el) => { el.style.display = '' })
   }, [target, tracking])
 
-  if (!tracking || tracking.ride_status === 'driver_arriving' || tracking.ride_status === 'in_progress' || !target || !document.contains(target)) return null
+  if (!tracking || tracking.ride_status === 'driver_arriving' || !target || !document.contains(target)) return null
 
-  const title = ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route'
-  const subtitle = ht ? 'Swiv chofè a pandan l ap vini pran ou.' : 'Suivez le chauffeur pendant son approche.'
+  const inProgress = tracking.ride_status === 'in_progress'
+  const title = inProgress
+    ? (ht ? 'Trajè a kòmanse' : 'La course a commencé')
+    : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
+  const subtitle = inProgress
+    ? (ht ? 'Swiv chofè a pandan l ap mennen ou nan destinasyon an.' : 'Suivez le chauffeur pendant le trajet vers votre destination.')
+    : (ht ? 'Swiv chofè a pandan l ap vini pran ou.' : 'Suivez le chauffeur pendant son approche.')
   const distanceLabel = metrics
     ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km`
     : '—'
@@ -210,10 +215,10 @@ export default function PassengerAcceptedRideMiniMap() {
 
       {mapUrl ? (
         <div className="passenger-live-top-map-frame">
-          <img src={mapUrl} alt={ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager'} />
+          <img src={mapUrl} alt={inProgress ? (ht ? 'Pozisyon chofè a ak destinasyon an' : 'Position du chauffeur et de la destination') : (ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager')} />
           <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
-            <span className="passenger-live-top-map-pill"><b className="passenger-dot" />{ht ? 'Ou' : 'Vous'}</span>
+            <span className="passenger-live-top-map-pill"><b className="passenger-dot" />{inProgress ? (ht ? 'Destinasyon' : 'Destination') : (ht ? 'Ou' : 'Vous')}</span>
           </div>
         </div>
       ) : (
@@ -222,11 +227,11 @@ export default function PassengerAcceptedRideMiniMap() {
 
       <div className="passenger-live-top-map-metrics">
         <div className="passenger-live-top-map-metric">
-          <span>{ht ? 'Distans' : 'Distance'}</span>
+          <span>{inProgress ? (ht ? 'Distans ki rete' : 'Distance restante') : (ht ? 'Distans' : 'Distance')}</span>
           <strong>{distanceLabel}</strong>
         </div>
         <div className="passenger-live-top-map-metric">
-          <span>{ht ? 'Chofè a rive nan' : 'Arrivée dans'}</span>
+          <span>{inProgress ? (ht ? 'Tan ki rete' : 'Temps restant') : (ht ? 'Chofè a rive nan' : 'Arrivée dans')}</span>
           <strong>{timeLabel}</strong>
         </div>
       </div>
