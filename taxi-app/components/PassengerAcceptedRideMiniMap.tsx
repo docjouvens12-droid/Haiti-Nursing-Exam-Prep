@@ -31,19 +31,6 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-function findTopMapTarget() {
-  const candidates = Array.from(document.querySelectorAll<HTMLElement>('div,section,p,span,strong'))
-  const placeholder = candidates.find((el) => {
-    const text = (el.textContent || '').trim().toLowerCase()
-    return text === 'carte temporairement indisponible'
-      || text === 'kat la pa disponib pou kounye a'
-      || text === 'map temporarily unavailable'
-  })
-
-  if (placeholder?.parentElement) return placeholder.parentElement as HTMLElement
-  return document.querySelector<HTMLElement>('.shell .booking-sheet')
-}
-
 export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
@@ -52,9 +39,9 @@ export default function PassengerAcceptedRideMiniMap() {
   const lastRouteAt = useRef(0)
 
   useEffect(() => {
-    const findTarget = () => setTarget(findTopMapTarget())
+    const findTarget = () => setTarget(document.querySelector<HTMLElement>('.map-panel.real-map-panel'))
     findTarget()
-    const timer = window.setInterval(findTarget, 700)
+    const timer = window.setInterval(findTarget, 500)
     return () => window.clearInterval(timer)
   }, [])
 
@@ -76,7 +63,7 @@ export default function PassengerAcceptedRideMiniMap() {
     }
 
     void load()
-    const timer = window.setInterval(() => void load(), 1500)
+    const timer = window.setInterval(() => void load(), 1000)
     const onStorage = () => syncLang()
     window.addEventListener('storage', onStorage)
 
@@ -88,7 +75,7 @@ export default function PassengerAcceptedRideMiniMap() {
   }, [])
 
   const routeTarget = useMemo(() => {
-    if (!tracking) return null
+    if (!tracking || tracking.ride_status === 'driver_arriving') return null
 
     const dLat = tracking.driver_latitude
     const dLng = tracking.driver_longitude
@@ -118,7 +105,7 @@ export default function PassengerAcceptedRideMiniMap() {
 
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     const now = Date.now()
-    if (!token || now - lastRouteAt.current < 8000) return
+    if (!token || now - lastRouteAt.current < 6000) return
     lastRouteAt.current = now
 
     let cancelled = false
@@ -161,47 +148,43 @@ export default function PassengerAcceptedRideMiniMap() {
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/760x420@2x?padding=90&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget])
 
-  useEffect(() => {
-    if (!target) return
-    const placeholders = Array.from(target.querySelectorAll<HTMLElement>('div,p,span,strong')).filter((el) => {
-      const text = (el.textContent || '').trim().toLowerCase()
-      return text === 'carte temporairement indisponible'
-        || text === 'kat la pa disponib pou kounye a'
-        || text === 'map temporarily unavailable'
-    })
-    const shouldHide = !!tracking && (tracking.ride_status === 'accepted' || tracking.ride_status === 'in_progress')
-    placeholders.forEach((el) => {
-      el.style.display = shouldHide ? 'none' : ''
-    })
-    return () => placeholders.forEach((el) => { el.style.display = '' })
-  }, [target, tracking])
-
-  if (!tracking || tracking.ride_status === 'driver_arriving' || !target || !document.contains(target)) return null
+  if (!tracking || !target || !document.contains(target)) return null
 
   const inProgress = tracking.ride_status === 'in_progress'
+  const arrived = tracking.ride_status === 'driver_arriving'
   const title = inProgress
     ? (ht ? 'Trajè a kòmanse' : 'La course a commencé')
-    : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
+    : arrived
+      ? (ht ? 'Chofè a rive' : 'Le chauffeur est arrivé')
+      : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
   const subtitle = inProgress
     ? (ht ? 'Swiv chofè a pandan l ap mennen ou nan destinasyon an.' : 'Suivez le chauffeur pendant le trajet vers votre destination.')
-    : (ht ? 'Swiv chofè a pandan l ap vini pran ou.' : 'Suivez le chauffeur pendant son approche.')
+    : arrived
+      ? (ht ? 'Chofè a nan kote pou pran ou. Tanpri pare pou monte.' : 'Le chauffeur est au point de prise en charge. Préparez-vous à monter.')
+      : (ht ? 'Swiv chofè a pandan l ap vini pran ou.' : 'Suivez le chauffeur pendant son approche.')
+
   const distanceLabel = metrics
     ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km`
     : '—'
   const timeLabel = metrics ? `~${metrics.minutes} min` : '—'
 
   return createPortal(
-    <section className="passenger-live-top-map" aria-live="polite">
+    <section className={`passenger-live-top-map ${arrived ? 'arrived' : ''}`} aria-live="polite">
       <style>{`
-        .passenger-live-top-map{width:100%;max-width:100%;overflow:hidden;background:#eef5f2;border-radius:0;font-family:Inter,system-ui,sans-serif;box-shadow:none}
-        .passenger-live-top-map-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.96);border-bottom:1px solid #e2ebe7}
+        .map-panel.real-map-panel{position:relative!important}
+        .passenger-live-top-map{position:absolute;left:0;right:0;top:76px;bottom:0;z-index:8;overflow:hidden;background:#eef5f2;font-family:Inter,system-ui,sans-serif}
+        .passenger-live-top-map-head{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,.97);border-bottom:1px solid #e2ebe7}
         .passenger-live-top-map-icon{width:36px;height:36px;border-radius:12px;background:#e6f5ef;display:grid;place-items:center;font-size:18px;flex:0 0 36px}
         .passenger-live-top-map-copy{min-width:0;flex:1}.passenger-live-top-map-copy strong{display:block;color:#10243a;font-size:14px;line-height:1.2;font-weight:900}.passenger-live-top-map-copy small{display:block;margin-top:2px;color:#6d7e77;font-size:9px;line-height:1.3;font-weight:650}
         .passenger-live-top-map-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;letter-spacing:.05em}.passenger-live-top-map-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065}
-        .passenger-live-top-map-frame{position:relative;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:225px;object-fit:cover}
+        .passenger-live-top-map-frame{position:absolute;left:0;right:0;top:57px;bottom:54px;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:100%;object-fit:cover}
         .passenger-live-top-map-pills{position:absolute;left:14px;right:14px;bottom:12px;display:flex;justify-content:space-between;gap:10px}.passenger-live-top-map-pill{display:flex;align-items:center;gap:6px;padding:7px 11px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:9px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.passenger-live-top-map-pill .driver-dot{background:#0f8065}.passenger-live-top-map-pill .passenger-dot{background:#ef6a5b}
-        .passenger-live-top-map-metrics{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #edf2f0}.passenger-live-top-map-metric{padding:11px 16px}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #edf2f0}.passenger-live-top-map-metric span,.passenger-live-top-map-metric strong{display:block}.passenger-live-top-map-metric span{font-size:8px;color:#76857f;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.passenger-live-top-map-metric strong{margin-top:3px;color:#10243a;font-size:18px;line-height:1;font-weight:950}
-        .passenger-live-top-map-loading{height:225px;display:grid;place-items:center;background:linear-gradient(180deg,#eaf2ef,#f4f8f6);color:#62766f;font-size:11px;font-weight:800;text-align:center;padding:20px}
+        .passenger-live-top-map-metrics{position:absolute;left:0;right:0;bottom:0;height:54px;display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #edf2f0}.passenger-live-top-map-metric{padding:9px 16px}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #edf2f0}.passenger-live-top-map-metric span,.passenger-live-top-map-metric strong{display:block}.passenger-live-top-map-metric span{font-size:8px;color:#76857f;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.passenger-live-top-map-metric strong{margin-top:2px;color:#10243a;font-size:17px;line-height:1;font-weight:950}
+        .passenger-live-top-map-loading{position:absolute;left:0;right:0;top:57px;bottom:54px;display:grid;place-items:center;background:linear-gradient(180deg,#eaf2ef,#f4f8f6);color:#62766f;font-size:11px;font-weight:800;text-align:center;padding:20px}
+        .passenger-live-top-map.arrived{background:linear-gradient(180deg,#eef8f4,#f9fcfb)}
+        .passenger-live-arrived-panel{position:absolute;inset:57px 0 0;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(180deg,#edf8f4,#f8fcfa)}
+        .passenger-live-arrived-panel div{max-width:310px}.passenger-live-arrived-panel span{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#dff3eb;font-size:34px}.passenger-live-arrived-panel strong{display:block;color:#0f604f;font-size:22px;font-weight:950}.passenger-live-arrived-panel small{display:block;margin-top:7px;color:#62766f;font-size:12px;line-height:1.45;font-weight:700}
+        .passenger-live-top-map.arrived .passenger-live-top-map-live{display:none}
       `}</style>
 
       <div className="passenger-live-top-map-head">
@@ -210,10 +193,18 @@ export default function PassengerAcceptedRideMiniMap() {
           <strong>{title}</strong>
           <small>{subtitle}</small>
         </div>
-        <span className="passenger-live-top-map-live">LIVE</span>
+        {!arrived && <span className="passenger-live-top-map-live">LIVE</span>}
       </div>
 
-      {mapUrl ? (
+      {arrived ? (
+        <div className="passenger-live-arrived-panel">
+          <div>
+            <span>📍</span>
+            <strong>{ht ? 'Chofè a rive' : 'Le chauffeur est arrivé'}</strong>
+            <small>{ht ? 'Chofè a ap tann ou nan kote pou pran ou.' : 'Votre chauffeur vous attend au point de prise en charge.'}</small>
+          </div>
+        </div>
+      ) : mapUrl ? (
         <div className="passenger-live-top-map-frame">
           <img src={mapUrl} alt={inProgress ? (ht ? 'Pozisyon chofè a ak destinasyon an' : 'Position du chauffeur et de la destination') : (ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager')} />
           <div className="passenger-live-top-map-pills">
@@ -225,7 +216,7 @@ export default function PassengerAcceptedRideMiniMap() {
         <div className="passenger-live-top-map-loading">{ht ? 'N ap chaje pozisyon chofè a…' : 'Chargement de la position du chauffeur…'}</div>
       )}
 
-      <div className="passenger-live-top-map-metrics">
+      {!arrived && <div className="passenger-live-top-map-metrics">
         <div className="passenger-live-top-map-metric">
           <span>{inProgress ? (ht ? 'Distans ki rete' : 'Distance restante') : (ht ? 'Distans' : 'Distance')}</span>
           <strong>{distanceLabel}</strong>
@@ -234,7 +225,7 @@ export default function PassengerAcceptedRideMiniMap() {
           <span>{inProgress ? (ht ? 'Tan ki rete' : 'Temps restant') : (ht ? 'Chofè a rive nan' : 'Arrivée dans')}</span>
           <strong>{timeLabel}</strong>
         </div>
-      </div>
+      </div>}
     </section>,
     target,
   )
