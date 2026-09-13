@@ -10,6 +10,7 @@ import PassengerHelpStableInline from './PassengerHelpStableInline'
 import PassengerLogoutStable from './PassengerLogoutStable'
 import PassengerTypedAddressPreview from './PassengerTypedAddressPreview'
 import PassengerDashboardPaymentPanel from './PassengerDashboardPaymentPanel'
+import PassengerAcceptedRideMiniMap from './PassengerAcceptedRideMiniMap'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -67,6 +68,7 @@ export default function RouteScopedEnhancers() {
       <PassengerLogoutStable />
       <PassengerTypedAddressPreview />
       <PassengerDashboardPaymentPanel />
+      <PassengerAcceptedRideMiniMap />
     </>}
 
     {isCleanDriverDashboard && <>
