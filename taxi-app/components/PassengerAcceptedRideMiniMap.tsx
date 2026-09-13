@@ -27,6 +27,21 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
+function pointOverlay(lng: number, lat: number, color: string) {
+  const geojson = {
+    type: 'Feature',
+    properties: {
+      'marker-size': 'medium',
+      'marker-color': color,
+    },
+    geometry: {
+      type: 'Point',
+      coordinates: [lng, lat],
+    },
+  }
+  return `geojson(${encodeURIComponent(JSON.stringify(geojson))})`
+}
+
 export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
@@ -128,9 +143,9 @@ export default function PassengerAcceptedRideMiniMap() {
 
     if (inProgress) {
       if (tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-        overlays.push(`pin-s+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+        overlays.push(pointOverlay(tracking.pickup_longitude, tracking.pickup_latitude, '#2563eb'))
       }
-      overlays.push(`pin-s+ef4444(${targetLng},${targetLat})`)
+      overlays.push(pointOverlay(targetLng, targetLat, '#ef4444'))
     } else {
       overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
       overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
@@ -147,9 +162,9 @@ export default function PassengerAcceptedRideMiniMap() {
     if (inProgress) {
       const overlays: string[] = []
       if (tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-        overlays.push(`pin-s+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+        overlays.push(pointOverlay(tracking.pickup_longitude, tracking.pickup_latitude, '#2563eb'))
       }
-      overlays.push(`pin-s+ef4444(${targetLng},${targetLat})`)
+      overlays.push(pointOverlay(targetLng, targetLat, '#ef4444'))
       return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
     }
     const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`, `pin-l-p+ef4444(${targetLng},${targetLat})`]
