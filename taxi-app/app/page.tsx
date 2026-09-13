@@ -6,7 +6,6 @@ import type { User } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
 
 const TaxiMap = dynamic(() => import('../components/TaxiMap'), { ssr: false })
-const DestinationPickerMap = dynamic(() => import('../components/DestinationPickerMap'), { ssr: false })
 
 type Lang = 'fr' | 'ht'
 type Panel = 'home' | 'rides' | 'payment' | 'profile' | 'driver' | 'help'
@@ -81,7 +80,6 @@ export default function HomePage() {
   const [panel, setPanel] = useState<Panel>('home')
   const [rides, setRides] = useState<RideHistory[]>([])
   const [ridesBusy, setRidesBusy] = useState(false)
-  const [mapPickerOpen, setMapPickerOpen] = useState(false)
 
   const effectiveDestinationCoords = destinationCoords ?? resolvedDestinationCoords
   const ride = useMemo(() => rideOptions.find((o) => o.id === selectedRide) ?? rideOptions[1], [selectedRide])
@@ -288,16 +286,6 @@ export default function HomePage() {
     setRideError('')
   }
 
-  function chooseMapDestination(point: Point, label: string) {
-    setDestination(label)
-    setDestinationCoords(point)
-    setResolvedDestinationCoords(point)
-    setSearchResults([])
-    setQuote(null)
-    setRideError('')
-    setMapPickerOpen(false)
-  }
-
   function freshPassengerPosition(): Promise<Point> {
     return new Promise((resolve, reject) => {
       if (!navigator.geolocation) { reject(new Error('GEOLOCATION_UNAVAILABLE')); return }
@@ -392,7 +380,6 @@ export default function HomePage() {
   </section>
 
   return <main className="shell"><section className="phone-frame">
-    {mapPickerOpen && <DestinationPickerMap pickup={pickupCoords} initialDestination={effectiveDestinationCoords} lang={lang} onConfirm={chooseMapDestination} onCancel={() => setMapPickerOpen(false)} />}
     {panelContent}
     <div className={`app-underlay ${panel !== 'home' ? 'panel-hidden' : ''}`}>
       <div className="map-panel real-map-panel"><TaxiMap pickup={pickupCoords} destination={effectiveDestinationCoords} routeGeometry={routeGeometry} />
@@ -401,7 +388,6 @@ export default function HomePage() {
       <section className="booking-sheet"><div className="grabber" />
         <div className="greeting-row"><div><p className="eyebrow">{t.hello} {user.user_metadata?.full_name?.split(' ')[0] ?? ''} 👋</p><h1>{t.where}</h1></div><span className="online-pill">{t.drivers}</span></div>
         <div className="route-card"><div className="route-line"><span className="pickup-dot" /><div className="input-wrap"><label>{t.pickup}</label><input value={pickup} readOnly /></div></div><div className="connector" /><div className="route-line"><span className="destination-dot" /><div className="input-wrap"><label>{t.destination}</label><input value={destination} autoComplete="off" autoCorrect="off" spellCheck={false} enterKeyHint="search" onChange={(e) => { setDestination(e.target.value); setDestinationCoords(null); setResolvedDestinationCoords(null); setQuote(null); setRideError('') }} placeholder={t.destinationPlaceholder} /></div></div></div>
-        <button type="button" onClick={() => setMapPickerOpen(true)} style={{width:'100%',marginTop:10,border:'1px solid #d9e5e1',background:'#f5faf8',borderRadius:16,padding:'13px 16px',fontWeight:850,color:'#0f705a',fontSize:14,textAlign:'left'}}>📍 {lang === 'ht' ? 'Chwazi destinasyon sou kat la' : 'Choisir la destination sur la carte'}</button>
         {(searchBusy || searchResults.length > 0) && <div className="search-results">{searchBusy && <div className="search-status">{t.searchingAddress}</div>}{searchResults.map((r) => <button key={r.id} onClick={() => chooseSearchResult(r)}><span>📍</span><strong>{r.label}</strong></button>)}</div>}
         <div className="section-heading"><div><p className="eyebrow">{t.chooseService}</p><h2>{t.vehicles}</h2></div><span>{routeDistanceKm && routeDurationMin ? `${routeDistanceKm.toFixed(1)} km · ${routeDurationMin} min` : effectiveQuote ? `${effectiveQuote.distance_km.toFixed(1)} km · ${effectiveQuote.duration_min} min` : t.chooseDestination}</span></div>
         <div className="ride-list">{rideOptions.map((option) => <button key={option.id} className={`ride-option ${selectedRide === option.id ? 'selected' : ''}`} onClick={() => setSelectedRide(option.id)}><span className="ride-icon">{option.id === 'moto' ? '🏍️' : option.id === 'comfort' ? '🚙' : '🚕'}</span><span className="ride-copy"><strong>{option.name}</strong><small>{lang === 'fr' ? option.detailFr : option.detailHt} · {option.eta}</small></span><strong className="ride-price">{selectedRide === option.id && effectiveQuote ? `${effectiveQuote.fare_htg.toLocaleString('fr-FR')} HTG` : '—'}</strong></button>)}</div>
