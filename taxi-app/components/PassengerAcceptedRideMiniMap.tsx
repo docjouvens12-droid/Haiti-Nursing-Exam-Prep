@@ -148,13 +148,11 @@ export default function PassengerAcceptedRideMiniMap() {
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/760x420@2x?padding=90&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget])
 
-  if (!tracking || !target || !document.contains(target)) return null
+  if (!tracking || tracking.ride_status === 'driver_arriving' || !target || !document.contains(target)) return null
 
   const title = tracking.ride_status === 'in_progress'
     ? (ht ? 'Trajè a an kou' : 'Course en cours')
-    : tracking.ride_status === 'driver_arriving'
-      ? (ht ? 'Chofè a ap pwoche' : 'Le chauffeur approche')
-      : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
+    : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
 
   const subtitle = tracking.ride_status === 'in_progress'
     ? (ht ? 'Swiv pozisyon chofè a jouk destinasyon an.' : 'Suivez le chauffeur jusqu’à votre destination.')
