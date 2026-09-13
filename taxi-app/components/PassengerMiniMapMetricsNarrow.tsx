@@ -30,9 +30,15 @@ export default function PassengerMiniMapMetricsNarrow() {
       height:4px!important;
     }
     .passenger-live-top-map .passenger-live-top-map-frame{
+      bottom:74px!important;
+      display:flex!important;
+      align-items:center!important;
+      justify-content:center!important;
       background:#dfe9e5!important;
     }
     .passenger-live-top-map .passenger-live-top-map-frame img{
+      width:100%!important;
+      height:100%!important;
       object-fit:contain!important;
       object-position:center center!important;
       background:#dfe9e5!important;
