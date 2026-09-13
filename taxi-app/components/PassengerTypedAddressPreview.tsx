@@ -31,8 +31,6 @@ export default function PassengerTypedAddressPreview() {
   useEffect(() => {
     let host: HTMLButtonElement | null = null
     let cleanupTimer: number | null = null
-    let autoSelectTimer: number | null = null
-    let autoCommitTimer: number | null = null
     let observer: MutationObserver | null = null
 
     const removeHost = () => {
@@ -51,51 +49,18 @@ export default function PassengerTypedAddressPreview() {
       observer.observe(parent, { childList: true, subtree: true })
     }
 
-    const autoSelectFirstNativeResult = (routeCard: HTMLElement) => {
-      let attempts = 0
-      const trySelect = () => {
-        attempts += 1
-        const nativeButtons = routeCard.parentElement?.querySelectorAll('.search-results button')
-        const nativeButton = nativeButtons?.length === 1 ? nativeButtons[0] as HTMLButtonElement : null
-        if (nativeButton) {
-          nativeButton.click()
-          removeHost()
-          return
-        }
-        if (attempts < 20) autoSelectTimer = window.setTimeout(trySelect, 200)
-      }
-      autoSelectTimer = window.setTimeout(trySelect, 150)
-    }
-
-    const commitRecognizedDestination = (input: HTMLInputElement, context: string, routeCard: HTMLElement) => {
-      if (autoCommitTimer) window.clearTimeout(autoCommitTimer)
-      const snapshot = input.value.trim()
-      autoCommitTimer = window.setTimeout(() => {
-        if (!input.isConnected || input.value.trim() !== snapshot) return
-
-        if (normalize(input.value) !== normalize(context)) {
-          const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
-          setter?.call(input, context)
-          input.dispatchEvent(new Event('input', { bubbles: true }))
-          input.dispatchEvent(new Event('change', { bubbles: true }))
-        }
-
-        autoSelectFirstNativeResult(routeCard)
-      }, 650)
-    }
-
     const renderPreview = (input: HTMLInputElement) => {
       const value = input.value.trim()
       const context = findContext(value)
       const routeCard = input.closest('.route-card') as HTMLElement | null
       if (!routeCard || value.length < 3 || !context) {
-        if (autoCommitTimer) window.clearTimeout(autoCommitTimer)
         removeHost()
         return
       }
 
-      commitRecognizedDestination(input, context, routeCard)
-
+      // Never rewrite what the passenger typed. The native geocoder must receive the
+      // exact street/place text so it can return a precise destination rather than a
+      // generic city result.
       const existingNative = routeCard.parentElement?.querySelector('.search-results button')
       if (existingNative) {
         removeHost()
@@ -112,12 +77,12 @@ export default function PassengerTypedAddressPreview() {
       }
 
       host.onclick = () => {
-        input.focus()
+        // This is only a broad-city fallback when Mapbox has no precise result.
         const setter = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value')?.set
         setter?.call(input, context)
         input.dispatchEvent(new Event('input', { bubbles: true }))
         input.dispatchEvent(new Event('change', { bubbles: true }))
-        autoSelectFirstNativeResult(routeCard)
+        input.focus()
       }
 
       host.innerHTML = ''
@@ -127,9 +92,9 @@ export default function PassengerTypedAddressPreview() {
       const copy = document.createElement('div')
       copy.className = 'passenger-typed-address-copy'
       const top = document.createElement('strong')
-      top.textContent = context
+      top.textContent = value
       const bottom = document.createElement('small')
-      bottom.textContent = value
+      bottom.textContent = context
       copy.append(top, bottom)
       host.append(pin, copy)
 
@@ -161,8 +126,6 @@ export default function PassengerTypedAddressPreview() {
       document.removeEventListener('input', onInput, true)
       document.removeEventListener('focusin', onFocus, true)
       if (cleanupTimer) window.clearTimeout(cleanupTimer)
-      if (autoSelectTimer) window.clearTimeout(autoSelectTimer)
-      if (autoCommitTimer) window.clearTimeout(autoCommitTimer)
       observer?.disconnect()
       removeHost()
     }
