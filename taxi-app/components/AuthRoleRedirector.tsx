@@ -85,7 +85,12 @@ async function routeUser(userId: string) {
 export default function AuthRoleRedirector() {
   useEffect(() => {
     let active = true
-    finishRoleRouting()
+    const path = currentPath()
+
+    // Prevent the passenger dashboard from flashing while an existing
+    // authenticated session is being resolved to driver/admin/passenger.
+    if (path === '/' || path.startsWith('/passenger')) beginRoleRouting()
+    else finishRoleRouting()
 
     const routeCurrentUser = async () => {
       const { data } = await supabase.auth.getUser()
@@ -105,6 +110,7 @@ export default function AuthRoleRedirector() {
       }
 
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+        beginRoleRouting()
         window.setTimeout(() => {
           if (active) void routeUser(session.user.id)
         }, 0)
