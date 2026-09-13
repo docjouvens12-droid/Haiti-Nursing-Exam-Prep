@@ -78,9 +78,6 @@ function visualPoints(dLat: number, dLng: number, targetLat: number, targetLng: 
     }
   }
 
-  // When the real GPS points overlap, keep the real distance/ETA but separate
-  // the display points by only a few metres so both endpoints and a connector
-  // remain visible to the passenger.
   const midLat = (dLat + targetLat) / 2
   const midLng = (dLng + targetLng) / 2
   const lngOffset = 0.00012
@@ -142,6 +139,11 @@ export default function PassengerAcceptedRideMiniMap() {
     return { dLat, dLng, targetLat, targetLng }
   }, [tracking])
 
+  const closeDisplay = useMemo(() => {
+    if (!routeTarget) return false
+    return visualPoints(routeTarget.dLat, routeTarget.dLng, routeTarget.targetLat, routeTarget.targetLng).close
+  }, [routeTarget])
+
   useEffect(() => {
     if (!routeTarget) {
       setMetrics(null)
@@ -183,7 +185,6 @@ export default function PassengerAcceptedRideMiniMap() {
     if (!token || !routeTarget || !tracking) return ''
 
     const { dLat, dLng, targetLat, targetLng } = routeTarget
-    const inProgress = tracking.ride_status === 'in_progress'
     const display = visualPoints(dLat, dLng, targetLat, targetLng)
     const overlays: string[] = []
 
@@ -196,8 +197,6 @@ export default function PassengerAcceptedRideMiniMap() {
       overlays.push(lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#087a5d', 6, 1))
     }
 
-    // Always use two clear endpoint markers. The driver is blue and the
-    // passenger/destination is red, matching the passenger tracking legend.
     overlays.push(pointOverlay(display.driverLng, display.driverLat, '#2563eb'))
     overlays.push(pointOverlay(display.targetLng, display.targetLat, '#ef4444'))
 
@@ -250,7 +249,10 @@ export default function PassengerAcceptedRideMiniMap() {
         .passenger-live-top-map-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;letter-spacing:.05em}.passenger-live-top-map-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065}
         .passenger-live-top-map-frame{position:absolute;left:0;right:0;top:57px;bottom:0;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:100%;object-fit:cover}
         .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#2563eb}.end-dot{background:#ef4444}
-        .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:4;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
+        .passenger-live-close-route{position:absolute;left:50%;top:58%;width:min(230px,56vw);height:12px;transform:translate(-50%,-50%);z-index:5;border-radius:999px;background:#087a5d;border:3px solid rgba(255,255,255,.96);box-shadow:0 4px 12px rgba(8,122,93,.35)}
+        .passenger-live-close-route span{position:absolute;top:50%;width:22px;height:22px;border:4px solid #fff;border-radius:50%;transform:translateY(-50%);box-shadow:0 3px 9px rgba(15,35,29,.25)}
+        .passenger-live-close-route .close-driver{left:-8px;background:#2563eb}.passenger-live-close-route .close-passenger{right:-8px;background:#ef4444}
+        .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:6;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
         .passenger-live-top-map-metric{padding:6px 8px 5px;display:flex;flex-direction:column;justify-content:center;min-width:0}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #e6eeeb}
         .passenger-live-top-map-metric span{display:block;font-size:5.8px;color:#5f716a;font-weight:900;text-transform:uppercase;letter-spacing:.025em;line-height:1;white-space:nowrap}.passenger-live-top-map-metric strong{display:block;margin-top:3px;color:#0f2438;font-size:14px;line-height:1;font-weight:950;letter-spacing:-.02em;white-space:nowrap}.passenger-live-top-map-metric:first-child strong{color:#087a5d}
         .passenger-live-top-map-loading{position:absolute;left:0;right:0;top:57px;bottom:0;display:grid;place-items:center;background:linear-gradient(180deg,#eaf2ef,#f4f8f6);color:#62766f;font-size:11px;font-weight:800;text-align:center;padding:20px}
@@ -269,6 +271,7 @@ export default function PassengerAcceptedRideMiniMap() {
       ) : visibleMapUrl ? (
         <div className="passenger-live-top-map-frame">
           <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè trajè a' : 'Itinéraire de la course') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
+          {closeDisplay && <div className="passenger-live-close-route" aria-label={ht ? 'Liy itinerè ant chofè ak pasaje' : 'Ligne d’itinéraire entre chauffeur et passager'}><span className="close-driver" /><span className="close-passenger" /></div>}
           {!inProgress && <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
             <span className="passenger-live-top-map-pill"><b className="end-dot" />{ht ? 'Ou' : 'Vous'}</span>
