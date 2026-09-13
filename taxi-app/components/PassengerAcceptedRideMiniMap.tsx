@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { supabase } from '../lib/supabase'
 
 type Tracking = {
@@ -34,7 +35,15 @@ export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
   const [ht, setHt] = useState(false)
+  const [target, setTarget] = useState<HTMLElement | null>(null)
   const lastRouteAt = useRef(0)
+
+  useEffect(() => {
+    const findTarget = () => setTarget(document.querySelector<HTMLElement>('.shell .booking-sheet'))
+    findTarget()
+    const timer = window.setInterval(findTarget, 900)
+    return () => window.clearInterval(timer)
+  }, [])
 
   useEffect(() => {
     let alive = true
@@ -115,7 +124,7 @@ export default function PassengerAcceptedRideMiniMap() {
           minutes: Math.max(1, Math.ceil(route.duration / 60)),
         })
       } catch {
-        // Keep the immediate straight-line fallback when routing is unavailable.
+        // Keep the immediate fallback when routing is unavailable.
       }
     }
 
@@ -136,67 +145,74 @@ export default function PassengerAcceptedRideMiniMap() {
       `pin-s-p+ef6a5b(${targetLng},${targetLat})`,
     ].join(',')
 
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/520x360@2x?padding=70&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays}/auto/760x420@2x?padding=90&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget])
 
-  if (!tracking) return null
+  if (!tracking || !target || !document.contains(target)) return null
 
   const title = tracking.ride_status === 'in_progress'
     ? (ht ? 'Trajè a an kou' : 'Course en cours')
     : tracking.ride_status === 'driver_arriving'
       ? (ht ? 'Chofè a ap pwoche' : 'Le chauffeur approche')
-      : (ht ? 'Chofè a aksepte demann lan' : 'Le chauffeur a accepté la course')
+      : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
 
   const subtitle = tracking.ride_status === 'in_progress'
-    ? (ht ? 'W ap wè chofè a sou wout pou destinasyon an.' : 'Suivez le chauffeur vers votre destination.')
-    : (ht ? 'Kat sa a montre chofè a parapò ak kote pou pran ou.' : 'Cette carte montre le chauffeur par rapport à votre point de prise en charge.')
+    ? (ht ? 'Swiv pozisyon chofè a jouk destinasyon an.' : 'Suivez le chauffeur jusqu’à votre destination.')
+    : (ht ? 'Swiv chofè a an tan reyèl pandan l ap vini pran ou.' : 'Suivez le chauffeur en temps réel pendant son approche.')
 
   const distanceLabel = metrics
     ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km`
     : '—'
   const timeLabel = metrics ? `~${metrics.minutes} min` : '—'
 
-  return (
-    <div className="passenger-live-mini-map" aria-live="polite">
-      <div className="passenger-live-mini-head">
-        <span className="passenger-live-mini-icon">🚕</span>
-        <div><strong>{title}</strong><small>{subtitle}</small></div>
+  return createPortal(
+    <section className="passenger-live-dashboard-map" aria-live="polite">
+      <style>{`
+        .passenger-live-dashboard-map{margin:12px 0 4px;overflow:hidden;border-radius:22px;background:#fff;border:1px solid #dce9e4;box-shadow:0 12px 28px rgba(17,42,34,.10);font-family:Inter,system-ui,sans-serif}
+        .passenger-live-dashboard-head{display:flex;align-items:center;gap:11px;padding:14px 15px 12px;background:linear-gradient(180deg,#f7fcfa 0%,#fff 100%)}
+        .passenger-live-dashboard-icon{width:42px;height:42px;border-radius:14px;background:#e6f5ef;display:grid;place-items:center;flex:0 0 42px;font-size:21px}
+        .passenger-live-dashboard-copy{min-width:0;flex:1}.passenger-live-dashboard-copy strong{display:block;color:#10243a;font-size:15px;line-height:1.2;font-weight:900}.passenger-live-dashboard-copy small{display:block;margin-top:4px;color:#6d7e77;font-size:10px;line-height:1.4;font-weight:650}
+        .passenger-live-dashboard-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap}.passenger-live-dashboard-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065;box-shadow:0 0 0 3px rgba(15,128,101,.12)}
+        .passenger-live-dashboard-map-frame{position:relative;background:#e8efec}.passenger-live-dashboard-map-frame img{display:block;width:100%;height:178px;object-fit:cover}.passenger-live-dashboard-wait{height:150px;display:grid;place-items:center;padding:16px;text-align:center;color:#71817b;font-size:11px;font-weight:750;background:#eef4f2}
+        .passenger-live-dashboard-pills{position:absolute;left:12px;bottom:11px;right:12px;display:flex;gap:8px;justify-content:space-between;pointer-events:none}.passenger-live-dashboard-pill{display:flex;align-items:center;gap:6px;padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.94);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:9px;font-weight:900;color:#334a42}.passenger-live-dashboard-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.passenger-live-dashboard-pill .driver-dot{background:#0f8065}.passenger-live-dashboard-pill .passenger-dot{background:#ef6a5b}
+        .passenger-live-dashboard-metrics{display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #edf2f0}.passenger-live-dashboard-metric{padding:13px 15px}.passenger-live-dashboard-metric+.passenger-live-dashboard-metric{border-left:1px solid #edf2f0}.passenger-live-dashboard-metric span,.passenger-live-dashboard-metric strong{display:block}.passenger-live-dashboard-metric span{font-size:8px;color:#76857f;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.passenger-live-dashboard-metric strong{margin-top:4px;color:#10243a;font-size:20px;line-height:1;font-weight:950}
+        @media(max-width:380px){.passenger-live-dashboard-map-frame img{height:160px}.passenger-live-dashboard-head{padding:12px}.passenger-live-dashboard-metric{padding:11px 12px}.passenger-live-dashboard-metric strong{font-size:18px}}
+      `}</style>
+
+      <div className="passenger-live-dashboard-head">
+        <span className="passenger-live-dashboard-icon">🚕</span>
+        <div className="passenger-live-dashboard-copy">
+          <strong>{title}</strong>
+          <small>{subtitle}</small>
+        </div>
+        <span className="passenger-live-dashboard-live">Live</span>
       </div>
-      {mapUrl ? (
-        <img src={mapUrl} alt={ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager'} />
-      ) : (
-        <div className="passenger-live-mini-wait">{ht ? 'N ap tann pozisyon chofè a…' : 'En attente de la position du chauffeur…'}</div>
-      )}
-      <div className="passenger-live-mini-metrics">
-        <div>
+
+      <div className="passenger-live-dashboard-map-frame">
+        {mapUrl ? (
+          <img src={mapUrl} alt={ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager'} />
+        ) : (
+          <div className="passenger-live-dashboard-wait">{ht ? 'N ap tann pozisyon chofè a…' : 'En attente de la position du chauffeur…'}</div>
+        )}
+        <div className="passenger-live-dashboard-pills">
+          <span className="passenger-live-dashboard-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
+          <span className="passenger-live-dashboard-pill"><b className="passenger-dot" />{tracking.ride_status === 'in_progress' ? (ht ? 'Destinasyon' : 'Destination') : (ht ? 'Ou' : 'Vous')}</span>
+        </div>
+      </div>
+
+      <div className="passenger-live-dashboard-metrics">
+        <div className="passenger-live-dashboard-metric">
           <span>{ht ? 'Distans' : 'Distance'}</span>
           <strong>{distanceLabel}</strong>
         </div>
-        <div>
+        <div className="passenger-live-dashboard-metric">
           <span>{tracking.ride_status === 'in_progress'
             ? (ht ? 'Tan ki rete' : 'Temps restant')
             : (ht ? 'Chofè a rive nan' : 'Arrivée dans')}</span>
           <strong>{timeLabel}</strong>
         </div>
       </div>
-      <div className="passenger-live-mini-legend">
-        <span><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
-        <span><b className="passenger-dot" />{tracking.ride_status === 'in_progress' ? (ht ? 'Destinasyon' : 'Destination') : (ht ? 'Pasaje' : 'Passager')}</span>
-      </div>
-      <style>{`
-        .passenger-live-mini-map{position:fixed;top:86px;right:12px;z-index:85;width:min(46vw,210px);overflow:hidden;border-radius:18px;background:#fff;border:1px solid rgba(15,128,101,.18);box-shadow:0 14px 34px rgba(17,42,34,.20);font-family:Inter,system-ui,sans-serif}
-        .passenger-live-mini-head{display:flex;gap:8px;align-items:flex-start;padding:10px 11px 8px;background:#fff}
-        .passenger-live-mini-icon{width:28px;height:28px;border-radius:10px;background:#eaf7f2;display:grid;place-items:center;flex:0 0 28px;font-size:15px}
-        .passenger-live-mini-head strong,.passenger-live-mini-head small{display:block}.passenger-live-mini-head strong{font-size:11px;line-height:1.25;color:#10243a}.passenger-live-mini-head small{font-size:8px;line-height:1.35;color:#6c7d76;margin-top:3px}
-        .passenger-live-mini-map img{display:block;width:100%;height:118px;object-fit:cover;background:#e7efec}
-        .passenger-live-mini-wait{height:92px;display:grid;place-items:center;text-align:center;padding:10px;background:#eef4f2;color:#71817b;font-size:9px;font-weight:750}
-        .passenger-live-mini-metrics{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #edf2f0;border-bottom:1px solid #edf2f0;background:#fff}
-        .passenger-live-mini-metrics div{padding:8px 10px;min-width:0}.passenger-live-mini-metrics div+div{border-left:1px solid #edf2f0}
-        .passenger-live-mini-metrics span,.passenger-live-mini-metrics strong{display:block}.passenger-live-mini-metrics span{font-size:7px;line-height:1.2;color:#76857f;font-weight:800;text-transform:uppercase;letter-spacing:.03em}.passenger-live-mini-metrics strong{margin-top:2px;font-size:12px;line-height:1.2;color:#10243a;white-space:nowrap}
-        .passenger-live-mini-legend{display:flex;justify-content:space-between;gap:8px;padding:8px 10px 9px;font-size:8px;color:#52645e;font-weight:800;background:#fff}
-        .passenger-live-mini-legend span{display:flex;align-items:center;gap:4px}.passenger-live-mini-legend b{width:7px;height:7px;border-radius:50%;display:inline-block}.driver-dot{background:#0f8065}.passenger-dot{background:#ef6a5b}
-        @media(max-width:380px){.passenger-live-mini-map{width:184px;top:82px;right:8px}.passenger-live-mini-map img{height:108px}}
-      `}</style>
-    </div>
+    </section>,
+    target,
   )
 }
