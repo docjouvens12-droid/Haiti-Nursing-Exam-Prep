@@ -11,6 +11,7 @@ import PassengerLogoutStable from './PassengerLogoutStable'
 import PassengerTypedAddressPreview from './PassengerTypedAddressPreview'
 import PassengerDashboardPaymentPanel from './PassengerDashboardPaymentPanel'
 import PassengerAcceptedRideMiniMap from './PassengerAcceptedRideMiniMap'
+import PassengerMiniMapMetricsNarrow from './PassengerMiniMapMetricsNarrow'
 import PassengerRideStatusFlow from './PassengerRideStatusFlow'
 import PassengerPendingRideCancel from './PassengerPendingRideCancel'
 
@@ -71,6 +72,7 @@ export default function RouteScopedEnhancers() {
       <PassengerTypedAddressPreview />
       <PassengerDashboardPaymentPanel />
       <PassengerAcceptedRideMiniMap />
+      <PassengerMiniMapMetricsNarrow />
       <PassengerRideStatusFlow />
       <PassengerPendingRideCancel />
     </>}
