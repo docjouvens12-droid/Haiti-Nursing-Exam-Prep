@@ -72,8 +72,11 @@ export default function DriverDashboardV2Page() {
   const [vehicle,setVehicle] = useState<Vehicle|null>(null)
   const [activeRide,setActiveRide] = useState<Ride|null>(null)
   const [available,setAvailable] = useState<Ride[]>([])
+  const [offerRideId,setOfferRideId] = useState<string|null>(null)
+  const [offerSeconds,setOfferSeconds] = useState(20)
   const userIdRef = useRef<string|null>(null)
   const tokenRef = useRef<string|null>(null)
+  const timeoutLockRef = useRef<string|null>(null)
 
   useEffect(() => {
     const session = readSession()
@@ -85,6 +88,33 @@ export default function DriverDashboardV2Page() {
     userIdRef.current = session.user?.id ?? null
     void refreshDashboard(false)
   }, [])
+
+  useEffect(() => {
+    if (!online || activeRide || available.length === 0) {
+      setOfferRideId(null)
+      setOfferSeconds(20)
+      return
+    }
+    const first = available[0]
+    if (offerRideId !== first.id) {
+      timeoutLockRef.current = null
+      setOfferRideId(first.id)
+      setOfferSeconds(20)
+    }
+  }, [online,activeRide,available,offerRideId])
+
+  useEffect(() => {
+    if (!offerRideId || activeRide || !online) return
+    if (offerSeconds <= 0) {
+      const ride = available.find(item => item.id === offerRideId)
+      if (!ride || timeoutLockRef.current === ride.id) return
+      timeoutLockRef.current = ride.id
+      void rideAction('timeout',ride)
+      return
+    }
+    const timer = window.setTimeout(() => setOfferSeconds(current => Math.max(0,current-1)),1000)
+    return () => window.clearTimeout(timer)
+  }, [offerRideId,offerSeconds,activeRide,online,available])
 
   function token() {
     if (tokenRef.current) return tokenRef.current
@@ -152,19 +182,22 @@ export default function DriverDashboardV2Page() {
     finally { setBusy(false) }
   }
 
-  async function rideAction(action:'accept'|'reject'|'arriving'|'start'|'complete',ride:Ride) {
-    if (busy) return
+  async function rideAction(action:'accept'|'reject'|'timeout'|'arriving'|'start'|'complete',ride:Ride) {
+    if (busy && action!=='timeout') return
     if (action==='accept' && !vehicle) { setMessage('Aucun véhicule actif n’est associé à ce compte.'); return }
-    setBusy(true); setMessage('')
+    if (action!=='timeout') setBusy(true)
+    setMessage('')
     try {
       if (action==='accept') await rpc('accept_ride',{p_ride_id:ride.id,p_vehicle_id:vehicle!.id})
       if (action==='reject') await rpc('reject_ride_request',{p_ride_id:ride.id,p_reason:'rejected'})
+      if (action==='timeout') await rpc('reject_ride_request',{p_ride_id:ride.id,p_reason:'timeout'})
       if (action==='arriving') await rpc('mark_driver_arriving',{p_ride_id:ride.id})
       if (action==='start') await rpc('start_ride',{p_ride_id:ride.id})
       if (action==='complete') await rpc('complete_ride',{p_ride_id:ride.id,p_final_fare_htg:ride.estimated_fare_htg ?? 0,p_payment_method:'cash'})
+      if (action==='timeout') setMessage('Temps écoulé. La demande est proposée à un autre chauffeur.')
       await refreshDashboard(false)
     } catch(e) { setMessage(e instanceof Error ? e.message : 'Impossible de mettre à jour le trajet.') }
-    finally { setBusy(false) }
+    finally { if (action!=='timeout') setBusy(false) }
   }
 
   const nextAction = activeRide?.status==='accepted'
@@ -207,18 +240,17 @@ export default function DriverDashboardV2Page() {
         <div className="drv2-section-head"><div><span className="drv2-kicker">COURSES</span><h2>Demandes disponibles</h2></div><button className="drv2-refresh" onClick={()=>refreshDashboard(true)} disabled={busy}>{busy?'...':'Actualiser'}</button></div>
         {!online ? <div className="drv2-empty"><span>🚘</span><strong>Passez en ligne</strong><p>Activez votre disponibilité pour recevoir les demandes proches de vous.</p></div>
           : available.length===0 ? <div className="drv2-empty"><span>🧭</span><strong>Aucune demande pour le moment</strong><p>Les nouvelles courses apparaîtront ici automatiquement.</p></div>
-          : <div className="drv2-list">{available.map(ride=><article className="drv2-ride" key={ride.id}>
+          : <div className="drv2-list">{available.slice(0,1).map(ride=><article className="drv2-ride" key={ride.id}>
+              <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginBottom:10}}>
+                <span style={{fontSize:12,fontWeight:900,color:'#0f705a'}}>NOUVELLE DEMANDE</span>
+                <span style={{minWidth:42,height:42,borderRadius:999,display:'grid',placeItems:'center',background:offerSeconds<=5?'#fff0f0':'#eef8f4',color:offerSeconds<=5?'#b23a3a':'#0f705a',fontWeight:950,fontSize:16}}>{offerSeconds}s</span>
+              </div>
               <div className="drv2-ride-top"><div><small>DÉPART</small><strong>{ride.pickup_address}</strong></div><span>{ride.service_type ?? 'standard'}</span></div>
               <div className="drv2-route-line"/>
               <div className="drv2-destination"><small>DESTINATION</small><strong>{ride.destination_address}</strong></div>
               <div className="drv2-stats"><span>{ride.estimated_distance_km ?? '—'} km</span><span>{ride.estimated_duration_min ?? '—'} min</span><span>{ride.estimated_fare_htg ?? '—'} HTG</span></div>
               <div style={{display:'grid',gridTemplateColumns:'1fr 1.35fr',gap:10,marginTop:12}}>
-                <button
-                  type="button"
-                  disabled={busy}
-                  onClick={()=>rideAction('reject',ride)}
-                  style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}
-                >Refuser</button>
+                <button type="button" disabled={busy} onClick={()=>rideAction('reject',ride)} style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}>Refuser</button>
                 <button className="drv2-primary" style={{marginTop:0}} disabled={busy || !vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button>
               </div>
             </article>)}</div>}
