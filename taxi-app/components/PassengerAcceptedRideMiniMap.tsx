@@ -31,6 +31,7 @@ export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
   const [routePolyline, setRoutePolyline] = useState('')
+  const [mapFailed, setMapFailed] = useState(false)
   const [ht, setHt] = useState(false)
   const [target, setTarget] = useState<HTMLElement | null>(null)
   const lastRouteAt = useRef(0)
@@ -96,7 +97,7 @@ export default function PassengerAcceptedRideMiniMap() {
 
     async function loadRoadRoute() {
       try {
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=full&geometries=polyline&steps=false&access_token=${encodeURIComponent(token ?? '')}`
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=simplified&geometries=polyline&steps=false&access_token=${encodeURIComponent(token ?? '')}`
         const response = await fetch(url, { signal: controller.signal, cache: 'no-store' })
         if (!response.ok) return
         const json = await response.json()
@@ -119,7 +120,9 @@ export default function PassengerAcceptedRideMiniMap() {
     const inProgress = tracking.ride_status === 'in_progress'
     const overlays: string[] = []
 
-    if (routePolyline) overlays.push(`path-6+0f8065-0.95(${encodeURIComponent(routePolyline)})`)
+    if (routePolyline && routePolyline.length < 4000) {
+      overlays.push(`path-5+0f8065-0.95(${encodeURIComponent(routePolyline)})`)
+    }
     overlays.push(`pin-s-d+0f8065(${dLng},${dLat})`)
     if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
       overlays.push(`pin-s-a+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
@@ -128,6 +131,21 @@ export default function PassengerAcceptedRideMiniMap() {
 
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=80&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking, routePolyline])
+
+  const fallbackMapUrl = useMemo(() => {
+    const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
+    if (!token || !routeTarget || !tracking) return ''
+    const { dLat, dLng, targetLat, targetLng } = routeTarget
+    const inProgress = tracking.ride_status === 'in_progress'
+    const overlays = [`pin-s-d+0f8065(${dLng},${dLat})`]
+    if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
+      overlays.push(`pin-s-a+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+    }
+    overlays.push(`pin-s-b+ef6a5b(${targetLng},${targetLat})`)
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=80&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+  }, [routeTarget, tracking])
+
+  useEffect(() => { setMapFailed(false) }, [mapUrl])
 
   if (!tracking || !target || !document.contains(target)) return null
 
@@ -146,6 +164,7 @@ export default function PassengerAcceptedRideMiniMap() {
 
   const distanceLabel = metrics ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km` : '—'
   const timeLabel = metrics ? `~${metrics.minutes} min` : '—'
+  const visibleMapUrl = mapFailed ? fallbackMapUrl : mapUrl
 
   return createPortal(
     <section className={`passenger-live-top-map ${arrived ? 'arrived' : ''}`} aria-live="polite">
@@ -176,9 +195,9 @@ export default function PassengerAcceptedRideMiniMap() {
 
       {arrived ? (
         <div className="passenger-live-arrived-panel"><div><span>📍</span><strong>{ht ? 'Chofè a rive' : 'Le chauffeur est arrivé'}</strong><small>{ht ? 'Chofè a ap tann ou nan kote pou pran ou.' : 'Votre chauffeur vous attend au point de prise en charge.'}</small></div></div>
-      ) : mapUrl ? (
+      ) : visibleMapUrl ? (
         <div className="passenger-live-top-map-frame">
-          <img src={mapUrl} alt={inProgress ? (ht ? 'Itinerè chofè a jouk destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
+          <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè chofè a jouk destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
           <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
             {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Demaraj' : 'Départ'}</span>}
