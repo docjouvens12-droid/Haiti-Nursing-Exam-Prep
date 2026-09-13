@@ -29,15 +29,8 @@ function completeLabel(props: any, fallbackName = '') {
   const name = String(props?.name || fallbackName || '').trim()
   const fullAddress = String(props?.full_address || '').trim()
   const placeFormatted = String(props?.place_formatted || '').trim()
-
   if (fullAddress && normalize(fullAddress) !== normalize(name)) return fullAddress
-
-  if (name && placeFormatted) {
-    const normalizedName = normalize(name)
-    const normalizedContext = normalize(placeFormatted)
-    if (!normalizedContext.startsWith(normalizedName)) return `${name}, ${placeFormatted}`
-  }
-
+  if (name && placeFormatted && !normalize(placeFormatted).startsWith(normalize(name))) return `${name}, ${placeFormatted}`
   return fullAddress || placeFormatted || name || 'Destination'
 }
 
@@ -51,7 +44,6 @@ function looksLikeStreetAddress(query: string) {
 function buildAddressVariants(query: string) {
   const clean = query.trim().replace(/\s+/g, ' ')
   const variants = new Set<string>([clean])
-
   if (!/ha[iï]ti/i.test(clean)) variants.add(`${clean}, Haïti`)
 
   const withoutHouseNumber = clean.replace(/^\s*\d+[a-z]?\s*[,\-]?\s*/i, '').trim()
@@ -73,7 +65,6 @@ function buildAddressVariants(query: string) {
       }
     }
   }
-
   return Array.from(variants)
 }
 
@@ -95,6 +86,31 @@ function knownCityFallback(query: string): Result | null {
   }
 }
 
+function exactKnownCity(query: string): Result | null {
+  const q = normalize(query)
+  for (const city of KNOWN_CITY_FALLBACKS) {
+    const label = normalize(city.label)
+    if (q === label || city.keys.some(key => {
+      const k = normalize(key)
+      return q === k || q === `${k} haiti` || q === `${k} artibonite haiti` || q === `${k} ouest haiti` || q === `${k} nord haiti`
+    })) {
+      return {
+        id: `city-${normalize(city.label).replace(/\s+/g, '-')}`,
+        label: city.label,
+        center: city.center,
+        featureType: 'place',
+      }
+    }
+  }
+  return null
+}
+
+function queryTokens(query: string) {
+  return normalize(query)
+    .split(' ')
+    .filter(token => token.length >= 3 && !['haiti', 'artibonite', 'ouest', 'nord', 'sud', 'centre', 'departement'].includes(token))
+}
+
 export async function GET(request: NextRequest) {
   const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
   const { searchParams } = new URL(request.url)
@@ -105,112 +121,59 @@ export async function GET(request: NextRequest) {
   if (!token) return NextResponse.json({ results: [], error: 'MAPBOX_TOKEN_MISSING' }, { status: 500 })
   if (q.length < 3) return NextResponse.json({ results: [] })
 
+  const addressLike = looksLikeStreetAddress(q)
+  if (!addressLike) {
+    const exactCity = exactKnownCity(q)
+    if (exactCity) return NextResponse.json({ results: [exactCity], query: q, precise: false, fallback: false })
+  }
+
   const proximity = Number.isFinite(lat) && Number.isFinite(lng) ? `${lng},${lat}` : null
 
   async function searchMapboxV6(query: string, useTypes = true): Promise<Result[]> {
-    const params = new URLSearchParams({
-      q: query,
-      access_token: token as string,
-      country: 'ht',
-      autocomplete: 'true',
-      limit: '10',
-      language: 'fr',
-    })
-
+    const params = new URLSearchParams({ q: query, access_token: token as string, country: 'ht', autocomplete: 'true', limit: '10', language: 'fr' })
     if (useTypes) params.set('types', SEARCH_TYPES)
     if (proximity) params.set('proximity', proximity)
-
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 5000)
-
     try {
-      const response = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?${params.toString()}`, {
-        signal: controller.signal,
-        cache: 'no-store',
-      })
+      const response = await fetch(`https://api.mapbox.com/search/geocode/v6/forward?${params.toString()}`, { signal: controller.signal, cache: 'no-store' })
       if (!response.ok) return []
-
       const json = await response.json()
       return (json.features ?? []).flatMap((f: any) => {
         const center = f.geometry?.coordinates
         if (!Array.isArray(center) || center.length < 2) return []
         const props = f.properties ?? {}
-        const name = props.name || f.name || ''
-        return [{
-          id: f.id || props.mapbox_id || `${center[0]},${center[1]}`,
-          label: completeLabel(props, name),
-          center: [Number(center[0]), Number(center[1])] as [number, number],
-          featureType: props.feature_type || f.feature_type || '',
-        }]
+        return [{ id: f.id || props.mapbox_id || `${center[0]},${center[1]}`, label: completeLabel(props, props.name || f.name || ''), center: [Number(center[0]), Number(center[1])] as [number, number], featureType: props.feature_type || f.feature_type || '' }]
       })
-    } catch {
-      return []
-    } finally {
-      clearTimeout(timeout)
-    }
+    } catch { return [] } finally { clearTimeout(timeout) }
   }
 
   async function searchMapboxSearchBox(query: string): Promise<Result[]> {
-    const params = new URLSearchParams({
-      q: query,
-      access_token: token as string,
-      country: 'HT',
-      language: 'fr',
-      limit: '10',
-    })
+    const params = new URLSearchParams({ q: query, access_token: token as string, country: 'HT', language: 'fr', limit: '10' })
     if (proximity) params.set('proximity', proximity)
-
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 5000)
-
     try {
-      const response = await fetch(`https://api.mapbox.com/search/searchbox/v1/forward?${params.toString()}`, {
-        signal: controller.signal,
-        cache: 'no-store',
-      })
+      const response = await fetch(`https://api.mapbox.com/search/searchbox/v1/forward?${params.toString()}`, { signal: controller.signal, cache: 'no-store' })
       if (!response.ok) return []
-
       const json = await response.json()
       return (json.features ?? []).flatMap((f: any) => {
         const props = f.properties ?? {}
         const geometryCenter = f.geometry?.coordinates
-        const propertyCenter = Number.isFinite(Number(props.coordinates?.longitude)) && Number.isFinite(Number(props.coordinates?.latitude))
-          ? [Number(props.coordinates.longitude), Number(props.coordinates.latitude)]
-          : null
+        const propertyCenter = Number.isFinite(Number(props.coordinates?.longitude)) && Number.isFinite(Number(props.coordinates?.latitude)) ? [Number(props.coordinates.longitude), Number(props.coordinates.latitude)] : null
         const center = Array.isArray(geometryCenter) && geometryCenter.length >= 2 ? geometryCenter : propertyCenter
-        if (!Array.isArray(center) || center.length < 2 || !Number.isFinite(Number(center[0])) || !Number.isFinite(Number(center[1]))) return []
-
-        return [{
-          id: f.id || props.mapbox_id || `searchbox-${center[0]},${center[1]}`,
-          label: completeLabel(props, props.name || ''),
-          center: [Number(center[0]), Number(center[1])] as [number, number],
-          featureType: props.feature_type || f.feature_type || '',
-        }]
+        if (!Array.isArray(center) || center.length < 2) return []
+        return [{ id: f.id || props.mapbox_id || `searchbox-${center[0]},${center[1]}`, label: completeLabel(props, props.name || ''), center: [Number(center[0]), Number(center[1])] as [number, number], featureType: props.feature_type || f.feature_type || '' }]
       })
-    } catch {
-      return []
-    } finally {
-      clearTimeout(timeout)
-    }
+    } catch { return [] } finally { clearTimeout(timeout) }
   }
 
   async function searchOpenStreetMap(query: string): Promise<Result[]> {
-    const params = new URLSearchParams({
-      q: query,
-      format: 'jsonv2',
-      addressdetails: '1',
-      limit: '8',
-      countrycodes: 'ht',
-      'accept-language': 'fr',
-    })
+    const params = new URLSearchParams({ q: query, format: 'jsonv2', addressdetails: '1', limit: '8', countrycodes: 'ht', 'accept-language': 'fr' })
     const controller = new AbortController()
     const timeout = setTimeout(() => controller.abort(), 6000)
     try {
-      const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
-        signal: controller.signal,
-        cache: 'no-store',
-        headers: { 'User-Agent': 'MOVI-Haiti/1.0 (address-search)' },
-      })
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, { signal: controller.signal, cache: 'no-store', headers: { 'User-Agent': 'MOVI-Haiti/1.0 (address-search)' } })
       if (!response.ok) return []
       const rows = await response.json()
       return (Array.isArray(rows) ? rows : []).flatMap((row: any) => {
@@ -219,37 +182,25 @@ export async function GET(request: NextRequest) {
         if (!Number.isFinite(latValue) || !Number.isFinite(lngValue)) return []
         const type = String(row.type || row.addresstype || '')
         const featureType = ['house', 'building'].includes(type) ? 'address' : type === 'road' ? 'street' : type === 'neighbourhood' ? 'neighborhood' : type
-        return [{
-          id: `osm-${row.place_id ?? `${lngValue},${latValue}`}`,
-          label: String(row.display_name || query),
-          center: [lngValue, latValue] as [number, number],
-          featureType,
-        }]
+        return [{ id: `osm-${row.place_id ?? `${lngValue},${latValue}`}`, label: String(row.display_name || query), center: [lngValue, latValue] as [number, number], featureType }]
       })
-    } catch {
-      return []
-    } finally {
-      clearTimeout(timeout)
-    }
+    } catch { return [] } finally { clearTimeout(timeout) }
   }
 
   try {
     const batches: Result[][] = []
     const variants = buildAddressVariants(q)
-
     for (const variant of variants) batches.push(await searchMapboxV6(variant, true))
 
     let hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
-    if (!hasPrecise && looksLikeStreetAddress(q)) {
+    if (!hasPrecise && addressLike) {
       for (const variant of variants) batches.push(await searchMapboxSearchBox(variant))
       hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
     }
-
-    if (!hasPrecise && looksLikeStreetAddress(q)) {
+    if (!hasPrecise && addressLike) {
       for (const variant of variants) batches.push(await searchOpenStreetMap(variant))
       hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
     }
-
     if (!batches.some(batch => batch.length)) batches.push(await searchMapboxV6(q, false))
 
     const deduped = new Map<string, Result>()
@@ -262,7 +213,7 @@ export async function GET(request: NextRequest) {
 
     let results = Array.from(deduped.values())
     const normalizedQuery = normalize(q)
-    const addressLike = looksLikeStreetAddress(q)
+    const tokens = queryTokens(q)
 
     const toRad = (value: number) => value * Math.PI / 180
     const distance = (result: Result) => {
@@ -275,27 +226,22 @@ export async function GET(request: NextRequest) {
       return 6371 * 2 * Math.asin(Math.sqrt(a))
     }
 
-    const typeRank = (type = '') => {
-      const rank: Record<string, number> = {
-        address: 0,
-        street: 1,
-        neighborhood: 2,
-        locality: 3,
-        place: 4,
-        district: 5,
-        region: 6,
-      }
-      return rank[type] ?? 7
-    }
+    const typeRank = (type = '') => ({ address: 0, street: 1, neighborhood: 2, locality: 3, place: 4, district: 5, region: 6 } as Record<string, number>)[type] ?? 7
 
     if (addressLike) {
       const precise = results.filter(result => PRECISE_TYPES.has(result.featureType || ''))
-      if (precise.length) {
-        results = precise
-      } else {
+      if (precise.length) results = precise
+      else {
         const fallback = knownCityFallback(q)
         results = fallback ? [fallback] : []
       }
+    } else {
+      const relevant = results.filter(result => {
+        const label = normalize(result.label)
+        if (label.includes(normalizedQuery)) return true
+        return tokens.length > 0 && tokens.every(token => label.includes(token))
+      })
+      results = relevant.length ? relevant : results.filter(result => ['place', 'locality', 'neighborhood'].includes(result.featureType || ''))
     }
 
     results = [...results].sort((a, b) => {
@@ -304,17 +250,15 @@ export async function GET(request: NextRequest) {
       const aMatches = aLabel.includes(normalizedQuery) ? 0 : 1
       const bMatches = bLabel.includes(normalizedQuery) ? 0 : 1
       if (aMatches !== bMatches) return aMatches - bMatches
-
       const aType = typeRank(a.featureType)
       const bType = typeRank(b.featureType)
       if (aType !== bType) return aType - bType
-
       return distance(a) - distance(b)
     })
 
-    const displayResults = results.slice(0, 12).map(result => ({
+    const displayResults = results.slice(0, addressLike ? 8 : 6).map(result => ({
       ...result,
-      label: `${contextFromLabel(result.label)}\n${q}`,
+      label: addressLike ? `${contextFromLabel(result.label)}\n${q}` : result.label,
     }))
 
     return NextResponse.json({ results: displayResults, query: q, precise: addressLike, fallback: addressLike && results.some(result => result.id.startsWith('fallback-')) })
