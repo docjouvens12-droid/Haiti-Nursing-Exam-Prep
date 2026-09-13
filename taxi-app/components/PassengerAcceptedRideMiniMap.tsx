@@ -27,21 +27,6 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
-function pointOverlay(lng: number, lat: number, color: string) {
-  const geojson = {
-    type: 'Feature',
-    properties: {
-      'marker-size': 'large',
-      'marker-color': color,
-    },
-    geometry: {
-      type: 'Point',
-      coordinates: [lng, lat],
-    },
-  }
-  return `geojson(${encodeURIComponent(JSON.stringify(geojson))})`
-}
-
 function lineOverlay(
   fromLng: number,
   fromLat: number,
@@ -197,8 +182,8 @@ export default function PassengerAcceptedRideMiniMap() {
       overlays.push(lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#087a5d', 6, 1))
     }
 
-    overlays.push(pointOverlay(display.driverLng, display.driverLat, '#2563eb'))
-    overlays.push(pointOverlay(display.targetLng, display.targetLat, '#ef4444'))
+    overlays.push(`pin-l-car+2563eb(${display.driverLng},${display.driverLat})`)
+    overlays.push(`pin-l+ef4444(${display.targetLng},${display.targetLat})`)
 
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking, routePolyline])
@@ -211,8 +196,8 @@ export default function PassengerAcceptedRideMiniMap() {
     const overlays = [
       lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#ffffff', 10, 0.92),
       lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#087a5d', 6, 1),
-      pointOverlay(display.driverLng, display.driverLat, '#2563eb'),
-      pointOverlay(display.targetLng, display.targetLat, '#ef4444'),
+      `pin-l-car+2563eb(${display.driverLng},${display.driverLat})`,
+      `pin-l+ef4444(${display.targetLng},${display.targetLat})`,
     ]
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking])
@@ -248,10 +233,10 @@ export default function PassengerAcceptedRideMiniMap() {
         .passenger-live-top-map-copy{min-width:0;flex:1}.passenger-live-top-map-copy strong{display:block;color:#10243a;font-size:14px;line-height:1.2;font-weight:900}.passenger-live-top-map-copy small{display:block;margin-top:2px;color:#6d7e77;font-size:9px;line-height:1.3;font-weight:650}
         .passenger-live-top-map-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;letter-spacing:.05em}.passenger-live-top-map-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065}
         .passenger-live-top-map-frame{position:absolute;left:0;right:0;top:57px;bottom:0;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:100%;object-fit:cover}
-        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#2563eb}.end-dot{background:#ef4444}
+        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{font-size:13px;line-height:1}.driver-dot::before{content:'🚕'}.end-dot::before{content:'📍'}
         .passenger-live-close-route{position:absolute;left:50%;top:58%;width:min(230px,56vw);height:12px;transform:translate(-50%,-50%);z-index:5;border-radius:999px;background:#087a5d;border:3px solid rgba(255,255,255,.96);box-shadow:0 4px 12px rgba(8,122,93,.35)}
-        .passenger-live-close-route span{position:absolute;top:50%;width:22px;height:22px;border:4px solid #fff;border-radius:50%;transform:translateY(-50%);box-shadow:0 3px 9px rgba(15,35,29,.25)}
-        .passenger-live-close-route .close-driver{left:-8px;background:#2563eb}.passenger-live-close-route .close-passenger{right:-8px;background:#ef4444}
+        .passenger-live-close-route span{position:absolute;top:50%;width:34px;height:34px;display:grid;place-items:center;border-radius:50%;transform:translateY(-50%);background:#fff;box-shadow:0 3px 9px rgba(15,35,29,.25);font-size:20px}
+        .passenger-live-close-route .close-driver{left:-12px}.passenger-live-close-route .close-driver::after{content:'🚕'}.passenger-live-close-route .close-passenger{right:-12px}.passenger-live-close-route .close-passenger::after{content:'📍'}
         .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:6;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
         .passenger-live-top-map-metric{padding:6px 8px 5px;display:flex;flex-direction:column;justify-content:center;min-width:0}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #e6eeeb}
         .passenger-live-top-map-metric span{display:block;font-size:5.8px;color:#5f716a;font-weight:900;text-transform:uppercase;letter-spacing:.025em;line-height:1;white-space:nowrap}.passenger-live-top-map-metric strong{display:block;margin-top:3px;color:#0f2438;font-size:14px;line-height:1;font-weight:950;letter-spacing:-.02em;white-space:nowrap}.passenger-live-top-map-metric:first-child strong{color:#087a5d}
@@ -271,11 +256,11 @@ export default function PassengerAcceptedRideMiniMap() {
       ) : visibleMapUrl ? (
         <div className="passenger-live-top-map-frame">
           <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè trajè a' : 'Itinéraire de la course') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
-          {closeDisplay && <div className="passenger-live-close-route" aria-label={ht ? 'Liy itinerè ant chofè ak pasaje' : 'Ligne d’itinéraire entre chauffeur et passager'}><span className="close-driver" /><span className="close-passenger" /></div>}
-          {!inProgress && <div className="passenger-live-top-map-pills">
-            <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
-            <span className="passenger-live-top-map-pill"><b className="end-dot" />{ht ? 'Ou' : 'Vous'}</span>
-          </div>}
+          {closeDisplay && <div className="passenger-live-close-route" aria-label={ht ? 'Liy itinerè ant chofè ak pwen arive' : 'Ligne d’itinéraire entre chauffeur et point d’arrivée'}><span className="close-driver" /><span className="close-passenger" /></div>}
+          <div className="passenger-live-top-map-pills">
+            <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Machin chofè' : 'Voiture du chauffeur'}</span>
+            <span className="passenger-live-top-map-pill"><b className="end-dot" />{inProgress ? (ht ? 'Pwen arive' : 'Arrivée') : (ht ? 'Kote pou pran ou' : 'Point de prise en charge')}</span>
+          </div>
         </div>
       ) : (
         <div className="passenger-live-top-map-loading">{ht ? 'N ap chaje itinerè a…' : 'Chargement de l’itinéraire…'}</div>
