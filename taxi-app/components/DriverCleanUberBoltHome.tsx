@@ -183,20 +183,46 @@ export default function DriverCleanUberBoltHome(){
 
   useEffect(()=>{
     const ride=activeRide
-    const marker=driverMarkerRef.current
-    if(!ride||!marker)return
-    const p=marker.getLngLat()
-    void drawRoute([p.lng,p.lat],ride,true)
+    if(!ride||!navigator.geolocation)return
+    setGpsStatus('waiting')
+    navigator.geolocation.getCurrentPosition(async pos=>{
+      setGpsStatus('ok')
+      const map=mapRef.current
+      if(!map)return
+      const point:[number,number]=[pos.coords.longitude,pos.coords.latitude]
+      const mod=await import('mapbox-gl')
+      if(!driverMarkerRef.current){
+        const el=document.createElement('div');el.className='dcu-marker active';el.textContent='🚕'
+        driverMarkerRef.current=new mod.default.Marker({element:el,rotationAlignment:'map'}).setLngLat(point).addTo(map)
+      }else driverMarkerRef.current.setLngLat(point)
+
+      const pickup:[number,number]=[Number(ride.pickup_longitude),Number(ride.pickup_latitude)]
+      const dest:[number,number]=[Number(ride.destination_longitude),Number(ride.destination_latitude)]
+      if(!pickupMarkerRef.current){
+        const el=document.createElement('div');el.className='dcu-stop pickup';el.textContent='P'
+        pickupMarkerRef.current=new mod.default.Marker({element:el}).setLngLat(pickup).addTo(map)
+      }else pickupMarkerRef.current.setLngLat(pickup)
+      if(!destinationMarkerRef.current){
+        const el=document.createElement('div');el.className='dcu-stop destination';el.textContent='D'
+        destinationMarkerRef.current=new mod.default.Marker({element:el}).setLngLat(dest).addTo(map)
+      }else destinationMarkerRef.current.setLngLat(dest)
+
+      const user=(await supabase.auth.getUser()).data.user
+      if(user){
+        void supabase.from('driver_locations').upsert({driver_id:user.id,latitude:pos.coords.latitude,longitude:pos.coords.longitude,heading:Number.isFinite(pos.coords.heading)?pos.coords.heading:null,speed_kph:Number.isFinite(pos.coords.speed)?Math.max(0,(pos.coords.speed||0)*3.6):null,updated_at:new Date().toISOString()},{onConflict:'driver_id'})
+      }
+      void drawRoute(point,ride,true)
+    },()=>setGpsStatus('error'),{enableHighAccuracy:true,maximumAge:0,timeout:12000})
   },[activeRide?.id,activeRide?.status])
 
   const ht=typeof window!=='undefined'&&localStorage.getItem('taxi-language')==='ht'
   return <>
     <style>{`
-      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:3;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08);border:1px solid rgba(15,112,90,.12)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border:1px solid #dfe9e5;border-radius:18px;padding:11px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:11px;font-weight:900;color:#0f705a}.dcu-route-card p{margin:5px 0 0;font-size:10px;color:#60716a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-stat strong span{margin-right:3px}.dcu-marker{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #0f705a;box-shadow:0 5px 14px rgba(0,0,0,.2);font-size:21px}.dcu-stop{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:1000;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.2)}.dcu-stop.pickup{background:#102033}.dcu-stop.destination{background:#0f705a}@media(max-width:560px){.dcu-map-shell{height:295px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
+      .dcu-home{margin:16px 0 10px}.dcu-map-shell{height:310px;border-radius:26px;overflow:hidden;position:relative;background:#eaf1ef;border:1px solid #dce7e3;box-shadow:0 10px 28px rgba(16,32,51,.08)}.dcu-map{width:100%;height:100%}.dcu-map-label{position:absolute;left:14px;top:14px;z-index:3;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:900;color:#102033;box-shadow:0 4px 14px rgba(0,0,0,.08);border:1px solid rgba(15,112,90,.12)}.dcu-map-fallback{height:100%;display:grid;place-items:center;text-align:center;padding:20px;color:#617281;font-weight:800}.dcu-route-card{position:absolute;left:12px;right:12px;bottom:12px;z-index:3;background:rgba(255,255,255,.97);backdrop-filter:blur(8px);border:1px solid #dfe9e5;border-radius:18px;padding:11px 13px;box-shadow:0 8px 22px rgba(16,32,51,.14)}.dcu-route-top{display:flex;justify-content:space-between;align-items:center;gap:8px}.dcu-route-top strong{font-size:12px;color:#102033}.dcu-route-top span{font-size:11px;font-weight:900;color:#0f705a}.dcu-route-card p{margin:5px 0 0;font-size:10px;color:#60716a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dcu-gps-error{color:#b54747!important}.dcu-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:11px}.dcu-stat{background:#fff;border:1px solid #e0e8e5;border-radius:18px;padding:13px 9px;min-width:0;box-shadow:0 5px 16px rgba(16,32,51,.04)}.dcu-stat small,.dcu-stat strong{display:block}.dcu-stat small{font-size:9px;color:#7d8b98;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.dcu-stat strong{margin-top:6px;font-size:14px;color:#102033}.dcu-stat strong span{margin-right:3px}.dcu-marker{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;border:3px solid #0f705a;box-shadow:0 5px 14px rgba(0,0,0,.2);font-size:21px}.dcu-marker.active{box-shadow:0 0 0 8px rgba(15,112,90,.16),0 5px 14px rgba(0,0,0,.22)}.dcu-stop{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:11px;font-weight:1000;border:3px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,.2)}.dcu-stop.pickup{background:#102033}.dcu-stop.destination{background:#0f705a}@media(max-width:560px){.dcu-map-shell{height:295px}.dcu-stat{padding:12px 8px}.dcu-stat strong{font-size:13px}}
     `}</style>
     <section className="dcu-home">
       <div className="dcu-map-shell">
-        <div className={`dcu-map-label ${gpsStatus==='error'?'dcu-gps-error':''}`}>{gpsStatus==='error'?(ht?'⚠️ GPS pa disponib':'⚠️ GPS indisponible'):(ht?'📍 Pozisyon ou':'📍 Votre position')}</div>
+        <div className={`dcu-map-label ${gpsStatus==='error'?'dcu-gps-error':''}`}>{gpsStatus==='error'?(ht?'⚠️ GPS pa disponib':'⚠️ GPS indisponible'):gpsStatus==='waiting'?(ht?'🛰️ GPS ap aktive…':'🛰️ Activation GPS…'):activeRide?(ht?'🟢 GPS aktif':'🟢 GPS actif'):(ht?'📍 Pozisyon ou':'📍 Votre position')}</div>
         {mapFailed?<div className="dcu-map-fallback">{ht?'Kat GPS la pa disponib pou kounye a.':'La carte GPS est indisponible pour le moment.'}</div>:<div ref={mapEl} className="dcu-map"/>}
         {routeInfo&&<div className="dcu-route-card"><div className="dcu-route-top"><strong>{routeInfo.phase==='pickup'?(ht?'Ale pran pasaje a':'Vers le passager'):(ht?'Ale nan destinasyon':'Vers la destination')}</strong><span>{routeInfo.distanceKm.toFixed(1)} km · {routeInfo.durationMin} min</span></div><p>{routeInfo.instruction||(ht?'Swiv wout ki make sou kat la.':'Suivez l’itinéraire affiché sur la carte.')}</p></div>}
       </div>
