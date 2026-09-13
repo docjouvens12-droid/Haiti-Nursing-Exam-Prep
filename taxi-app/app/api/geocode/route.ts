@@ -194,15 +194,60 @@ export async function GET(request: NextRequest) {
     }
   }
 
+  async function searchOpenStreetMap(query: string): Promise<Result[]> {
+    const params = new URLSearchParams({
+      q: query,
+      format: 'jsonv2',
+      addressdetails: '1',
+      limit: '8',
+      countrycodes: 'ht',
+      'accept-language': 'fr',
+    })
+    const controller = new AbortController()
+    const timeout = setTimeout(() => controller.abort(), 6000)
+    try {
+      const response = await fetch(`https://nominatim.openstreetmap.org/search?${params.toString()}`, {
+        signal: controller.signal,
+        cache: 'no-store',
+        headers: { 'User-Agent': 'MOVI-Haiti/1.0 (address-search)' },
+      })
+      if (!response.ok) return []
+      const rows = await response.json()
+      return (Array.isArray(rows) ? rows : []).flatMap((row: any) => {
+        const latValue = Number(row.lat)
+        const lngValue = Number(row.lon)
+        if (!Number.isFinite(latValue) || !Number.isFinite(lngValue)) return []
+        const type = String(row.type || row.addresstype || '')
+        const featureType = ['house', 'building'].includes(type) ? 'address' : type === 'road' ? 'street' : type === 'neighbourhood' ? 'neighborhood' : type
+        return [{
+          id: `osm-${row.place_id ?? `${lngValue},${latValue}`}`,
+          label: String(row.display_name || query),
+          center: [lngValue, latValue] as [number, number],
+          featureType,
+        }]
+      })
+    } catch {
+      return []
+    } finally {
+      clearTimeout(timeout)
+    }
+  }
+
   try {
     const batches: Result[][] = []
     const variants = buildAddressVariants(q)
 
     for (const variant of variants) batches.push(await searchMapboxV6(variant, true))
 
-    const hasPreciseV6 = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
-    if (!hasPreciseV6 && looksLikeStreetAddress(q)) {
+    let hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
+    if (!hasPrecise && looksLikeStreetAddress(q)) {
       for (const variant of variants) batches.push(await searchMapboxSearchBox(variant))
+      hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
+    }
+
+    if (!hasPrecise && looksLikeStreetAddress(q)) {
+      for (const variant of variants) batches.push(await searchOpenStreetMap(variant))
+      hasPrecise = batches.some(batch => batch.some(result => PRECISE_TYPES.has(result.featureType || '')))
     }
 
     if (!batches.some(batch => batch.length)) batches.push(await searchMapboxV6(q, false))
