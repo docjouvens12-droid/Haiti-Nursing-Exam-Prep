@@ -69,7 +69,7 @@ export default function UnifiedLoginPage() {
         .maybeSingle()
 
       if (driver?.status === 'approved') {
-        target = { path: '/driver/dashboard' }
+        target = { path: '/driver/dashboard-v2' }
       }
     }
 
