@@ -21,6 +21,11 @@ type RouteMetrics = {
   minutes: number
 }
 
+type RouteGeometry = {
+  type: 'LineString'
+  coordinates: number[][]
+}
+
 function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   const r = 6371
   const toRad = (value: number) => value * Math.PI / 180
@@ -34,6 +39,7 @@ function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
 export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
+  const [routeGeometry, setRouteGeometry] = useState<RouteGeometry | null>(null)
   const [ht, setHt] = useState(false)
   const [target, setTarget] = useState<HTMLElement | null>(null)
   const lastRouteAt = useRef(0)
@@ -86,6 +92,7 @@ export default function PassengerAcceptedRideMiniMap() {
   useEffect(() => {
     if (!routeTarget) {
       setMetrics(null)
+      setRouteGeometry(null)
       return
     }
     const { dLat, dLng, targetLat, targetLng } = routeTarget
@@ -101,13 +108,16 @@ export default function PassengerAcceptedRideMiniMap() {
     const controller = new AbortController()
     async function loadRoadMetrics() {
       try {
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=false&steps=false&access_token=${encodeURIComponent(token ?? '')}`
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token ?? '')}`
         const response = await fetch(url, { signal: controller.signal })
         if (!response.ok) return
         const json = await response.json()
         const route = json?.routes?.[0]
         if (cancelled || !route || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) return
         setMetrics({ distanceKm: route.distance / 1000, minutes: Math.max(1, Math.ceil(route.duration / 60)) })
+        if (route.geometry?.type === 'LineString' && Array.isArray(route.geometry.coordinates)) {
+          setRouteGeometry(route.geometry as RouteGeometry)
+        }
       } catch {}
     }
     void loadRoadMetrics()
@@ -119,15 +129,25 @@ export default function PassengerAcceptedRideMiniMap() {
     if (!token || !routeTarget || !tracking) return ''
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
-    const overlays: string[] = [`pin-s-d+0f8065(${dLng},${dLat})`]
+    const overlays: string[] = []
 
+    if (routeGeometry) {
+      const routeOverlay = {
+        type: 'Feature',
+        properties: { stroke: '#0f8065', 'stroke-width': 5, 'stroke-opacity': 0.95 },
+        geometry: routeGeometry,
+      }
+      overlays.push(`geojson(${encodeURIComponent(JSON.stringify(routeOverlay))})`)
+    }
+
+    overlays.push(`pin-s-d+0f8065(${dLng},${dLat})`)
     if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
       overlays.push(`pin-s-a+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
     }
     overlays.push(`pin-s-b+ef6a5b(${targetLng},${targetLat})`)
 
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=90&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
-  }, [routeTarget, tracking])
+  }, [routeTarget, tracking, routeGeometry])
 
   if (!tracking || !target || !document.contains(target)) return null
 
@@ -139,10 +159,10 @@ export default function PassengerAcceptedRideMiniMap() {
       ? (ht ? 'Chofè a rive' : 'Le chauffeur est arrivé')
       : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
   const subtitle = inProgress
-    ? (ht ? 'Swiv chofè a soti nan pwen demaraj la rive nan destinasyon an.' : 'Suivez le chauffeur du point de départ jusqu’à la destination.')
+    ? (ht ? 'Swiv itinerè a soti nan pozisyon chofè a rive nan destinasyon an.' : 'Suivez l’itinéraire du chauffeur jusqu’à la destination.')
     : arrived
       ? (ht ? 'Chofè a nan kote pou pran ou. Tanpri pare pou monte.' : 'Le chauffeur est au point de prise en charge. Préparez-vous à monter.')
-      : (ht ? 'Swiv chofè a pandan l ap vini pran ou.' : 'Suivez le chauffeur pendant son approche.')
+      : (ht ? 'Swiv itinerè chofè a pandan l ap vini pran ou.' : 'Suivez l’itinéraire du chauffeur pendant son approche.')
 
   const distanceLabel = metrics ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km` : '—'
   const timeLabel = metrics ? `~${metrics.minutes} min` : '—'
@@ -175,7 +195,7 @@ export default function PassengerAcceptedRideMiniMap() {
         <div className="passenger-live-arrived-panel"><div><span>📍</span><strong>{ht ? 'Chofè a rive' : 'Le chauffeur est arrivé'}</strong><small>{ht ? 'Chofè a ap tann ou nan kote pou pran ou.' : 'Votre chauffeur vous attend au point de prise en charge.'}</small></div></div>
       ) : mapUrl ? (
         <div className="passenger-live-top-map-frame">
-          <img src={mapUrl} alt={inProgress ? (ht ? 'Pwen demaraj, chofè ak destinasyon' : 'Point de départ, chauffeur et destination') : (ht ? 'Pozisyon chofè a ak pasaje a' : 'Position du chauffeur et du passager')} />
+          <img src={mapUrl} alt={inProgress ? (ht ? 'Itinerè soti nan pozisyon chofè a rive nan destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
           <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
             {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Demaraj' : 'Départ'}</span>}
@@ -183,7 +203,7 @@ export default function PassengerAcceptedRideMiniMap() {
           </div>
         </div>
       ) : (
-        <div className="passenger-live-top-map-loading">{ht ? 'N ap chaje pozisyon chofè a…' : 'Chargement de la position du chauffeur…'}</div>
+        <div className="passenger-live-top-map-loading">{ht ? 'N ap chaje itinerè a…' : 'Chargement de l’itinéraire…'}</div>
       )}
 
       {!arrived && <div className="passenger-live-top-map-metrics">
