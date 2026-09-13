@@ -4,8 +4,8 @@ import { useLayoutEffect } from 'react'
 
 const TEST_POSITION: GeolocationPosition = {
   coords: {
-    latitude: 19.4475,
-    longitude: -72.6843,
+    latitude: 19.445677,
+    longitude: -72.6907718,
     accuracy: 15,
     altitude: null,
     altitudeAccuracy: null,
