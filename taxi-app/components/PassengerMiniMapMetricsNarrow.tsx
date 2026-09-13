@@ -29,5 +29,23 @@ export default function PassengerMiniMapMetricsNarrow() {
       width:4px!important;
       height:4px!important;
     }
+    .passenger-live-top-map .passenger-live-top-map-frame{
+      background:#dfe9e5!important;
+    }
+    .passenger-live-top-map .passenger-live-top-map-frame img{
+      object-fit:contain!important;
+      object-position:center center!important;
+      background:#dfe9e5!important;
+    }
+    .passenger-live-top-map .passenger-live-top-map-pills{
+      bottom:8px!important;
+      left:8px!important;
+      right:8px!important;
+      gap:4px!important;
+    }
+    .passenger-live-top-map .passenger-live-top-map-pill{
+      padding:4px 6px!important;
+      font-size:6.5px!important;
+    }
   `}</style>
 }
