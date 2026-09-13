@@ -42,6 +42,57 @@ function pointOverlay(lng: number, lat: number, color: string) {
   return `geojson(${encodeURIComponent(JSON.stringify(geojson))})`
 }
 
+function lineOverlay(
+  fromLng: number,
+  fromLat: number,
+  toLng: number,
+  toLat: number,
+  color: string,
+  width: number,
+  opacity = 1,
+) {
+  const geojson = {
+    type: 'Feature',
+    properties: {
+      stroke: color,
+      'stroke-width': width,
+      'stroke-opacity': opacity,
+    },
+    geometry: {
+      type: 'LineString',
+      coordinates: [[fromLng, fromLat], [toLng, toLat]],
+    },
+  }
+  return `geojson(${encodeURIComponent(JSON.stringify(geojson))})`
+}
+
+function visualPoints(dLat: number, dLng: number, targetLat: number, targetLng: number) {
+  const distanceKm = haversineKm(dLat, dLng, targetLat, targetLng)
+  if (distanceKm >= 0.035) {
+    return {
+      close: false,
+      driverLat: dLat,
+      driverLng: dLng,
+      targetLat,
+      targetLng,
+    }
+  }
+
+  // When the real GPS points overlap, keep the real distance/ETA but separate
+  // the display points by only a few metres so both endpoints and a connector
+  // remain visible to the passenger.
+  const midLat = (dLat + targetLat) / 2
+  const midLng = (dLng + targetLng) / 2
+  const lngOffset = 0.00012
+  return {
+    close: true,
+    driverLat: midLat,
+    driverLng: midLng - lngOffset,
+    targetLat: midLat,
+    targetLng: midLng + lngOffset,
+  }
+}
+
 export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
@@ -133,21 +184,22 @@ export default function PassengerAcceptedRideMiniMap() {
 
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
+    const display = visualPoints(dLat, dLng, targetLat, targetLng)
     const overlays: string[] = []
 
-    if (routePolyline && routePolyline.length < 4000) {
+    if (!display.close && routePolyline && routePolyline.length < 4000) {
       const encoded = encodeURIComponent(routePolyline)
       overlays.push(`path-10+ffffff-0.88(${encoded})`)
       overlays.push(`path-6+087a5d-1(${encoded})`)
+    } else {
+      overlays.push(lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#ffffff', 10, 0.92))
+      overlays.push(lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#087a5d', 6, 1))
     }
 
-    if (inProgress) {
-      overlays.push(pointOverlay(targetLng, targetLat, '#ef4444'))
-      overlays.push(pointOverlay(dLng, dLat, '#2563eb'))
-    } else {
-      overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
-      overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
-    }
+    // Always use two clear endpoint markers. The driver is blue and the
+    // passenger/destination is red, matching the passenger tracking legend.
+    overlays.push(pointOverlay(display.driverLng, display.driverLat, '#2563eb'))
+    overlays.push(pointOverlay(display.targetLng, display.targetLat, '#ef4444'))
 
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking, routePolyline])
@@ -156,15 +208,13 @@ export default function PassengerAcceptedRideMiniMap() {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || !routeTarget || !tracking) return ''
     const { dLat, dLng, targetLat, targetLng } = routeTarget
-    const inProgress = tracking.ride_status === 'in_progress'
-    if (inProgress) {
-      const overlays = [
-        pointOverlay(targetLng, targetLat, '#ef4444'),
-        pointOverlay(dLng, dLat, '#2563eb'),
-      ]
-      return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
-    }
-    const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`, `pin-l-p+ef4444(${targetLng},${targetLat})`]
+    const display = visualPoints(dLat, dLng, targetLat, targetLng)
+    const overlays = [
+      lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#ffffff', 10, 0.92),
+      lineOverlay(display.driverLng, display.driverLat, display.targetLng, display.targetLat, '#087a5d', 6, 1),
+      pointOverlay(display.driverLng, display.driverLat, '#2563eb'),
+      pointOverlay(display.targetLng, display.targetLat, '#ef4444'),
+    ]
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking])
 
@@ -199,7 +249,7 @@ export default function PassengerAcceptedRideMiniMap() {
         .passenger-live-top-map-copy{min-width:0;flex:1}.passenger-live-top-map-copy strong{display:block;color:#10243a;font-size:14px;line-height:1.2;font-weight:900}.passenger-live-top-map-copy small{display:block;margin-top:2px;color:#6d7e77;font-size:9px;line-height:1.3;font-weight:650}
         .passenger-live-top-map-live{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:999px;background:#eaf7f2;color:#0f8065;font-size:8px;font-weight:900;letter-spacing:.05em}.passenger-live-top-map-live:before{content:'';width:6px;height:6px;border-radius:50%;background:#0f8065}
         .passenger-live-top-map-frame{position:absolute;left:0;right:0;top:57px;bottom:0;background:#e8efec}.passenger-live-top-map-frame img{display:block;width:100%;height:100%;object-fit:cover}
-        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#087a5d}.end-dot{background:#ef4444}
+        .passenger-live-top-map-pills{position:absolute;left:12px;right:12px;bottom:12px;display:flex;justify-content:space-between;gap:6px;flex-wrap:wrap;z-index:3}.passenger-live-top-map-pill{display:flex;align-items:center;gap:5px;padding:6px 9px;border-radius:999px;background:rgba(255,255,255,.95);box-shadow:0 5px 14px rgba(15,35,29,.12);font-size:8px;font-weight:900;color:#334a42}.passenger-live-top-map-pill b{width:8px;height:8px;border-radius:50%;display:inline-block}.driver-dot{background:#2563eb}.end-dot{background:#ef4444}
         .passenger-live-top-map-metrics{position:absolute;left:10px;top:66px;width:184px;z-index:4;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.94);border:1px solid rgba(221,233,228,.92);border-radius:13px;overflow:hidden;box-shadow:0 5px 14px rgba(16,36,31,.12);backdrop-filter:blur(7px)}
         .passenger-live-top-map-metric{padding:6px 8px 5px;display:flex;flex-direction:column;justify-content:center;min-width:0}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #e6eeeb}
         .passenger-live-top-map-metric span{display:block;font-size:5.8px;color:#5f716a;font-weight:900;text-transform:uppercase;letter-spacing:.025em;line-height:1;white-space:nowrap}.passenger-live-top-map-metric strong{display:block;margin-top:3px;color:#0f2438;font-size:14px;line-height:1;font-weight:950;letter-spacing:-.02em;white-space:nowrap}.passenger-live-top-map-metric:first-child strong{color:#087a5d}
