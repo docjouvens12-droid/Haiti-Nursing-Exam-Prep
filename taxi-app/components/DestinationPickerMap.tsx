@@ -14,14 +14,26 @@ type Props = {
   onCancel: () => void
 }
 
-function reverseLabel(feature: any, fallback: string) {
+function mapboxLabel(feature: any) {
   const props = feature?.properties ?? {}
+  const featureType = String(props.feature_type || feature?.feature_type || '')
   const full = String(props.full_address || '').trim()
-  if (full) return full
   const name = String(props.name || feature?.text || '').trim()
   const context = String(props.place_formatted || '').trim()
-  if (name && context) return `${name}, ${context}`
-  return name || context || fallback
+  const label = full || (name && context ? `${name}, ${context}` : name || context)
+  return { label, featureType }
+}
+
+function osmLabel(row: any) {
+  const address = row?.address ?? {}
+  const house = String(address.house_number || '').trim()
+  const road = String(address.road || address.pedestrian || address.residential || address.neighbourhood || '').trim()
+  const city = String(address.city || address.town || address.village || address.municipality || '').trim()
+  const state = String(address.state || address.region || '').trim()
+  const country = String(address.country || 'Haïti').trim()
+  const first = [house, road].filter(Boolean).join(', ')
+  const second = [city, state, country].filter(Boolean).join(', ')
+  return [first, second].filter(Boolean).join(' · ')
 }
 
 export default function DestinationPickerMap({ pickup, initialDestination, lang, onConfirm, onCancel }: Props) {
@@ -77,18 +89,50 @@ export default function DestinationPickerMap({ pickup, initialDestination, lang,
       const fallback = lang === 'ht'
         ? `Pwen chwazi (${point.lat.toFixed(5)}, ${point.lng.toFixed(5)})`
         : `Point choisi (${point.lat.toFixed(5)}, ${point.lng.toFixed(5)})`
+
       try {
-        const params = new URLSearchParams({
+        const mapboxParams = new URLSearchParams({
           longitude: String(point.lng),
           latitude: String(point.lat),
           access_token: token,
           language: 'fr',
           country: 'ht',
         })
-        const response = await fetch(`https://api.mapbox.com/search/geocode/v6/reverse?${params.toString()}`, { signal: controller.signal, cache: 'no-store' })
-        const json = response.ok ? await response.json() : null
-        const feature = json?.features?.[0]
-        setLabel(feature ? reverseLabel(feature, fallback) : fallback)
+        const mapboxResponse = await fetch(`https://api.mapbox.com/search/geocode/v6/reverse?${mapboxParams.toString()}`, { signal: controller.signal, cache: 'no-store' })
+        const mapboxJson = mapboxResponse.ok ? await mapboxResponse.json() : null
+        const features = Array.isArray(mapboxJson?.features) ? mapboxJson.features : []
+        const preciseFeature = features.find((feature: any) => {
+          const type = String(feature?.properties?.feature_type || feature?.feature_type || '')
+          return type === 'address' || type === 'street'
+        })
+
+        if (preciseFeature) {
+          const precise = mapboxLabel(preciseFeature).label
+          if (precise) {
+            setLabel(precise)
+            return
+          }
+        }
+
+        const osmParams = new URLSearchParams({
+          lat: String(point.lat),
+          lon: String(point.lng),
+          format: 'jsonv2',
+          addressdetails: '1',
+          zoom: '18',
+          'accept-language': 'fr',
+        })
+        const osmResponse = await fetch(`https://nominatim.openstreetmap.org/reverse?${osmParams.toString()}`, { signal: controller.signal, cache: 'no-store' })
+        const osmJson = osmResponse.ok ? await osmResponse.json() : null
+        const detailed = osmLabel(osmJson)
+        if (detailed && !/^Haïti$/i.test(detailed)) {
+          setLabel(detailed)
+          return
+        }
+
+        const firstFeature = features[0]
+        const broad = firstFeature ? mapboxLabel(firstFeature).label : ''
+        setLabel(broad || fallback)
       } catch {
         if (!controller.signal.aborted) setLabel(fallback)
       } finally {
