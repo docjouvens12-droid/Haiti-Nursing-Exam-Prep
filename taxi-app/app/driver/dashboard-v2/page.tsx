@@ -33,19 +33,46 @@ export default function DriverDashboardV2Page(){
 
   const nextAction=activeRide?.status==='accepted'?{key:'arriving' as const,label:'Je suis arrivé'}:activeRide?.status==='driver_arriving'?{key:'start' as const,label:'Commencer le trajet'}:activeRide?.status==='in_progress'?{key:'complete' as const,label:'Terminer le trajet'}:null
   if(!authorized)return <main className="drv2-page"><div className="drv2-shell"><div className="drv2-access"><div className="drv2-logo">M</div><h1>Accès chauffeur</h1><p>{message||'Ce compte n’est pas un chauffeur approuvé.'}</p></div></div></main>
-  const activeDestination=activeRide?destinationParts(activeRide.destination_address):null
-  const mapRide=(activeRide??available[0]??null)
-  const showRideMap=Boolean(mapRide&&['requested','accepted','driver_arriving','in_progress'].includes(mapRide.status))
+
+  const incomingRide=!activeRide&&online?(available[0]??null):null
+
+  if(incomingRide){
+    const destination=destinationParts(incomingRide.destination_address)
+    return <main className="drv2-page drv2-ride-mode drv2-offer-mode">
+      <header className="drv2-offer-top"><div className="drv2-offer-brand"><div className="drv2-logo">M</div><strong>MOVI</strong></div><button type="button" onClick={()=>rideAction('reject',incomingRide)} disabled={busy}>✕ Refuser</button></header>
+      <DriverCleanUberBoltHome previewRide={incomingRide as any}/>
+      <section className="drv2-offer-sheet">
+        <div className="drv2-sheet-handle"/>
+        <div className="drv2-offer-head"><span className="drv2-service-chip">{incomingRide.service_type??'Standard'}</span><span className={offerSeconds<=5?'drv2-countdown danger':'drv2-countdown'}>{offerSeconds}s</span></div>
+        <div className="drv2-offer-main"><strong>{incomingRide.estimated_duration_min??'—'} min <span>({incomingRide.estimated_distance_km??'—'} km)</span></strong><em>{incomingRide.estimated_fare_htg??'—'} HTG</em></div>
+        <div className="drv2-offer-route"><div><b>●</b><span><small>DÉPART</small><strong>{incomingRide.pickup_address}</strong></span></div><div><b>■</b><span><small>DESTINATION</small><strong>{destination.city}</strong>{destination.street&&<em>{destination.street}</em>}</span></div></div>
+        <div className="drv2-offer-actions"><button type="button" className="reject" onClick={()=>rideAction('reject',incomingRide)} disabled={busy}>Refuser</button><button type="button" className="accept" onClick={()=>rideAction('accept',incomingRide)} disabled={busy||!vehicle}>Accepter</button></div>
+      </section>
+    </main>
+  }
+
+  if(activeRide){
+    const destination=destinationParts(activeRide.destination_address)
+    return <main className="drv2-page drv2-ride-mode drv2-active-mode">
+      <header className="drv2-offer-top"><div className="drv2-offer-brand"><div className="drv2-logo">M</div><strong>MOVI</strong></div><div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div></header>
+      <DriverCleanUberBoltHome previewRide={activeRide as any}/>
+      <section className="drv2-offer-sheet drv2-active-sheet">
+        <div className="drv2-sheet-handle"/>
+        <span className="drv2-section-label">TRAJET EN COURS</span>
+        <h2><span>{destination.city}</span>{destination.street&&<span>{destination.street}</span>}</h2>
+        <div className="drv2-active-meta"><span>{activeRide.estimated_distance_km??'—'} km</span><span>{activeRide.estimated_duration_min??'—'} min</span><span>{activeRide.estimated_fare_htg??'—'} HTG</span></div>
+        {nextAction&&<button className="drv2-active-next" disabled={busy} onClick={()=>rideAction(nextAction.key,activeRide)}>{nextAction.label}</button>}
+      </section>
+    </main>
+  }
 
   return <main className="drv2-page"><div className="drv2-shell">
     <header className="drv2-topbar"><button className="menu drv2-menu" aria-label="Menu" onTouchStart={(event)=>{event.currentTarget.click()}}>☰</button><div className="drv2-brand"><div className="drv2-logo">M</div><div><strong>MOVI</strong><span>Espace chauffeur</span></div></div><div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div></header>
-    {showRideMap&&<DriverCleanUberBoltHome previewRide={mapRide as any}/>} 
     <section className="drv2-status-card"><div className="drv2-status-copy"><strong>{online?'Prêt à conduire':'Vous êtes hors ligne'}</strong><span>{online?'Les nouvelles demandes peuvent apparaître maintenant.':'Activez-vous pour recevoir des courses.'}</span></div><button className={online?'drv2-switch on':'drv2-switch'} onClick={toggleOnline} disabled={busy} aria-label={online?'Passer hors ligne':'Passer en ligne'}><span/></button></section>
     {vehicle&&<section className="drv2-vehicle-strip"><span>🚙</span><div><small>VÉHICULE ACTIF</small><strong>{vehicle.make} {vehicle.model}</strong><em>{vehicle.plate_number}</em></div></section>}
     {message&&<div className="drv2-message">{message}</div>}
-    {activeRide&&activeDestination&&<section className="drv2-active-card"><div className="drv2-section-label">TRAJET EN COURS</div><h2 style={{display:'grid',gap:4}}><span>{activeDestination.city}</span>{activeDestination.street&&<span style={{fontSize:'0.86em',fontWeight:800}}>{activeDestination.street}</span>}</h2><p><b>Départ</b><span>{activeRide.pickup_address}</span></p><div className="drv2-stats"><span>{activeRide.estimated_distance_km??'—'} km</span><span>{activeRide.estimated_duration_min??'—'} min</span><span>{activeRide.estimated_fare_htg??'—'} HTG</span></div>{nextAction&&<button className="drv2-primary" disabled={busy} onClick={()=>rideAction(nextAction.key,activeRide)}>{nextAction.label}</button>}</section>}
     <section className="drv2-requests"><div className="drv2-section-head"><div><span className="drv2-kicker">COURSES</span><h2>Demandes disponibles</h2></div><button className="drv2-refresh" onClick={()=>refreshDashboard(true)} disabled={busy}>{busy?'...':'Actualiser'}</button></div>
-      {!online?<div className="drv2-empty"><span>🚘</span><strong>Passez en ligne</strong><p>Activez votre disponibilité pour recevoir les demandes proches de vous.</p></div>:available.length===0?<div className="drv2-empty"><span>🧭</span><strong>Aucune demande pour le moment</strong><p>Les nouvelles courses apparaîtront ici automatiquement.</p></div>:<div className="drv2-list">{available.slice(0,1).map(ride=>{const destination=destinationParts(ride.destination_address);return <article className="drv2-ride" key={ride.id}><div style={{display:'flex',justifyContent:'space-between',alignItems:'center',gap:12,marginBottom:10}}><span style={{fontSize:12,fontWeight:900,color:'#0f705a'}}>NOUVELLE DEMANDE</span><span style={{minWidth:42,height:42,borderRadius:999,display:'grid',placeItems:'center',background:offerSeconds<=5?'#fff0f0':'#eef8f4',color:offerSeconds<=5?'#b23a3a':'#0f705a',fontWeight:950,fontSize:16}}>{offerSeconds}s</span></div><div className="drv2-ride-top"><div><small>DÉPART</small><strong>{ride.pickup_address}</strong></div><span>{ride.service_type??'standard'}</span></div><div className="drv2-route-line"/><div className="drv2-destination"><small>DESTINATION</small><strong style={{display:'grid',gap:3}}><span>{destination.city}</span>{destination.street&&<span style={{fontSize:'0.92em',fontWeight:800}}>{destination.street}</span>}</strong></div><div className="drv2-stats"><span>{ride.estimated_distance_km??'—'} km</span><span>{ride.estimated_duration_min??'—'} min</span><span>{ride.estimated_fare_htg??'—'} HTG</span></div><div style={{display:'grid',gridTemplateColumns:'1fr 1.35fr',gap:10,marginTop:12}}><button type="button" disabled={busy} onClick={()=>rideAction('reject',ride)} style={{minHeight:54,borderRadius:15,border:'1px solid #e3bcbc',background:'#fff5f5',color:'#a33b3b',fontWeight:900,fontSize:15}}>Refuser</button><button className="drv2-primary" style={{marginTop:0}} disabled={busy||!vehicle} onClick={()=>rideAction('accept',ride)}>Accepter la course</button></div></article>})}</div>}
+      {!online?<div className="drv2-empty"><span>🚘</span><strong>Passez en ligne</strong><p>Activez votre disponibilité pour recevoir les demandes proches de vous.</p></div>:<div className="drv2-empty"><span>🧭</span><strong>Aucune demande pour le moment</strong><p>Les nouvelles courses apparaîtront ici automatiquement.</p></div>}
     </section>
   </div></main>
 }
