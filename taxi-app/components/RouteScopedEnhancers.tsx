@@ -14,7 +14,6 @@ import PassengerAcceptedRideMiniMap from './PassengerAcceptedRideMiniMap'
 import PassengerMiniMapMetricsNarrow from './PassengerMiniMapMetricsNarrow'
 import PassengerRideStatusFlow from './PassengerRideStatusFlow'
 import PassengerPendingRideCancel from './PassengerPendingRideCancel'
-import PassengerRideCompletion from './PassengerRideCompletion'
 
 import DriverAvatarUploadPolish from './DriverAvatarUploadPolish'
 import DriverDashboardTitleHide from './DriverDashboardTitleHide'
@@ -76,7 +75,6 @@ export default function RouteScopedEnhancers() {
       <PassengerMiniMapMetricsNarrow />
       <PassengerRideStatusFlow />
       <PassengerPendingRideCancel />
-      <PassengerRideCompletion />
     </>}
 
     {isCleanDriverDashboard && <>
