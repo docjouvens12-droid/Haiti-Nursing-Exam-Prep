@@ -34,10 +34,11 @@ export default function DriverDashboardV2Page(){
   if(!authorized)return <main className="drv2-page"><div className="drv2-shell"><div className="drv2-access"><div className="drv2-logo">M</div><h1>Accès chauffeur</h1><p>{message||'Ce compte n’est pas un chauffeur approuvé.'}</p></div></div></main>
   const activeDestination=activeRide?destinationParts(activeRide.destination_address):null
   const mapRide=(activeRide??available[0]??null)
+  const showRideMap=Boolean(mapRide&&['requested','accepted','driver_arriving','in_progress'].includes(mapRide.status))
 
   return <main className="drv2-page"><div className="drv2-shell">
     <header className="drv2-topbar"><button className="menu drv2-menu" aria-label="Menu" onTouchStart={(event)=>{event.currentTarget.click()}}>☰</button><div className="drv2-brand"><div className="drv2-logo">M</div><div><strong>MOVI</strong><span>Espace chauffeur</span></div></div><div className="drv2-rating"><strong>★ {rating.toFixed(2)}</strong><span>{totalRides} trajets</span></div></header>
-    <DriverCleanUberBoltHome previewRide={mapRide&&['requested','accepted','driver_arriving','in_progress'].includes(mapRide.status)?mapRide as any:null}/>
+    {showRideMap&&<DriverCleanUberBoltHome previewRide={mapRide as any}/>} 
     <section className="drv2-status-card"><div className="drv2-status-copy"><strong>{online?'Prêt à conduire':'Vous êtes hors ligne'}</strong><span>{online?'Les nouvelles demandes peuvent apparaître maintenant.':'Activez-vous pour recevoir des courses.'}</span></div><button className={online?'drv2-switch on':'drv2-switch'} onClick={toggleOnline} disabled={busy} aria-label={online?'Passer hors ligne':'Passer en ligne'}><span/></button></section>
     {vehicle&&<section className="drv2-vehicle-strip"><span>🚙</span><div><small>VÉHICULE ACTIF</small><strong>{vehicle.make} {vehicle.model}</strong><em>{vehicle.plate_number}</em></div></section>}
     {message&&<div className="drv2-message">{message}</div>}
