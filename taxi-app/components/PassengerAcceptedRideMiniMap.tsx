@@ -125,11 +125,15 @@ export default function PassengerAcceptedRideMiniMap() {
       overlays.push(`path-10+ffffff-0.88(${encoded})`)
       overlays.push(`path-6+087a5d-1(${encoded})`)
     }
-    overlays.push(`pin-m-d+087a5d(${dLng},${dLat})`)
+
+    overlays.push(`pin-l-c+087a5d(${dLng},${dLat})`)
+
     if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-      overlays.push(`pin-m-a+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+      overlays.push(`pin-l-d+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+      overlays.push(`pin-l-a+ef4444(${targetLng},${targetLat})`)
+    } else {
+      overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
     }
-    overlays.push(`pin-m-b+ef4444(${targetLng},${targetLat})`)
 
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking, routePolyline])
@@ -139,11 +143,13 @@ export default function PassengerAcceptedRideMiniMap() {
     if (!token || !routeTarget || !tracking) return ''
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
-    const overlays = [`pin-m-d+087a5d(${dLng},${dLat})`]
+    const overlays = [`pin-l-c+087a5d(${dLng},${dLat})`]
     if (inProgress && tracking.pickup_latitude != null && tracking.pickup_longitude != null) {
-      overlays.push(`pin-m-a+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+      overlays.push(`pin-l-d+2563eb(${tracking.pickup_longitude},${tracking.pickup_latitude})`)
+      overlays.push(`pin-l-a+ef4444(${targetLng},${targetLat})`)
+    } else {
+      overlays.push(`pin-l-p+ef4444(${targetLng},${targetLat})`)
     }
-    overlays.push(`pin-m-b+ef4444(${targetLng},${targetLat})`)
     return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=60&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
   }, [routeTarget, tracking])
 
@@ -201,8 +207,8 @@ export default function PassengerAcceptedRideMiniMap() {
           <img src={visibleMapUrl} onError={() => setMapFailed(true)} alt={inProgress ? (ht ? 'Itinerè chofè a jouk destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
           <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
-            {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Demaraj' : 'Départ'}</span>}
-            <span className="passenger-live-top-map-pill"><b className="end-dot" />{inProgress ? (ht ? 'Arive' : 'Arrivée') : (ht ? 'Ou' : 'Vous')}</span>
+            {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Pwen demaraj' : 'Point de départ'} · D</span>}
+            <span className="passenger-live-top-map-pill"><b className="end-dot" />{inProgress ? (ht ? 'Pwen arive · A' : 'Point d’arrivée · A') : (ht ? 'Ou' : 'Vous')}</span>
           </div>
         </div>
       ) : (
@@ -212,7 +218,7 @@ export default function PassengerAcceptedRideMiniMap() {
       {!arrived && <div className="passenger-live-top-map-metrics">
         <div className="passenger-live-top-map-metric"><span>{inProgress ? (ht ? 'Distans ki rete' : 'Distance restante') : (ht ? 'Distans' : 'Distance')}</span><strong>{distanceLabel}</strong></div>
         <div className="passenger-live-top-map-metric"><span>{inProgress ? (ht ? 'Tan ki rete' : 'Temps restant') : (ht ? 'Chofè a rive nan' : 'Arrivée dans')}</span><strong>{timeLabel}</strong></div>
-        {inProgress && <div className="trip-endpoints"><span><b className="start-dot" />{ht ? 'Pwen demaraj' : 'Point de départ'}</span><span><b className="end-dot" />{ht ? 'Pwen arive' : 'Point d’arrivée'}</span></div>}
+        {inProgress && <div className="trip-endpoints"><span><b className="start-dot" />{ht ? 'D = Depa' : 'D = Départ'}</span><span><b className="end-dot" />{ht ? 'A = Arive' : 'A = Arrivée'}</span></div>}
       </div>}
     </section>,
     target,
