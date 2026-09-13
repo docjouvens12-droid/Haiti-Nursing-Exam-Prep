@@ -16,30 +16,21 @@ type Tracking = {
   destination_longitude: number | null
 }
 
-type RouteMetrics = {
-  distanceKm: number
-  minutes: number
-}
-
-type RouteGeometry = {
-  type: 'LineString'
-  coordinates: number[][]
-}
+type RouteMetrics = { distanceKm: number; minutes: number }
 
 function haversineKm(lat1: number, lng1: number, lat2: number, lng2: number) {
   const r = 6371
   const toRad = (value: number) => value * Math.PI / 180
   const dLat = toRad(lat2 - lat1)
   const dLng = toRad(lng2 - lng1)
-  const a = Math.sin(dLat / 2) ** 2
-    + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2
   return 2 * r * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 }
 
 export default function PassengerAcceptedRideMiniMap() {
   const [tracking, setTracking] = useState<Tracking | null>(null)
   const [metrics, setMetrics] = useState<RouteMetrics | null>(null)
-  const [routeGeometry, setRouteGeometry] = useState<RouteGeometry | null>(null)
+  const [routePolyline, setRoutePolyline] = useState('')
   const [ht, setHt] = useState(false)
   const [target, setTarget] = useState<HTMLElement | null>(null)
   const lastRouteAt = useRef(0)
@@ -59,23 +50,18 @@ export default function PassengerAcceptedRideMiniMap() {
     async function load() {
       const { data, error } = await supabase.rpc('get_passenger_live_driver_tracking')
       if (!alive) return
-      if (error) {
-        setTracking(null)
-        return
-      }
+      if (error) { setTracking(null); return }
       const row = (Array.isArray(data) ? data[0] : data) as Tracking | undefined
       setTracking(row ?? null)
     }
 
     void load()
     const timer = window.setInterval(() => void load(), 1000)
-    const onStorage = () => syncLang()
-    window.addEventListener('storage', onStorage)
-
+    window.addEventListener('storage', syncLang)
     return () => {
       alive = false
       window.clearInterval(timer)
-      window.removeEventListener('storage', onStorage)
+      window.removeEventListener('storage', syncLang)
     }
   }, [])
 
@@ -92,52 +78,49 @@ export default function PassengerAcceptedRideMiniMap() {
   useEffect(() => {
     if (!routeTarget) {
       setMetrics(null)
-      setRouteGeometry(null)
+      setRoutePolyline('')
       return
     }
+
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const fallbackDistance = haversineKm(dLat, dLng, targetLat, targetLng)
     setMetrics({ distanceKm: fallbackDistance, minutes: Math.max(1, Math.ceil(fallbackDistance * 3.2)) })
 
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     const now = Date.now()
-    if (!token || now - lastRouteAt.current < 6000) return
+    if (!token || now - lastRouteAt.current < 5000) return
     lastRouteAt.current = now
 
     let cancelled = false
     const controller = new AbortController()
-    async function loadRoadMetrics() {
+
+    async function loadRoadRoute() {
       try {
-        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=full&geometries=geojson&steps=false&access_token=${encodeURIComponent(token ?? '')}`
-        const response = await fetch(url, { signal: controller.signal })
+        const url = `https://api.mapbox.com/directions/v5/mapbox/driving/${dLng},${dLat};${targetLng},${targetLat}?overview=full&geometries=polyline6&steps=false&access_token=${encodeURIComponent(token ?? '')}`
+        const response = await fetch(url, { signal: controller.signal, cache: 'no-store' })
         if (!response.ok) return
         const json = await response.json()
         const route = json?.routes?.[0]
         if (cancelled || !route || !Number.isFinite(route.distance) || !Number.isFinite(route.duration)) return
         setMetrics({ distanceKm: route.distance / 1000, minutes: Math.max(1, Math.ceil(route.duration / 60)) })
-        if (route.geometry?.type === 'LineString' && Array.isArray(route.geometry.coordinates)) {
-          setRouteGeometry(route.geometry as RouteGeometry)
-        }
+        if (typeof route.geometry === 'string' && route.geometry.length > 0) setRoutePolyline(route.geometry)
       } catch {}
     }
-    void loadRoadMetrics()
+
+    void loadRoadRoute()
     return () => { cancelled = true; controller.abort() }
   }, [routeTarget])
 
   const mapUrl = useMemo(() => {
     const token = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN
     if (!token || !routeTarget || !tracking) return ''
+
     const { dLat, dLng, targetLat, targetLng } = routeTarget
     const inProgress = tracking.ride_status === 'in_progress'
     const overlays: string[] = []
 
-    if (routeGeometry) {
-      const routeOverlay = {
-        type: 'Feature',
-        properties: { stroke: '#0f8065', 'stroke-width': 5, 'stroke-opacity': 0.95 },
-        geometry: routeGeometry,
-      }
-      overlays.push(`geojson(${encodeURIComponent(JSON.stringify(routeOverlay))})`)
+    if (routePolyline) {
+      overlays.push(`path-6+0f8065-0.95(${encodeURIComponent(routePolyline)})`)
     }
 
     overlays.push(`pin-s-d+0f8065(${dLng},${dLat})`)
@@ -146,8 +129,8 @@ export default function PassengerAcceptedRideMiniMap() {
     }
     overlays.push(`pin-s-b+ef6a5b(${targetLng},${targetLat})`)
 
-    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=90&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
-  }, [routeTarget, tracking, routeGeometry])
+    return `https://api.mapbox.com/styles/v1/mapbox/streets-v12/static/${overlays.join(',')}/auto/760x420@2x?padding=80&logo=false&attribution=false&access_token=${encodeURIComponent(token)}`
+  }, [routeTarget, tracking, routePolyline])
 
   if (!tracking || !target || !document.contains(target)) return null
 
@@ -159,10 +142,10 @@ export default function PassengerAcceptedRideMiniMap() {
       ? (ht ? 'Chofè a rive' : 'Le chauffeur est arrivé')
       : (ht ? 'Chofè a sou wout pou ou' : 'Votre chauffeur est en route')
   const subtitle = inProgress
-    ? (ht ? 'Swiv itinerè a soti nan pozisyon chofè a rive nan destinasyon an.' : 'Suivez l’itinéraire du chauffeur jusqu’à la destination.')
+    ? (ht ? 'Swiv liy itinerè a jouk destinasyon an.' : 'Suivez la ligne de l’itinéraire jusqu’à la destination.')
     : arrived
       ? (ht ? 'Chofè a nan kote pou pran ou. Tanpri pare pou monte.' : 'Le chauffeur est au point de prise en charge. Préparez-vous à monter.')
-      : (ht ? 'Swiv itinerè chofè a pandan l ap vini pran ou.' : 'Suivez l’itinéraire du chauffeur pendant son approche.')
+      : (ht ? 'Swiv liy itinerè chofè a pandan l ap vini pran ou.' : 'Suivez l’itinéraire du chauffeur pendant son approche.')
 
   const distanceLabel = metrics ? `${metrics.distanceKm < 10 ? metrics.distanceKm.toFixed(1) : Math.round(metrics.distanceKm)} km` : '—'
   const timeLabel = metrics ? `~${metrics.minutes} min` : '—'
@@ -181,8 +164,7 @@ export default function PassengerAcceptedRideMiniMap() {
         .passenger-live-top-map-metrics{position:absolute;left:0;right:0;bottom:0;height:82px;display:grid;grid-template-columns:1fr 1fr;background:#fff;border-top:1px solid #edf2f0}.passenger-live-top-map-metric{padding:8px 14px}.passenger-live-top-map-metric+.passenger-live-top-map-metric{border-left:1px solid #edf2f0}.passenger-live-top-map-metric span,.passenger-live-top-map-metric strong{display:block}.passenger-live-top-map-metric span{font-size:8px;color:#76857f;font-weight:900;text-transform:uppercase;letter-spacing:.06em}.passenger-live-top-map-metric strong{margin-top:2px;color:#10243a;font-size:17px;line-height:1;font-weight:950}.trip-endpoints{grid-column:1/-1;display:flex;justify-content:center;gap:12px;padding:5px 10px 0;font-size:8px;font-weight:850;color:#52645e}.trip-endpoints span{display:flex;align-items:center;gap:5px}.trip-endpoints b{width:7px;height:7px;border-radius:50%;display:inline-block}
         .passenger-live-top-map-loading{position:absolute;left:0;right:0;top:57px;bottom:82px;display:grid;place-items:center;background:linear-gradient(180deg,#eaf2ef,#f4f8f6);color:#62766f;font-size:11px;font-weight:800;text-align:center;padding:20px}
         .passenger-live-arrived-panel{position:absolute;inset:57px 0 0;display:grid;place-items:center;text-align:center;padding:24px;background:linear-gradient(180deg,#edf8f4,#f8fcfa)}
-        .passenger-live-arrived-panel div{max-width:310px}.passenger-live-arrived-panel span{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#dff3eb;font-size:34px}.passenger-live-arrived-panel strong{display:block;color:#0f604f;font-size:22px;font-weight:950}.passenger-live-arrived-panel small{display:block;margin-top:7px;color:#62766f;font-size:12px;line-height:1.45;font-weight:700}
-        .passenger-live-top-map.arrived .passenger-live-top-map-live{display:none}
+        .passenger-live-arrived-panel div{max-width:310px}.passenger-live-arrived-panel span{display:grid;place-items:center;width:70px;height:70px;margin:0 auto 14px;border-radius:22px;background:#dff3eb;font-size:34px}.passenger-live-arrived-panel strong{display:block;color:#0f604f;font-size:22px;font-weight:950}.passenger-live-arrived-panel small{display:block;margin-top:7px;color:#62766f;font-size:12px;line-height:1.45;font-weight:700}.passenger-live-top-map.arrived .passenger-live-top-map-live{display:none}
       `}</style>
 
       <div className="passenger-live-top-map-head">
@@ -195,7 +177,7 @@ export default function PassengerAcceptedRideMiniMap() {
         <div className="passenger-live-arrived-panel"><div><span>📍</span><strong>{ht ? 'Chofè a rive' : 'Le chauffeur est arrivé'}</strong><small>{ht ? 'Chofè a ap tann ou nan kote pou pran ou.' : 'Votre chauffeur vous attend au point de prise en charge.'}</small></div></div>
       ) : mapUrl ? (
         <div className="passenger-live-top-map-frame">
-          <img src={mapUrl} alt={inProgress ? (ht ? 'Itinerè soti nan pozisyon chofè a rive nan destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
+          <img src={mapUrl} alt={inProgress ? (ht ? 'Itinerè chofè a jouk destinasyon an' : 'Itinéraire du chauffeur jusqu’à la destination') : (ht ? 'Itinerè chofè a pou rive kote pasaje a' : 'Itinéraire du chauffeur vers le passager')} />
           <div className="passenger-live-top-map-pills">
             <span className="passenger-live-top-map-pill"><b className="driver-dot" />{ht ? 'Chofè' : 'Chauffeur'}</span>
             {inProgress && <span className="passenger-live-top-map-pill"><b className="start-dot" />{ht ? 'Demaraj' : 'Départ'}</span>}
