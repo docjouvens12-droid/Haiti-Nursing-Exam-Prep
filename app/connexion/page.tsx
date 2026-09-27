@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import "../auth-pages.css";
+import HaitiNursingBrand from "@/components/HaitiNursingBrand";
 
 export default function Connexion() {
   const [message, setMessage] = useState("");
@@ -37,8 +38,7 @@ export default function Connexion() {
     <main className="signup-showcase">
       <section className="signup-story">
         <Link href="/" className="signup-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
-          <span className="signup-brand-mark">H</span>
-          <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
+          <HaitiNursingBrand />
         </Link>
 
         <div className="signup-story-copy">
