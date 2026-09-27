@@ -106,18 +106,3 @@ textarea {
 .mobile-student-nav,.mobile-student-nav-spacer{display:none}.profile-page{max-width:1100px;margin:0 auto;padding:38px 24px 90px}.profile-hero{background:linear-gradient(135deg,#0b1f59,#243f91);color:#fff;border-radius:22px;padding:30px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;position:relative}.profile-back{grid-column:1/-1;font-size:12px;color:#dbe4ff}.profile-avatar{width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#2445d8;font-size:30px;font-weight:900}.profile-eyebrow{font-size:10px;text-transform:uppercase;letter-spacing:1.4px;color:#b9c7ff;font-weight:800}.profile-hero h1{font-size:30px;margin:6px 0 8px}.profile-hero p{margin:0;color:#dce4ff;font-size:13px;line-height:1.6}.profile-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.profile-card{background:#fff;border:1px solid #e5eaf3;border-radius:18px;padding:22px;box-shadow:0 8px 24px rgba(31,49,91,.05)}.profile-card h2{font-size:17px;margin:0 0 16px}.profile-detail{display:grid;gap:4px;padding:13px 0;border-top:1px solid #eef1f6}.profile-detail span{font-size:10px;color:#7a849a}.profile-detail strong{font-size:13px;color:#1a2442}.profile-links{display:grid}.profile-links a{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid #eef1f6;color:#2439b8;font-size:12px;font-weight:700}
 @media(max-width:800px){.mobile-student-nav-spacer{display:block;height:84px}.mobile-student-nav{position:fixed;left:0;right:0;bottom:0;z-index:50;display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.98);border-top:1px solid #e3e8f1;box-shadow:0 -10px 28px rgba(27,42,82,.10);padding:7px max(8px,env(safe-area-inset-right)) calc(7px + env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left));backdrop-filter:blur(14px)}.mobile-student-nav a{min-width:0;display:grid;justify-items:center;gap:3px;color:#818ba2;font-size:9px;font-weight:700;padding:5px 2px;border-radius:9px}.mobile-student-nav-icon{font-size:20px;line-height:1}.mobile-student-nav a.active{color:#2474ff;background:#f2f6ff}.profile-page{padding:16px 14px 24px}.profile-hero{grid-template-columns:1fr;text-align:center;padding:22px 18px}.profile-back{justify-self:start}.profile-avatar{margin:0 auto;width:68px;height:68px}.profile-hero h1{font-size:24px}.profile-grid{grid-template-columns:1fr}.dashboard-sidebar{display:none!important}.dashboard-content{padding-bottom:24px}}
 @media(max-width:430px){.mobile-student-nav a{font-size:8.5px}.mobile-student-nav-icon{font-size:19px}.profile-card{padding:18px}.metric-grid{grid-template-columns:1fr 1fr!important;gap:10px}.metric-card{min-height:112px;padding:12px;align-items:flex-start}.metric-card strong{font-size:20px}}
-
-
-/* Haiti Nursing brand preview: home + login only */
-.hnep-brand-lockup{display:inline-flex;align-items:center;gap:10px}
-.hnep-brand-icon{display:grid;place-items:center;flex:0 0 auto;filter:drop-shadow(0 8px 16px rgba(10,63,131,.16))}
-.hnep-brand-copy{display:grid;line-height:1}
-.hnep-brand-copy strong{font-size:1rem;color:#0a245d;font-weight:900}
-.hnep-brand-copy small{font-size:.67rem;color:#d7192d;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-top:5px}
-.signup-brand .hnep-brand-copy strong{font-size:1.16rem}
-.signup-brand .hnep-brand-copy small{font-size:.66rem}
-@media(max-width:620px){
-  .hnep-brand-copy strong{font-size:.9rem}
-  .hnep-brand-copy small{font-size:.58rem}
-  .signup-brand .hnep-brand-copy strong{font-size:1rem}
-}
