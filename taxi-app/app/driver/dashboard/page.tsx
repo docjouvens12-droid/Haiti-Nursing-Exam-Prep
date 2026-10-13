@@ -1,5 +1,0 @@
-import { redirect } from 'next/navigation'
-
-export default function DriverDashboardRedirect() {
-  redirect('/driver/dashboard-v2')
-}
