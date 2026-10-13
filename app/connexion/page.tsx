@@ -20,17 +20,30 @@ export default function Connexion() {
     const email = String(form.get("email") || "");
     const motDePasse = String(form.get("motDePasse") || "");
 
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password: motDePasse });
-    setChargement(false);
-
-    if (error) {
-      setMessage("Connexion impossible. Vérifiez votre e-mail et votre mot de passe.");
-      return;
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password: motDePasse });
+      if (error) {
+        if (error.code === "email_not_confirmed") {
+          setMessage("Confirmez votre adresse e-mail avant de vous connecter.");
+        } else if (error.code === "over_request_rate_limit" || error.status === 429) {
+          setMessage("Trop de tentatives. Attendez quelques minutes et réessayez.");
+        } else if (error.code === "invalid_credentials") {
+          setMessage("E-mail ou mot de passe incorrect. Vérifiez vos identifiants.");
+        } else if ((error.status ?? 0) >= 500 || /fetch|network|timeout/i.test(error.message)) {
+          setMessage("Le service de connexion est momentanément indisponible. Réessayez plus tard.");
+        } else {
+          setMessage("Connexion indisponible. Vérifiez votre accès et réessayez.");
+        }
+        return;
+      }
+      router.push("/tableau-de-bord");
+      router.refresh();
+    } catch {
+      setMessage("Problème de réseau. Vos données sont conservées ; réessayez quand la connexion revient.");
+    } finally {
+      setChargement(false);
     }
-
-    router.push("/tableau-de-bord");
-    router.refresh();
   }
 
   return (
