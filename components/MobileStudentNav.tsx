@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import StudentNavIcon from "./StudentNavIcon";
 
 const items = [
-  { href: "/tableau-de-bord", label: "Accueil", icon: "⌂" },
-  { href: "/pratique", label: "QCM", icon: "▤" },
-  { href: "/examens", label: "Examens", icon: "▣" },
-  { href: "/cours-revisions", label: "Cours", icon: "▥" },
-];
+  { href: "/tableau-de-bord", label: "Accueil", icon: "home" },
+  { href: "/pratique", label: "QCM", icon: "qcm" },
+  { href: "/examens", label: "Examens", icon: "exams" },
+  { href: "/cours-revisions", label: "Cours", icon: "books" },
+] as const;
 
 const groups = [
   {
@@ -186,16 +187,19 @@ export default function MobileStudentNav() {
           const active = item.href === "/tableau-de-bord" ? pathname === item.href : pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link key={item.href} href={item.href} className={active ? "active" : ""} aria-current={active ? "page" : undefined}>
-              <span className="mobile-student-nav-icon" aria-hidden="true">{item.icon}</span><span>{item.label}</span>
+              <span className="mobile-student-nav-icon" aria-hidden="true"><StudentNavIcon name={item.icon} /></span><span>{item.label}</span>
             </Link>
           );
         })}
         <button type="button" className={drawerOpen ? "active" : ""} onClick={() => setDrawerOpen(true)} aria-label="Plus d’options">
-          <span className="mobile-student-nav-icon" aria-hidden="true">•••</span><span>Plus</span>
+          <span className="mobile-student-nav-icon" aria-hidden="true"><StudentNavIcon name="more" /></span><span>Plus</span>
         </button>
       </nav>
 
       <style jsx global>{`
+        .mobile-student-nav-icon{display:grid;place-items:center;width:27px;height:27px;line-height:1}
+        .mobile-student-nav-icon svg{display:block;width:23px;height:23px;stroke-width:1.9}
+        .mobile-student-nav a.active .mobile-student-nav-icon{color:#176ed7}
         .menu-button{min-width:44px;min-height:44px;cursor:pointer;touch-action:manipulation}
         .menu-button:focus-visible{outline:3px solid #2474ff;outline-offset:2px;border-radius:8px}
         .mobile-drawer-layer{display:block;position:fixed;inset:0;z-index:1000}

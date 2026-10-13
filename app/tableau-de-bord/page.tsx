@@ -68,7 +68,7 @@ export default async function TableauDeBord() {
     supabase.from("questions").select("id", { count: "exact", head: true }),
     supabase.from("exam_banks").select("id", { count: "exact", head: true }),
     supabase.from("learning_modules").select("id", { count: "exact", head: true }).eq("is_published", true),
-    supabase.from("learning_module_progress").select("module_id,status,progress_percent").eq("user_id", userId),
+    supabase.from("learning_module_progress").select("module_id,status,progress_percent,updated_at,module_title").eq("user_id", userId),
     supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Maternité-Obstétrique"),
     supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Urgences"),
     supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Pharmacologie"),
@@ -171,8 +171,35 @@ export default async function TableauDeBord() {
   const repriseUrl = resumeCategory
     ? "/pratique?categorie=" + encodeURIComponent(resumeCategory) + "&nombre=25"
     : "/pratique";
-  const derniereActivite = recentAnswer?.answered_at
-    ? new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: STUDY_TIME_ZONE }).format(new Date(recentAnswer.answered_at))
+  // The previous label only used the latest QCM answer and could show an old
+  // date even when a newer course or completed exam existed.
+  const dernierExamen = (sessions ?? [])[0];
+  const dernierCours = [...(courseProgressRows ?? [])]
+    .filter((item) => item.updated_at && Number.isFinite(Date.parse(item.updated_at)))
+    .sort((a, b) => Date.parse(b.updated_at!) - Date.parse(a.updated_at!))[0];
+  const activites = [
+    ...(recentAnswer?.answered_at ? [{
+      date: recentAnswer.answered_at as string, type: "QCM" as const,
+      titre: resumeCategory || "Entraînement QCM", url: repriseUrl,
+      action: "Reprendre les QCM",
+    }] : []),
+    ...(dernierExamen?.completed_at ? [{
+      date: dernierExamen.completed_at, type: "examen" as const,
+      titre: "Examen blanc terminé", url: "/resultats/" + dernierExamen.id,
+      action: "Voir les résultats",
+    }] : []),
+    ...(dernierCours?.updated_at ? [{
+      date: dernierCours.updated_at, type: "cours" as const,
+      titre: dernierCours.module_title || "Cours & révisions", url: "/cours-revisions",
+      action: "Continuer les cours",
+    }] : []),
+  ].filter((item) => Number.isFinite(Date.parse(item.date)))
+    .sort((a, b) => Date.parse(b.date) - Date.parse(a.date));
+  const derniereActivite = activites[0] ?? null;
+  const derniereActiviteDate = derniereActivite
+    ? new Intl.DateTimeFormat("fr-FR", {
+        day: "numeric", month: "short", year: "numeric", timeZone: STUDY_TIME_ZONE,
+      }).format(new Date(derniereActivite.date))
     : null;
 
   return (
@@ -224,21 +251,21 @@ export default async function TableauDeBord() {
                 <Link href="/examens" className="c-herosecondary">Examens blancs</Link>
               </div>
             </div>
-            <img className="c-heroimg" src="/nursing-home-b-student.svg" alt="" width={320} height={235} />
+            <img className="c-heroimg" src="/nursing-home-c-student.svg" alt="" width={230} height={235} />
           </section>
 
           <section className="c-statgrid" aria-label="Vos statistiques">
             <div className="c-stat">
               <span className="c-staticon" aria-hidden="true">▤</span>
-              <div><small>QCM explorés</small><strong>{questionsRepondues.toLocaleString("fr-FR")}</strong></div>
+              <div><small>QCM explorés</small><strong>{questionsRepondues.toLocaleString("fr-FR")}</strong><span className="c-statbar" aria-hidden="true"><i style={{width:progressionQuestions+"%"}} /></span></div>
             </div>
             <div className="c-stat">
               <span className="c-staticon" aria-hidden="true">✓</span>
-              <div><small>Bonnes réponses</small><strong>{taux}%</strong></div>
+              <div><small>Taux de réussite</small><strong>{taux}%</strong><span className="c-statbar" aria-hidden="true"><i style={{width:taux+"%"}} /></span></div>
             </div>
             <div className="c-stat">
               <span className="c-staticon" aria-hidden="true">☑</span>
-              <div><small>Examens terminés</small><strong>{(sessions ?? []).length}</strong></div>
+              <div><small>Examens terminés</small><strong>{(sessions ?? []).length}</strong><span className="c-statbar" title={examensCompletes + " formats sur " + examensDisponibles} aria-hidden="true"><i style={{width:(examensDisponibles>0 ? Math.min(100,Math.round(examensCompletes/examensDisponibles*100)):0)+"%"}} /></span></div>
             </div>
           </section>
 
@@ -251,10 +278,10 @@ export default async function TableauDeBord() {
               <div className="c-resume">
                 <div>
                   <span className="c-cardkicker">◷ CONTINUER LÀ OÙ VOUS ÉTIEZ</span>
-                  <h3>{recentAnswer ? resumeCategory || "Entraînement QCM" : "Votre première séance"}</h3>
-                  <p>{recentAnswer ? (derniereActivite ? "Dernière activité le " + derniereActivite : "Reprenez vos révisions.") : "Commencez une série de questions pour construire votre parcours."}</p>
+                  <h3>{derniereActivite ? derniereActivite.titre : "Votre première séance"}</h3>
+                  <p>{derniereActivite ? "Dernière activité (" + derniereActivite.type + ") · " + derniereActiviteDate : "Commencez une série de questions pour construire votre parcours."}</p>
                 </div>
-                <Link href={repriseUrl}>{recentAnswer ? "Reprendre les QCM" : "Commencer"} <span aria-hidden="true">›</span></Link>
+                <Link href={derniereActivite?.url ?? "/pratique"}>{derniereActivite?.action ?? "Commencer"} <span aria-hidden="true">›</span></Link>
               </div>
               <div className="c-focus">
                 <div>

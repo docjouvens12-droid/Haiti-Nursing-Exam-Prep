@@ -70,3 +70,49 @@
 .c-subjects{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.c-subject{min-height:107px;padding:13px}.c-shortcuts{gap:6px}.c-shortcut{padding:13px 3px;gap:6px}.c-shortcut span{font-size:21px}.c-shortcut strong{font-size:10px;overflow-wrap:anywhere}
 .c-bottom{grid-template-columns:minmax(0,1fr);gap:12px}.c-quote p{font-size:14px}}
 @media(max-width:350px){.c-herocopy{max-width:80%}.c-heroimg{opacity:.4}.c-hero h1{font-size:20px}.c-shortcuts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Mobile polish after screenshot review — existing Model C only. */
+.c-hero{isolation:isolate}
+.c-heroimg{width:clamp(160px,24%,245px);max-width:35%;height:218px;right:9px;bottom:0;opacity:1;object-fit:contain;object-position:bottom center;filter:drop-shadow(0 8px 13px rgba(0,10,40,.18))}
+.c-herocopy{max-width:68%}
+.c-stat>div{width:100%;min-width:0}
+.c-statbar{display:block;width:100%;height:4px;border-radius:99px;background:#e7edf6;overflow:hidden;margin-top:8px}
+.c-statbar i{display:block;height:100%;max-width:100%;border-radius:99px;background:linear-gradient(90deg,#87beed,#236dce)}
+.c-stat:nth-child(2) .c-statbar i{background:linear-gradient(90deg,#66d7bb,#139b83)}
+.c-stat:nth-child(3) .c-statbar i{background:linear-gradient(90deg,#f1dba1,#c49b4b)}
+.c-cardkicker{letter-spacing:.04em}
+.c-resume,.c-focus{gap:8px;justify-content:center}
+.c-resume h3,.c-focus h3{margin:6px 0}
+.c-stat small{line-height:1.25}
+@media(max-width:900px){
+ .c-heroimg{width:200px;max-width:33%;height:209px;right:4px;bottom:0;opacity:1}
+ .c-two{gap:10px}
+ .c-resume,.c-focus{padding:14px 16px}
+}
+@media(max-width:600px){
+ .c-hero{min-height:192px;padding:17px 15px}
+ .c-herocopy{max-width:71%}
+ .c-heroimg{width:136px;max-width:36%;height:170px;right:0;bottom:0;opacity:1}
+ .c-herobuttons{gap:5px}
+ .c-stat{min-height:101px;padding:9px 7px}
+ .c-stat small{font-size:10px}
+ .c-stat strong{font-size:20px}
+ .c-statbar{height:4px;margin-top:6px}
+ .c-panel{padding:13px 12px}
+ .c-panelhead{margin-bottom:10px}
+ .c-panelhead h2{font-size:17px}
+ .c-two{gap:8px}
+ .c-resume,.c-focus{padding:11px 13px;gap:7px}
+ .c-resume h3,.c-focus h3{font-size:16px;line-height:1.15;margin:5px 0 3px}
+ .c-resume p,.c-focus p{font-size:11px;line-height:1.3}
+ .c-cardkicker{font-size:9px}
+ .c-resume>a{padding:8px 11px;font-size:11px}
+ .c-hero h1{font-size:22px}
+ .c-content{gap:10px}
+}
+@media(max-width:380px){
+ .c-heroimg{width:105px;max-width:32%;height:149px;opacity:.96}
+ .c-herocopy{max-width:75%}
+ .c-stat small{font-size:9px}
+ .c-stat strong{font-size:18px}
+}
