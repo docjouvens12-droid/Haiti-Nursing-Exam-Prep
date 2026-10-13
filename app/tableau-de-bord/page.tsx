@@ -129,7 +129,7 @@ export default async function TableauDeBord() {
     <div className="dashboard-shell modern-dashboard">
       <aside className="dashboard-sidebar modern-sidebar">
         <Link href="/tableau-de-bord" className="brand-lockup modern-brand">
-          <span className="brand-mark">♡</span>
+          <img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} />
           <span><strong>Haiti Nursing</strong><small>Exam Prep</small></span>
         </Link>
 
