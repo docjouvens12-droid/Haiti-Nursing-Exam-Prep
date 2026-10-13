@@ -21,6 +21,18 @@ type PracticeStatus = "toutes" | "nouvelles" | "incorrectes" | "favorites";
 type CorrectionMode = "immediate" | "fin";
 
 const SESSION_SIZES = [10, 25, 50, 100] as const;
+
+// Keep existing database rows and saved student results; only hide repeated
+// question wording within each newly generated practice session.
+function sansDoublons(questions: any[], nombre: number) {
+  const dejaVues = new Set<string>();
+  return questions.filter((q) => {
+    const normalise = String(q.question || "").trim().toLocaleLowerCase("fr").replace(/\\s+/g, " ");
+    if (!normalise || dejaVues.has(normalise)) return false;
+    dejaVues.add(normalise);
+    return true;
+  }).slice(0, nombre);
+}
 const PRACTICE_STATUSES: { value: PracticeStatus; label: string }[] = [
   { value: "toutes", label: "Toutes les questions" },
   { value: "nouvelles", label: "Nouvelles" },
@@ -75,7 +87,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
         .from("questions")
         .select("id,annee,categorie,sous_categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication")
         .order("id")
-        .limit(nombreQuestions)
+        .limit(Math.min(1000, nombreQuestions * 4))
     );
     questions = data ?? [];
   } else {
@@ -98,13 +110,15 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
       }
     }
 
-    const selectedIds = scopedIds.filter((id) => eligible.has(id)).slice(0, nombreQuestions);
+    const selectedIds = scopedIds.filter((id) => eligible.has(id)).slice(0, Math.min(1000, nombreQuestions * 4));
     if (selectedIds.length > 0) {
       const { data } = await supabase.from("questions").select("id,annee,categorie,sous_categorie,question,option_a,option_b,option_c,option_d,bonne_reponse,explication").in("id", selectedIds);
       const byId = new Map((data ?? []).map((question: any) => [question.id, question]));
       questions = selectedIds.map((id) => byId.get(id)).filter(Boolean);
     }
   }
+
+  questions = sansDoublons(questions, nombreQuestions);
 
   const [{ data: taxonomyData }, { data: anneesData }] = await Promise.all([
     supabase.from("questions").select("categorie,sous_categorie").not("categorie", "is", null),
