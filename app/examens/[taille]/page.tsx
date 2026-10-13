@@ -51,11 +51,18 @@ export default async function ExamenPage({ params }: { params: Promise<{ taille:
     );
   }
 
+  const dejaVues = new Set<string>();
   const selection = [...questions]
     .map((q) => ({ q, r: Math.random() }))
     .sort((a, b) => a.r - b.r)
-    .slice(0, taille)
-    .map(({ q }) => q);
+    .map(({ q }) => q)
+    .filter((q) => {
+      const normalized = String(q.question || "").trim().toLocaleLowerCase("fr").replace(/\s+/g, " ");
+      if (dejaVues.has(normalized)) return false;
+      dejaVues.add(normalized);
+      return true;
+    })
+    .slice(0, taille);
 
   const dureeMinutes = taille === 25 ? 35 : taille === 50 ? 70 : 140;
   return <ExamenInteractif questions={selection} tailleDemandee={taille} dureeMinutes={dureeMinutes} />;
