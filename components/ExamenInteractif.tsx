@@ -213,9 +213,9 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
   return (
     <main className="exam-session-shell">
       <div role="status" style={{padding:"8px 18px",fontSize:13,color:"#0a6852"}}>✓ Vos réponses en cours sont conservées sur cet appareil. Le chronomètre continue après fermeture.</div>
-      {pendingSessionRef.current && !soumission && <p style={{padding:"6px 18px",color:"#713c19"}}>La soumission est en attente. Les réponses sont verrouillées jusqu\u0027à la synchronisation.</p>}
+      {pendingSessionRef.current && !soumission && <p style={{padding:"6px 18px",color:"#713c19"}}>La soumission est en attente. Les réponses sont verrouillées jusqu'à la synchronisation.</p>}
       {messageErreur && <div role="alert" style={{margin:16,padding:12,borderRadius:10,background:"#fff3ef",color:"#9a2525",border:"1px solid #f0b9a5"}}>
-        {messageErreur} <button type="button" onClick={() => void soumettreExamen(secondesRestantes === 0)} disabled={soumission} style={{borderRadius:8,border:0,padding:"8px 12px",background:"#154a96",color:"#fff"}}>Réessayer l'enregistrement</button>
+        {messageErreur} {(pendingSessionRef.current || secondesRestantes === 0) && <button type="button" onClick={() => void soumettreExamen(secondesRestantes === 0)} disabled={soumission} style={{borderRadius:8,border:0,padding:"8px 12px",background:"#154a96",color:"#fff"}}>Réessayer l'enregistrement</button>}
       </div>}
       <header className="exam-session-header">
         <Link href="/examens" className="exam-session-brand"><img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:9}} /><span><strong>{titreSession || "Haiti Nursing Exam Prep"}</strong><small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small></span></Link>
