@@ -213,6 +213,7 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
   return (
     <main className="exam-session-shell">
       <div role="status" style={{padding:"8px 18px",fontSize:13,color:"#0a6852"}}>✓ Vos réponses en cours sont conservées sur cet appareil. Le chronomètre continue après fermeture.</div>
+      {pendingSessionRef.current && !soumission && <p style={{padding:"6px 18px",color:"#713c19"}}>La soumission est en attente. Les réponses sont verrouillées jusqu\u0027à la synchronisation.</p>}
       {messageErreur && <div role="alert" style={{margin:16,padding:12,borderRadius:10,background:"#fff3ef",color:"#9a2525",border:"1px solid #f0b9a5"}}>
         {messageErreur} <button type="button" onClick={() => void soumettreExamen(secondesRestantes === 0)} disabled={soumission} style={{borderRadius:8,border:0,padding:"8px 12px",background:"#154a96",color:"#fff"}}>Réessayer l'enregistrement</button>
       </div>}
@@ -236,7 +237,7 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
 
           <div className="exam-answer-list">
             {options.map(([lettre, texte]) => (
-              <button type="button" key={lettre} className={`exam-answer ${reponses[question.id] === lettre ? "selected" : ""}`} onClick={() => setReponses((r) => ({ ...r, [question.id]: lettre }))}>
+              <button type="button" key={lettre} className={`exam-answer ${reponses[question.id] === lettre ? "selected" : ""}`} disabled={soumission || !!pendingSessionRef.current || secondesRestantes === 0} onClick={() => setReponses((r) => { const next = { ...r, [question.id]: lettre }; reponsesRef.current = next; return next; })}>
                 <span className="exam-answer-letter">{lettre}</span><span>{texte}</span>
               </button>
             ))}
