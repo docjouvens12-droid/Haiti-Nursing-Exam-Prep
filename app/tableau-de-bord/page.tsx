@@ -163,6 +163,7 @@ export default async function TableauDeBord() {
       <main className="dashboard-main">
         <header className="dashboard-topbar modern-topbar">
           <StudentMenuButton />
+          <Link href="/tableau-de-bord" className="hn-mobile-topbar-logo" aria-label="Haiti Nursing Exam Prep, accueil"><img src="/pwa-icon.svg" width={42} height={42} alt="Logo HN" style={{borderRadius:12}} /></Link>
           <div className="dashboard-search">⌕ <span>Rechercher (ex: pharmacologie, pédiatrie...)</span></div>
           <div className="topbar-spacer" />
           <div className="study-streak">🔥 <span><small>Série d’étude</small><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong></span></div>
