@@ -28,14 +28,21 @@ type Props = {
   sousTitreSession?: string;
 };
 
-export default function ExamenInteractif({ questions, tailleDemandee, dureeMinutes, modeSession, titreSession, sousTitreSession }: Props) {
+export default function ExamenInteractif({ questions: initialQuestions, tailleDemandee, dureeMinutes, modeSession, titreSession, sousTitreSession }: Props) {
   const router = useRouter();
+  const [questions, setQuestions] = useState<Question[]>(initialQuestions);
   const [index, setIndex] = useState(0);
   const [reponses, setReponses] = useState<Reponses>({});
   const [marquees, setMarquees] = useState<Set<string>>(new Set());
   const [secondesRestantes, setSecondesRestantes] = useState(dureeMinutes * 60);
   const [soumission, setSoumission] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
+  const [chargementBrouillon, setChargementBrouillon] = useState(true);
+  const [brouillonKey, setBrouillonKey] = useState("");
+  const [dateLimite, setDateLimite] = useState(0);
+  const [messageErreur, setMessageErreur] = useState("");
+  const pendingSessionRef = useRef<string | null>(null);
+  const autoSubmittedRef = useRef(false);
   const reponsesRef = useRef<Reponses>({});
   const soumissionRef = useRef(false);
   const question = questions[index];
@@ -44,18 +51,70 @@ export default function ExamenInteractif({ questions, tailleDemandee, dureeMinut
   useEffect(() => { soumissionRef.current = soumission; }, [soumission]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
-      setSecondesRestantes((s) => {
-        if (s <= 1) {
-          window.clearInterval(timer);
-          void soumettreExamen(true);
-          return 0;
-        }
-        return s - 1;
-      });
-    }, 1000);
-    return () => window.clearInterval(timer);
+    let cancelled = false;
+    async function chargerBrouillon() {
+      try {
+        const { data: { user } } = await createClient().auth.getUser();
+        if (cancelled) return;
+        if (!user) { router.replace("/connexion"); return; }
+        const key = "haiti-nursing-examen-v1:" + user.id + ":" + (modeSession || "examen_" + tailleDemandee);
+        let expiration = Date.now() + dureeMinutes * 60000;
+        try {
+          const saved = JSON.parse(localStorage.getItem(key) || "null");
+          if (saved?.version === 1 && Array.isArray(saved.questions) &&
+              saved.questions.length === initialQuestions.length &&
+              saved.questions.every((q: Question) => q?.id && q?.question && q?.bonne_reponse) &&
+              typeof saved.expiration === "number") {
+            const savedIds = new Set<string>(saved.questions.map((q: Question) => q.id));
+            const answers: Reponses = {};
+            for (const [id, answer] of Object.entries(saved.reponses || {})) {
+              if (savedIds.has(id) && ["A","B","C","D"].includes(String(answer)))
+                answers[id] = answer as Reponses[string];
+            }
+            setQuestions(saved.questions);
+            setReponses(answers);
+            reponsesRef.current = answers;
+            setMarquees(new Set<string>((saved.marquees || []).filter((id: string) => savedIds.has(id))));
+            setIndex(Math.min(Math.max(Number(saved.index) || 0, 0), saved.questions.length - 1));
+            expiration = saved.expiration;
+            pendingSessionRef.current = typeof saved.pendingSessionId === "string" ? saved.pendingSessionId : null;
+          }
+        } catch { /* Private browsing may deny local storage. */ }
+        setDateLimite(expiration);
+        setBrouillonKey(key);
+        setChargementBrouillon(false);
+      } catch {
+        if (!cancelled) setMessageErreur("Connexion indisponible. Vos réponses seront conservées si le stockage local est accessible.");
+      }
+    }
+    void chargerBrouillon();
+    return () => { cancelled = true; };
   }, []);
+
+  useEffect(() => {
+    if (chargementBrouillon || !brouillonKey) return;
+    try {
+      localStorage.setItem(brouillonKey, JSON.stringify({
+        version: 1, questions, reponses, marquees: Array.from(marquees),
+        index, expiration: dateLimite, pendingSessionId: pendingSessionRef.current
+      }));
+    } catch { setMessageErreur("Le stockage local est indisponible. Gardez cette page ouverte pendant l'examen."); }
+  }, [chargementBrouillon, brouillonKey, questions, reponses, marquees, index, dateLimite]);
+
+  useEffect(() => {
+    if (chargementBrouillon || !dateLimite) return;
+    const tick = () => {
+      const remaining = Math.max(0, Math.ceil((dateLimite - Date.now()) / 1000));
+      setSecondesRestantes(remaining);
+      if (remaining === 0 && !autoSubmittedRef.current) {
+        autoSubmittedRef.current = true;
+        void soumettreExamen(true);
+      }
+    };
+    tick();
+    const timer = window.setInterval(tick, 1000);
+    return () => window.clearInterval(timer);
+  }, [chargementBrouillon, dateLimite]);
 
   const temps = useMemo(() => {
     const min = Math.floor(secondesRestantes / 60);
