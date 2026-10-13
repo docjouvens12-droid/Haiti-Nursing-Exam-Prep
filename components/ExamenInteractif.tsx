@@ -135,7 +135,7 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
   }
 
   function demanderSoumission() {
-    if (soumission) return;
+    if (chargementBrouillon || soumission) return;
     if (restantes > 0 || marquees.size > 0) {
       setConfirmation(true);
       return;
@@ -204,12 +204,20 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
     }
   }
 
+  if (chargementBrouillon || !question) {
+    return <main className="exam-session-shell" style={{padding:30}}><p>{messageErreur || "Récupération sécurisée de votre examen en cours…"}</p></main>;
+  }
+
   const options = [["A", question.option_a], ["B", question.option_b], ["C", question.option_c], ["D", question.option_d]] as const;
 
   return (
     <main className="exam-session-shell">
+      <div role="status" style={{padding:"8px 18px",fontSize:13,color:"#0a6852"}}>✓ Vos réponses en cours sont conservées sur cet appareil. Le chronomètre continue après fermeture.</div>
+      {messageErreur && <div role="alert" style={{margin:16,padding:12,borderRadius:10,background:"#fff3ef",color:"#9a2525",border:"1px solid #f0b9a5"}}>
+        {messageErreur} <button type="button" onClick={() => void soumettreExamen(secondesRestantes === 0)} disabled={soumission} style={{borderRadius:8,border:0,padding:"8px 12px",background:"#154a96",color:"#fff"}}>Réessayer l'enregistrement</button>
+      </div>}
       <header className="exam-session-header">
-        <Link href="/examens" className="exam-session-brand"><span className="brand-mark">✚</span><span><strong>{titreSession || "Haiti Nursing Exam Prep"}</strong><small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small></span></Link>
+        <Link href="/examens" className="exam-session-brand"><img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:9}} /><span><strong>{titreSession || "Haiti Nursing Exam Prep"}</strong><small>{sousTitreSession || `Simulation de ${questions.length} questions`}</small></span></Link>
         <div className="exam-timer"><span>◷</span><span>Temps restant</span><strong>{temps}</strong></div>
         <Link href="/examens" className="exam-session-exit">Quitter l’examen</Link>
       </header>
