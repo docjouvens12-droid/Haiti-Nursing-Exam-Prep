@@ -123,7 +123,7 @@ export default async function Pratique({ searchParams }: { searchParams: Promise
   return (
     <div className="practice-shell">
       <aside className="practice-sidebar">
-        <Link href="/tableau-de-bord" className="brand-lockup"><span className="brand-mark">✚</span><span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span></Link>
+        <Link href="/tableau-de-bord" className="brand-lockup"><img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} /><span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span></Link>
         <nav className="side-nav">
           <Link href="/tableau-de-bord">⌂ <span>Accueil</span></Link>
           <Link className="active" href="/pratique">✎ <span>Questions</span></Link>
