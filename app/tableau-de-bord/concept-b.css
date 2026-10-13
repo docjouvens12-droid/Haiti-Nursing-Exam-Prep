@@ -1,0 +1,198 @@
+
+/* Haiti Nursing Exam Prep · Student dashboard · Approved Concept B
+   Scoped to b-* class names so practice, results and admin pages remain unchanged. */
+.b-dashboard.dashboard-shell{grid-template-columns:250px minmax(0,1fr);background:#f2f8ff}
+.b-home.dashboard-main{min-width:0;background:radial-gradient(circle at 50% 3%,#e4f3ff 0,transparent 460px),#f6faff}
+.b-container{width:min(100%,1080px);padding:28px 36px 60px;margin:0 auto;display:flex;flex-direction:column;gap:17px}
+.b-container *{box-sizing:border-box}
+.b-container a:focus-visible,.b-container button:focus-visible{outline:3px solid #156de5;outline-offset:4px}
+.b-header{display:flex;align-items:center;justify-content:space-between;gap:18px;min-height:70px}
+.b-brand{display:inline-flex;align-items:center;flex:0 1 auto;min-width:0}
+.b-brand img{display:block;width:226px;height:auto;max-width:100%}
+.b-header-controls{display:flex;align-items:center;gap:14px}
+.b-header-controls .menu-button{display:none}
+.b-user{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;border:3px solid #fff;box-shadow:0 3px 17px #1e5cac22;background:linear-gradient(145deg,#acd6fa,#e4f3ff);color:#1054a5;font-size:18px;font-weight:900}
+.b-welcome{display:flex;position:relative;align-items:center;justify-content:space-between;min-height:208px;overflow:hidden;border-radius:27px;background:linear-gradient(125deg,rgba(241,249,255,.95),rgba(210,235,253,.8));padding:25px 31px}
+.b-welcome:before{content:"";position:absolute;right:-67px;top:-140px;width:425px;height:430px;border-radius:49%;background:#9fd7ff55;transform:rotate(27deg)}
+.b-welcome:after{content:"";position:absolute;right:140px;bottom:-122px;width:260px;height:230px;border-radius:48%;background:#e9f7ff99}
+.b-greeting{position:relative;z-index:2;max-width:58%;align-self:center}
+.b-intro{font-size:10px!important;font-weight:900;letter-spacing:1.3px;color:#1282c1!important;margin:0 0 10px!important}
+.b-welcome h1{font-size:clamp(26px,3.15vw,39px);margin:0 0 8px;line-height:1.16;letter-spacing:-.7px;color:#091f57}
+.b-welcome h1 span{font-size:.74em}
+.b-welcome .b-greeting>p:last-child{max-width:430px;font-size:16px;line-height:1.48;color:#536d94;margin:0}
+.b-nurse{position:absolute;z-index:1;width:min(47%,340px);height:auto;right:10px;bottom:-17px;object-fit:contain;pointer-events:none}
+.b-progress-card{padding:22px 26px 25px;background:#ffffff;border:1px solid #e5eef8;border-radius:26px;box-shadow:0 10px 27px #294e8f0c}
+.b-card-heading,.b-section-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.b-heading-title{display:flex;align-items:center;gap:11px}
+.b-heading-title h2,.b-section-heading h2{font-size:23px;line-height:1.2;letter-spacing:-.5px;font-weight:900;color:#0b255b;margin:0}
+.b-heading-icon{width:39px;height:39px;border-radius:13px;display:grid;place-items:center;background:#ecf6ff;color:#147bdc;font-size:25px;font-weight:900}
+.b-heading-link{display:inline-flex;align-items:center;justify-content:center;gap:10px;border-radius:30px;background:#f4faff;border:1px solid #dcebf9;padding:8px 14px;color:#175bb5;font-size:12px;font-weight:800;white-space:nowrap}
+.b-heading-link span{font-size:20px;line-height:0}
+.b-progress-content{display:grid;grid-template-columns:minmax(160px,.78fr) minmax(0,1.5fr);align-items:center;gap:34px;margin-top:16px}
+.b-ring-wrap{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px}
+.b-ring-wrap>small{font-size:11px;color:#7b8ca8;line-height:1.3}
+.b-progress-ring{--b-ring:0%;width:183px;height:183px;border-radius:50%;background:conic-gradient(from 212deg,#13c4b7 0%,#279fe4 var(--b-ring),#e5eef9 var(--b-ring),#e5eef9 100%);display:grid;place-items:center;flex:none;box-shadow:0 7px 22px #1c9ab222}
+.b-progress-center{width:calc(100% - 29px);height:calc(100% - 29px);background:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+.b-progress-center strong{font-size:35px;line-height:1;color:#0c2459;letter-spacing:-1px;font-weight:900}
+.b-progress-center span{font-size:12px;color:#68809f}
+.b-progress-list{display:flex;flex-direction:column;gap:17px;min-width:0}
+.b-progress-item{display:grid;grid-template-columns:46px minmax(0,1fr);align-items:center;gap:12px;min-width:0}
+.b-mini-icon{width:44px;height:44px;background:#eff8ff;color:#1869ca;border-radius:15px;font-size:23px;display:grid;place-items:center}
+.b-item-qcm .b-mini-icon{background:#e8fbf7;color:#089f85}
+.b-item-exam .b-mini-icon{background:#eef2fc;color:#204a98}
+.b-progress-detail{display:flex;flex-direction:column;gap:9px;min-width:0}
+.b-progress-meta{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.b-progress-meta strong{font-size:14px;color:#09245c;font-weight:850}
+.b-progress-meta small{font-size:12px;color:#4d6487;white-space:nowrap;font-weight:700}
+.b-track{display:block;height:9px;width:100%;background:#e5edf6;border-radius:100px;overflow:hidden}
+.b-track>span{display:block;height:100%;background:linear-gradient(90deg,#36baf5,#176de7);border-radius:100px;transition:width .3s}
+.b-item-qcm .b-track>span{background:linear-gradient(90deg,#5cdfb7,#08aca6)}
+.b-item-exam .b-track>span{background:linear-gradient(90deg,#2669be,#153f8b)}
+.b-recommendation{min-height:129px;padding:25px 25px;position:relative;isolation:isolate;overflow:hidden;border:6px solid #fff;border-radius:27px;display:flex;align-items:center;box-shadow:0 7px 22px #21488b12;background:linear-gradient(114deg,#e3f9f5,#d5f5f3 60%,#c6edfa);color:#0a285c}
+.b-recommendation:before{content:"";position:absolute;width:260px;height:230px;border-radius:50%;background:#80d9df55;right:-90px;bottom:-135px;z-index:-1}
+.b-recommend-copy{display:flex;flex-direction:column;gap:7px;z-index:1;padding-right:100px}
+.b-recommend-copy small{color:#098c83;font-size:13px;font-weight:850}
+.b-recommend-copy strong{font-size:22px;font-weight:900;line-height:1.17}
+.b-recommend-copy>span:last-child{font-size:12px;color:#577c90}
+.b-recommend-books{position:absolute;right:45px;bottom:17px;width:110px;height:80px;transform:rotate(-7deg)}
+.b-recommend-books i{display:block;position:absolute;width:91px;height:24px;border-radius:5px;background:linear-gradient(#166ab8 0 57%,#fafcff 58% 84%,#0f4c98 85%);box-shadow:1px 3px 8px #03416f2a;transform:skewY(-5deg);right:0}
+.b-recommend-books i:nth-child(1){bottom:2px;background:linear-gradient(#163e8a 0 57%,#fff 58% 84%,#112961 85%)}
+.b-recommend-books i:nth-child(2){bottom:25px;right:5px;background:linear-gradient(#28c4c6 0 57%,#fff 58% 84%,#0b8c9d 85%)}
+.b-recommend-books i:nth-child(3){bottom:48px;right:11px}
+.b-recommend-arrow{z-index:2;position:absolute;right:157px;top:50%;transform:translateY(-50%);background:#effffb91;color:#0a8686;border-radius:50%;width:34px;height:34px;display:grid;place-items:center;font-size:29px}
+.b-actions{background:#fff;border-radius:26px;border:1px solid #edf1fa;padding:22px 18px 17px;box-shadow:0 7px 20px #1b3e7509}
+.b-section-heading{padding:0 5px 17px}
+.b-section-heading a{font-size:12px;color:#156fdb;font-weight:800}
+.b-section-heading a span{font-size:19px}
+.b-action-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.b-action-tile{min-width:0;min-height:139px;border-radius:19px;display:flex;align-items:center;text-align:center;flex-direction:column;padding:18px 9px 13px;gap:8px;transition:transform .16s,box-shadow .16s}
+.b-action-tile:hover{transform:translateY(-3px);box-shadow:0 8px 20px #2458a022}
+.b-tile-qcm{background:#eaf5ff}.b-tile-exams{background:#e8f9f4}.b-tile-courses{background:#f1edff}.b-tile-errors{background:#fff0f0}
+.b-tile-icon{display:grid;place-items:center;width:54px;height:54px;border-radius:17px;background:#d0eaff;color:#1780e4;font-size:34px;line-height:1}
+.b-tile-exams .b-tile-icon{background:#c9f4e7;color:#119b77}
+.b-tile-courses .b-tile-icon{background:#e1d8ff;color:#805ce4}
+.b-tile-errors .b-tile-icon{background:#ffd9de;color:#e54b56}
+.b-action-tile strong{font-size:15px;color:#0b245a;line-height:1.15;font-weight:850}
+.b-action-tile small{font-size:11px;line-height:1.3;color:#6d84a7}
+.b-lower-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.b-streak,.b-quote{background:#fff;min-height:175px;border:1px solid #edf1f8;border-radius:25px;padding:19px 20px;box-shadow:0 7px 19px #1b3e7509}
+.b-streak-top{display:flex;gap:11px;align-items:flex-start}
+.b-flame{font-size:42px;line-height:1.2}
+.b-streak h2,.b-quote h2{font-size:14px;font-weight:900;color:#1b68b9;margin:0 0 4px}
+.b-streak-top strong{display:block;font-size:29px;line-height:1;font-weight:900;color:#0b245a}
+.b-streak-top p{font-size:12px;color:#6b83a5;margin:5px 0 0}
+.b-week-row{display:flex;justify-content:space-between;gap:5px;margin-top:17px}
+.b-week-day{display:flex;flex-direction:column;align-items:center;gap:5px;flex:1}
+.b-week-day span{width:27px;height:27px;border-radius:50%;background:#f4f9fc;border:1px solid #c6d9e7;display:grid;place-items:center;color:#fff;font-weight:900}
+.b-week-day span.b-done{background:#10b79c;border:1px solid #08a88b}
+.b-week-day span.b-today{border:2px solid #86d6ca;background:#e2f9f4}
+.b-week-day small{font-size:9px;color:#607a9d}
+.b-quote{position:relative;overflow:hidden;background:linear-gradient(130deg,#fff,#e8f7ff)}
+.b-quote:after{content:"";position:absolute;right:-42px;bottom:-85px;width:270px;height:155px;border-radius:50%;background:#d2edff;opacity:.8}
+.b-quote-title{display:flex;align-items:center;gap:10px}
+.b-quote-title>span{font-size:53px;line-height:.6;color:#6cb9eb;font-weight:900}
+.b-quote p{font-size:17px;font-style:italic;line-height:1.37;color:#10265b;position:relative;z-index:2;margin:14px 0 0}
+.b-heartbeat{position:absolute;right:12px;bottom:4px;font-size:78px;color:#8accf6;line-height:1;z-index:2}
+.b-daily{border:1px solid #e8eef8;border-radius:22px;background:#fff;padding:18px 21px;box-shadow:0 7px 18px #1b3e7509}
+.b-daily-top{display:flex;align-items:center;gap:12px}
+.b-daily-symbol{width:44px;height:44px;background:#eaf5ff;color:#1778dd;border-radius:14px;display:grid;place-items:center;font-size:32px;flex:none}
+.b-daily-top>div{flex:1;min-width:0}
+.b-daily-top h2{font-size:15px;color:#0b245a;font-weight:900;margin:0}
+.b-daily-top p{font-size:12px;color:#657a9a;margin:4px 0 0}
+.b-daily-top>strong{font-size:16px;color:#1467bd;white-space:nowrap}
+.b-daily-track{margin:14px 0 12px}
+.b-daily>a{display:inline-flex;font-size:12px;font-weight:800;color:#136bd5}
+.b-recent{display:flex;align-items:center;justify-content:space-between;gap:15px;background:#fff;border:1px solid #e8eef8;border-radius:20px;padding:15px 21px}
+.b-recent>div{display:flex;gap:13px;align-items:center}
+.b-recent>div>span{font-size:28px;color:#187de0}
+.b-recent strong,.b-recent small{display:block;color:#102659}
+.b-recent small{font-size:11px;margin-top:4px;color:#697d9a}
+.b-recent>a{font-size:12px;color:#1972d9;font-weight:900}
+
+@media(max-width:1050px){
+ .b-container{padding:22px 20px 50px}
+ .b-progress-content{gap:20px}
+ .b-progress-ring{width:159px;height:159px}
+ .b-recommend-copy strong{font-size:20px}
+}
+@media(max-width:800px){
+ .b-dashboard.dashboard-shell{display:block;grid-template-columns:minmax(0,1fr)}
+ .b-dashboard .dashboard-sidebar.modern-sidebar{display:none!important}
+ .b-home.dashboard-main{min-height:100dvh;background:linear-gradient(160deg,#f0f8ff,#f8fbff 520px)}
+ .b-container{max-width:670px;padding:13px 15px calc(105px + env(safe-area-inset-bottom));gap:12px}
+ .b-header{height:75px;min-height:75px;padding:4px 3px}
+ .b-brand img{width:188px}
+ .b-header-controls{gap:9px}
+ .b-header-controls .menu-button{display:grid;place-items:center;border:0!important;background:#fff!important;border-radius:50%;width:45px;height:45px;min-width:45px;min-height:45px;color:#144e98;box-shadow:0 3px 14px #1c5d9412;font-size:22px;padding:0}
+ .b-user{width:42px;height:42px;font-size:16px}
+ .b-welcome{min-height:180px;padding:18px 19px;border-radius:21px}
+ .b-greeting{max-width:58%}
+ .b-welcome h1{font-size:clamp(22px,5.3vw,31px)}
+ .b-welcome .b-greeting>p:last-child{font-size:13px;line-height:1.36}
+ .b-intro{font-size:9px!important}
+ .b-nurse{width:53%;max-width:280px;right:-12px;bottom:-20px}
+ .b-progress-card{padding:17px 17px 20px;border-radius:22px}
+ .b-heading-title h2,.b-section-heading h2{font-size:19px}
+ .b-heading-icon{width:32px;height:32px;font-size:20px;border-radius:10px}
+ .b-progress-content{grid-template-columns:minmax(0,.84fr) minmax(0,1.25fr);gap:15px;margin-top:15px}
+ .b-progress-ring{width:138px;height:138px;max-width:100%;aspect-ratio:1;height:auto}
+ .b-progress-center{width:calc(100% - 24px);height:calc(100% - 24px)}
+ .b-progress-center strong{font-size:27px}
+ .b-progress-center span{font-size:10px}
+ .b-ring-wrap>small{font-size:9px}
+ .b-progress-list{gap:12px}
+ .b-progress-item{grid-template-columns:31px minmax(0,1fr);gap:7px}
+ .b-mini-icon{width:31px;height:31px;font-size:17px;border-radius:10px}
+ .b-progress-meta strong{font-size:12px}
+ .b-progress-meta small{font-size:10px}
+ .b-track{height:7px}
+ .b-progress-detail{gap:7px}
+ .b-recommendation{min-height:118px;padding:20px 17px;border:4px solid #fff;border-radius:22px}
+ .b-recommend-copy{padding-right:78px;gap:7px}
+ .b-recommend-copy small{font-size:11px}
+ .b-recommend-copy strong{font-size:19px}
+ .b-recommend-copy>span:last-child{font-size:10px}
+ .b-recommend-books{right:16px;transform:rotate(-7deg) scale(.72);transform-origin:bottom right}
+ .b-recommend-arrow{display:none}
+ .b-actions{padding:17px 12px 14px;border-radius:22px}
+ .b-section-heading{padding:0 3px 13px}
+ .b-action-grid{gap:8px}
+ .b-action-tile{padding:13px 5px 10px;min-height:117px;border-radius:16px;gap:7px}
+ .b-tile-icon{width:43px;height:43px;border-radius:13px;font-size:26px}
+ .b-action-tile strong{font-size:12px}
+ .b-action-tile small{font-size:9px}
+ .b-lower-grid{gap:10px}
+ .b-streak,.b-quote{padding:15px 12px;min-height:161px;border-radius:20px}
+ .b-flame{font-size:32px}
+ .b-streak-top{gap:5px}
+ .b-streak h2,.b-quote h2{font-size:12px}
+ .b-streak-top strong{font-size:23px}
+ .b-streak-top p{font-size:10px}
+ .b-week-row{gap:1px;margin-top:16px}
+ .b-week-day span{width:19px;height:19px;font-size:11px}
+ .b-week-day small{font-size:8px}
+ .b-quote-title>span{font-size:39px}
+ .b-quote p{font-size:13px;margin-top:15px}
+ .b-heartbeat{font-size:50px;bottom:4px}
+ .b-daily,.b-recent{padding:14px 15px}
+}
+@media(max-width:380px){
+ .b-container{padding-left:11px;padding-right:11px}
+ .b-brand img{width:168px}
+ .b-header-controls .menu-button,.b-user{width:39px;height:39px;min-width:39px;min-height:39px}
+ .b-welcome{min-height:171px}
+ .b-welcome .b-greeting>p:last-child{font-size:12px}
+ .b-progress-content{gap:8px}
+ .b-progress-ring{width:118px}
+ .b-progress-list{gap:10px}
+ .b-progress-item{grid-template-columns:25px minmax(0,1fr);gap:6px}
+ .b-mini-icon{width:25px;height:25px;font-size:14px}
+ .b-action-tile{min-height:114px;padding:12px 3px}
+ .b-action-tile strong{font-size:10.5px}
+ .b-action-tile small{font-size:8px}
+ .b-tile-icon{width:39px;height:39px;font-size:24px}
+ .b-recommend-copy strong{font-size:17px}
+ .b-streak,.b-quote{padding:13px 10px}
+ .b-week-day span{width:17px;height:17px}
+}
+@media(prefers-reduced-motion:reduce){.b-action-tile,.b-track>span{transition:none}}
