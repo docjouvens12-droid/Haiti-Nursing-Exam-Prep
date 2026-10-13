@@ -5,7 +5,7 @@ export const runtime = "edge";
 
 /** Android icon generated from the approved HN stethoscope and cap symbol. */
 export async function GET() {
-  const artwork = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(HN_ICON_SVG)}`;
+  const artwork = `data:image/svg+xml;base64,${btoa(HN_ICON_SVG)}`;
   return new ImageResponse(
     <div style={{display:"flex",width:"100%",height:"100%",alignItems:"center",justifyContent:"center",background:"#071c55"}}>
       <img src={artwork} alt="Haiti Nursing Exam Prep" width="512" height="512" />
