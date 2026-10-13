@@ -196,3 +196,58 @@
  .b-week-day span{width:17px;height:17px}
 }
 @media(prefers-reduced-motion:reduce){.b-action-tile,.b-track>span{transition:none}}
+
+
+/* Final approved design: 70% Concept B, 30% Concept C. */
+.bc-resume,.bc-specialties{border:1px solid #e6edf7;background:#fff;border-radius:25px;padding:19px 21px;box-shadow:0 7px 24px #173d7a0c;min-width:0}
+.bc-resume-heading,.bc-specialties-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.bc-resume-heading>div{display:flex;align-items:center;gap:10px;min-width:0}
+.bc-resume-heading h2,.bc-specialties-heading h2{font-size:20px;line-height:1.25;font-weight:900;color:#0d285e;margin:0;letter-spacing:-.3px}
+.bc-resume-clock{font-size:25px;line-height:1;color:#167bdc}
+.bc-resume-heading>a{font-size:25px;color:#2469c1;display:grid;place-items:center;flex:none;width:30px;height:30px}
+.bc-resume-body{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:16px;align-items:center}
+.bc-resume-illustration{height:82px;width:82px;display:grid;place-items:center;border-radius:20px;background:linear-gradient(145deg,#ffe8ed,#e7efff);color:#3272c7;font-size:43px}
+.bc-resume-description{min-width:0;display:grid;gap:5px}
+.bc-resume-description small{color:#7185a1;font-size:10px;letter-spacing:.04em;font-weight:850}
+.bc-resume-description strong{color:#0d285b;font-weight:900;font-size:17px;line-height:1.2}
+.bc-resume-description>span{color:#647b9c;font-size:12px;line-height:1.35}
+.bc-resume-button{background:linear-gradient(135deg,#2384f8,#1463d9);padding:12px 15px;border-radius:12px;color:white;display:inline-flex;align-items:center;gap:11px;font-weight:800;font-size:12px;white-space:nowrap;box-shadow:0 7px 15px #2174cf1b}
+.bc-resume-button span{font-size:20px;line-height:.8}
+.bc-specialties-heading{margin-bottom:15px;padding:0 3px}
+.bc-specialties-heading>a{white-space:nowrap;font-size:12px;font-weight:800;color:#196fcf}
+.bc-specialties-heading>a span{font-size:19px;margin-left:5px}
+.bc-specialties-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.bc-specialty{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:flex-start;min-height:149px;border-radius:18px;padding:15px 12px 35px;gap:9px;background:#fff1f3;color:#10265e;transition:transform .18s,box-shadow .18s}
+.bc-specialty:hover{transform:translateY(-2px);box-shadow:0 8px 24px #184b7d1a}
+.bc-specialty.bc-urgences{background:#fff1f0}.bc-specialty.bc-pharmaco{background:#e7faf5}.bc-specialty.bc-communaute{background:#f0ebff}
+.bc-specialty-symbol{height:43px;width:43px;border-radius:14px;background:#ffdae3;display:grid;place-items:center;font-size:26px;font-weight:900;color:#d94e78}
+.bc-urgences .bc-specialty-symbol{color:#e74e55;background:#ffe0dd}.bc-pharmaco .bc-specialty-symbol{color:#008d81;background:#c9f3e8}.bc-communaute .bc-specialty-symbol{color:#7251c9;background:#dfd4ff}
+.bc-specialty strong{font-size:14px;line-height:1.22;overflow-wrap:anywhere;font-weight:900}
+.bc-specialty-meta{font-size:11px;color:#647c9f}
+.bc-specialty-arrow{position:absolute;right:10px;bottom:9px;border-radius:50%;display:grid;place-items:center;height:25px;width:25px;background:#ffdbe2;color:#da557d;font-size:20px}
+.bc-urgences .bc-specialty-arrow{background:#ffdddd;color:#dc5a5a}
+.bc-pharmaco .bc-specialty-arrow{background:#c6f0e7;color:#0b9687}
+.bc-communaute .bc-specialty-arrow{background:#ded4ff;color:#6953b8}
+@media(max-width:800px){
+ .bc-resume,.bc-specialties{padding:16px 14px;border-radius:21px}
+ .bc-resume-heading h2,.bc-specialties-heading h2{font-size:18px}
+ .bc-resume-body{grid-template-columns:65px minmax(0,1fr);gap:10px}
+ .bc-resume-illustration{height:64px;width:64px;border-radius:17px;font-size:30px}
+ .bc-resume-description strong{font-size:14px}
+ .bc-resume-description>span{font-size:11px}
+ .bc-resume-button{grid-column:2;width:max-content;font-size:11px;padding:10px 13px}
+ .bc-specialties-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}
+ .bc-specialty{min-height:144px;padding:11px 7px 34px;border-radius:15px;gap:7px}
+ .bc-specialty-symbol{height:36px;width:36px;font-size:21px;border-radius:12px}
+ .bc-specialty strong{font-size:11px;line-height:1.17}
+ .bc-specialty-meta{font-size:9px}
+ .bc-specialty-arrow{height:22px;width:22px;right:7px;bottom:7px}
+}
+@media(max-width:390px){
+ .bc-resume-heading h2,.bc-specialties-heading h2{font-size:16px}
+ .bc-specialty{min-height:146px;padding:10px 5px 31px}
+ .bc-specialty strong{font-size:10px}
+ .bc-specialty-meta{font-size:8px}
+}
+@media(max-width:330px){.bc-specialties-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.bc-specialty{min-height:120px}}
+@media(prefers-reduced-motion:reduce){.bc-specialty:hover{transform:none}}
