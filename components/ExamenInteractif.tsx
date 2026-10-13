@@ -144,45 +144,64 @@ export default function ExamenInteractif({ questions: initialQuestions, tailleDe
   }
 
   async function soumettreExamen(force = false) {
-    if (soumissionRef.current) return;
+    if (chargementBrouillon || soumissionRef.current) return;
     soumissionRef.current = true;
     setSoumission(true);
     setConfirmation(false);
-    const reponsesFinales = force ? reponsesRef.current : reponses;
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) { router.push("/connexion"); return; }
-
-    const bonnes = questions.reduce((total, q) => total + (reponsesFinales[q.id] === q.bonne_reponse ? 1 : 0), 0);
-    const { data: session, error: sessionError } = await supabase.from("exam_sessions").insert({
-      user_id: user.id,
-      mode: modeSession || `examen_${tailleDemandee}`,
-      score: bonnes,
-      total_questions: questions.length,
-      completed_at: new Date().toISOString(),
-    }).select("id").single();
-
-    if (sessionError || !session) {
-      soumissionRef.current = false;
+    setMessageErreur("");
+    const finales = force ? reponsesRef.current : reponses;
+    try {
+      const supabase = createClient();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) throw new Error("Votre connexion a expiré. Reconnectez-vous avant de soumettre l'examen.");
+      const bonnes = questions.reduce((total, q) => total + (finales[q.id] === q.bonne_reponse ? 1 : 0), 0);
+      let sessionId = pendingSessionRef.current;
+      if (!sessionId) {
+        const { data: session, error: sessionError } = await supabase.from("exam_sessions").insert({
+          user_id: user.id,
+          mode: modeSession || "examen_" + tailleDemandee,
+          score: bonnes,
+          total_questions: questions.length,
+          completed_at: null,
+        }).select("id").single();
+        if (sessionError || !session) throw sessionError || new Error("Erreur lors de la création de l'examen.");
+        sessionId = session.id;
+        pendingSessionRef.current = sessionId;
+        if (brouillonKey) {
+          try {
+            const saved = JSON.parse(localStorage.getItem(brouillonKey) || "{}");
+            localStorage.setItem(brouillonKey, JSON.stringify({...saved, pendingSessionId: sessionId}));
+          } catch { /* Resume is best-effort when browser storage is disabled. */ }
+        }
+      }
+      const { data: existing, error: readError } = await supabase.from("user_answers")
+        .select("question_id").eq("user_id", user.id).eq("exam_session_id", sessionId);
+      if (readError) throw readError;
+      const savedIds = new Set((existing || []).map((r) => r.question_id));
+      const lignes = questions.filter((q) => !savedIds.has(q.id)).map((q) => ({
+        user_id: user.id,
+        question_id: q.id,
+        exam_session_id: sessionId,
+        reponse_choisie: finales[q.id] ?? null,
+        correcte: finales[q.id] === q.bonne_reponse,
+      }));
+      if (lignes.length) {
+        const { error: answersError } = await supabase.from("user_answers").insert(lignes);
+        if (answersError) throw answersError;
+      }
+      const { error: doneError } = await supabase.from("exam_sessions")
+        .update({ score: bonnes, completed_at: new Date().toISOString() })
+        .eq("id", sessionId).eq("user_id", user.id);
+      if (doneError) throw doneError;
+      if (brouillonKey) {
+        try { localStorage.removeItem(brouillonKey); } catch { /* Already saved remotely. */ }
+      }
+      router.push("/resultats/" + sessionId);
+    } catch {
+      setMessageErreur("Impossible d'enregistrer l'examen. Vos réponses restent dans le brouillon de cet appareil. Réessayez lorsque la connexion revient.");
       setSoumission(false);
-      return;
-    }
-
-    const lignes = questions.map((q) => ({
-      user_id: user.id,
-      question_id: q.id,
-      exam_session_id: session.id,
-      reponse_choisie: reponsesFinales[q.id] ?? null,
-      correcte: reponsesFinales[q.id] === q.bonne_reponse,
-    }));
-
-    const { error: answersError } = await supabase.from("user_answers").insert(lignes);
-    if (answersError) {
       soumissionRef.current = false;
-      setSoumission(false);
-      return;
     }
-    router.push(`/resultats/${session.id}`);
   }
 
   const options = [["A", question.option_a], ["B", question.option_b], ["C", question.option_c], ["D", question.option_d]] as const;
