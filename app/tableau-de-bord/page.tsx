@@ -3,8 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
-import type { CSSProperties } from "react";
-import "./concept-b.css";
+import "./concept-c.css";
 
 const DAILY_GOAL = 25;
 const STUDY_TIME_ZONE = "America/Port-au-Prince";
@@ -177,159 +176,173 @@ export default async function TableauDeBord() {
     : null;
 
   return (
-    <div className="dashboard-shell modern-dashboard b-dashboard">
-      <aside className="dashboard-sidebar modern-sidebar">
-        <Link href="/tableau-de-bord" className="brand-lockup modern-brand">
-          <img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} />
-          <span><strong>Haiti Nursing</strong><small>Exam Prep</small></span>
+    <div className="c-shell">
+      <aside className="c-side" aria-label="Menu principal sur ordinateur">
+        <Link className="c-sidebrand" href="/tableau-de-bord">
+          <img src="/pwa-icon.svg" alt="" width={44} height={44} />
+          <span>Haiti Nursing<small>EXAM PREP</small></span>
         </Link>
-
-        <nav className="side-nav modern-nav">
-          <Link className="active" href="/tableau-de-bord">⌂ <span>Accueil</span></Link>
-          <Link href="/pratique">▤ <span>Questions</span></Link>
-          <Link href="/categories">▦ <span>Catégories & thématiques</span></Link>
-          <Link href="/examens">▣ <span>Examens</span></Link>
-          <Link href="/historique">▥ <span>Plan d’étude</span></Link>
-          <Link href="/performance">⌁ <span>Performance</span></Link>
-          <Link href="/questions-incorrectes">◴ <span>Questions incorrectes</span>{incorrectes.length > 0 && <b>{incorrectes.length}</b>}</Link>
-          <Link href="/favoris">♡ <span>Favoris</span>{(favoris ?? 0) > 0 && <b>{favoris}</b>}</Link>
-          <Link href="/nightingale">✦ <span>Nightingale AI</span></Link>
-          <Link href="/questions-reelles">▧ <span>Ressources</span></Link>
-          {profil?.role === "admin" && <Link href="/admin">⚙ <span>Administration</span></Link>}
+        <nav className="c-sidenav" aria-label="Navigation principale">
+          <Link href="/tableau-de-bord" aria-current="page"><span aria-hidden="true">⌂</span>Accueil</Link>
+          <Link href="/pratique"><span aria-hidden="true">▤</span>QCM</Link>
+          <Link href="/categories"><span aria-hidden="true">▦</span>Catégories</Link>
+          <Link href="/examens"><span aria-hidden="true">☑</span>Examens</Link>
+          <Link href="/cours-revisions"><span aria-hidden="true">▣</span>Cours &amp; Révisions</Link>
+          <Link href="/historique"><span aria-hidden="true">◷</span>Mon parcours</Link>
+          <Link href="/performance"><span aria-hidden="true">⌁</span>Performance</Link>
+          <Link href="/questions-incorrectes"><span aria-hidden="true">◎</span>Questions incorrectes</Link>
+          <Link href="/favoris"><span aria-hidden="true">♡</span>Favoris</Link>
+          <Link href="/nightingale"><span aria-hidden="true">✦</span>Nightingale AI</Link>
+          {profil?.role === "admin" && <Link href="/admin"><span aria-hidden="true">⚙</span>Administration</Link>}
         </nav>
-
-        <div className="premium-box modern-premium">
-          <div className="premium-title">♛ Passe Premium</div>
-          <p>Accédez à toutes les fonctionnalités Premium.</p>
-          <button disabled>Prochainement</button>
+        <div className="c-sidebottom">
+          <p>{nom}<span style={{display:"block",color:"#f3d59a"}}>{profil?.role === "admin" ? "Administrateur" : "Étudiant(e)"}</span></p>
+          <BoutonDeconnexion />
         </div>
-
-        <div className="sidebar-profile">
-          <div className="avatar">{prenom.charAt(0).toUpperCase()}</div>
-          <div><strong>{nom}</strong><small>{profil?.role === "admin" ? "Administrateur" : "Étudiant"}</small></div>
-        </div>
-        <BoutonDeconnexion />
       </aside>
 
-
-      <main className="dashboard-main b-home">
-        <div className="b-container">
-          <header className="b-header">
-            <Link href="/tableau-de-bord" className="b-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
-              <img src="/hn-logo.svg" alt="Haiti Nursing Exam Prep" width={226} height={68} />
-            </Link>
-            <div className="b-header-controls">
-              <Link href="/profil" className="b-user" aria-label="Afficher mon profil" title={nom}>{prenom.charAt(0).toUpperCase()}</Link>
-              <StudentMenuButton />
-            </div>
-          </header>
-
-          <section className="b-welcome">
-            <div className="b-greeting">
-              <p className="b-intro">VOTRE ESPACE DE PRÉPARATION</p>
-              <h1>Bon retour, {prenom} ! <span aria-hidden="true">👋</span></h1>
-              <p>Continuez vos efforts aujourd’hui pour atteindre vos objectifs.</p>
-            </div>
-            <img className="b-nurse" src="/nursing-home-b-student.svg" width={400} height={300} alt="Illustration d’une étudiante infirmière avec ses livres" />
-          </section>
-
-          <section className="b-progress-card" aria-labelledby="b-progress-heading">
-            <div className="b-card-heading">
-              <div className="b-heading-title"><span className="b-heading-icon b-analytics-icon" aria-hidden="true">▥</span><h2 id="b-progress-heading">Votre progression</h2></div>
-              <Link className="b-heading-link" href="/performance">Détails <span aria-hidden="true">›</span></Link>
-            </div>
-            <div className="b-progress-content">
-              <div className="b-ring-wrap">
-                <div className="b-progress-ring" role="img" aria-label={progressionQuestions + "% des QCM disponibles déjà répondus"} style={{"--b-ring": progressionQuestions+"%"} as CSSProperties}>
-                  <div className="b-progress-center"><strong>{progressionQuestions}%</strong><span>QCM couverts</span></div>
-                </div>
-                <small>Basé sur vos réponses enregistrées</small>
-              </div>
-              <div className="b-progress-list">
-                {globalItems.map((item) => (
-                  <Link className={"b-progress-item b-item-"+item.tone} href={item.href} key={item.label}>
-                    <span className="b-mini-icon" aria-hidden="true">{item.tone === "course" ? "▤" : item.tone === "qcm" ? "▧" : "☑"}</span>
-                    <span className="b-progress-detail">
-                      <span className="b-progress-meta"><strong>{item.label}</strong><small>{item.current.toLocaleString("fr-FR")} / {item.total.toLocaleString("fr-FR")}</small></span>
-                      <span className="b-track"><span style={{width: (item.total>0?Math.min(100,Math.round(item.current/item.total*100)):0)+"%"}} /></span>
-                    </span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <Link className="b-recommendation" href={recommendationLink}>
-            <span className="b-recommend-copy">
-              <small><span aria-hidden="true">✦</span> {recommendationLabel}</small>
-              <strong>{recommendedTitle}</strong>
-              <span>{totalTentatives > 0 && plusFaible.questions > 0 ? plusFaible.questions + " tentatives · " + plusFaible.valeur + "% de réussite" : "Commencez par les bases essentielles des soins infirmiers."}</span>
-            </span>
-            <span className="b-recommend-books" aria-hidden="true"><i /><i /><i /></span>
-            <span className="b-recommend-arrow" aria-hidden="true">›</span>
+      <main className="c-main">
+        <header className="c-top">
+          <Link className="c-topbrand" href="/tableau-de-bord" aria-label="Haiti Nursing Exam Prep — accueil">
+            <img src="/pwa-icon.svg" alt="" width={45} height={45} />
+            <span>Haiti Nursing<small>EXAM PREP</small></span>
           </Link>
+          <div className="c-topactions">
+            <Link className="c-avatar" href="/profil" aria-label="Ouvrir mon profil" title={nom}>{prenom.charAt(0).toUpperCase()}</Link>
+            <StudentMenuButton />
+          </div>
+        </header>
 
-          <section className="bc-resume" aria-labelledby="bc-resume-title">
-            <div className="bc-resume-heading">
-              <div><span className="bc-resume-clock" aria-hidden="true">◷</span><h2 id="bc-resume-title">Continuer là où vous vous êtes arrêté</h2></div>
-              <Link href="/historique" aria-label="Voir l'historique des activités">›</Link>
-            </div>
-            <div className="bc-resume-body">
-              <span className="bc-resume-illustration" aria-hidden="true">▤</span>
-              <div className="bc-resume-description">
-                <small>{recentAnswer ? "DERNIÈRE ACTIVITÉ QCM" : "VOTRE PARCOURS"}</small>
-                <strong>{recentAnswer ? resumeCategory || "Questions d’entraînement" : "Commencez votre première série de QCM"}</strong>
-                <span>{recentAnswer ? (derniereActivite ? "Dernière réponse · " + derniereActivite : "Poursuivez ce domaine") : "Les questions et les cours vous attendent."}</span>
+        <div className="c-content">
+          <section className="c-hero" aria-labelledby="c-welcome-heading">
+            <div className="c-herocopy">
+              <span className="c-kicker">Votre espace de préparation · Haïti</span>
+              <h1 id="c-welcome-heading">Bon retour, {prenom} ! <em>👋</em></h1>
+              <p>Un pas de plus vers votre réussite à l’Examen d’État infirmier.</p>
+              <div className="c-herobuttons">
+                <Link href="/pratique" className="c-heroprimary">Commencer un QCM →</Link>
+                <Link href="/examens" className="c-herosecondary">Examens blancs</Link>
               </div>
-              <Link className="bc-resume-button" href={repriseUrl}>{recentAnswer ? "Reprendre les QCM" : "Commencer"} <span aria-hidden="true">›</span></Link>
+            </div>
+            <img className="c-heroimg" src="/nursing-home-b-student.svg" alt="" width={320} height={235} />
+          </section>
+
+          <section className="c-statgrid" aria-label="Vos statistiques">
+            <div className="c-stat">
+              <span className="c-staticon" aria-hidden="true">▤</span>
+              <div><small>QCM explorés</small><strong>{questionsRepondues.toLocaleString("fr-FR")}</strong></div>
+            </div>
+            <div className="c-stat">
+              <span className="c-staticon" aria-hidden="true">✓</span>
+              <div><small>Bonnes réponses</small><strong>{taux}%</strong></div>
+            </div>
+            <div className="c-stat">
+              <span className="c-staticon" aria-hidden="true">☑</span>
+              <div><small>Examens terminés</small><strong>{(sessions ?? []).length}</strong></div>
             </div>
           </section>
 
-          <section className="b-actions" aria-labelledby="b-actions-title">
-            <div className="b-section-heading"><h2 id="b-actions-title">Accès rapide</h2><Link href="/profil">Tous les outils <span aria-hidden="true">›</span></Link></div>
-            <div className="b-action-grid">
-              <Link href="/pratique" className="b-action-tile b-tile-qcm"><span className="b-tile-icon" aria-hidden="true">▤</span><strong>QCM</strong><small>S’entraîner maintenant</small></Link>
-              <Link href="/examens" className="b-action-tile b-tile-exams"><span className="b-tile-icon" aria-hidden="true">☑</span><strong>Examens</strong><small>Simulations chronométrées</small></Link>
-              <Link href="/cours-revisions" className="b-action-tile b-tile-courses"><span className="b-tile-icon" aria-hidden="true">▣</span><strong>Cours</strong><small>Lire et apprendre</small></Link>
-              <Link href="/questions-incorrectes" className="b-action-tile b-tile-errors"><span className="b-tile-icon" aria-hidden="true">◎</span><strong>Questions incorrectes</strong><small>Revoir vos erreurs</small></Link>
+          <section className="c-panel" aria-labelledby="c-resume-heading">
+            <div className="c-panelhead">
+              <h2 id="c-resume-heading">Votre parcours d’apprentissage</h2>
+              <Link href="/historique">Historique ›</Link>
+            </div>
+            <div className="c-two">
+              <div className="c-resume">
+                <div>
+                  <span className="c-cardkicker">◷ CONTINUER LÀ OÙ VOUS ÉTIEZ</span>
+                  <h3>{recentAnswer ? resumeCategory || "Entraînement QCM" : "Votre première séance"}</h3>
+                  <p>{recentAnswer ? (derniereActivite ? "Dernière activité le " + derniereActivite : "Reprenez vos révisions.") : "Commencez une série de questions pour construire votre parcours."}</p>
+                </div>
+                <Link href={repriseUrl}>{recentAnswer ? "Reprendre les QCM" : "Commencer"} <span aria-hidden="true">›</span></Link>
+              </div>
+              <div className="c-focus">
+                <div>
+                  <span className="c-cardkicker">✦ {recommendationLabel.toUpperCase()}</span>
+                  <h3>{recommendedTitle}</h3>
+                  <p>{totalTentatives > 0 && plusFaible.questions > 0 ? plusFaible.questions + " tentatives · " + plusFaible.valeur + "% de bonnes réponses" : "Les bases essentielles des soins infirmiers pour bien démarrer."}</p>
+                </div>
+                <Link href={recommendationLink}>Explorer ce parcours →</Link>
+              </div>
             </div>
           </section>
 
-          <section className="bc-specialties" aria-labelledby="bc-specialties-title">
-            <div className="bc-specialties-heading"><h2 id="bc-specialties-title">Nos principales thématiques</h2><Link href="/categories">Voir tout <span aria-hidden="true">›</span></Link></div>
-            <div className="bc-specialties-grid">
-              {specialites.map((specialite) => (
-                <Link href={"/pratique?categorie=" + encodeURIComponent(specialite.name) + "&nombre=25"} className={"bc-specialty bc-" + specialite.tone} key={specialite.name}>
-                  <span className="bc-specialty-symbol" aria-hidden="true">{specialite.icon}</span>
-                  <strong>{specialite.name}</strong>
-                  <span className="bc-specialty-meta">{specialite.count?.toLocaleString("fr-FR") ?? "—"} QCM</span>
-                  <span className="bc-specialty-arrow" aria-hidden="true">›</span>
+          <section className="c-panel" aria-labelledby="c-progress-heading">
+            <div className="c-panelhead">
+              <h2 id="c-progress-heading">Votre progression</h2>
+              <Link href="/performance">Détails ›</Link>
+            </div>
+            <div className="c-progress">
+              {globalItems.map(item => {
+                const percentage = item.total > 0 ? Math.min(100, Math.round(item.current / item.total * 100)) : 0;
+                return (
+                  <Link className="c-progressrow" href={item.href} key={item.label}
+                    aria-label={item.label + " : " + item.current + " sur " + item.total}>
+                    <span>{item.label}</span>
+                    <span className="c-track" aria-hidden="true"><i style={{width:percentage+"%"}} /></span>
+                    <strong>{item.current.toLocaleString("fr-FR")} / {item.total.toLocaleString("fr-FR")}</strong>
+                  </Link>
+                );
+              })}
+            </div>
+            <p className="c-muted">La progression est calculée avec vos résultats réellement enregistrés. {totalQuestions.toLocaleString("fr-FR")} questions sont disponibles.</p>
+          </section>
+
+          <section className="c-panel" aria-labelledby="c-subject-heading">
+            <div className="c-panelhead">
+              <h2 id="c-subject-heading">Explorer les spécialités</h2>
+              <Link href="/categories">Toutes les matières ›</Link>
+            </div>
+            <div className="c-subjects">
+              {specialites.map((item) => (
+                <Link className="c-subject" href={"/pratique?categorie="+encodeURIComponent(item.name)+"&nombre=25"} key={item.name}>
+                  <span className="c-subject-icon" aria-hidden="true">{item.icon}</span>
+                  <strong>{item.name}</strong>
+                  <small>{item.count?.toLocaleString("fr-FR") ?? "—"} QCM</small>
                 </Link>
               ))}
             </div>
           </section>
 
-          <div className="b-lower-grid">
-            <section className="b-streak" aria-labelledby="b-streak-title">
-              <div className="b-streak-top"><span className="b-flame" aria-hidden="true">🔥</span><div><h2 id="b-streak-title">Série de jours</h2><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong><p>{serieEtude > 0 ? "Continuez sur cette lancée !" : "Une session aujourd’hui pour démarrer !"}</p></div></div>
-              <div className="b-week-row" aria-label="Activité des sept derniers jours">
-                {weekDays.map((day) => <div className="b-week-day" key={day.key}><span className={day.active ? "b-done" : day.today ? "b-today" : ""} aria-label={day.key+(day.active?" : étudié":" : sans activité")}>{day.active ? "✓" : ""}</span><small>{day.label}</small></div>)}
-              </div>
-            </section>
-            <section className="b-quote">
-              <div className="b-quote-title"><span aria-hidden="true">“</span><h2>Motivation du jour</h2></div>
-              <p>Des infirmiers bien formés construisent une Haïti plus saine.</p>
-              <span className="b-heartbeat" aria-hidden="true">♡</span>
-            </section>
-          </div>
-
-          <section className="b-daily" aria-labelledby="b-daily-title">
-            <div className="b-daily-top"><span className="b-daily-symbol" aria-hidden="true">◎</span><div><h2 id="b-daily-title">Objectif quotidien</h2><p>{questionsAujourdhui} questions répondues sur {DAILY_GOAL} prévues aujourd’hui</p></div><strong>{objectifPourcentage}%</strong></div>
-            <div className="b-track b-daily-track"><span style={{width:objectifPourcentage+"%"}} /></div>
-            <Link href="/pratique?nombre=25"> {objectifRestant > 0 ? "Continuer à pratiquer →" : "Poursuivre votre apprentissage →"}</Link>
+          <section className="c-panel" aria-labelledby="c-shortcuts-heading">
+            <div className="c-panelhead"><h2 id="c-shortcuts-heading">Accès rapide</h2></div>
+            <div className="c-shortcuts">
+              <Link className="c-shortcut" href="/pratique"><span aria-hidden="true">▤</span><strong>QCM</strong></Link>
+              <Link className="c-shortcut" href="/examens"><span aria-hidden="true">☑</span><strong>Examens</strong></Link>
+              <Link className="c-shortcut" href="/cours-revisions"><span aria-hidden="true">▣</span><strong>Cours</strong></Link>
+              <Link className="c-shortcut" href="/questions-incorrectes"><span aria-hidden="true">◎</span><strong>Mes erreurs</strong></Link>
+            </div>
           </section>
 
-
+          <div className="c-bottom">
+            <section className="c-panel c-goal" aria-labelledby="c-goal-heading">
+              <div className="c-panelhead" style={{marginBottom:0}}>
+                <h2 id="c-goal-heading">Objectif quotidien</h2>
+                <span style={{color:"#b68b44",fontWeight:900}}>✦</span>
+              </div>
+              <div className="c-goal-line">
+                <p>{questionsAujourdhui} / {DAILY_GOAL} QCM aujourd’hui</p>
+                <strong>{objectifPourcentage}%</strong>
+              </div>
+              <div className="c-track" role="progressbar" aria-label="Objectif de QCM quotidien" aria-valuenow={objectifPourcentage} aria-valuemin={0} aria-valuemax={100}>
+                <i style={{width:objectifPourcentage+"%"}} />
+              </div>
+              <div className="c-week" aria-label={"Série d’étude de "+serieEtude+" jours"}>
+                {weekDays.map(day => (
+                  <div className="c-weekday" key={day.key}>
+                    <span className={day.active ? "done" : ""} aria-label={day.key + (day.active ? " : étudié" : " : sans activité")}>{day.active ? "✓" : ""}</span>
+                    <small>{day.label}</small>
+                  </div>
+                ))}
+              </div>
+              <Link href="/pratique?nombre=25" style={{fontSize:12,fontWeight:850,color:"#1a65b9"}}>{objectifRestant ? "Continuer à pratiquer →" : "Poursuivre vos révisions →"}</Link>
+            </section>
+            <section className="c-panel c-quote" aria-labelledby="c-quote-heading">
+              <small id="c-quote-heading">MOTIVATION DU JOUR</small>
+              <p>« Des infirmiers bien formés construisent une Haïti plus saine. »</p>
+            </section>
+          </div>
+          <p className="c-footnote">Haiti Nursing Exam Prep · Étudier · S’entraîner · Réussir</p>
         </div>
       </main>
     </div>
