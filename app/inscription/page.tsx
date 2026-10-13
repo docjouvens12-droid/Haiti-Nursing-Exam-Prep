@@ -45,7 +45,7 @@ export default function Inscription() {
     <main className="signup-showcase">
       <section className="signup-story">
         <Link href="/" className="signup-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
-          <span className="signup-brand-mark">H</span>
+          <img src="/pwa-icon.svg" alt="" width={48} height={48} style={{borderRadius:14,flexShrink:0}} />
           <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
         </Link>
 
