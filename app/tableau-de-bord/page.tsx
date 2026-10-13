@@ -3,9 +3,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import BoutonDeconnexion from "@/components/BoutonDeconnexion";
+import type { CSSProperties } from "react";
+import "./concept-b.css";
 
 const DAILY_GOAL = 25;
-const STUDY_TIME_ZONE = "America/Denver";
+const STUDY_TIME_ZONE = "America/Port-au-Prince";
 
 function dayKey(value: string | Date) {
   return new Intl.DateTimeFormat("en-CA", {
@@ -42,6 +44,8 @@ export default async function TableauDeBord() {
     { count: favoris },
     { count: totalQuestionsCount },
     { count: historicalExamCount },
+    { count: availableCourseCount },
+    { data: courseProgressRows },
   ] = await Promise.all([
     supabase.from("profiles").select("nom_complet,role").eq("id", userId).single(),
     supabase
@@ -60,6 +64,8 @@ export default async function TableauDeBord() {
     supabase.from("favorites").select("*", { count: "exact", head: true }).eq("user_id", userId),
     supabase.from("questions").select("id", { count: "exact", head: true }),
     supabase.from("exam_banks").select("id", { count: "exact", head: true }),
+    supabase.from("learning_modules").select("id", { count: "exact", head: true }).eq("is_published", true),
+    supabase.from("learning_module_progress").select("module_id,status,progress_percent").eq("user_id", userId),
   ]);
 
   const totalTentatives = reponses?.length ?? 0;
@@ -125,8 +131,33 @@ export default async function TableauDeBord() {
     curseur = addDays(curseur, -1);
   }
 
+  const courseTotal = availableCourseCount ?? 0;
+  const courseCompleted = new Set((courseProgressRows ?? [])
+    .filter((item) => item.status === "completed" || (item.progress_percent ?? 0) >= 100)
+    .map((item) => item.module_id)).size;
+  const globalItems = [
+    { label: "Cours", current: courseCompleted, total: courseTotal, href: "/cours-revisions", tone: "course" },
+    { label: "QCM", current: questionsRepondues, total: totalQuestions, href: "/pratique", tone: "qcm" },
+    { label: "Examens", current: examensCompletes, total: examensDisponibles, href: "/examens", tone: "exam" },
+  ];
+  const weekDays = Array.from({ length: 7 }, (_, i) => {
+    const key = addDays(aujourdHui, i - 6);
+    const date = new Date(key + "T12:00:00Z");
+    const label = new Intl.DateTimeFormat("fr-FR", { weekday: "short", timeZone: "UTC" }).format(date).slice(0, 1).toUpperCase();
+    return {key,label,active:joursEtudies.has(key),today:key===aujourdHui};
+  });
+  const recentAnswer = (reponses ?? [])[0] as any | undefined;
+  const lastQuestion = Array.isArray(recentAnswer?.questions) ? recentAnswer.questions[0] : recentAnswer?.questions;
+  const resumeCategory = lastQuestion?.categorie || "";
+  const recommendedTitle = totalTentatives > 0 && plusFaible.questions > 0 ? plusFaible.categorie : "Soins infirmiers fondamentaux";
+  const recommendationLink = totalTentatives > 0 && plusFaible.questions > 0
+    ? "/pratique?categorie=" + encodeURIComponent(plusFaible.categorie) + "&nombre=25"
+    : "/cours-revisions";
+  const recommendationLabel = totalTentatives > 0 && plusFaible.questions > 0
+    ? "Domaine à renforcer" : "Parcours recommandé";
+
   return (
-    <div className="dashboard-shell modern-dashboard">
+    <div className="dashboard-shell modern-dashboard b-dashboard">
       <aside className="dashboard-sidebar modern-sidebar">
         <Link href="/tableau-de-bord" className="brand-lockup modern-brand">
           <img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} />
@@ -160,121 +191,100 @@ export default async function TableauDeBord() {
         <BoutonDeconnexion />
       </aside>
 
-      <main className="dashboard-main">
-        <header className="dashboard-topbar modern-topbar">
-          <StudentMenuButton />
-          <Link href="/tableau-de-bord" className="hn-mobile-topbar-logo" aria-label="Haiti Nursing Exam Prep, accueil"><img src="/pwa-icon.svg" width={42} height={42} alt="Logo HN" style={{borderRadius:12}} /></Link>
-          <div className="dashboard-search">⌕ <span>Rechercher (ex: pharmacologie, pédiatrie...)</span></div>
-          <div className="topbar-spacer" />
-          <div className="study-streak">🔥 <span><small>Série d’étude</small><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong></span></div>
-          <div className="notif">♢<span>1</span></div>
-          <div className="top-user"><div className="avatar small">{prenom.charAt(0).toUpperCase()}</div><span>Bonjour, {prenom}</span></div>
-        </header>
 
-        <section className="dashboard-content modern-content">
-          <div className="welcome-row modern-welcome">
-            <div>
-              <h1>Bonjour, {prenom} ! 👋</h1>
-              <p>Prêt(e) à continuer votre préparation aujourd’hui ?</p>
+      <main className="dashboard-main b-home">
+        <div className="b-container">
+          <header className="b-header">
+            <Link href="/tableau-de-bord" className="b-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
+              <img src="/hn-logo.svg" alt="Haiti Nursing Exam Prep" width={226} height={68} />
+            </Link>
+            <div className="b-header-controls">
+              <Link href="/profil" className="b-user" aria-label="Afficher mon profil" title={nom}>{prenom.charAt(0).toUpperCase()}</Link>
+              <StudentMenuButton />
             </div>
-            <Link className="continue-button" href="/pratique">CONTINUER À PRATIQUER →</Link>
-          </div>
+          </header>
 
-          <div className="daily-goal-card">
-            <div className="daily-goal-copy"><span className="daily-goal-icon">🎯</span><div><small>Objectif quotidien</small><strong>{questionsAujourdhui} / {DAILY_GOAL} questions aujourd’hui</strong><p>{objectifRestant === 0 ? "Objectif atteint — excellent travail aujourd’hui !" : `Encore ${objectifRestant} question${objectifRestant > 1 ? "s" : ""} pour atteindre votre objectif.`}</p></div></div>
-            <div className="daily-goal-progress"><div><span style={{ width: `${objectifPourcentage}%` }} /></div><b>{objectifPourcentage}%</b></div>
-            <Link href={`/pratique?nombre=${objectifRestant > 0 ? Math.min(25, objectifRestant) : 25}&statut=toutes`}>{objectifRestant > 0 ? "CONTINUER L’OBJECTIF →" : "CONTINUER À PRATIQUER →"}</Link>
-          </div>
+          <section className="b-welcome">
+            <div className="b-greeting">
+              <p className="b-intro">VOTRE ESPACE DE PRÉPARATION</p>
+              <h1>Bon retour, {prenom} ! <span aria-hidden="true">👋</span></h1>
+              <p>Continuez vos efforts aujourd’hui pour atteindre vos objectifs.</p>
+            </div>
+            <img className="b-nurse" src="/nursing-home-b-student.svg" width={400} height={300} alt="Illustration d’une étudiante infirmière avec ses livres" />
+          </section>
 
-          <div className="metric-grid modern-metrics">
-            <div className="metric-card"><span className="metric-icon blue">?</span><div><small>Questions répondues</small><strong>{questionsRepondues.toLocaleString("fr-FR")} <i>/ {totalQuestions.toLocaleString("fr-FR")}</i></strong><div className="mini-progress"><span style={{ width: `${progressionQuestions}%` }} /></div><em>{progressionQuestions}% complété</em></div></div>
-            <div className="metric-card"><span className="metric-icon green">✓</span><div><small>Taux de réussite</small><strong>{taux}%</strong><em>{bonnes} bonnes réponses</em></div></div>
-            <div className="metric-card"><span className="metric-icon purple">▣</span><div><small>Examens complétés</small><strong>{examensCompletes} <i>/ {examensDisponibles}</i></strong><em>{examensDisponibles} formats disponibles</em></div></div>
-            <div className="metric-card"><span className="metric-icon orange">🔥</span><div><small>Série d’étude réelle</small><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong><em>{questionsAujourdhui > 0 ? "Activité enregistrée aujourd’hui" : "Répondez à une question aujourd’hui"}</em></div></div>
-          </div>
-
-          <div className="mock-grid">
-            <div className="mock-main-column">
-              <section className="panel progress-panel">
-                <div className="panel-heading"><h2>Votre progression par matière</h2><Link href="/performance">Voir tout</Link></div>
-                {progression.length > 0 ? progression.map((item, index) => (
-                  <div className="subject-row" key={item.categorie}>
-                    <span className={`subject-dot c${index + 1}`}>{["♟","♙","♧","◇","◉","♢"][index]}</span>
-                    <strong>{item.categorie}</strong>
-                    <div className="bar"><i style={{ width: `${item.valeur}%` }} /></div>
-                    <b>{item.valeur}%</b>
-                    <small>{item.questions} questions</small>
-                  </div>
-                )) : <p className="empty-state">Commencez à pratiquer pour afficher votre progression par matière.</p>}
-              </section>
-
-              <section className="panel state-exams-panel">
-                <div className="panel-heading"><h2>Examens disponibles</h2><Link href="/examens">Voir tous</Link></div>
-                <div className="state-exam-grid">
-                  {[25, 50, 100].map((taille, index) => (
-                    <div className="state-exam-card" key={taille}>
-                      <span className={`exam-doc e${index + 1}`}>▤</span>
-                      <strong>Simulation {taille}</strong>
-                      <small>{taille} questions</small>
-                      <p>Mode chronométré</p>
-                      <Link href={`/examens/${taille}`}>Commencer →</Link>
-                    </div>
-                  ))}
-                  <div className="state-exam-card upcoming-exam">
-                    <span className="exam-doc e4">★</span>
-                    <strong>Examens d’État</strong>
-                    <small>Banque historique</small>
-                    <p>{historicalExamCount ?? 0} examens reconstitués</p>
-                    <Link href="/examens">Découvrir →</Link>
-                  </div>
+          <section className="b-progress-card" aria-labelledby="b-progress-heading">
+            <div className="b-card-heading">
+              <div className="b-heading-title"><span className="b-heading-icon b-analytics-icon" aria-hidden="true">▥</span><h2 id="b-progress-heading">Votre progression</h2></div>
+              <Link className="b-heading-link" href="/performance">Détails <span aria-hidden="true">›</span></Link>
+            </div>
+            <div className="b-progress-content">
+              <div className="b-ring-wrap">
+                <div className="b-progress-ring" role="img" aria-label={progressionQuestions + "% des QCM disponibles déjà répondus"} style={{"--b-ring": progressionQuestions+"%"} as CSSProperties}>
+                  <div className="b-progress-center"><strong>{progressionQuestions}%</strong><span>QCM couverts</span></div>
                 </div>
-              </section>
+                <small>Basé sur vos réponses enregistrées</small>
+              </div>
+              <div className="b-progress-list">
+                {globalItems.map((item) => (
+                  <Link className={"b-progress-item b-item-"+item.tone} href={item.href} key={item.label}>
+                    <span className="b-mini-icon" aria-hidden="true">{item.tone === "course" ? "▤" : item.tone === "qcm" ? "▧" : "☑"}</span>
+                    <span className="b-progress-detail">
+                      <span className="b-progress-meta"><strong>{item.label}</strong><small>{item.current.toLocaleString("fr-FR")} / {item.total.toLocaleString("fr-FR")}</small></span>
+                      <span className="b-track"><span style={{width: (item.total>0?Math.min(100,Math.round(item.current/item.total*100)):0)+"%"}} /></span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </div>
+          </section>
 
-            <div className="mock-side-column">
-              <section className="panel focus-panel">
-                <div className="panel-heading"><h2>À travailler davantage</h2></div>
-                <div className="focus-card">
-                  <span>◇</span>
-                  <div><strong>{plusFaible.categorie}</strong><b>{plusFaible.valeur}% de maîtrise</b></div>
-                </div>
-                <div className="bar focus-bar"><i style={{ width: `${plusFaible.valeur}%` }} /></div>
-                <p className="focus-target">Cible : 70%</p>
-                <strong className="incorrect-count">{incorrectes.length} questions incorrectes</strong>
-                <Link className="review-button" href="/questions-incorrectes">RÉVISER MAINTENANT</Link>
-              </section>
+          <Link className="b-recommendation" href={recommendationLink}>
+            <span className="b-recommend-copy">
+              <small><span aria-hidden="true">✦</span> {recommendationLabel}</small>
+              <strong>{recommendedTitle}</strong>
+              <span>{totalTentatives > 0 && plusFaible.questions > 0 ? plusFaible.questions + " tentatives · " + plusFaible.valeur + "% de réussite" : "Commencez par les bases essentielles des soins infirmiers."}</span>
+            </span>
+            <span className="b-recommend-books" aria-hidden="true"><i /><i /><i /></span>
+            <span className="b-recommend-arrow" aria-hidden="true">›</span>
+          </Link>
 
-              <section className="panel today-panel">
-                <h2>Aujourd’hui</h2>
-                <div className="today-real-summary"><span>{questionsAujourdhui >= DAILY_GOAL ? "✓" : "🎯"}</span><div><strong>{questionsAujourdhui} questions répondues</strong><small>Objectif : {DAILY_GOAL} questions par jour</small></div><b>{objectifPourcentage}%</b></div>
-                <div className="mini-progress today-progress"><span style={{ width: `${objectifPourcentage}%` }} /></div>
-                <Link href="/pratique" className="today-task"><span>▤</span><div><strong>{objectifRestant > 0 ? `Faire ${Math.min(25, objectifRestant)} questions` : "Objectif atteint"}</strong><small>{objectifRestant > 0 ? `${objectifRestant} restantes aujourd’hui` : "Vous pouvez continuer librement"}</small></div><i>→</i></Link>
-                <Link href="/questions-incorrectes" className="today-task"><span>▣</span><div><strong>Réviser les erreurs</strong><small>{incorrectes.length} à revoir</small></div><i>→</i></Link>
-                <Link className="plan-link" href="/historique">Voir le plan complet →</Link>
-              </section>
-
-              <section className="panel ai-panel">
-                <div className="ai-badge">IA</div>
-                <div><strong>Nightingale AI</strong><p>Votre tuteur infirmier personnel pour expliquer les concepts difficiles.</p></div>
-                <Link href="/nightingale">Poser une question →</Link>
-              </section>
+          <section className="b-actions" aria-labelledby="b-actions-title">
+            <div className="b-section-heading"><h2 id="b-actions-title">Accès rapide</h2><Link href="/profil">Tous les outils <span aria-hidden="true">›</span></Link></div>
+            <div className="b-action-grid">
+              <Link href="/pratique" className="b-action-tile b-tile-qcm"><span className="b-tile-icon" aria-hidden="true">▤</span><strong>QCM</strong><small>S’entraîner maintenant</small></Link>
+              <Link href="/examens" className="b-action-tile b-tile-exams"><span className="b-tile-icon" aria-hidden="true">☑</span><strong>Examens</strong><small>Simulations chronométrées</small></Link>
+              <Link href="/cours-revisions" className="b-action-tile b-tile-courses"><span className="b-tile-icon" aria-hidden="true">▣</span><strong>Cours</strong><small>Lire et apprendre</small></Link>
+              <Link href="/questions-incorrectes" className="b-action-tile b-tile-errors"><span className="b-tile-icon" aria-hidden="true">◎</span><strong>Questions incorrectes</strong><small>Revoir vos erreurs</small></Link>
             </div>
+          </section>
+
+          <div className="b-lower-grid">
+            <section className="b-streak" aria-labelledby="b-streak-title">
+              <div className="b-streak-top"><span className="b-flame" aria-hidden="true">🔥</span><div><h2 id="b-streak-title">Série de jours</h2><strong>{serieEtude} jour{serieEtude > 1 ? "s" : ""}</strong><p>{serieEtude > 0 ? "Continuez sur cette lancée !" : "Une session aujourd’hui pour démarrer !"}</p></div></div>
+              <div className="b-week-row" aria-label="Activité des sept derniers jours">
+                {weekDays.map((day) => <div className="b-week-day" key={day.key}><span className={day.active ? "b-done" : day.today ? "b-today" : ""} aria-label={day.key+(day.active?" : étudié":" : sans activité")}>{day.active ? "✓" : ""}</span><small>{day.label}</small></div>)}
+              </div>
+            </section>
+            <section className="b-quote">
+              <div className="b-quote-title"><span aria-hidden="true">“</span><h2>Motivation du jour</h2></div>
+              <p>Des infirmiers bien formés construisent une Haïti plus saine.</p>
+              <span className="b-heartbeat" aria-hidden="true">♡</span>
+            </section>
           </div>
 
-          <div className="dashboard-benefits">
-            <div><span>▤</span><p><strong>Questions de haute qualité</strong>Basées sur votre préparation infirmière.</p></div>
-            <div><span>◉</span><p><strong>Explications détaillées</strong>Comprenez chaque concept en profondeur.</p></div>
-            <div><span>▥</span><p><strong>Suivi intelligent</strong>Identifiez vos points faibles.</p></div>
-            <div><span>🏆</span><p><strong>Objectif réussite</strong>Étudiez efficacement et progressez.</p></div>
-          </div>
-        </section>
+          <section className="b-daily" aria-labelledby="b-daily-title">
+            <div className="b-daily-top"><span className="b-daily-symbol" aria-hidden="true">◎</span><div><h2 id="b-daily-title">Objectif quotidien</h2><p>{questionsAujourdhui} questions répondues sur {DAILY_GOAL} prévues aujourd’hui</p></div><strong>{objectifPourcentage}%</strong></div>
+            <div className="b-track b-daily-track"><span style={{width:objectifPourcentage+"%"}} /></div>
+            <Link href="/pratique?nombre=25"> {objectifRestant > 0 ? "Continuer à pratiquer →" : "Poursuivre votre apprentissage →"}</Link>
+          </section>
+
+          {recentAnswer && <div className="b-recent">
+            <div><span aria-hidden="true">◷</span><div><strong>Dernière activité</strong><small>{resumeCategory || "QCM d’entraînement"}</small></div></div>
+            <Link href={resumeCategory?"/pratique?categorie="+encodeURIComponent(resumeCategory):"/pratique"}>Réviser →</Link>
+          </div>}
+        </div>
       </main>
-
-      <style>{`
-        .modern-dashboard{background:#f7f9fd}.modern-sidebar{width:auto}.modern-brand .brand-mark{background:#2474ff;color:white;border:0;border-radius:50%}.modern-brand strong{color:white;font-size:18px}.modern-brand small{color:#d9e6ff;letter-spacing:0;font-size:12px;text-transform:none}.modern-nav a.active{background:#2474ff}.modern-nav b{background:#ef4b58}.modern-premium{border-color:#ba943e}.modern-premium button{background:#ffcf61;color:#132238}.modern-topbar{height:78px}.dashboard-search{min-width:370px;display:flex;align-items:center;gap:10px;background:#f7f9fc;border:1px solid #edf0f5;border-radius:24px;padding:11px 16px;color:#96a0b5;font-size:12px}.study-streak{display:flex;align-items:center;gap:8px;padding:0 12px}.study-streak span{display:grid}.study-streak small{font-size:10px;color:#69738d}.study-streak strong{font-size:12px;color:#ef7d00}.modern-content{max-width:1400px}.modern-welcome{align-items:center;margin-bottom:18px}.continue-button{margin-left:auto;background:#2474ff;color:#fff;border-radius:9px;padding:14px 22px;font-size:11px;font-weight:800;box-shadow:0 8px 18px rgba(36,116,255,.2)}.daily-goal-card{display:grid;grid-template-columns:minmax(260px,1.2fr) minmax(220px,.8fr) auto;gap:18px;align-items:center;background:#fff;border:1px solid #e7ebf3;border-radius:14px;padding:18px 20px;margin:0 0 16px;box-shadow:0 5px 18px rgba(30,55,90,.04)}.daily-goal-copy{display:flex;align-items:center;gap:12px}.daily-goal-icon{width:42px;height:42px;border-radius:12px;background:#eef4ff;display:grid;place-items:center;font-size:22px}.daily-goal-copy small,.daily-goal-copy strong{display:block}.daily-goal-copy small{font-size:10px;color:#69738d;text-transform:uppercase;letter-spacing:.04em}.daily-goal-copy strong{font-size:15px;color:#17213f;margin-top:3px}.daily-goal-copy p{margin:4px 0 0;font-size:10px;color:#6e7891}.daily-goal-progress{display:flex;align-items:center;gap:10px}.daily-goal-progress>div{height:9px;flex:1;background:#edf1f7;border-radius:10px;overflow:hidden}.daily-goal-progress span{display:block;height:100%;background:#2474ff}.daily-goal-progress b{font-size:12px;color:#2474ff}.daily-goal-card>a{background:#2474ff;color:#fff;padding:11px 14px;border-radius:8px;font-size:10px;font-weight:800;white-space:nowrap}.modern-metrics{margin-top:0}.metric-card strong i{font-size:11px;font-style:normal;color:#6e7891;font-weight:600}.mini-progress{height:5px;background:#edf1f7;border-radius:10px;overflow:hidden;margin:7px 0}.mini-progress span{display:block;height:100%;background:#2474ff}.mock-grid{display:grid;grid-template-columns:1.75fr .85fr;gap:16px}.mock-main-column,.mock-side-column{display:grid;gap:16px;align-content:start}.progress-panel{padding:20px}.subject-row{display:grid;grid-template-columns:30px minmax(115px,1fr) 1.5fr 45px 86px;align-items:center;gap:10px;padding:10px 0;font-size:11px}.subject-dot{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:#eaf2ff;color:#2474ff}.subject-row:nth-of-type(3) .bar i{background:#23b26d}.subject-row:nth-of-type(4) .bar i{background:#ef5f87}.subject-row:nth-of-type(5) .bar i{background:#7d5ce8}.subject-row:nth-of-type(6) .bar i{background:#f4a62a}.subject-row small{color:#7b8499}.focus-card{background:#f7f5ff;border-radius:10px;padding:18px;display:flex;gap:12px;align-items:center}.focus-card>span{font-size:28px;color:#7d5ce8}.focus-card strong,.focus-card b{display:block}.focus-card b{font-size:12px;color:#ff7c31;margin-top:5px}.focus-bar{margin:14px 0 5px}.focus-bar i{background:#7d5ce8}.focus-target{text-align:right;font-size:10px;color:#7b8499}.incorrect-count{display:block;color:#ef4b58;font-size:13px;margin:18px 0}.review-button{display:block;border:1px solid #2474ff;color:#2474ff;text-align:center;border-radius:8px;padding:11px;font-size:11px;font-weight:800}.today-panel h2{margin-bottom:8px}.today-real-summary{display:grid;grid-template-columns:34px 1fr auto;gap:9px;align-items:center;padding:10px 0 8px}.today-real-summary>span{width:32px;height:32px;border-radius:9px;background:#eef4ff;display:grid;place-items:center}.today-real-summary strong,.today-real-summary small{display:block}.today-real-summary strong{font-size:11px}.today-real-summary small{font-size:10px;color:#69738d;margin-top:3px}.today-real-summary b{font-size:12px;color:#2474ff}.today-progress{margin:2px 0 8px}.today-task{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;padding:13px 0;border-bottom:1px solid #edf0f5}.today-task>span{width:30px;height:30px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.today-task div strong,.today-task div small{display:block}.today-task div strong{font-size:11px}.today-task div small{font-size:10px;color:#69738d;margin-top:3px}.today-task i{font-style:normal;color:#9da7bb}.plan-link{display:block;margin-top:13px;color:#2474ff;font-size:11px;font-weight:700}.ai-panel{display:grid;grid-template-columns:40px 1fr;gap:10px;align-items:center}.ai-badge{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:#7d5ce8;color:white;font-weight:800}.ai-panel strong{font-size:13px}.ai-panel p{font-size:10px;color:#6d7790;line-height:1.5;margin:4px 0}.ai-panel>a{grid-column:2;color:#2474ff;font-size:10px;font-weight:700}.state-exam-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.state-exam-card{border:1px solid #e7ebf3;border-radius:10px;padding:14px;display:grid;gap:5px}.exam-doc{width:32px;height:32px;border-radius:9px;background:#eaf2ff;color:#2474ff;display:grid;place-items:center}.state-exam-card strong{font-size:12px}.state-exam-card small,.state-exam-card p{font-size:10px;color:#6e7891;margin:0}.state-exam-card a{border:1px solid #2474ff;color:#2474ff;border-radius:7px;text-align:center;padding:8px;margin-top:5px;font-size:10px;font-weight:700}.state-exam-card:nth-child(2) .exam-doc{background:#e9f8ef;color:#1caf65}.state-exam-card:nth-child(3) .exam-doc{background:#f1edff;color:#7d5ce8}.state-exam-card:nth-child(4) .exam-doc{background:#fff3e8;color:#f18a22}.dashboard-benefits{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;background:#fff;border:1px solid #e7ebf3;border-radius:13px;margin-top:16px;padding:18px}.dashboard-benefits>div{display:flex;align-items:flex-start;gap:10px}.dashboard-benefits>div>span{font-size:24px;color:#2474ff}.dashboard-benefits p{margin:0;font-size:10px;color:#65708a;line-height:1.5}.dashboard-benefits strong{display:block;color:#17213f;font-size:11px;margin-bottom:3px}
-        @media(max-width:1100px){.mock-grid{grid-template-columns:1fr}.state-exam-grid{grid-template-columns:repeat(2,1fr)}.dashboard-search{min-width:260px}.dashboard-benefits{grid-template-columns:repeat(2,1fr)}.daily-goal-card{grid-template-columns:1fr 1fr}.daily-goal-card>a{grid-column:1/3;text-align:center}}
-        @media(max-width:800px){.modern-sidebar{display:none}.modern-topbar{height:64px}.dashboard-search,.study-streak,.notif{display:none}.modern-content{padding:16px 14px 90px}.modern-welcome{display:block}.continue-button{display:block;margin:16px 0 0;text-align:center}.daily-goal-card{grid-template-columns:1fr;padding:16px}.daily-goal-card>a{grid-column:auto;text-align:center}.modern-metrics{grid-template-columns:repeat(2,1fr)!important}.metric-card{min-height:118px;padding:13px}.subject-row{grid-template-columns:30px 1fr 45px}.subject-row .bar{grid-column:2/4}.subject-row small{display:none}.state-exam-grid{grid-template-columns:1fr 1fr}.dashboard-benefits{grid-template-columns:1fr}.top-user{margin-left:auto}.mock-grid{grid-template-columns:1fr}.modern-welcome h1{font-size:24px}.modern-welcome p{font-size:12px}}
-      `}</style>
     </div>
   );
 }
