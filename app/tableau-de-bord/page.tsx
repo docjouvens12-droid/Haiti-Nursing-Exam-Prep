@@ -331,16 +331,6 @@ export default async function TableauDeBord() {
             </div>
           </section>
 
-          <section className="c-panel" aria-labelledby="c-shortcuts-heading">
-            <div className="c-panelhead"><h2 id="c-shortcuts-heading">Accès rapide</h2></div>
-            <div className="c-shortcuts">
-              <Link className="c-shortcut" href="/pratique"><span aria-hidden="true">▤</span><strong>QCM</strong></Link>
-              <Link className="c-shortcut" href="/examens"><span aria-hidden="true">☑</span><strong>Examens</strong></Link>
-              <Link className="c-shortcut" href="/cours-revisions"><span aria-hidden="true">▣</span><strong>Cours</strong></Link>
-              <Link className="c-shortcut" href="/questions-incorrectes"><span aria-hidden="true">◎</span><strong>Mes erreurs</strong></Link>
-            </div>
-          </section>
-
           <div className="c-bottom">
             <section className="c-panel c-goal" aria-labelledby="c-goal-heading">
               <div className="c-panelhead" style={{marginBottom:0}}>
