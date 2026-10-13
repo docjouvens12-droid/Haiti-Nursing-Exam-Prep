@@ -46,6 +46,10 @@ export default async function TableauDeBord() {
     { count: historicalExamCount },
     { count: availableCourseCount },
     { data: courseProgressRows },
+    { count: maternitéCount },
+    { count: urgencesCount },
+    { count: pharmacologieCount },
+    { count: communauteCount },
   ] = await Promise.all([
     supabase.from("profiles").select("nom_complet,role").eq("id", userId).single(),
     supabase
@@ -66,6 +70,10 @@ export default async function TableauDeBord() {
     supabase.from("exam_banks").select("id", { count: "exact", head: true }),
     supabase.from("learning_modules").select("id", { count: "exact", head: true }).eq("is_published", true),
     supabase.from("learning_module_progress").select("module_id,status,progress_percent").eq("user_id", userId),
+    supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Maternité-Obstétrique"),
+    supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Urgences"),
+    supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Pharmacologie"),
+    supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", "Santé communautaire"),
   ]);
 
   const totalTentatives = reponses?.length ?? 0;
@@ -155,6 +163,18 @@ export default async function TableauDeBord() {
     : "/cours-revisions";
   const recommendationLabel = totalTentatives > 0 && plusFaible.questions > 0
     ? "Domaine à renforcer" : "Parcours recommandé";
+  const specialites = [
+    { name: "Maternité-Obstétrique", count: maternitéCount, icon: "♡", tone: "maternite" },
+    { name: "Urgences", count: urgencesCount, icon: "✚", tone: "urgences" },
+    { name: "Pharmacologie", count: pharmacologieCount, icon: "◈", tone: "pharmaco" },
+    { name: "Santé communautaire", count: communauteCount, icon: "♧", tone: "communaute" },
+  ];
+  const repriseUrl = resumeCategory
+    ? "/pratique?categorie=" + encodeURIComponent(resumeCategory) + "&nombre=25"
+    : "/pratique";
+  const derniereActivite = recentAnswer?.answered_at
+    ? new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone: STUDY_TIME_ZONE }).format(new Date(recentAnswer.answered_at))
+    : null;
 
   return (
     <div className="dashboard-shell modern-dashboard b-dashboard">
@@ -249,6 +269,22 @@ export default async function TableauDeBord() {
             <span className="b-recommend-arrow" aria-hidden="true">›</span>
           </Link>
 
+          <section className="bc-resume" aria-labelledby="bc-resume-title">
+            <div className="bc-resume-heading">
+              <div><span className="bc-resume-clock" aria-hidden="true">◷</span><h2 id="bc-resume-title">Continuer là où vous vous êtes arrêté</h2></div>
+              <Link href="/historique" aria-label="Voir l'historique des activités">›</Link>
+            </div>
+            <div className="bc-resume-body">
+              <span className="bc-resume-illustration" aria-hidden="true">▤</span>
+              <div className="bc-resume-description">
+                <small>{recentAnswer ? "DERNIÈRE ACTIVITÉ QCM" : "VOTRE PARCOURS"}</small>
+                <strong>{recentAnswer ? resumeCategory || "Questions d’entraînement" : "Commencez votre première série de QCM"}</strong>
+                <span>{recentAnswer ? (derniereActivite ? "Dernière réponse · " + derniereActivite : "Poursuivez ce domaine") : "Les questions et les cours vous attendent."}</span>
+              </div>
+              <Link className="bc-resume-button" href={repriseUrl}>{recentAnswer ? "Reprendre les QCM" : "Commencer"} <span aria-hidden="true">›</span></Link>
+            </div>
+          </section>
+
           <section className="b-actions" aria-labelledby="b-actions-title">
             <div className="b-section-heading"><h2 id="b-actions-title">Accès rapide</h2><Link href="/profil">Tous les outils <span aria-hidden="true">›</span></Link></div>
             <div className="b-action-grid">
@@ -256,6 +292,20 @@ export default async function TableauDeBord() {
               <Link href="/examens" className="b-action-tile b-tile-exams"><span className="b-tile-icon" aria-hidden="true">☑</span><strong>Examens</strong><small>Simulations chronométrées</small></Link>
               <Link href="/cours-revisions" className="b-action-tile b-tile-courses"><span className="b-tile-icon" aria-hidden="true">▣</span><strong>Cours</strong><small>Lire et apprendre</small></Link>
               <Link href="/questions-incorrectes" className="b-action-tile b-tile-errors"><span className="b-tile-icon" aria-hidden="true">◎</span><strong>Questions incorrectes</strong><small>Revoir vos erreurs</small></Link>
+            </div>
+          </section>
+
+          <section className="bc-specialties" aria-labelledby="bc-specialties-title">
+            <div className="bc-specialties-heading"><h2 id="bc-specialties-title">Nos principales thématiques</h2><Link href="/categories">Voir tout <span aria-hidden="true">›</span></Link></div>
+            <div className="bc-specialties-grid">
+              {specialites.map((specialite) => (
+                <Link href={"/pratique?categorie=" + encodeURIComponent(specialite.name) + "&nombre=25"} className={"bc-specialty bc-" + specialite.tone} key={specialite.name}>
+                  <span className="bc-specialty-symbol" aria-hidden="true">{specialite.icon}</span>
+                  <strong>{specialite.name}</strong>
+                  <span className="bc-specialty-meta">{specialite.count?.toLocaleString("fr-FR") ?? "—"} QCM</span>
+                  <span className="bc-specialty-arrow" aria-hidden="true">›</span>
+                </Link>
+              ))}
             </div>
           </section>
 
@@ -279,10 +329,7 @@ export default async function TableauDeBord() {
             <Link href="/pratique?nombre=25"> {objectifRestant > 0 ? "Continuer à pratiquer →" : "Poursuivre votre apprentissage →"}</Link>
           </section>
 
-          {recentAnswer && <div className="b-recent">
-            <div><span aria-hidden="true">◷</span><div><strong>Dernière activité</strong><small>{resumeCategory || "QCM d’entraînement"}</small></div></div>
-            <Link href={resumeCategory?"/pratique?categorie="+encodeURIComponent(resumeCategory):"/pratique"}>Réviser →</Link>
-          </div>}
+
         </div>
       </main>
     </div>
