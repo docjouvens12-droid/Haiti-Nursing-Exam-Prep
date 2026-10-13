@@ -6,7 +6,7 @@ export const contentType = "image/png";
 
 /** iOS homescreen icon uses the same official HN mark as the website. */
 export default function AppleIcon() {
-  const artwork = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(HN_ICON_SVG)}`;
+  const artwork = `data:image/svg+xml;base64,${btoa(HN_ICON_SVG)}`;
   return new ImageResponse(
     <div style={{display:"flex",width:"100%",height:"100%",alignItems:"center",justifyContent:"center",background:"#071c55"}}>
       <img src={artwork} alt="Haiti Nursing Exam Prep" width="180" height="180" />
