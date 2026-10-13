@@ -1,147 +1,97 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-import "./home-bc.css";
+import "./home-categories.css";
+import "./home-modern.css";
 
-export const dynamic = "force-dynamic";
-
-const specialties = [
-  { name: "Maternité-Obstétrique", icon: "♡", category: "Maternité-Obstétrique" },
-  { name: "Urgences", icon: "✚", category: "Urgences" },
-  { name: "Pharmacologie", icon: "◈", category: "Pharmacologie" },
-  { name: "Santé communautaire", icon: "♧", category: "Santé communautaire" },
+const stats = [
+  { icon: "▤", value: "6 425", label: "Questions expliquées" },
+  { icon: "◇", value: "8", label: "Grandes catégories" },
+  { icon: "✓", value: "17", label: "Formats d’examen" },
+  { icon: "▣", value: "78", label: "Modules de cours" },
 ];
 
-export default async function Accueil() {
-  const supabase = await createClient();
-  const { data: authData } = await supabase.auth.getClaims();
-  // Signed-in students go straight to the personalized dashboard.
-  if (authData?.claims?.sub) redirect("/tableau-de-bord");
+const features = [
+  { icon: "▤", title: "QCM expliqués", text: "Bonne réponse, justification A–D et point à retenir." },
+  { icon: "◷", title: "Examens chronométrés", text: "Entraînez-vous dans des conditions proches de l’examen." },
+  { icon: "▣", title: "Cours & Révisions", text: "Des modules structurés par domaine infirmier." },
+  { icon: "▥", title: "Suivi de progression", text: "Visualisez vos résultats et vos points faibles." },
+  { icon: "★", title: "Questions incorrectes", text: "Revenez sur vos erreurs pour mieux progresser." },
+  { icon: "♥", title: "Favoris", text: "Enregistrez les questions importantes à revoir." },
+];
 
-  const [
-    { count: totalQuestions },
-    { count: totalCourseModules },
-    { count: historicalBanks },
-    ...specialtyResults
-  ] = await Promise.all([
-    supabase.from("questions").select("id", { count: "exact", head: true }),
-    supabase.from("learning_modules").select("id", { count: "exact", head: true }).eq("is_published", true),
-    supabase.from("exam_banks").select("id", { count: "exact", head: true }),
-    ...specialties.map((item) =>
-      supabase.from("questions").select("id", { count: "exact", head: true }).eq("categorie", item.category)
-    ),
-  ]);
-
-  const displayNumber = (value: number | null) =>
-    value === null ? "—" : value.toLocaleString("fr-FR");
-
+export default function Accueil() {
   return (
-    <main className="hnb-landing">
-      <div className="hnb-wrap">
-        <header className="hnb-header">
-          <Link className="hnb-logo" href="/" aria-label="Haiti Nursing Exam Prep - Accueil">
-            <img src="/hn-logo.svg" alt="Haiti Nursing Exam Prep" width={230} height={69} />
-          </Link>
-          <nav className="hnb-header-actions" aria-label="Connexion et inscription">
-            <Link className="hnb-header-login" href="/connexion">Se connecter</Link>
-            <Link className="hnb-header-join" href="/inscription">Créer un compte</Link>
-          </nav>
-        </header>
+    <main className="container home-modern">
+      <nav className="nav home-nav">
+        <Link href="/" className="home-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
+          <img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:11,flexShrink:0}} />
+          <span className="home-brand-text"><strong>Haiti Nursing</strong><small>Exam Prep</small></span>
+        </Link>
+        <div className="home-desktop-nav">
+          <a href="#fonctionnalites">Fonctionnalités</a>
+        </div>
+        <div className="navlinks">
+          <Link className="home-login-outline" href="/connexion">Se connecter</Link>
+        </div>
+      </nav>
 
-        <section className="hnb-welcome" aria-labelledby="hnb-title">
-          <div className="hnb-welcome-copy">
-            <span className="hnb-kicker">✦ Préparation infirmière en Haïti</span>
-            <h1 id="hnb-title">Votre avenir commence <em>aujourd’hui.</em></h1>
-            <p>Préparez l’Examen d’État en sciences infirmières avec des QCM expliqués, des cours et des examens blancs.</p>
-            <div className="hnb-hero-actions">
-              <Link href="/inscription" className="hnb-btn-main">Commencer maintenant →</Link>
-              <Link href="/connexion" className="hnb-btn-outline">Se connecter</Link>
-            </div>
+      <section className="home-hero-showcase">
+        <div className="home-hero-copy">
+          <span className="home-pill-blue">Préparation à l’Examen d’État infirmier 🇭🇹</span>
+          <h1>Préparez l’Examen d’État infirmier <em>avec confiance.</em></h1>
+          <p className="home-lead-dark">Des QCM expliqués, des examens simulés et des cours structurés pour aider les étudiants infirmiers à réussir avec méthode.</p>
+          <div className="home-actions">
+            <Link className="btn btn-primary home-main-blue" href="/inscription">Créer mon compte</Link>
+            <Link className="home-outline-cta" href="/connexion">Se connecter</Link>
           </div>
-          <img className="hnb-illustration" src="/nursing-home-b-student.svg" alt="Illustration d’une étudiante infirmière avec des livres" width={400} height={300} />
-        </section>
-
-        <section className="hnb-guest-card" aria-labelledby="hnb-progress-title">
-          <div className="hnb-section-heading">
-            <h2 id="hnb-progress-title">Suivez votre progression</h2>
-            <small>Aperçu illustratif du tableau de bord</small>
-          </div>
-          <div className="hnb-dashboard-preview">
-            <div className="hnb-ring-demo" aria-hidden="true">
-              <div className="hnb-ring-inner"><strong>Votre suivi</strong><small>Personnalisé après connexion</small></div>
-            </div>
-            <div className="hnb-preview-list" aria-label="Types de progression disponibles">
-              <div className="hnb-preview-row"><span className="hnb-preview-icon" aria-hidden="true">▤</span><div><b>Cours &amp; révisions</b><div className="hnb-demo-track" aria-hidden="true"><span /></div></div></div>
-              <div className="hnb-preview-row"><span className="hnb-preview-icon" aria-hidden="true">▧</span><div><b>QCM</b><div className="hnb-demo-track" aria-hidden="true"><span /></div></div></div>
-              <div className="hnb-preview-row"><span className="hnb-preview-icon" aria-hidden="true">☑</span><div><b>Examens blancs</b><div className="hnb-demo-track" aria-hidden="true"><span /></div></div></div>
-            </div>
-          </div>
-          <p className="hnb-preview-caption">Les barres sont un aperçu graphique, pas des résultats réels. Chaque étudiant retrouvera ses propres résultats après connexion.</p>
-        </section>
-
-        <section className="hnb-recommend" aria-labelledby="hnb-recommend-title">
-          <div>
-            <small>✦ Parcours conseillé pour commencer</small>
-            <h2 id="hnb-recommend-title">Soins infirmiers fondamentaux</h2>
-            <p>Révisez les bases avant de passer à des cas cliniques plus avancés.</p>
-          </div>
-          <span className="hnb-book-art" aria-hidden="true"><i /><i /><i /></span>
-        </section>
-
-        <section className="hnb-quick" aria-labelledby="hnb-quick-title">
-          <div className="hnb-section-heading"><h2 id="hnb-quick-title">Accès rapide</h2><small>Disponible après connexion</small></div>
-          <div className="hnb-quick-grid">
-            <Link href="/inscription"><span aria-hidden="true">▤</span><strong>QCM</strong><small>S’entraîner à son rythme</small></Link>
-            <Link href="/inscription"><span aria-hidden="true">☑</span><strong>Examens</strong><small>Simulations chronométrées</small></Link>
-            <Link href="/inscription"><span aria-hidden="true">▣</span><strong>Cours</strong><small>Lire et apprendre</small></Link>
-            <Link href="/inscription"><span aria-hidden="true">◎</span><strong>Questions incorrectes</strong><small>Revoir ses erreurs</small></Link>
-          </div>
-        </section>
-
-        <div className="hnb-continue">
-          <section className="hnb-resume" aria-labelledby="hnb-resume-title">
-            <h2 id="hnb-resume-title">◷ Continuer là où vous vous êtes arrêté</h2>
-            <p>Reprenez vos révisions et retrouvez votre dernière activité en vous connectant à votre espace personnel.</p>
-            <Link href="/connexion">Retrouver mon parcours →</Link>
-          </section>
-          <section className="hnb-quote" aria-labelledby="hnb-quote-title">
-            <h2 id="hnb-quote-title">Motivation du jour</h2>
-            <p>« Des infirmiers bien formés construisent une Haïti plus saine. »</p>
-          </section>
         </div>
 
-        <section className="hnb-specialties" aria-labelledby="hnb-specialties-title">
-          <div className="hnb-section-heading">
-            <h2 id="hnb-specialties-title">Nos principales thématiques</h2>
-            <small>Questions issues de notre banque</small>
+        <div className="home-device-stage" aria-label="Aperçu de Haiti Nursing Exam Prep">
+          <div className="home-laptop">
+            <div className="home-screen">
+              <div className="dash-mini-top"><b>Tableau de bord</b><span>●</span></div>
+              <div className="dash-mini-metrics"><div><small>QCM réalisés</small><b>1 250</b></div><div><small>Bonnes réponses</small><b>78%</b></div><div><small>Temps d’étude</small><b>24 h</b></div></div>
+              <div className="dash-mini-grid"><div className="dash-mini-chart"><b>Progression par catégorie</b><p><span style={{width:"85%"}} /></p><p><span style={{width:"72%"}} /></p><p><span style={{width:"70%"}} /></p><p><span style={{width:"65%"}} /></p></div><div className="dash-mini-goal"><b>Prochain objectif</b><small>Terminer 100 QCM</small><button>Continuer</button></div></div>
+            </div>
           </div>
-          <div className="hnb-specialty-grid">
-            {specialties.map((specialty, i) => (
-              <Link href="/inscription" key={specialty.category}>
-                <span aria-hidden="true">{specialty.icon}</span>
-                <strong>{specialty.name}</strong>
-                <small>{displayNumber(specialtyResults[i].count)} QCM</small>
-              </Link>
-            ))}
+          <div className="home-phone">
+            <div className="phone-notch" />
+            <b>Bonjour !</b><small>Continuez votre préparation</small>
+            <div className="phone-score">78%</div>
+            <div className="phone-link">▤ QCM par catégorie</div><div className="phone-link">◷ Examens simulés</div><div className="phone-link">▣ Cours & Révisions</div><div className="phone-link">▥ Mes statistiques</div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        <section className="hnb-guest-card" aria-label="Contenu de la plateforme">
-          <div className="hnb-section-heading"><h2>Apprenez avec méthode</h2></div>
-          <div className="hnb-quick-grid">
-            <div><span aria-hidden="true">▤</span><strong>{displayNumber(totalQuestions)} QCM</strong><small>Avec explications</small></div>
-            <div><span aria-hidden="true">▣</span><strong>{displayNumber(totalCourseModules)} modules</strong><small>Cours publiés</small></div>
-            <div><span aria-hidden="true">☑</span><strong>{displayNumber(historicalBanks)} banques</strong><small>Examens reconstitués</small></div>
-            <div><span aria-hidden="true">↗</span><strong>Progression</strong><small>Suivi personnalisé</small></div>
-          </div>
-        </section>
+      <section className="home-stat-cards" aria-label="Chiffres clés">
+        {stats.map((stat)=><article key={stat.label}><span>{stat.icon}</span><div><strong>{stat.value}</strong><small>{stat.label}</small></div></article>)}
+      </section>
 
-        <section className="hnb-bottom-cta">
-          <div><h2>Prêt(e) à commencer votre préparation ?</h2><p>Créez votre compte pour accéder à vos QCM, vos cours et vos résultats personnels.</p></div>
-          <Link href="/inscription">Créer mon compte →</Link>
-        </section>
-        <footer className="hnb-footer"><span>© {new Date().getFullYear()} Haiti Nursing Exam Prep</span><span>Préparer aujourd’hui. Réussir demain.</span></footer>
-      </div>
+      <section id="fonctionnalites" className="home-section compact-section">
+        <div className="home-section-heading centered"><h2>Tout ce qu’il vous faut pour réussir</h2><p>Des outils complets pour préparer votre Examen d’État infirmier.</p></div>
+        <div className="home-feature-six">{features.map((f)=><article key={f.title}><span>{f.icon}</span><h3>{f.title}</h3><p>{f.text}</p></article>)}</div>
+      </section>
+
+      <section className="home-question-demo">
+        <div className="demo-question">
+          <div className="demo-head"><b>Un exemple de question sur la plateforme</b><span>Question 1/15</span></div>
+          <small>Santé maternelle</small>
+          <p>Une femme enceinte de 32 semaines présente une hypertension importante, des œdèmes et des céphalées. Quel diagnostic est le plus probable ?</p>
+          <div className="demo-option"><b>A</b> Hypertension chronique</div>
+          <div className="demo-option correct"><b>B</b> Prééclampsie sévère <strong>✓</strong></div>
+          <div className="demo-option"><b>C</b> Diabète gestationnel</div>
+          <div className="demo-option"><b>D</b> Anémie ferriprive</div>
+        </div>
+        <div className="demo-explanation">
+          <div className="demo-correct">✓ Bonne réponse : B. Prééclampsie sévère</div>
+          <h3>Explication</h3><p>L’association d’une hypertension importante après 20 semaines avec des signes cliniques compatibles doit faire suspecter une prééclampsie nécessitant une évaluation rapide.</p>
+          <h3>Analyse des choix</h3><ul><li><b>A.</b> Ne correspond pas au tableau présenté.</li><li><b>B.</b> Correspond aux signes décrits.</li><li><b>C.</b> N’explique pas l’hypertension et les céphalées.</li><li><b>D.</b> N’explique pas ce tableau hypertensif.</li></ul>
+          <div className="demo-point"><b>💡 Point à retenir</b><span>Reconnaître rapidement les signes d’alerte permet de prioriser la prise en charge.</span></div>
+        </div>
+      </section>
+
+      <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Créez votre compte et accédez directement à la plateforme pendant la phase de test.</p></div><div><Link className="home-white-button" href="/inscription">Commencer</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
+
+      <footer className="home-footer clean-footer"><div className="home-footer-brand"><img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:11,flexShrink:0}} /><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
     </main>
   );
 }
