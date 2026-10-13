@@ -27,7 +27,7 @@ const SESSION_SIZES = [10, 25, 50, 100] as const;
 function sansDoublons(questions: any[], nombre: number) {
   const dejaVues = new Set<string>();
   return questions.filter((q) => {
-    const normalise = String(q.question || "").trim().toLocaleLowerCase("fr").replace(/\\s+/g, " ");
+    const normalise = String(q.question || "").trim().toLocaleLowerCase("fr").replace(/\s+/g, " ");
     if (!normalise || dejaVues.has(normalise)) return false;
     dejaVues.add(normalise);
     return true;
