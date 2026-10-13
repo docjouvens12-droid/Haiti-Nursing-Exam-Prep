@@ -44,7 +44,7 @@ export default async function Examens() {
     <div className="exam-shell">
       <aside className="exam-sidebar">
         <Link href="/tableau-de-bord" className="brand-lockup">
-          <span className="brand-mark">✚</span>
+          <img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} />
           <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
         </Link>
         <nav className="side-nav">
