@@ -1,6 +1,6 @@
-const CACHE_NAME = "haiti-nursing-exam-prep-v5";
+const CACHE_NAME = "haiti-nursing-exam-prep-v6-hn-brand";
 const OFFLINE_URL = "/hors-connexion";
-const APP_SHELL = ["/", "/connexion", OFFLINE_URL, "/manifest.webmanifest", "/pwa-icon.svg", "/pwa-icon-maskable.svg"];
+const APP_SHELL = ["/", "/connexion", OFFLINE_URL, "/manifest.webmanifest", "/pwa-icon.svg", "/pwa-icon-maskable.svg", "/hn-logo.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -28,6 +28,19 @@ self.addEventListener("fetch", (event) => {
   if (url.origin !== self.location.origin) return;
 
   if (url.pathname.startsWith("/api/") || url.pathname.startsWith("/auth/")) return;
+
+
+  // Never serve a stale HN logo from the cache after a design update.
+  if (/^\/(?:pwa-icon(?:-maskable)?\.svg|hn-logo\.svg|apple-icon(?:\.png)?|android-icon(?:\/.*)?)$/.test(url.pathname)) {
+    event.respondWith(fetch(request, { cache: "no-store" }).then((response) => {
+      if (response.ok) {
+        const copy = response.clone();
+        event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, copy)));
+      }
+      return response;
+    }).catch(async () => (await caches.match(request)) || Response.error()));
+    return;
+  }
 
   if (request.mode === "navigate") {
     event.respondWith(

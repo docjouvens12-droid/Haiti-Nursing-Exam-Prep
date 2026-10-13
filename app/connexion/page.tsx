@@ -50,8 +50,7 @@ export default function Connexion() {
     <main className="signup-showcase">
       <section className="signup-story">
         <Link href="/" className="signup-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
-          <img src="/pwa-icon.svg" alt="" width={48} height={48} style={{borderRadius:14,flexShrink:0}} />
-          <span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span>
+          <img src={"/hn-logo.svg?v=hn-b-20261013-2"} alt="Haiti Nursing Exam Prep" width={215} height={65} style={{width:"min(215px,100%)",height:"auto"}} />
         </Link>
 
         <div className="signup-story-copy">

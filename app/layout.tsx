@@ -17,8 +17,9 @@ export const metadata: Metadata = {
     statusBarStyle: "default",
   },
   icons: {
-    icon: "/pwa-icon.svg",
-    shortcut: "/pwa-icon.svg",
+    icon: "/pwa-icon.svg?v=hn-b-20261013-2",
+    shortcut: "/pwa-icon.svg?v=hn-b-20261013-2",
+    apple: "/apple-icon",
   },
 };
 

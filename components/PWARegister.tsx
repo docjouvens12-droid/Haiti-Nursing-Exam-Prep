@@ -155,7 +155,7 @@ export default function PWARegister() {
         <div className="pwa-splash" role="status" aria-label="Ouverture de Haiti Nursing Exam Prep">
           <div className="pwa-splash-glow glow-one" /><div className="pwa-splash-glow glow-two" />
           <div className="pwa-splash-content">
-            <div className="pwa-splash-logo" aria-hidden="true"><svg viewBox="0 0 160 160" width="112" height="112"><path d="M35 78c17-8 31-7 45 2v46c-14-9-28-10-45-2V78Z" fill="#ffffff" /><path d="M125 78c-17-8-31-7-45 2v46c14-9 28-10 45-2V78Z" fill="#dff7ff" /><path d="M53 63c0-19 12-31 27-31s27 12 27 31v10H53V63Z" fill="#ffffff" /><rect x="72" y="40" width="16" height="26" rx="3" fill="#20c3bd" /><rect x="67" y="45" width="26" height="16" rx="3" fill="#20c3bd" /><path d="M80 80v46" stroke="#4f7df3" strokeWidth="6" strokeLinecap="round" /></svg></div>
+            <div className="pwa-splash-logo" aria-hidden="true"><img src={"/pwa-icon.svg?v=hn-b-20261013-2"} width="112" height="112" alt="" style={{display:"block",width:112,height:112,borderRadius:24}} /></div>
             <div className="pwa-splash-title"><span>HAITI</span> <strong>NURSING</strong></div><div className="pwa-splash-subtitle">EXAM PREP</div><p>Préparez-vous. Pratiquez. Progressez.</p><div className="pwa-splash-loader" aria-hidden="true"><span /></div>
           </div>
           <small className="pwa-splash-footer">Préparation infirmière • Haïti</small>

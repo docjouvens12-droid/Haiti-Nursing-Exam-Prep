@@ -16,13 +16,13 @@ export default function manifest(): MetadataRoute.Manifest {
     categories: ["education", "medical"],
     icons: [
       {
-        src: "/pwa-icon.svg",
+        src: "/pwa-icon.svg?v=hn-b-20261013-2",
         sizes: "512x512",
         type: "image/svg+xml",
         purpose: "any",
       },
       {
-        src: "/pwa-icon-maskable.svg",
+        src: "/pwa-icon-maskable.svg?v=hn-b-20261013-2",
         sizes: "512x512",
         type: "image/svg+xml",
         purpose: "maskable",
@@ -34,14 +34,14 @@ export default function manifest(): MetadataRoute.Manifest {
         short_name: "Pratique",
         description: "Commencer une session de questions infirmières.",
         url: "/pratique",
-        icons: [{ src: "/pwa-icon.svg", sizes: "512x512", type: "image/svg+xml" }],
+        icons: [{ src: "/pwa-icon.svg?v=hn-b-20261013-2", sizes: "512x512", type: "image/svg+xml" }],
       },
       {
         name: "Simulations d’examen",
         short_name: "Examens",
         description: "Ouvrir les simulations de l’Examen d’État.",
         url: "/examens",
-        icons: [{ src: "/pwa-icon.svg", sizes: "512x512", type: "image/svg+xml" }],
+        icons: [{ src: "/pwa-icon.svg?v=hn-b-20261013-2", sizes: "512x512", type: "image/svg+xml" }],
       },
     ],
   };

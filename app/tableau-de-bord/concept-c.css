@@ -116,3 +116,8 @@
  .c-stat small{font-size:9px}
  .c-stat strong{font-size:18px}
 }
+
+/* Keep the approved complete HN signature visible on a light header. */
+.c-topbrand .c-official-logo{display:block;width:200px;max-width:100%;height:auto;object-fit:contain}
+@media(max-width:600px){.c-topbrand .c-official-logo{width:177px;height:auto}}
+@media(max-width:360px){.c-topbrand .c-official-logo{width:146px;height:auto}}

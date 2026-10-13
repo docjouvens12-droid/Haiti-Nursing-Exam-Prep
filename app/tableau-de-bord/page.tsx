@@ -206,7 +206,7 @@ export default async function TableauDeBord() {
     <div className="c-shell">
       <aside className="c-side" aria-label="Menu principal sur ordinateur">
         <Link className="c-sidebrand" href="/tableau-de-bord">
-          <img src="/pwa-icon.svg" alt="" width={44} height={44} />
+          <img src={"/pwa-icon.svg?v=hn-b-20261013-2"} alt="Icône officielle HN" width={44} height={44} />
           <span>Haiti Nursing<small>EXAM PREP</small></span>
         </Link>
         <nav className="c-sidenav" aria-label="Navigation principale">
@@ -231,8 +231,7 @@ export default async function TableauDeBord() {
       <main className="c-main">
         <header className="c-top">
           <Link className="c-topbrand" href="/tableau-de-bord" aria-label="Haiti Nursing Exam Prep — accueil">
-            <img src="/pwa-icon.svg" alt="" width={45} height={45} />
-            <span>Haiti Nursing<small>EXAM PREP</small></span>
+            <img className="c-official-logo" src={"/hn-logo.svg?v=hn-b-20261013-2"} alt="Haiti Nursing Exam Prep" width={200} height={60} />
           </Link>
           <div className="c-topactions">
             <Link className="c-avatar" href="/profil" aria-label="Ouvrir mon profil" title={nom}>{prenom.charAt(0).toUpperCase()}</Link>

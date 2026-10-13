@@ -133,7 +133,7 @@ export default function MobileStudentNav() {
           <aside id="student-menu" ref={drawerRef} className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu principal">
             <div className="mobile-drawer-head premium-head">
               <div className="brand-lockup">
-                <img src="/pwa-icon.svg" alt="" width={58} height={58} style={{borderRadius:17,flexShrink:0}} />
+                <img src={"/pwa-icon.svg?v=hn-b-20261013-2"} alt="Icône HN" width={58} height={58} style={{borderRadius:17,flexShrink:0}} />
                 <div className="brand-copy">
                   <strong>Haiti Nursing</strong>
                   <strong>Exam Prep</strong>
