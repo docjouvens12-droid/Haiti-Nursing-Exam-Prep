@@ -23,7 +23,7 @@ export default function Accueil() {
     <main className="container home-modern">
       <nav className="nav home-nav">
         <Link href="/" className="home-brand" aria-label="Haiti Nursing Exam Prep - Accueil">
-          <span className="home-brand-mark">H</span>
+          <img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:11,flexShrink:0}} />
           <span className="home-brand-text"><strong>Haiti Nursing</strong><small>Exam Prep</small></span>
         </Link>
         <div className="home-desktop-nav">
@@ -91,7 +91,7 @@ export default function Accueil() {
 
       <section className="home-final-banner"><div><h2>Prêt à commencer votre préparation ?</h2><p>Créez votre compte et accédez directement à la plateforme pendant la phase de test.</p></div><div><Link className="home-white-button" href="/inscription">Commencer</Link><Link className="home-blue-outline" href="/connexion">Se connecter</Link></div></section>
 
-      <footer className="home-footer clean-footer"><div className="home-footer-brand"><span className="home-brand-mark">H</span><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
+      <footer className="home-footer clean-footer"><div className="home-footer-brand"><img src="/pwa-icon.svg" alt="" width={40} height={40} style={{borderRadius:11,flexShrink:0}} /><div><strong>Haiti Nursing Exam Prep</strong><small>Préparer aujourd’hui. Réussir demain.</small></div></div><div className="home-footer-links"><Link href="/connexion">Aide</Link><span>Confidentialité</span></div><p>© {new Date().getFullYear()} Haiti Nursing Exam Prep. Tous droits réservés.</p></footer>
     </main>
   );
 }
