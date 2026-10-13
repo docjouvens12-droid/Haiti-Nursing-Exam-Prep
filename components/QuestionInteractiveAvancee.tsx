@@ -48,6 +48,7 @@ export default function QuestionInteractiveAvancee({
   const [reponses, setReponses] = useState<Record<string, AnswerLetter>>({});
   const [termine, setTermine] = useState(false);
   const [enregistrement, setEnregistrement] = useState(false);
+  const [erreurEnregistrement, setErreurEnregistrement] = useState("");
 
   useEffect(() => {
     setIndex(0);
@@ -58,6 +59,7 @@ export default function QuestionInteractiveAvancee({
     setReponses({});
     setTermine(false);
     setEnregistrement(false);
+    setErreurEnregistrement("");
   }, [questions, chronometre, correctionMode]);
 
   useEffect(() => {
@@ -75,22 +77,30 @@ export default function QuestionInteractiveAvancee({
   const scorePourcentage = questionsMelangees.length ? Math.round((score / questionsMelangees.length) * 100) : 0;
 
   async function enregistrerReponse(question: Question, answer: AnswerLetter) {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return false;
-    await supabase.from("user_answers").insert({
-      user_id: user.id,
-      question_id: question.id,
-      reponse_choisie: answer,
-      correcte: answer === question.bonne_reponse,
-    });
-    return true;
+    try {
+      const supabase = createClient();
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError || !user) throw new Error("Votre session a expiré. Reconnectez-vous pour continuer.");
+      const { error } = await supabase.from("user_answers").insert({
+        user_id: user.id,
+        question_id: question.id,
+        reponse_choisie: answer,
+        correcte: answer === question.bonne_reponse,
+      });
+      if (error) throw error;
+      return true;
+    } catch {
+      setErreurEnregistrement("Réponse non enregistrée : vérifiez votre connexion et réessayez. Vous restez sur cette question.");
+      return false;
+    }
   }
 
   async function valider() {
     if (!choix || enregistrement) return;
     setEnregistrement(true);
-    await enregistrerReponse(q, choix);
+    setErreurEnregistrement("");
+    const sauvegarde = await enregistrerReponse(q, choix);
+    if (!sauvegarde) { setEnregistrement(false); return; }
     setReponses((actuelles) => ({ ...actuelles, [q.id]: choix }));
 
     if (correctionMode === "immediate") {
@@ -118,11 +128,13 @@ export default function QuestionInteractiveAvancee({
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
     if (favori) {
-      await supabase.from("favorites").delete().eq("user_id", user.id).eq("question_id", q.id);
-      setFavori(false);
+      const { error } = await supabase.from("favorites").delete().eq("user_id", user.id).eq("question_id", q.id);
+      if (!error) setFavori(false);
+      else setErreurEnregistrement("Impossible de modifier le favori. Réessayez.");
     } else {
-      await supabase.from("favorites").upsert({ user_id: user.id, question_id: q.id });
-      setFavori(true);
+      const { error } = await supabase.from("favorites").upsert({ user_id: user.id, question_id: q.id });
+      if (!error) setFavori(true);
+      else setErreurEnregistrement("Impossible de modifier le favori. Réessayez.");
     }
   }
 
@@ -226,6 +238,7 @@ export default function QuestionInteractiveAvancee({
         </div>
       )}
 
+      {erreurEnregistrement && <p role="alert" style={{ padding: 12, border: "1px solid #f6b8b0", borderRadius: 10, background: "#fff5f3", color: "#a32828" }}>{erreurEnregistrement}</p>}
       <div className="practice-actions-row">
         <span className="practice-counter">{index + 1} / {questionsMelangees.length}</span>
         {correctionMode === "immediate" && valide ? (
