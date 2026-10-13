@@ -82,7 +82,7 @@ export default async function PerformancePage() {
   return (
     <div className="performance-shell">
       <aside className="performance-sidebar">
-        <Link href="/tableau-de-bord" className="brand-lockup"><span className="brand-mark">✚</span><span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span></Link>
+        <Link href="/tableau-de-bord" className="brand-lockup"><img src="/pwa-icon.svg" alt="" width={42} height={42} style={{borderRadius:10,flexShrink:0}} /><span><strong>Haiti Nursing</strong><small>EXAM PREP</small></span></Link>
         <nav>
           <Link href="/tableau-de-bord">Accueil</Link>
           <Link href="/pratique">Questions</Link>
